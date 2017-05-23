@@ -206,6 +206,10 @@
     <Compile Include="Migrations\201705231259184_IntialModelUcenik.Designer.cs">
       <DependentUpon>201705231259184_IntialModelUcenik.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705231350258_DodatiOsnovniAtributiZaModelUcenik.cs" />
+    <Compile Include="Migrations\201705231350258_DodatiOsnovniAtributiZaModelUcenik.Designer.cs">
+      <DependentUpon>201705231350258_DodatiOsnovniAtributiZaModelUcenik.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -289,6 +293,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201705231259184_IntialModelUcenik.resx">
       <DependentUpon>201705231259184_IntialModelUcenik.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705231350258_DodatiOsnovniAtributiZaModelUcenik.resx">
+      <DependentUpon>201705231350258_DodatiOsnovniAtributiZaModelUcenik.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
