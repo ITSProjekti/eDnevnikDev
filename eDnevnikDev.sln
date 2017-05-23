@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eDnevnikDev", "eDnevnikDev\eDnevnikDev.csproj", "{47A47A6C-C411-4376-ACF6-30189E817DFA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eDnevnikDev.Tests", "eDnevnikDev.Tests\eDnevnikDev.Tests.csproj", "{2A39548B-98F7-42EA-8D73-9305CD76AFA8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{47A47A6C-C411-4376-ACF6-30189E817DFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47A47A6C-C411-4376-ACF6-30189E817DFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47A47A6C-C411-4376-ACF6-30189E817DFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47A47A6C-C411-4376-ACF6-30189E817DFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A39548B-98F7-42EA-8D73-9305CD76AFA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A39548B-98F7-42EA-8D73-9305CD76AFA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A39548B-98F7-42EA-8D73-9305CD76AFA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A39548B-98F7-42EA-8D73-9305CD76AFA8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
