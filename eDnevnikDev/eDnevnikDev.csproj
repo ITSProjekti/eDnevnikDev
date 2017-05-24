@@ -278,6 +278,7 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Ucenici\Index.cshtml" />
+    <Content Include="Views\Ucenici\Dodaj.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

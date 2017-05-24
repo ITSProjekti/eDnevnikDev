@@ -28,5 +28,10 @@ namespace eDnevnikDev.Controllers
             IEnumerable<Ucenik> ListaUcenika = _context.Ucenici.ToList();
             return View(ListaUcenika);
         }
+        public ActionResult Dodaj()
+        {
+
+            return View();
+        }
     }
 }
