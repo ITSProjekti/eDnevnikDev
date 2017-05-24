@@ -17,6 +17,9 @@ namespace eDnevnikDev.Models
         [Required(AllowEmptyStrings = false, ErrorMessage = "Polje za prezime je obavezno")]
         [RegularExpression(@"^([A-ZŠĐČĆŽ]{1}[a-zšđčćž]+ ?)+$", ErrorMessage = "Polje za prezime može da sadrži samo slova i mora da počinje velikim slovom")]
         public string Prezime { get; set; }
+
+        
+        [RegularExpression("(0[1-9]|[12][0-9]|3[01])(0[1-9]|1[012])[0|9][0-9]{2}[0-9]{6}", ErrorMessage ="JMBG nije ispravan")]
         public string JMBG { get; set; }
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "Polje za adresu je obavezno")]
