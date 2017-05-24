@@ -1,0 +1,47 @@
+﻿@model Ucenik
+@{
+    ViewBag.Title = "Dodaj";
+}
+
+<h2>Nov ucenik</h2>
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <!--<form class="form-horizontal">-->
+            <div class="well">
+                @using (Html.BeginForm("Sacuvaj", "Ucenici", FormMethod.Post, new { @class = "form-horizontal" }))
+            {
+                    <fieldset>
+                        <legend>Novi</legend>
+                        <div class="form-group">
+                            <!--<label for="inputEmail" class="col-lg-2 control-label">Email</label>-->
+                            @Html.LabelFor(u => u.Ime, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-10">
+                                <!--    <input type="text" class="form-control" id="inputEmail" placeholder="Email"> -->
+                                @Html.TextBoxFor(u => u.Ime, new { @class = "form-control", placeholder = "Ime" })
+                                @Html.ValidationMessageFor(u => u.Ime)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-10 col-md-offset-2">
+                                <button type="reset" class="btn btn-default">Poništi</button>
+                                <button type="submit" class="btn btn-primary">Sačuvaj</button>
+                            </div>
+                        </div>
+                    </fieldset>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+ <!--       </form> -->
+
+
+
+@section Scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+
+
