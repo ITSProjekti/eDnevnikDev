@@ -24,6 +24,15 @@
                         </div>
                         <div class="form-group">
                             <!--<label for="inputEmail" class="col-lg-2 control-label">Email</label>-->
+                            @Html.LabelFor(u => u.RoditeljStaratelj, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-10">
+                                <!--    <input type="text" class="form-control" id="inputEmail" placeholder="Email"> -->
+                                @Html.TextBoxFor(u => u.RoditeljStaratelj, new { @class = "form-control", placeholder = "Ime Roditelja/Staratelja" })
+                                @Html.ValidationMessageFor(u => u.RoditeljStaratelj )
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <!--<label for="inputEmail" class="col-lg-2 control-label">Email</label>-->
                             @Html.LabelFor(u => u.JMBG, new { @class = "col-md-2 control-label" })
                             <div class="col-md-10">
                                 <!--    <input type="text" class="form-control" id="inputEmail" placeholder="Email"> -->
@@ -31,6 +40,17 @@
                                 @Html.ValidationMessageFor(u => u.JMBG )
                             </div>
                         </div>
+                        <div class="form-group">
+                            <!--<label for="inputEmail" class="col-lg-2 control-label">Email</label>-->
+                            @Html.LabelFor(u => u.Adresa, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-10">
+                                <!--    <input type="text" class="form-control" id="inputEmail" placeholder="Email"> -->
+                                @Html.TextBoxFor(u => u.Adresa, new { @class = "form-control", placeholder = "Adresa"})
+                                @Html.ValidationMessageFor(u => u.Adresa)
+                            </div>
+                        </div>
+
+
 
                         <div class="form-group">
                             <div class="col-md-10 col-md-offset-2">
