@@ -18,12 +18,20 @@
                             @Html.LabelFor(u => u.Ime, new { @class = "col-md-2 control-label" })
                             <div class="col-md-10">
                                 <!--    <input type="text" class="form-control" id="inputEmail" placeholder="Email"> -->
-                                @Html.TextBoxFor(u => u.Ime, new { @class = "form-control", placeholder = "Ime" })
+                                @Html.TextBoxFor(u => u.Ime, new { @class = "form-control", placeholder = " Unesite Ime" })
                                 @Html.ValidationMessageFor(u => u.Ime)
                             </div>
                         </div>
                         <div class="form-group">
                             <!--<label for="inputEmail" class="col-lg-2 control-label">Email</label>-->
+                            @Html.LabelFor(u => u.Prezime, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-10">
+                                <!--    <input type="text" class="form-control" id="inputEmail" placeholder="Email"> -->
+                                @Html.TextBoxFor(u => u.Prezime, new { @class = "form-control", placeholder = " Unesite Prezime" })
+                                @Html.ValidationMessageFor(u => u.Prezime)
+                            </div>
+                        </div>
+
                             @Html.LabelFor(u => u.JMBG, new { @class = "col-md-2 control-label" })
                             <div class="col-md-10">
                                 <!--    <input type="text" class="form-control" id="inputEmail" placeholder="Email"> -->
