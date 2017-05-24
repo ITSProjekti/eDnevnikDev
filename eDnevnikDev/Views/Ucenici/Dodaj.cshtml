@@ -31,12 +31,12 @@
                                 @Html.ValidationMessageFor(u => u.Prezime)
                             </div>
                         </div>
-
+                        <div class="form-group">
                             @Html.LabelFor(u => u.JMBG, new { @class = "col-md-2 control-label" })
                             <div class="col-md-10">
                                 <!--    <input type="text" class="form-control" id="inputEmail" placeholder="Email"> -->
-                                @Html.TextBoxFor(u => u.JMBG, new { @class = "form-control", placeholder = "JMBG", maxlength="13" })
-                                @Html.ValidationMessageFor(u => u.JMBG )
+                                @Html.TextBoxFor(u => u.JMBG, new { @class = "form-control", placeholder = "JMBG", maxlength = "13" })
+                                @Html.ValidationMessageFor(u => u.JMBG)
                             </div>
                         </div>
 
