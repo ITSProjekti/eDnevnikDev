@@ -16,8 +16,8 @@
                         <div class="form-group">
                             <!--<label for="inputEmail" class="col-lg-2 control-label">Email</label>-->
 
-                            @Html.LabelFor(u => u.Ucenik.Ime, new { @class = "col-md-2 control-label" })
-                            <div class="col-md-10">
+                            @Html.LabelFor(u => u.Ucenik.Ime, new { @class = "col-md-3 control-label" })
+                            <div class="col-md-9">
 
                                 <!--    <input type="text" class="form-control" id="inputEmail" placeholder="Email"> -->
                                 @Html.TextBoxFor(u => u.Ucenik.Ime, new { @class = "form-control", placeholder = " Unesite Ime" })
@@ -27,8 +27,8 @@
                         <div class="form-group">
                             <!--<label for="inputEmail" class="col-lg-2 control-label">Email</label>-->
 
-                            @Html.LabelFor(u => u.Ucenik.Prezime, new { @class = "col-md-2 control-label" })
-                            <div class="col-md-10">
+                            @Html.LabelFor(u => u.Ucenik.Prezime, new { @class = "col-md-3 control-label" })
+                            <div class="col-md-9">
 
                                 <!--    <input type="text" class="form-control" id="inputEmail" placeholder="Email"> -->
                                 @Html.TextBoxFor(u => u.Ucenik.Prezime, new { @class = "form-control", placeholder = " Unesite Prezime" })
@@ -38,8 +38,8 @@
                          <div class="form-group">
                             <!--<label for="inputEmail" class="col-lg-2 control-label">Email</label>-->
 
-                            @Html.LabelFor(u => u.Ucenik.RoditeljStaratelj, new { @class = "col-md-2 control-label" })
-                            <div class="col-md-10">
+                            @Html.LabelFor(u => u.Ucenik.RoditeljStaratelj, new { @class = "col-md-3 control-label" })
+                            <div class="col-md-9">
 
                                 <!--    <input type="text" class="form-control" id="inputEmail" placeholder="Email"> -->
                                 @Html.TextBoxFor(u => u.Ucenik.RoditeljStaratelj, new { @class = "form-control", placeholder = "Ime Roditelja/Staratelja" })
@@ -48,8 +48,8 @@
                         </div>
                         <div class="form-group">
 
-                            @Html.LabelFor(u => u.Ucenik.JMBG, new { @class = "col-md-2 control-label" })
-                            <div class="col-md-10">
+                            @Html.LabelFor(u => u.Ucenik.JMBG, new { @class = "col-md-3 control-label" })
+                            <div class="col-md-9">
 
                                 <!--    <input type="text" class="form-control" id="inputEmail" placeholder="Email"> -->
                                 @Html.TextBoxFor(u => u.Ucenik.JMBG, new { @class = "form-control", placeholder = "JMBG", maxlength = "13" })
@@ -59,8 +59,8 @@
                         <div class="form-group">
                             <!--<label for="inputEmail" class="col-lg-2 control-label">Email</label>-->
 
-                            @Html.LabelFor(u => u.Ucenik.Adresa, new { @class = "col-md-2 control-label" })
-                            <div class="col-md-10">
+                            @Html.LabelFor(u => u.Ucenik.Adresa, new { @class = "col-md-3 control-label" })
+                            <div class="col-md-9">
 
                                 <!--    <input type="text" class="form-control" id="inputEmail" placeholder="Email"> -->
                                 @Html.TextBoxFor(u => u.Ucenik.Adresa, new { @class = "form-control", placeholder = "Adresa"})
@@ -96,7 +96,7 @@
                             @Html.LabelFor(u => u.Ucenik.MestoRodjenja, new { @class = "col-md-3 control-label" })
                             <div class="col-md-9">                                
                                 @Html.DropDownListFor(u => u.Ucenik.MestoRodjenja, new SelectList(Model.Gradovi, "Id", "Naziv"), "Grad", new { @class = "form-control" })
-                                @Html.ValidationMessageFor(u => u.Ucenik.RoditeljStaratelj)
+                                @Html.ValidationMessageFor(u => u.Ucenik.MestoRodjenja)
                             </div>
                          </div>
 

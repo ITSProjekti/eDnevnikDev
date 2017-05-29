@@ -101,10 +101,18 @@ namespace eDnevnikDev.Models
         public string BrojTelefonaRoditelja { get; set; }
 
 
-
+        /// <summary>
+        /// Navigacioni property, referencira grad u tabeli Grad
+        /// </summary>
+        /// <value>
+        /// Grad
+        /// </value>
         [ForeignKey("MestoRodjenjaId")]
         [Display(Name ="Mesto Rodjenja")]
+        [Required(ErrorMessage = "Polje za mesto rođenja je obavezno")]
         public Grad MestoRodjenja { get; set; }
+
+
         public int MestoRodjenjaId { get; set; }
 
 
