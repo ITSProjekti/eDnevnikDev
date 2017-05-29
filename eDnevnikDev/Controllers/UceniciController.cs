@@ -7,31 +7,55 @@ using eDnevnikDev.Models;
 
 namespace eDnevnikDev.Controllers
 {
+    /// <summary>
+    /// Kontroler za upravljanje učenicima.
+    /// </summary>
+    /// <seealso cref="System.Web.Mvc.Controller" />
     public class UceniciController : Controller
     {
         ApplicationDbContext _context;
+        /// <summary>
+        /// Inicijalizuje instancu klase <see cref="UceniciController"/> class.
+        /// Konstruktor kontrolera.
+        /// </summary>
         public UceniciController()
         {
             _context = new ApplicationDbContext();
             
         }
 
+        /// <summary>
+        /// Destruktor za objekat klase aplicationDbContext.
+        /// </summary>
+        /// <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
         protected override void Dispose(bool disposing)
         {
             _context.Dispose();
         }
 
         // GET: Ucenici
+        /// <summary>
+        /// Indexes this instance.
+        /// Pravi instancu liste ucenika i prosledjuje je u view;
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Index()
         {
 
             IEnumerable<Ucenik> ListaUcenika = _context.Ucenici.ToList();
             return View(ListaUcenika);
         }
+        /// <summary>
+        /// Dodajs this instance.
+        /// Funkcija koja vraca view dodaj.
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Dodaj()
         {
 
             return View();
         }
+
+        
     }
 }
