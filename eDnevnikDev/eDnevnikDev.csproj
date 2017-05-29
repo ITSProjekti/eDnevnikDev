@@ -214,6 +214,11 @@
     <Compile Include="Migrations\201705251053460_DodatRequiredZaJmbg.Designer.cs">
       <DependentUpon>201705251053460_DodatRequiredZaJmbg.cs</DependentUpon>
     </Compile>
+
+    <Compile Include="Migrations\201705290947272_DodatoMestoPrebivalista.cs" />
+    <Compile Include="Migrations\201705290947272_DodatoMestoPrebivalista.Designer.cs">
+      <DependentUpon>201705290947272_DodatoMestoPrebivalista.cs</DependentUpon>
+
     <Compile Include="Migrations\201705290918434_DodatModelGrad.cs" />
     <Compile Include="Migrations\201705290918434_DodatModelGrad.Designer.cs">
       <DependentUpon>201705290918434_DodatModelGrad.cs</DependentUpon>
@@ -225,6 +230,7 @@
     <Compile Include="Migrations\201705290943222_DodatoMestoRodjenjaUModelUcenik.cs" />
     <Compile Include="Migrations\201705290943222_DodatoMestoRodjenjaUModelUcenik.Designer.cs">
       <DependentUpon>201705290943222_DodatoMestoRodjenjaUModelUcenik.cs</DependentUpon>
+
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -319,6 +325,10 @@
     <EmbeddedResource Include="Migrations\201705251053460_DodatRequiredZaJmbg.resx">
       <DependentUpon>201705251053460_DodatRequiredZaJmbg.cs</DependentUpon>
     </EmbeddedResource>
+
+    <EmbeddedResource Include="Migrations\201705290947272_DodatoMestoPrebivalista.resx">
+      <DependentUpon>201705290947272_DodatoMestoPrebivalista.cs</DependentUpon>
+
     <EmbeddedResource Include="Migrations\201705290918434_DodatModelGrad.resx">
       <DependentUpon>201705290918434_DodatModelGrad.cs</DependentUpon>
     </EmbeddedResource>
@@ -327,6 +337,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705290943222_DodatoMestoRodjenjaUModelUcenik.resx">
       <DependentUpon>201705290943222_DodatoMestoRodjenjaUModelUcenik.cs</DependentUpon>
+
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

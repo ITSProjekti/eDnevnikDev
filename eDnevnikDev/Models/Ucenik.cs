@@ -28,7 +28,7 @@ namespace eDnevnikDev.Models
         /// The IME.
         /// </value>
         [Required(AllowEmptyStrings =false, ErrorMessage ="Polje za ime je obavezno")]
-        [RegularExpression(@"^([A-ZŠĐČĆŽ]{1}[a-zšđčćž]+ ?)+$", ErrorMessage ="Polje za ime može da sadrži samo slova i mora da počinje velikim slovom")]
+        [RegularExpression(@"^([A-ZŠĐČĆŽa-zšđčćž]+ ?)+$", ErrorMessage ="Polje za ime može da sadrži samo slova")]
         public string Ime { get; set; }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace eDnevnikDev.Models
         /// The prezime.
         /// </value>
         [Required(AllowEmptyStrings = false, ErrorMessage = "Polje za prezime je obavezno")]
-        [RegularExpression(@"^([A-ZŠĐČĆŽ]{1}[a-zšđčćž]+ ?)+$", ErrorMessage = "Polje za prezime može da sadrži samo slova i mora da počinje velikim slovom")]
+        [RegularExpression(@"^([A-ZŠĐČĆŽa-zšđčćž]+ ?)+$", ErrorMessage = "Polje za prezime može da sadrži samo slova")]
         public string Prezime { get; set; }
         /// <summary>
         /// Gets or sets the JMBG.
@@ -72,13 +72,41 @@ namespace eDnevnikDev.Models
         /// The roditelj staratelj.
         /// </value>
         [Required(AllowEmptyStrings = false, ErrorMessage = "Polje za roditelja/staratelja je obavezno")]
-        [RegularExpression(@"^([A-ZŠĐČĆŽ]{1}[a-zšđčćž]+ ?)+$", ErrorMessage = "Ime roditelja nije ispravno (Prvo slovo mora biti veliko)")]
+        [RegularExpression(@"^([A-ZŠĐČĆŽa-zšđčćž]+ ?)+$", ErrorMessage = "Ime roditelja nije ispravno")]
+        [Display(Name = "Roditelj/Staratelj")]
         public string RoditeljStaratelj { get; set; }
+
+
+        /// <summary>
+        /// Služi za čuvanje mesta prebivališta
+        /// </summary>
+        /// <value>
+        /// Mesto prebivališta.
+        /// </value>
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Polje za mesto prebivališta je obavezno")]
+        [RegularExpression(@"^([A-ZŠĐČĆŽa-zšđčćž]+ ?)+$", ErrorMessage = "Mesto prebivališta nije ispravno")]
+        [Display(Name = "Mesto prebivališta")]
+        public string MestoPrebivalista { get; set; }
+
+
+        /// <summary>
+        /// Služi za čuvanje broja telefona roditelja staratelja
+        /// </summary>
+        /// <value>
+        /// Broj telefona
+        /// </value>
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Polje za broj telefona roditelja je obavezno")]
+        [RegularExpression(@"^\+(\d{1,3})-(\d{1,3})\/(\d{6,7})$", ErrorMessage = "Broj telefona roditelja nije ispravan (format: +381-11/1234567)")]
+        [Display(Name = "Broj telefona roditelja")]
+        public string BrojTelefonaRoditelja { get; set; }
+
+
 
         [ForeignKey("MestoRodjenjaId")]
         [Display(Name ="Mesto Rodjenja")]
         public Grad MestoRodjenja { get; set; }
         public int MestoRodjenjaId { get; set; }
+
 
     }
 }
