@@ -1,4 +1,4 @@
-﻿@model Ucenik
+﻿@model UcenikViewModel
 @{
     ViewBag.Title = "Dodaj";
 }
@@ -15,77 +15,101 @@
                         <legend>Novi</legend>
                         <div class="form-group">
                             <!--<label for="inputEmail" class="col-lg-2 control-label">Email</label>-->
-                            @Html.LabelFor(u => u.Ime, new { @class = "col-md-3 control-label" })
-                            <div class="col-md-9">
+
+                            @Html.LabelFor(u => u.Ucenik.Ime, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-10">
+
                                 <!--    <input type="text" class="form-control" id="inputEmail" placeholder="Email"> -->
-                                @Html.TextBoxFor(u => u.Ime, new { @class = "form-control", placeholder = " Unesite Ime" })
-                                @Html.ValidationMessageFor(u => u.Ime)
+                                @Html.TextBoxFor(u => u.Ucenik.Ime, new { @class = "form-control", placeholder = " Unesite Ime" })
+                                @Html.ValidationMessageFor(u => u.Ucenik.Ime)
                             </div>
                         </div>
                         <div class="form-group">
                             <!--<label for="inputEmail" class="col-lg-2 control-label">Email</label>-->
-                            @Html.LabelFor(u => u.Prezime, new { @class = "col-md-3 control-label" })
-                            <div class="col-md-9">
+
+                            @Html.LabelFor(u => u.Ucenik.Prezime, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-10">
+
                                 <!--    <input type="text" class="form-control" id="inputEmail" placeholder="Email"> -->
-                                @Html.TextBoxFor(u => u.Prezime, new { @class = "form-control", placeholder = " Unesite Prezime" })
-                                @Html.ValidationMessageFor(u => u.Prezime)
+                                @Html.TextBoxFor(u => u.Ucenik.Prezime, new { @class = "form-control", placeholder = " Unesite Prezime" })
+                                @Html.ValidationMessageFor(u => u.Ucenik.Prezime)
                             </div>
                         </div>
                          <div class="form-group">
                             <!--<label for="inputEmail" class="col-lg-2 control-label">Email</label>-->
-                            @Html.LabelFor(u => u.RoditeljStaratelj, new { @class = "col-md-3 control-label" })
-                            <div class="col-md-9">
+
+                            @Html.LabelFor(u => u.Ucenik.RoditeljStaratelj, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-10">
+
                                 <!--    <input type="text" class="form-control" id="inputEmail" placeholder="Email"> -->
-                                @Html.TextBoxFor(u => u.RoditeljStaratelj, new { @class = "form-control", placeholder = "Ime Roditelja/Staratelja" })
-                                @Html.ValidationMessageFor(u => u.RoditeljStaratelj )
+                                @Html.TextBoxFor(u => u.Ucenik.RoditeljStaratelj, new { @class = "form-control", placeholder = "Ime Roditelja/Staratelja" })
+                                @Html.ValidationMessageFor(u => u.Ucenik.RoditeljStaratelj )
                             </div>
                         </div>
                         <div class="form-group">
-                            @Html.LabelFor(u => u.JMBG, new { @class = "col-md-3 control-label" })
-                            <div class="col-md-9">
+
+                            @Html.LabelFor(u => u.Ucenik.JMBG, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-10">
+
                                 <!--    <input type="text" class="form-control" id="inputEmail" placeholder="Email"> -->
-                                @Html.TextBoxFor(u => u.JMBG, new { @class = "form-control", placeholder = "JMBG", maxlength = "13" })
-                                @Html.ValidationMessageFor(u => u.JMBG)
+                                @Html.TextBoxFor(u => u.Ucenik.JMBG, new { @class = "form-control", placeholder = "JMBG", maxlength = "13" })
+                                @Html.ValidationMessageFor(u => u.Ucenik.JMBG)
                             </div>
                         </div>
                         <div class="form-group">
                             <!--<label for="inputEmail" class="col-lg-2 control-label">Email</label>-->
-                            @Html.LabelFor(u => u.Adresa, new { @class = "col-md-3 control-label" })
+
+                            @Html.LabelFor(u => u.Ucenik.Adresa, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-10">
+
+                                <!--    <input type="text" class="form-control" id="inputEmail" placeholder="Email"> -->
+                                @Html.TextBoxFor(u => u.Ucenik.Adresa, new { @class = "form-control", placeholder = "Adresa"})
+                                @Html.ValidationMessageFor(u => u.Ucenik.Adresa)
+                            </div>
+                        </div>
+                        <div class="form-group">
+
+                            <!--<label for="inputEmail" class="col-lg-2 control-label">Email</label>-->
+                            @Html.LabelFor(u => u.Ucenik.MestoPrebivalista, new { @class = "col-md-3 control-label" })
                             <div class="col-md-9">
                                 <!--    <input type="text" class="form-control" id="inputEmail" placeholder="Email"> -->
-                                @Html.TextBoxFor(u => u.Adresa, new { @class = "form-control", placeholder = "Adresa"})
-                                @Html.ValidationMessageFor(u => u.Adresa)
+                                @Html.TextBoxFor(u => u.Ucenik.MestoPrebivalista, new { @class = "form-control", placeholder = "Mesto prebivališta" })
+                                @Html.ValidationMessageFor(u => u.Ucenik.MestoPrebivalista)
                             </div>
                         </div>
                         <div class="form-group">
                             <!--<label for="inputEmail" class="col-lg-2 control-label">Email</label>-->
-                            @Html.LabelFor(u => u.MestoPrebivalista, new { @class = "col-md-3 control-label" })
+                            @Html.LabelFor(u => u.Ucenik.BrojTelefonaRoditelja, new { @class = "col-md-3 control-label" })
                             <div class="col-md-9">
                                 <!--    <input type="text" class="form-control" id="inputEmail" placeholder="Email"> -->
-                                @Html.TextBoxFor(u => u.MestoPrebivalista, new { @class = "form-control", placeholder = "Mesto prebivališta" })
-                                @Html.ValidationMessageFor(u => u.MestoPrebivalista)
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <!--<label for="inputEmail" class="col-lg-2 control-label">Email</label>-->
-                            @Html.LabelFor(u => u.BrojTelefonaRoditelja, new { @class = "col-md-3 control-label" })
-                            <div class="col-md-9">
-                                <!--    <input type="text" class="form-control" id="inputEmail" placeholder="Email"> -->
-                                @Html.TextBoxFor(u => u.BrojTelefonaRoditelja, new { @class = "form-control", placeholder = "Broj telefona" })
-                                @Html.ValidationMessageFor(u => u.BrojTelefonaRoditelja)
+                                @Html.TextBoxFor(u => u.Ucenik.BrojTelefonaRoditelja, new { @class = "form-control", placeholder = "Broj telefona" })
+                                @Html.ValidationMessageFor(u => u.Ucenik.BrojTelefonaRoditelja)
                             </div>
                         </div>
 
 
 
 
-                        <div class="form-group">
-                            <div class="col-md-9 col-md-offset-3">
-                                <button type="reset" class="btn btn-default">Poništi</button>
-                                <button type="submit" class="btn btn-primary">Sačuvaj</button>
+                        
+
+                         <div class="form-group">
+                            @Html.LabelFor(u => u.Ucenik.MestoRodjenja, new { @class = "col-md-3 control-label" })
+                            <div class="col-md-9">                                
+                                @Html.DropDownListFor(u => u.Ucenik.MestoRodjenja, new SelectList(Model.Gradovi, "Id", "Naziv"), "Grad", new { @class = "form-control" })
+                                @Html.ValidationMessageFor(u => u.Ucenik.RoditeljStaratelj)
                             </div>
-                        </div>
-                    </fieldset>
+                         </div>
+
+
+                            <div class="form-group">
+                                <div class="col-md-10 col-md-offset-2">
+                                    <button type="reset" class="btn btn-default">Poništi</button>
+                                    <button type="submit" class="btn btn-primary">Sačuvaj</button>
+                                </div>
+                            </div>
+
+                           
+</fieldset>
                 }
             </div>
         </div>

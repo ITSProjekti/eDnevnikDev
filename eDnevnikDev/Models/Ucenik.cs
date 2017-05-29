@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
-
+using System.ComponentModel.DataAnnotations.Schema;
 namespace eDnevnikDev.Models
 {
     /// <summary>
@@ -48,6 +48,7 @@ namespace eDnevnikDev.Models
         /// <value>
         /// The JMBG.
         /// </value>
+
         [Required(AllowEmptyStrings = false, ErrorMessage = "Polje za JMBG je obavezno")]
         [RegularExpression("(0[1-9]|[12][0-9]|3[01])(0[1-9]|1[012])[0|9][0-9]{2}[0-9]{6}", ErrorMessage = "JMBG nije ispravan")]
         public string JMBG { get; set; }
@@ -75,6 +76,7 @@ namespace eDnevnikDev.Models
         [Display(Name = "Roditelj/Staratelj")]
         public string RoditeljStaratelj { get; set; }
 
+
         /// <summary>
         /// Služi za čuvanje mesta prebivališta
         /// </summary>
@@ -98,6 +100,12 @@ namespace eDnevnikDev.Models
         [Display(Name = "Broj telefona roditelja")]
         public string BrojTelefonaRoditelja { get; set; }
 
+
+
+        [ForeignKey("MestoRodjenjaId")]
+        [Display(Name ="Mesto Rodjenja")]
+        public Grad MestoRodjenja { get; set; }
+        public int MestoRodjenjaId { get; set; }
 
 
     }
