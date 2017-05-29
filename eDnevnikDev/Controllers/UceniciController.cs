@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using eDnevnikDev.Models;
+using eDnevnikDev.ViewModel;
 
 namespace eDnevnikDev.Controllers
 {
@@ -52,8 +53,12 @@ namespace eDnevnikDev.Controllers
         /// <returns></returns>
         public ActionResult Dodaj()
         {
+            var ucenikVM = new UcenikViewModel
+            {
+                Gradovi = _context.Gradovi.ToList()
+            };
 
-            return View();
+            return View(ucenikVM);
         }
 
         

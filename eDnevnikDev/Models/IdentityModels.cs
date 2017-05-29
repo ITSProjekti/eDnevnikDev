@@ -23,6 +23,7 @@ namespace eDnevnikDev.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Ucenik> Ucenici { get; set; }
+        public DbSet<Grad> Gradovi {get;set;}
         public ApplicationDbContext()
             : base("eDnevnik", throwIfV1Schema: false)
         {
