@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
-
+using System.ComponentModel.DataAnnotations.Schema;
 namespace eDnevnikDev.Models
 {
     /// <summary>
@@ -48,6 +48,7 @@ namespace eDnevnikDev.Models
         /// <value>
         /// The JMBG.
         /// </value>
+        
         public string JMBG { get; set; }
 
         /// <summary>
@@ -71,6 +72,11 @@ namespace eDnevnikDev.Models
         [Required(AllowEmptyStrings = false, ErrorMessage = "Polje za roditelja/staratelja je obavezno")]
         [RegularExpression(@"^([A-ZŠĐČĆŽ]{1}[a-zšđčćž]+ ?)+$", ErrorMessage = "Ime roditelja nije ispravno (Prvo slovo mora biti veliko)")]
         public string RoditeljStaratelj { get; set; }
+
+        [ForeignKey("MestoRodjenjaId")]
+        [Display(Name ="Mesto Rodjenja")]
+        public Grad MestoRodjenja { get; set; }
+        public int MestoRodjenjaId { get; set; }
 
     }
 }
