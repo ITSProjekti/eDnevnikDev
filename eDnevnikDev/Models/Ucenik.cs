@@ -28,6 +28,7 @@ namespace eDnevnikDev.Models
         /// The IME.
         /// </value>
         [Required(AllowEmptyStrings =false, ErrorMessage ="Polje za ime je obavezno")]
+        [RegularExpression(@"^([A-ZŠĐČĆŽ]{1}[a-zšđčćž]+ ?)+$", ErrorMessage ="Polje za ime može da sadrži samo slova i mora da počinje velikim slovom")]
         public string Ime { get; set; }
 
         /// <summary>
@@ -38,6 +39,7 @@ namespace eDnevnikDev.Models
         /// The prezime.
         /// </value>
         [Required(AllowEmptyStrings = false, ErrorMessage = "Polje za prezime je obavezno")]
+        [RegularExpression(@"^([A-ZŠĐČĆŽ]{1}[a-zšđčćž]+ ?)+$", ErrorMessage = "Polje za prezime može da sadrži samo slova i mora da počinje velikim slovom")]
         public string Prezime { get; set; }
         /// <summary>
         /// Gets or sets the JMBG.
@@ -56,6 +58,7 @@ namespace eDnevnikDev.Models
         /// The adresa.
         /// </value>
         [Required(AllowEmptyStrings = false, ErrorMessage = "Polje za adresu je obavezno")]
+        [RegularExpression(@"^[A-Za-z0-9'\.\-\s\,]+$",ErrorMessage ="Nisu dozoljeni specijalni karakteri")]
         public string Adresa { get; set; }
 
         /// <summary>
@@ -66,6 +69,7 @@ namespace eDnevnikDev.Models
         /// The roditelj staratelj.
         /// </value>
         [Required(AllowEmptyStrings = false, ErrorMessage = "Polje za roditelja/staratelja je obavezno")]
+        [RegularExpression(@"^([A-ZŠĐČĆŽ]{1}[a-zšđčćž]+ ?)+$", ErrorMessage = "Ime roditelja nije ispravno (Prvo slovo mora biti veliko)")]
         public string RoditeljStaratelj { get; set; }
 
     }
