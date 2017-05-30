@@ -115,6 +115,6 @@ namespace eDnevnikDev.Models
 
         public int MestoRodjenjaId { get; set; }
 
-
+        public bool Vanredan { get; set; }
     }
 }
