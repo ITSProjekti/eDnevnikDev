@@ -35,7 +35,7 @@
                                 @Html.ValidationMessageFor(u => u.Ucenik.Prezime)
                             </div>
                         </div>
-                         <div class="form-group">
+                        <div class="form-group">
                             <!--<label for="inputEmail" class="col-lg-2 control-label">Email</label>-->
 
                             @Html.LabelFor(u => u.Ucenik.RoditeljStaratelj, new { @class = "col-md-3 control-label" })
@@ -43,7 +43,7 @@
 
                                 <!--    <input type="text" class="form-control" id="inputEmail" placeholder="Email"> -->
                                 @Html.TextBoxFor(u => u.Ucenik.RoditeljStaratelj, new { @class = "form-control", placeholder = "Ime Roditelja/Staratelja" })
-                                @Html.ValidationMessageFor(u => u.Ucenik.RoditeljStaratelj )
+                                @Html.ValidationMessageFor(u => u.Ucenik.RoditeljStaratelj)
                             </div>
                         </div>
                         <div class="form-group">
@@ -63,7 +63,7 @@
                             <div class="col-md-9">
 
                                 <!--    <input type="text" class="form-control" id="inputEmail" placeholder="Email"> -->
-                                @Html.TextBoxFor(u => u.Ucenik.Adresa, new { @class = "form-control", placeholder = "Adresa"})
+                                @Html.TextBoxFor(u => u.Ucenik.Adresa, new { @class = "form-control", placeholder = "Adresa" })
                                 @Html.ValidationMessageFor(u => u.Ucenik.Adresa)
                             </div>
                         </div>
@@ -93,6 +93,7 @@
                                 @Html.ValidationMessageFor(u => u.Ucenik.MestoRodjenja)
                             </div>
                         </div>
+
                         <div class="form-group">
                                                             
                                     @Html.LabelFor(u=>u.Ucenik.Vanredan,new { @class = "col-md-3 control-label"})
@@ -100,22 +101,27 @@
                                         @Html.CheckBoxFor(u => u.Ucenik.Vanredan)
                                     </div>
                          </div>
-                                                
-                            <div class="form-group">
-                                <div class="col-md-10 col-md-offset-2">
-                                    <button type="reset" class="btn btn-default">Poništi</button>
-                                    <button type="submit" class="btn btn-primary">Sačuvaj</button>
-                                </div>
+                                      
+                        <div class="form-group">
+                            @Html.LabelFor(u => u.Ucenik.Smer, new { @class = "col-md-3 control-label" })
+                            <div class="col-md-9">
+                                @Html.DropDownListFor(u => u.Ucenik.Smer, new SelectList(Model.Smerovi, "SmerID", "NazivSmera"), "Smer", new { @class = "form-control" })
+                                @Html.ValidationMessageFor(u => u.Ucenik.Smer)
                             </div>
-
-
-</fieldset>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-10 col-md-offset-2">
+                                <button type="reset" class="btn btn-default">Poništi</button>
+                                <button type="submit" class="btn btn-primary">Sačuvaj</button>
+                            </div>
+                        </div>
+                    </fieldset>
                 }
             </div>
         </div>
     </div>
 </div>
- <!--       </form> -->
+<!--       </form> -->
 
 
 

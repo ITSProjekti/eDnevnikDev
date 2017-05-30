@@ -55,7 +55,9 @@ namespace eDnevnikDev.Controllers
         {
             var ucenikVM = new UcenikViewModel
             {
-                Gradovi = _context.Gradovi.ToList()
+                Gradovi = _context.Gradovi.ToList(),
+                Smerovi = _context.Smerovi.ToList()
+
             };
 
             return View(ucenikVM);

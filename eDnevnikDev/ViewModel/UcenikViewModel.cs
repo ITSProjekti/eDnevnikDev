@@ -10,5 +10,7 @@ namespace eDnevnikDev.ViewModel
     {
         public Ucenik  Ucenik { get; set; }
         public IEnumerable<Grad> Gradovi { get; set; }
+
+        public IEnumerable<Smer> Smerovi { get; set; }
     }
 }
