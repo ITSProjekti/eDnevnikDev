@@ -24,6 +24,7 @@ namespace eDnevnikDev.Models
     {
         public DbSet<Ucenik> Ucenici { get; set; }
         public DbSet<Grad> Gradovi {get;set;}
+        public DbSet<Profesor> Profesori { get; set; }
         public ApplicationDbContext()
             : base("eDnevnik", throwIfV1Schema: false)
         {
