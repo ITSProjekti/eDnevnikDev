@@ -198,6 +198,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\ProfesoriController.cs" />
     <Compile Include="Controllers\UceniciController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -234,6 +235,26 @@
     <Compile Include="Migrations\201705291435428_DodatBrojTelefonaRoditeljaStaratelja.Designer.cs">
       <DependentUpon>201705291435428_DodatBrojTelefonaRoditeljaStaratelja.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705300827532_DodatoPoljeZaRedovnogUcenika.cs" />
+    <Compile Include="Migrations\201705300827532_DodatoPoljeZaRedovnogUcenika.Designer.cs">
+      <DependentUpon>201705300827532_DodatoPoljeZaRedovnogUcenika.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705300842493_dodatModelProfesora.cs" />
+    <Compile Include="Migrations\201705300842493_dodatModelProfesora.Designer.cs">
+      <DependentUpon>201705300842493_dodatModelProfesora.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705300942215_MergeMig1.cs" />
+    <Compile Include="Migrations\201705300942215_MergeMig1.Designer.cs">
+      <DependentUpon>201705300942215_MergeMig1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705301003091_DodataAdresaITelefonZaProfesora.cs" />
+    <Compile Include="Migrations\201705301003091_DodataAdresaITelefonZaProfesora.Designer.cs">
+      <DependentUpon>201705301003091_DodataAdresaITelefonZaProfesora.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705301017236_DodatoPoljeZaVanrednogProfesoraIZaRazrednogStaresinu.cs" />
+    <Compile Include="Migrations\201705301017236_DodatoPoljeZaVanrednogProfesoraIZaRazrednogStaresinu.Designer.cs">
+      <DependentUpon>201705301017236_DodatoPoljeZaVanrednogProfesoraIZaRazrednogStaresinu.cs</DependentUpon>
+      </Compile>
     <Compile Include="Migrations\201705300904336_DodatModelSmer.cs" />
     <Compile Include="Migrations\201705300904336_DodatModelSmer.Designer.cs">
       <DependentUpon>201705300904336_DodatModelSmer.cs</DependentUpon>
@@ -251,6 +272,7 @@
     <Compile Include="Models\Grad.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Profesor.cs" />
     <Compile Include="Models\Smer.cs" />
     <Compile Include="Models\Ucenik.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -318,6 +340,8 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Ucenici\Index.cshtml" />
     <Content Include="Views\Ucenici\Dodaj.cshtml" />
+    <Content Include="Views\Profesori\Index.cshtml" />
+    <Content Include="Views\Profesori\Dodaj.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -355,6 +379,22 @@
     <EmbeddedResource Include="Migrations\201705291435428_DodatBrojTelefonaRoditeljaStaratelja.resx">
       <DependentUpon>201705291435428_DodatBrojTelefonaRoditeljaStaratelja.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705300827532_DodatoPoljeZaRedovnogUcenika.resx">
+      <DependentUpon>201705300827532_DodatoPoljeZaRedovnogUcenika.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705300842493_dodatModelProfesora.resx">
+      <DependentUpon>201705300842493_dodatModelProfesora.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705300942215_MergeMig1.resx">
+      <DependentUpon>201705300942215_MergeMig1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705301003091_DodataAdresaITelefonZaProfesora.resx">
+      <DependentUpon>201705301003091_DodataAdresaITelefonZaProfesora.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705301017236_DodatoPoljeZaVanrednogProfesoraIZaRazrednogStaresinu.resx">
+      <DependentUpon>201705301017236_DodatoPoljeZaVanrednogProfesoraIZaRazrednogStaresinu.cs</DependentUpon>
+      </EmbeddedResource>
+
     <EmbeddedResource Include="Migrations\201705300904336_DodatModelSmer.resx">
       <DependentUpon>201705300904336_DodatModelSmer.cs</DependentUpon>
     </EmbeddedResource>

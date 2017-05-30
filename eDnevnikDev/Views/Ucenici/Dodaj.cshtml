@@ -86,7 +86,6 @@
                                 @Html.ValidationMessageFor(u => u.Ucenik.BrojTelefonaRoditelja)
                             </div>
                         </div>
-
                         <div class="form-group">
                             @Html.LabelFor(u => u.Ucenik.MestoRodjenja, new { @class = "col-md-3 control-label" })
                             <div class="col-md-9">
@@ -95,6 +94,14 @@
                             </div>
                         </div>
 
+                        <div class="form-group">
+                                                            
+                                    @Html.LabelFor(u=>u.Ucenik.Vanredan,new { @class = "col-md-3 control-label"})
+                                    <div class="checkbox col-md-9">
+                                        @Html.CheckBoxFor(u => u.Ucenik.Vanredan)
+                                    </div>
+                         </div>
+                                      
                         <div class="form-group">
                             @Html.LabelFor(u => u.Ucenik.Smer, new { @class = "col-md-3 control-label" })
                             <div class="col-md-9">
@@ -108,8 +115,6 @@
                                 <button type="submit" class="btn btn-primary">Sačuvaj</button>
                             </div>
                         </div>
-
-
                     </fieldset>
                 }
             </div>
