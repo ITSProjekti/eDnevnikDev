@@ -198,6 +198,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\PredmetiController.cs" />
     <Compile Include="Controllers\ProfesoriController.cs" />
     <Compile Include="Controllers\UceniciController.cs" />
     <Compile Include="Global.asax.cs">
@@ -271,11 +272,16 @@
     <Compile Include="Migrations\201705301039462_MergeMig2.Designer.cs">
       <DependentUpon>201705301039462_MergeMig2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705301126409_DodatModelPredmet.cs" />
+    <Compile Include="Migrations\201705301126409_DodatModelPredmet.Designer.cs">
+      <DependentUpon>201705301126409_DodatModelPredmet.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Grad.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Predmet.cs" />
     <Compile Include="Models\Profesor.cs" />
     <Compile Include="Models\Smer.cs" />
     <Compile Include="Models\Ucenik.cs" />
@@ -346,6 +352,8 @@
     <Content Include="Views\Ucenici\Dodaj.cshtml" />
     <Content Include="Views\Profesori\Index.cshtml" />
     <Content Include="Views\Profesori\Dodaj.cshtml" />
+    <Content Include="Views\Predmeti\Index.cshtml" />
+    <Content Include="Views\Predmeti\Dodaj.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -409,6 +417,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705301039462_MergeMig2.resx">
       <DependentUpon>201705301039462_MergeMig2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705301126409_DodatModelPredmet.resx">
+      <DependentUpon>201705301126409_DodatModelPredmet.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

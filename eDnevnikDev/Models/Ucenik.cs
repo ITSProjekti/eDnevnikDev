@@ -61,7 +61,7 @@ namespace eDnevnikDev.Models
         /// The adresa.
         /// </value>
         [Required(AllowEmptyStrings = false, ErrorMessage = "Polje za adresu je obavezno")]
-        [RegularExpression(@"^[A-Za-z0-9'\.\-\s\,]+$",ErrorMessage ="Nisu dozoljeni specijalni karakteri")]
+        [RegularExpression(@"^[A-ZŠĐČĆŽa-zšđčćž0-9'\.\-\s\,]+$", ErrorMessage ="Nisu dozoljeni specijalni karakteri")]
         public string Adresa { get; set; }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace eDnevnikDev.Models
         /// Grad
         /// </value>
         [ForeignKey("MestoRodjenjaId")]
-        [Display(Name ="Mesto Rodjenja")]
+        [Display(Name ="Mesto Rođenja")]
         [Required(ErrorMessage = "Polje za mesto rođenja je obavezno")]
         public Grad MestoRodjenja { get; set; }
 

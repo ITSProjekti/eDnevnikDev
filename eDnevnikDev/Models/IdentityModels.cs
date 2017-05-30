@@ -26,6 +26,9 @@ namespace eDnevnikDev.Models
         public DbSet<Grad> Gradovi {get;set;}
         public DbSet<Profesor> Profesori { get; set; }
         public DbSet<Smer> Smerovi { get; set; }
+        public DbSet<Predmet> Predmeti { get; set; }
+
+
         public ApplicationDbContext()
             : base("eDnevnik", throwIfV1Schema: false)
         {
