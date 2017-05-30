@@ -243,6 +243,10 @@
     <Compile Include="Migrations\201705300842493_dodatModelProfesora.Designer.cs">
       <DependentUpon>201705300842493_dodatModelProfesora.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705300942215_MergeMig1.cs" />
+    <Compile Include="Migrations\201705300942215_MergeMig1.Designer.cs">
+      <DependentUpon>201705300942215_MergeMig1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Grad.cs" />
@@ -353,12 +357,14 @@
     <EmbeddedResource Include="Migrations\201705291435428_DodatBrojTelefonaRoditeljaStaratelja.resx">
       <DependentUpon>201705291435428_DodatBrojTelefonaRoditeljaStaratelja.cs</DependentUpon>
     </EmbeddedResource>
-
     <EmbeddedResource Include="Migrations\201705300827532_DodatoPoljeZaRedovnogUcenika.resx">
       <DependentUpon>201705300827532_DodatoPoljeZaRedovnogUcenika.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705300842493_dodatModelProfesora.resx">
       <DependentUpon>201705300842493_dodatModelProfesora.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705300942215_MergeMig1.resx">
+      <DependentUpon>201705300942215_MergeMig1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
