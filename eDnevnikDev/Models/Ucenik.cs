@@ -115,6 +115,11 @@ namespace eDnevnikDev.Models
 
         public int MestoRodjenjaId { get; set; }
 
+        [ForeignKey("SmerID")]
+        [Required(ErrorMessage = "Polje za smer je obavezno")]
+        public Smer Smer { get; set; }
 
+
+        public int SmerID { get; set; }
     }
 }

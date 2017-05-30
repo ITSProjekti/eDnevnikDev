@@ -234,11 +234,24 @@
     <Compile Include="Migrations\201705291435428_DodatBrojTelefonaRoditeljaStaratelja.Designer.cs">
       <DependentUpon>201705291435428_DodatBrojTelefonaRoditeljaStaratelja.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705300904336_DodatModelSmer.cs" />
+    <Compile Include="Migrations\201705300904336_DodatModelSmer.Designer.cs">
+      <DependentUpon>201705300904336_DodatModelSmer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705300908048_PopunjavanjeSmerova.cs" />
+    <Compile Include="Migrations\201705300908048_PopunjavanjeSmerova.Designer.cs">
+      <DependentUpon>201705300908048_PopunjavanjeSmerova.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705300921426_DodatSmeruModelUcenik.cs" />
+    <Compile Include="Migrations\201705300921426_DodatSmeruModelUcenik.Designer.cs">
+      <DependentUpon>201705300921426_DodatSmeruModelUcenik.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Grad.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Smer.cs" />
     <Compile Include="Models\Ucenik.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -341,6 +354,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705291435428_DodatBrojTelefonaRoditeljaStaratelja.resx">
       <DependentUpon>201705291435428_DodatBrojTelefonaRoditeljaStaratelja.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705300904336_DodatModelSmer.resx">
+      <DependentUpon>201705300904336_DodatModelSmer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705300908048_PopunjavanjeSmerova.resx">
+      <DependentUpon>201705300908048_PopunjavanjeSmerova.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705300921426_DodatSmeruModelUcenik.resx">
+      <DependentUpon>201705300921426_DodatSmeruModelUcenik.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
