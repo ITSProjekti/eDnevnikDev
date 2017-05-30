@@ -15,13 +15,10 @@ namespace eDnevnikDev.Migrations
                         Naziv = c.String(),
                     })
                 .PrimaryKey(t => t.Id);
-            
-            AlterColumn("dbo.Ucenik", "JMBG", c => c.String());
         }
         
         public override void Down()
         {
-            AlterColumn("dbo.Ucenik", "JMBG", c => c.String(nullable: false));
             DropTable("dbo.Grad");
         }
     }

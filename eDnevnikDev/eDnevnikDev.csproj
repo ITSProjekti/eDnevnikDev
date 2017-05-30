@@ -254,7 +254,7 @@
     <Compile Include="Migrations\201705301017236_DodatoPoljeZaVanrednogProfesoraIZaRazrednogStaresinu.cs" />
     <Compile Include="Migrations\201705301017236_DodatoPoljeZaVanrednogProfesoraIZaRazrednogStaresinu.Designer.cs">
       <DependentUpon>201705301017236_DodatoPoljeZaVanrednogProfesoraIZaRazrednogStaresinu.cs</DependentUpon>
-      </Compile>
+    </Compile>
     <Compile Include="Migrations\201705300904336_DodatModelSmer.cs" />
     <Compile Include="Migrations\201705300904336_DodatModelSmer.Designer.cs">
       <DependentUpon>201705300904336_DodatModelSmer.cs</DependentUpon>
@@ -266,6 +266,10 @@
     <Compile Include="Migrations\201705300921426_DodatSmeruModelUcenik.cs" />
     <Compile Include="Migrations\201705300921426_DodatSmeruModelUcenik.Designer.cs">
       <DependentUpon>201705300921426_DodatSmeruModelUcenik.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705301039462_MergeMig2.cs" />
+    <Compile Include="Migrations\201705301039462_MergeMig2.Designer.cs">
+      <DependentUpon>201705301039462_MergeMig2.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -393,8 +397,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705301017236_DodatoPoljeZaVanrednogProfesoraIZaRazrednogStaresinu.resx">
       <DependentUpon>201705301017236_DodatoPoljeZaVanrednogProfesoraIZaRazrednogStaresinu.cs</DependentUpon>
-      </EmbeddedResource>
-
+    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705300904336_DodatModelSmer.resx">
       <DependentUpon>201705300904336_DodatModelSmer.cs</DependentUpon>
     </EmbeddedResource>
@@ -403,6 +406,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705300921426_DodatSmeruModelUcenik.resx">
       <DependentUpon>201705300921426_DodatSmeruModelUcenik.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705301039462_MergeMig2.resx">
+      <DependentUpon>201705301039462_MergeMig2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
