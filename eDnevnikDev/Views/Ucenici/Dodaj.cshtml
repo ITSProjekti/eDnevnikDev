@@ -86,21 +86,21 @@
                                 @Html.ValidationMessageFor(u => u.Ucenik.BrojTelefonaRoditelja)
                             </div>
                         </div>
-
-
-
-
-                        
-
-                         <div class="form-group">
+                        <div class="form-group">
                             @Html.LabelFor(u => u.Ucenik.MestoRodjenja, new { @class = "col-md-3 control-label" })
-                            <div class="col-md-9">                                
+                            <div class="col-md-9">
                                 @Html.DropDownListFor(u => u.Ucenik.MestoRodjenja, new SelectList(Model.Gradovi, "Id", "Naziv"), "Grad", new { @class = "form-control" })
                                 @Html.ValidationMessageFor(u => u.Ucenik.MestoRodjenja)
                             </div>
-                         </div>
-
-
+                        </div>
+                        <div class="form-group">
+                                                            
+                                    @Html.LabelFor(u=>u.Ucenik.Vanredan,new { @class = "col-md-3 control-label"})
+                                    <div class="checkbox col-md-9">
+                                        @Html.CheckBoxFor(u => u.Ucenik.Vanredan)
+                                    </div>
+                                     </div>
+                                                
                             <div class="form-group">
                                 <div class="col-md-10 col-md-offset-2">
                                     <button type="reset" class="btn btn-default">Poništi</button>
@@ -108,7 +108,7 @@
                                 </div>
                             </div>
 
-                           
+
 </fieldset>
                 }
             </div>
