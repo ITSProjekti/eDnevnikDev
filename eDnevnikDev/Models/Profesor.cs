@@ -28,7 +28,7 @@ namespace eDnevnikDev.Models
         public string Adresa { get; set; }
         
         public bool Vanredan { get; set; }
-        [Display(Name = "Razredni Staresina")]
+        [Display(Name = "Razredni Starešina")]
         public bool RazredniStaresina { get; set; }
 
 
