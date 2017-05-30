@@ -312,6 +312,7 @@
     <Content Include="Views\Ucenici\Index.cshtml" />
     <Content Include="Views\Ucenici\Dodaj.cshtml" />
     <Content Include="Views\Profesori\Index.cshtml" />
+    <Content Include="Views\Profesori\Dodaj.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
