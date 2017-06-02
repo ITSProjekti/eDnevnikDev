@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using eDnevnikDev.Models;
+using eDnevnikDev.ViewModel;
 
 namespace eDnevnikDev.Controllers
 {
@@ -28,7 +29,14 @@ namespace eDnevnikDev.Controllers
         }
         public ActionResult Dodaj()
         {
-            return View();
+            var model = new ProfesorViewModel
+            {
+                Predmeti = _context.Predmeti.ToList()
+            };
+
+
+
+            return View(model);
         }
     }
 }

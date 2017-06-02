@@ -8,6 +8,11 @@ namespace eDnevnikDev.Models
 {
     public class Predmet
     {
+        public Predmet()
+        {
+            Profesori = new HashSet<Profesor>();
+        }
+
         public int PredmetID { get; set; }
 
 
@@ -16,7 +21,7 @@ namespace eDnevnikDev.Models
         [RegularExpression(@"^[A-ZŠĐČĆŽa-zšđčćž0-9'\.\-\s\,]+$", ErrorMessage = "Nisu dozoljeni specijalni karakteri")]
         public string NazivPredmeta { get; set; }
 
-
+        public ICollection<Profesor> Profesori { get; set; }
 
 
     }

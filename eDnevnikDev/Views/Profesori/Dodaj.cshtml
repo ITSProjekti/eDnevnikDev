@@ -1,4 +1,4 @@
-﻿@model Profesor
+﻿@model ProfesorViewModel
 @{
     ViewBag.Title = "Dodaj";
 }
@@ -16,60 +16,68 @@
                         <div class="form-group">
                           
 
-                            @Html.LabelFor(p=>p.Ime, new { @class = "col-md-3 control-label" })
+                            @Html.LabelFor(p=>p.Profesor.Ime, new { @class = "col-md-3 control-label" })
                             <div class="col-md-9">
 
                                 
-                                @Html.TextBoxFor(p=>p.Ime, new { @class = "form-control", placeholder = " Unesite Ime" })
-                                @Html.ValidationMessageFor(p=>p.Ime )
+                                @Html.TextBoxFor(p=>p.Profesor.Ime, new { @class = "form-control", placeholder = " Unesite Ime" })
+                                @Html.ValidationMessageFor(p=>p.Profesor.Ime )
                             </div>
                         </div>
                         <div class="form-group">
                             
 
-                            @Html.LabelFor(p=>p.Prezime, new { @class = "col-md-3 control-label" })
+                            @Html.LabelFor(p=>p.Profesor.Prezime, new { @class = "col-md-3 control-label" })
                             <div class="col-md-9">
 
                          
-                                @Html.TextBoxFor(p=>p.Prezime, new { @class = "form-control", placeholder = " Unesite Prezime" })
-                                @Html.ValidationMessageFor(p=>p.Prezime)
+                                @Html.TextBoxFor(p=>p.Profesor.Prezime, new { @class = "form-control", placeholder = " Unesite Prezime" })
+                                @Html.ValidationMessageFor(p=>p.Profesor.Prezime)
                             </div>
                         </div>
                         <div class="form-group">
                             
 
-                            @Html.LabelFor(p=>p.Adresa, new { @class = "col-md-3 control-label" })
+                            @Html.LabelFor(p=>p.Profesor.Adresa, new { @class = "col-md-3 control-label" })
                             <div class="col-md-9">
 
                                
-                                @Html.TextBoxFor(p=>p.Adresa, new { @class = "form-control", placeholder = "Adresa" })
-                                @Html.ValidationMessageFor(p=>p.Adresa)
+                                @Html.TextBoxFor(p=>p.Profesor.Adresa, new { @class = "form-control", placeholder = "Adresa" })
+                                @Html.ValidationMessageFor(p=>p.Profesor.Adresa)
                             </div>
                         </div>
                         <div class="form-group">
                          
-                            @Html.LabelFor(p=>p.Telefon, new { @class = "col-md-3 control-label" })
+                            @Html.LabelFor(p=>p.Profesor.Telefon, new { @class = "col-md-3 control-label" })
                             <div class="col-md-9">
                                 
-                                @Html.TextBoxFor(p => p.Telefon, new { @class = "form-control", placeholder = "Broj telefona" })
-                                @Html.ValidationMessageFor(p => p.Telefon)
+                                @Html.TextBoxFor(p => p.Profesor.Telefon, new { @class = "form-control", placeholder = "Broj telefona" })
+                                @Html.ValidationMessageFor(p => p.Profesor.Telefon)
                             </div>
                         </div>
                         <div class="form-group">
 
-                            @Html.LabelFor(p=>p.RazredniStaresina, new { @class = "col-md-3 control-label" })
+                            @Html.LabelFor(p=>p.Profesor.RazredniStaresina, new { @class = "col-md-3 control-label" })
                             <div class="checkbox col-md-9">
-                                @Html.CheckBoxFor(p=>p.RazredniStaresina )
+                                @Html.CheckBoxFor(p=>p.Profesor.RazredniStaresina )
                             </div>
                         </div>
                         <div class="form-group">
 
-                            @Html.LabelFor(p=>p.Vanredan, new { @class = "col-md-3 control-label" })
+                            @Html.LabelFor(p=>p.Profesor.Vanredan, new { @class = "col-md-3 control-label" })
                             <div class="checkbox col-md-9">
-                                @Html.CheckBoxFor(p=>p.Vanredan )
+                                @Html.CheckBoxFor(p=>p.Profesor.Vanredan )
                             </div>
                         </div>
-                                             
+                                     
+                        <div class="form-group">
+
+                            @Html.LabelFor(p => p.Profesor.Predmeti, new { @class = "col-md-3 control-label" })
+                            <div class="checkbox col-md-9">
+                                @Html.ListBoxFor(p => p.PredmetiIDs, new SelectList(Model.Predmeti, "PredmetID", "NazivPredmeta"), new { @class = "form-control" })
+                            </div>
+                        </div>
+                                
                    
                         <div class="form-group">
                             <div class="col-md-10 col-md-offset-2">
@@ -92,6 +100,17 @@
 @section Scripts
 {
     @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+
+        $("#PredmetiIDs").select2({
+            placeholder: "Izaberite predmete"
+        });
+
+
+    </script>
+
+
 }
 
 

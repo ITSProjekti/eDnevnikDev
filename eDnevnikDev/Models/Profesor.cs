@@ -8,6 +8,11 @@ namespace eDnevnikDev.Models
 {
     public class Profesor
     {
+        public Profesor()
+        {
+            Predmeti = new HashSet<Predmet>();
+        }
+
         public int ProfesorID { get; set; }
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "Polje za ime je obavezno")]
@@ -30,6 +35,9 @@ namespace eDnevnikDev.Models
         public bool Vanredan { get; set; }
         [Display(Name = "Razredni Starešina")]
         public bool RazredniStaresina { get; set; }
+
+
+        public ICollection<Predmet> Predmeti { get; set; }
 
 
     }
