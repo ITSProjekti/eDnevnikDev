@@ -27,8 +27,8 @@ namespace eDnevnikDev.Models
         /// <value>
         /// The IME.
         /// </value>
-        [Required(AllowEmptyStrings =false, ErrorMessage ="Polje za ime je obavezno")]
-        [RegularExpression(@"^([A-ZŠĐČĆŽa-zšđčćž]+ ?)+$", ErrorMessage ="Polje za ime može da sadrži samo slova")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Polje za ime je obavezno")]
+        [RegularExpression(@"^([A-ZŠĐČĆŽa-zšđčćž]+ ?)+$", ErrorMessage = "Polje za ime može da sadrži samo slova")]
         public string Ime { get; set; }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace eDnevnikDev.Models
         /// The adresa.
         /// </value>
         [Required(AllowEmptyStrings = false, ErrorMessage = "Polje za adresu je obavezno")]
-        [RegularExpression(@"^[A-ZŠĐČĆŽa-zšđčćž0-9'\.\-\s\,]+$", ErrorMessage ="Nisu dozoljeni specijalni karakteri")]
+        [RegularExpression(@"^[A-ZŠĐČĆŽa-zšđčćž0-9'\.\-\s\,]+$", ErrorMessage = "Nisu dozoljeni specijalni karakteri")]
         public string Adresa { get; set; }
 
         /// <summary>
@@ -108,19 +108,43 @@ namespace eDnevnikDev.Models
         /// Grad
         /// </value>
         [ForeignKey("MestoRodjenjaId")]
-        [Display(Name ="Mesto Rođenja")]
+        [Display(Name = "Mesto Rođenja")]
         [Required(ErrorMessage = "Polje za mesto rođenja je obavezno")]
         public Grad MestoRodjenja { get; set; }
 
-
+        /// <summary>
+        /// Properti koji cuva id Mesta rodjenja
+        /// </summary>
+        /// <value>
+        /// int
+        /// </value>
         public int MestoRodjenjaId { get; set; }
 
+        /// <summary>
+        ///  Služi za čuvanje da li je ucenik redovan ili vandredan
+        /// </summary>
+        /// <value>
+        /// bool
+        /// </value>
         public bool Vanredan { get; set; }
 
+
+        /// <summary>
+        /// Navigacioni property, referencira smer u tabeli Smer
+        /// </summary>
+        /// <value>
+        /// Smer
+        /// </value>
         [ForeignKey("SmerID")]
         [Required(ErrorMessage = "Polje za smer je obavezno")]
         public Smer Smer { get; set; }
 
+        /// <summary>
+        /// Properti koji cuva id Smera
+        /// </summary>
+        /// <value>
+        /// int
+        /// </value>
         public int SmerID { get; set; }
     }
 }
