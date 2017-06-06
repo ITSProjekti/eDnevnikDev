@@ -260,10 +260,6 @@
     <Compile Include="Migrations\201705300904336_DodatModelSmer.Designer.cs">
       <DependentUpon>201705300904336_DodatModelSmer.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201705300908048_PopunjavanjeSmerova.cs" />
-    <Compile Include="Migrations\201705300908048_PopunjavanjeSmerova.Designer.cs">
-      <DependentUpon>201705300908048_PopunjavanjeSmerova.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\201705300921426_DodatSmeruModelUcenik.cs" />
     <Compile Include="Migrations\201705300921426_DodatSmeruModelUcenik.Designer.cs">
       <DependentUpon>201705300921426_DodatSmeruModelUcenik.cs</DependentUpon>
@@ -291,6 +287,18 @@
     <Compile Include="Migrations\201706061305000_DodatoTrajanjeUModelSmer.cs" />
     <Compile Include="Migrations\201706061305000_DodatoTrajanjeUModelSmer.Designer.cs">
       <DependentUpon>201706061305000_DodatoTrajanjeUModelSmer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201706061311173_PopunjavanjeSmerova.cs" />
+    <Compile Include="Migrations\201706061311173_PopunjavanjeSmerova.Designer.cs">
+      <DependentUpon>201706061311173_PopunjavanjeSmerova.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201706061341326_PovezaniModeliOdeljenjeSmer.cs" />
+    <Compile Include="Migrations\201706061341326_PovezaniModeliOdeljenjeSmer.Designer.cs">
+      <DependentUpon>201706061341326_PovezaniModeliOdeljenjeSmer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201706061348275_PopunjavanjeOdeljenja.cs" />
+    <Compile Include="Migrations\201706061348275_PopunjavanjeOdeljenja.Designer.cs">
+      <DependentUpon>201706061348275_PopunjavanjeOdeljenja.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -427,9 +435,6 @@
     <EmbeddedResource Include="Migrations\201705300904336_DodatModelSmer.resx">
       <DependentUpon>201705300904336_DodatModelSmer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201705300908048_PopunjavanjeSmerova.resx">
-      <DependentUpon>201705300908048_PopunjavanjeSmerova.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705300921426_DodatSmeruModelUcenik.resx">
       <DependentUpon>201705300921426_DodatSmeruModelUcenik.cs</DependentUpon>
     </EmbeddedResource>
@@ -450,6 +455,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201706061305000_DodatoTrajanjeUModelSmer.resx">
       <DependentUpon>201706061305000_DodatoTrajanjeUModelSmer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706061311173_PopunjavanjeSmerova.resx">
+      <DependentUpon>201706061311173_PopunjavanjeSmerova.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706061341326_PovezaniModeliOdeljenjeSmer.resx">
+      <DependentUpon>201706061341326_PovezaniModeliOdeljenjeSmer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706061348275_PopunjavanjeOdeljenja.resx">
+      <DependentUpon>201706061348275_PopunjavanjeOdeljenja.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -157,5 +157,11 @@ namespace eDnevnikDev.Models
 
         [ForeignKey("Odeljenje")]
         public int OdeljenjeId { get; set; }
+
+        [Required(ErrorMessage = "Polje za razred je obavezno")]
+        public byte Razred { get; set; }
+
+
+
     }
 }

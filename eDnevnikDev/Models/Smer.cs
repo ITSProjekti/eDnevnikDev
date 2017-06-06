@@ -7,8 +7,11 @@ using System.Web;
 namespace eDnevnikDev.Models
 {
     public class Smer
-    {                
-
+    {
+        public Smer()
+        {
+            Odeljenja = new HashSet<Odeljenje>();
+        }
 
         /// <summary>
         /// Gets or sets the Smer identifier
@@ -33,6 +36,8 @@ namespace eDnevnikDev.Models
         [Required( ErrorMessage = "Polje za trajanje smera je obavezno")]
         [Display(Name = "Trajanje smera")]
         public byte Trajanje { get; set; }
-       
+
+        public ICollection<Odeljenje> Odeljenja { get; set; }
+
     }
 }
