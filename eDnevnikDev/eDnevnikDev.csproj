@@ -280,11 +280,24 @@
     <Compile Include="Migrations\201706021216189_DodateKolekcijeZaPredmeteIProfesoreUModelimaProfesorIPredmet.Designer.cs">
       <DependentUpon>201706021216189_DodateKolekcijeZaPredmeteIProfesoreUModelimaProfesorIPredmet.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201706061222403_dodatoImePrezimeZaMajkuIocaUuceniku.cs" />
+    <Compile Include="Migrations\201706061222403_dodatoImePrezimeZaMajkuIocaUuceniku.Designer.cs">
+      <DependentUpon>201706061222403_dodatoImePrezimeZaMajkuIocaUuceniku.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201706061236586_dodatoOdeljenje.cs" />
+    <Compile Include="Migrations\201706061236586_dodatoOdeljenje.Designer.cs">
+      <DependentUpon>201706061236586_dodatoOdeljenje.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201706061305000_DodatoTrajanjeUModelSmer.cs" />
+    <Compile Include="Migrations\201706061305000_DodatoTrajanjeUModelSmer.Designer.cs">
+      <DependentUpon>201706061305000_DodatoTrajanjeUModelSmer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Grad.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Odeljenje.cs" />
     <Compile Include="Models\Predmet.cs" />
     <Compile Include="Models\Profesor.cs" />
     <Compile Include="Models\Smer.cs" />
@@ -428,6 +441,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201706021216189_DodateKolekcijeZaPredmeteIProfesoreUModelimaProfesorIPredmet.resx">
       <DependentUpon>201706021216189_DodateKolekcijeZaPredmeteIProfesoreUModelimaProfesorIPredmet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706061222403_dodatoImePrezimeZaMajkuIocaUuceniku.resx">
+      <DependentUpon>201706061222403_dodatoImePrezimeZaMajkuIocaUuceniku.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706061236586_dodatoOdeljenje.resx">
+      <DependentUpon>201706061236586_dodatoOdeljenje.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706061305000_DodatoTrajanjeUModelSmer.resx">
+      <DependentUpon>201706061305000_DodatoTrajanjeUModelSmer.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

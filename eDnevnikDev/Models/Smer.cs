@@ -7,7 +7,9 @@ using System.Web;
 namespace eDnevnikDev.Models
 {
     public class Smer
-    {
+    {                
+
+
         /// <summary>
         /// Gets or sets the Smer identifier
         /// Primary key u bazi.
@@ -28,6 +30,9 @@ namespace eDnevnikDev.Models
         [Display(Name = "Naziv smera")]
         public string NazivSmera { get; set; }
 
-        
+        [Required( ErrorMessage = "Polje za trajanje smera je obavezno")]
+        [Display(Name = "Trajanje smera")]
+        public byte Trajanje { get; set; }
+       
     }
 }
