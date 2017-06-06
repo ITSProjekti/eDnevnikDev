@@ -19,7 +19,25 @@ namespace eDnevnikDev.Models
         /// The ucenik identifier.
         /// </value>
         public int UcenikID { get; set; }
+        [Display(Name ="Ime oca / staratelja")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Polje za ime oca/staratelja je obavezno")]
+        [RegularExpression(@"^([A-ZŠĐČĆŽa-zšđčćž]+ ?)+$", ErrorMessage = "Polje za ime oca/staratelja može da sadrži samo slova")]
+        public string ImeOca { get; set; }
 
+        [Display(Name = "Prezime oca / staratelja")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Polje za prezime oca/staratelja je obavezno")]
+        [RegularExpression(@"^([A-ZŠĐČĆŽa-zšđčćž]+ ?)+$", ErrorMessage = "Polje za prezime oca/staratelja može da sadrži samo slova")]
+        public string PrezimeOca { get; set; }
+
+        [Display(Name = "Ime majke / staratelja")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Polje za ime majke/staratelja je obavezno")]
+        [RegularExpression(@"^([A-ZŠĐČĆŽa-zšđčćž]+ ?)+$", ErrorMessage = "Polje za ime majke/staratelja može da sadrži samo slova")]
+        public string ImeMajke { get; set; }
+
+        [Display(Name = "Prezime majke / staratelja")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Polje za prezime majke/staratelja je obavezno")]
+        [RegularExpression(@"^([A-ZŠĐČĆŽa-zšđčćž]+ ?)+$", ErrorMessage = "Polje za prezime majke/staratelja može da sadrži samo slova")]
+        public string PrezimeMajke { get; set; }
         /// <summary>
         /// Gets or sets the IME.
         /// Sluzi za cuvanje imena ucenika.
@@ -27,6 +45,7 @@ namespace eDnevnikDev.Models
         /// <value>
         /// The IME.
         /// </value>
+        /// 
         [Required(AllowEmptyStrings = false, ErrorMessage = "Polje za ime je obavezno")]
         [RegularExpression(@"^([A-ZŠĐČĆŽa-zšđčćž]+ ?)+$", ErrorMessage = "Polje za ime može da sadrži samo slova")]
         public string Ime { get; set; }
@@ -63,19 +82,6 @@ namespace eDnevnikDev.Models
         [Required(AllowEmptyStrings = false, ErrorMessage = "Polje za adresu je obavezno")]
         [RegularExpression(@"^[A-ZŠĐČĆŽa-zšđčćž0-9'\.\-\s\,]+$", ErrorMessage = "Nisu dozoljeni specijalni karakteri")]
         public string Adresa { get; set; }
-
-        /// <summary>
-        /// Gets or sets the roditelj staratelj.
-        /// Sluzi za cuvanje ime Roditelja ili Staratelja ucenika.
-        /// </summary>
-        /// <value>
-        /// The roditelj staratelj.
-        /// </value>
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Polje za roditelja/staratelja je obavezno")]
-        [RegularExpression(@"^([A-ZŠĐČĆŽa-zšđčćž]+ ?)+$", ErrorMessage = "Ime roditelja nije ispravno")]
-        [Display(Name = "Roditelj/Staratelj")]
-        public string RoditeljStaratelj { get; set; }
-
 
         /// <summary>
         /// Služi za čuvanje mesta prebivališta
@@ -146,5 +152,16 @@ namespace eDnevnikDev.Models
         /// int
         /// </value>
         public int SmerID { get; set; }
+
+        public Odeljenje Odeljenje { get; set; }
+
+        [ForeignKey("Odeljenje")]
+        public int OdeljenjeId { get; set; }
+
+        [Required(ErrorMessage = "Polje za razred je obavezno")]
+        public byte Razred { get; set; }
+
+
+
     }
 }

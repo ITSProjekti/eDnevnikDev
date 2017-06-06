@@ -9,7 +9,7 @@ namespace eDnevnikDev.Migrations
         {
             AddColumn("dbo.Ucenik", "SmerID", c => c.Int(nullable: false));
             CreateIndex("dbo.Ucenik", "SmerID");
-            AddForeignKey("dbo.Ucenik", "SmerID", "dbo.Smer", "SmerID", cascadeDelete: true);
+            AddForeignKey("dbo.Ucenik", "SmerID", "dbo.Smer", "SmerID", cascadeDelete: false);
         }
         
         public override void Down()

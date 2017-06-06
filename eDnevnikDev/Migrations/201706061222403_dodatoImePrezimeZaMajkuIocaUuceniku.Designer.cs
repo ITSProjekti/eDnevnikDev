@@ -7,13 +7,13 @@ namespace eDnevnikDev.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class PopunjavanjeSmerova : IMigrationMetadata
+    public sealed partial class dodatoImePrezimeZaMajkuIocaUuceniku : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(PopunjavanjeSmerova));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(dodatoImePrezimeZaMajkuIocaUuceniku));
         
         string IMigrationMetadata.Id
         {
-            get { return "201705300908048_PopunjavanjeSmerova"; }
+            get { return "201706061222403_dodatoImePrezimeZaMajkuIocaUuceniku"; }
         }
         
         string IMigrationMetadata.Source
