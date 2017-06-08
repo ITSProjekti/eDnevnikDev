@@ -6,11 +6,32 @@ using eDnevnikDev.Models;
 
 namespace eDnevnikDev.ViewModel
 {
+    /// <summary>
+    /// ViewModel Ucenika
+    /// </summary>
     public class UcenikViewModel
     {
+        /// <summary>
+        /// Gets or sets the ucenik.
+        /// </summary>
+        /// <value>
+        /// The ucenik.
+        /// </value>
         public Ucenik  Ucenik { get; set; }
+        /// <summary>
+        /// Gets or sets the gradovi.
+        /// </summary>
+        /// <value>
+        /// The gradovi. IEnumerable<Grad> Kolekcija
+        /// </value>
         public IEnumerable<Grad> Gradovi { get; set; }
 
+        /// <summary>
+        /// Gets or sets the smerovi.
+        /// </summary>
+        /// <value>
+        /// The smerovi.IEnumerable<Smer> Kolekcija
+        /// </value>
         public IEnumerable<Smer> Smerovi { get; set; }
     }
 }
