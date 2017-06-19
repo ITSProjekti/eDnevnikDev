@@ -90,7 +90,7 @@ namespace eDnevnikDev.Models
         /// <value>
         /// ICollection<Predmet>
         /// </value>
-        public ICollection<Predmet> Predmeti { get; set; }
+        public virtual ICollection<Predmet> Predmeti { get; set; }
 
 
     }

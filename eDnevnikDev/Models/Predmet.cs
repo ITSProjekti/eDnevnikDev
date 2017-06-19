@@ -39,7 +39,7 @@ namespace eDnevnikDev.Models
         /// <value>
         /// ICollection<Predmet>
         /// </value>
-        public ICollection<Profesor> Profesori { get; set; }
+        public virtual ICollection<Profesor> Profesori { get; set; }
 
 
     }

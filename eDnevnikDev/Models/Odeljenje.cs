@@ -37,14 +37,14 @@ namespace eDnevnikDev.Models
         [Required(ErrorMessage = "Polje za odeljenje je obavezno")]
         [Display(Name = "Odeljenje")]
         public int Oznaka { get; set; }
-
+        
         /// <summary>
         /// Gets or sets the ucenici. Kolekcija Ucenika
         /// </summary>
         /// <value>
         /// The ucenici.
         /// </value>
-        public ICollection<Ucenik> Ucenici { get; set; }
+        public virtual ICollection<Ucenik> Ucenici { get; set; }
 
         /// <summary>
         /// Gets or sets the smer.

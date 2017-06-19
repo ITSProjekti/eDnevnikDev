@@ -37,7 +37,7 @@ namespace eDnevnikDev.Models
         [Display(Name = "Trajanje smera")]
         public byte Trajanje { get; set; }
 
-        public ICollection<Odeljenje> Odeljenja { get; set; }
+        public virtual ICollection<Odeljenje> Odeljenja { get; set; }
 
     }
 }

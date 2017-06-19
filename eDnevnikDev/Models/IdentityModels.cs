@@ -22,11 +22,11 @@ namespace eDnevnikDev.Models
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public DbSet<Ucenik> Ucenici { get; set; }
-        public DbSet<Grad> Gradovi {get;set;}
-        public DbSet<Profesor> Profesori { get; set; }
-        public DbSet<Smer> Smerovi { get; set; }
-        public DbSet<Predmet> Predmeti { get; set; }
+        public virtual DbSet<Ucenik> Ucenici { get; set; }
+        public virtual DbSet<Grad> Gradovi {get;set;}
+        public virtual DbSet<Profesor> Profesori { get; set; }
+        public virtual DbSet<Smer> Smerovi { get; set; }
+        public virtual DbSet<Predmet> Predmeti { get; set; }
 
 
         public ApplicationDbContext()

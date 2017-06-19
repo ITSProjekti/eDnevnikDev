@@ -24,6 +24,12 @@ namespace eDnevnikDev.Controllers
             _context = new ApplicationDbContext();
             
         }
+        public UceniciController(ApplicationDbContext context)
+        {
+            this._context = context;
+
+        }
+
 
         /// <summary>
         /// Destruktor za objekat klase aplicationDbContext.
@@ -44,7 +50,7 @@ namespace eDnevnikDev.Controllers
         {
 
             IEnumerable<Ucenik> ListaUcenika = _context.Ucenici.ToList();
-            return View(ListaUcenika);
+            return View("Index", ListaUcenika);
         }
         /// <summary>
         /// Dodajs this instance.
