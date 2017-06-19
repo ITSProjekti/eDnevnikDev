@@ -20,6 +20,12 @@ namespace eDnevnikDev.Controllers
             _context = new ApplicationDbContext();
         }
 
+        public ProfesoriController(ApplicationDbContext _context)
+        {
+            this._context = _context;
+
+        }
+
         /// <summary>
         /// Releases unmanaged resources and optionally releases managed resources.
         /// </summary>
@@ -36,7 +42,7 @@ namespace eDnevnikDev.Controllers
         public ActionResult Index()
         {
             IEnumerable<Profesor> ListaProfesora = _context.Profesori.ToList();
-            return View(ListaProfesora);
+            return View("Index",ListaProfesora);
         }
         /// <summary>
         /// Dodaje se Profesor u Listu Profesora
@@ -51,7 +57,7 @@ namespace eDnevnikDev.Controllers
 
 
 
-            return View(model);
+            return View("Dodaj",model);
         }
     }
 }
