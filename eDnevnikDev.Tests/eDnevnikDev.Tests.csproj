@@ -101,6 +101,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\PredmetiControllerTests.cs" />
     <Compile Include="Controllers\ProfesoriControllerTests.cs" />
     <Compile Include="Controllers\UceniciControllerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

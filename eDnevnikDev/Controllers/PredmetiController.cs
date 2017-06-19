@@ -18,6 +18,10 @@ namespace eDnevnikDev.Controllers
         {
             _context = new ApplicationDbContext();
         }
+        public PredmetiController(ApplicationDbContext _context)
+        {
+            this._context = _context;
+        }
 
         /// <summary>
         /// Releases unmanaged resources and optionally releases managed resources.
@@ -35,7 +39,7 @@ namespace eDnevnikDev.Controllers
         public ActionResult Index()
         {
             IEnumerable<Predmet> ListaPredmeta = _context.Predmeti.ToList();
-            return View(ListaPredmeta);
+            return View("Index",ListaPredmeta);
         }
 
         /// <summary>
@@ -44,7 +48,7 @@ namespace eDnevnikDev.Controllers
         /// <returns>Vraca View  Dodaj</returns>
         public ActionResult Dodaj()
         {
-            return View();
+            return View("Dodaj");
         }
 
     }
