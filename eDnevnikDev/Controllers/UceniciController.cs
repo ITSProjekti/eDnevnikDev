@@ -69,7 +69,7 @@ namespace eDnevnikDev.Controllers
             
 
 
-            return View(ucenikVM);
+            return View("Dodaj", ucenikVM);
         }
 
 
