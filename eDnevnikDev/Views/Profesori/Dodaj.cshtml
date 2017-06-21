@@ -72,9 +72,10 @@
                                      
                         <div class="form-group">
 
-                            @Html.LabelFor(p => p.Profesor.Predmeti, new { @class = "col-md-3 control-label" })
-                            <div class="checkbox col-md-9">
+                            @Html.LabelFor(p => p.PredmetiIDs, new { @class = "col-md-3 control-label" })
+                            <div class="col-md-9">
                                 @Html.ListBoxFor(p => p.PredmetiIDs, new SelectList(Model.Predmeti, "PredmetID", "NazivPredmeta"), new { @class = "form-control" })
+                                @Html.ValidationMessageFor(p => p.PredmetiIDs)
                             </div>
                         </div>
                                 
@@ -97,9 +98,9 @@
 
 
 
-@section Scripts
+<@section Scripts
 {
-    @Scripts.Render("~/bundles/jqueryval")
+     @Scripts.Render("~/bundles/jqueryval")
 
     <script>
 
