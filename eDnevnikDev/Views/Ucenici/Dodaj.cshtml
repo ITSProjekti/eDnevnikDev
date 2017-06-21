@@ -123,8 +123,8 @@
                         <div class="form-group">
                             @Html.LabelFor(u => u.Ucenik.MestoRodjenja, new { @class = "col-md-3 control-label" })
                             <div class="col-md-9">
-                                @Html.DropDownListFor(u => u.Ucenik.MestoRodjenja, new SelectList(Model.Gradovi, "Id", "Naziv"), "Grad", new { @class = "form-control" })
-                                @Html.ValidationMessageFor(u => u.Ucenik.MestoRodjenja)
+                                @Html.DropDownListFor(u => u.Ucenik.MestoRodjenjaId, new SelectList(Model.Gradovi, "Id", "Naziv"), "Grad", new { @class = "form-control" })
+                                @Html.ValidationMessageFor(u => u.Ucenik.MestoRodjenjaId)
                             </div>
                         </div>
 
@@ -137,10 +137,10 @@
                          </div>
                                       
                         <div class="form-group">
-                            @Html.LabelFor(u => u.Ucenik.Smer, new { @class = "col-md-3 control-label" })
+                            @Html.LabelFor(u => u.Ucenik.SmerID, new { @class = "col-md-3 control-label" })
                             <div class="col-md-9">
-                                @Html.DropDownListFor(u => u.Ucenik.Smer, smerovi, " ", new { @class = "form-control" })
-                                @Html.ValidationMessageFor(u => u.Ucenik.Smer)
+                                @Html.DropDownListFor(u => u.Ucenik.SmerID, smerovi, " ", new { @class = "form-control" })
+                                @Html.ValidationMessageFor(u => u.Ucenik.SmerID)
                             </div>
                         </div>
                         <div style="display:none;" id="RazredOdeljenje">
@@ -156,7 +156,7 @@
                             <div class="form-group">
                                 @Html.LabelFor(u => u.Ucenik.Odeljenje.Oznaka, new { @class = "col-md-3 control-label" })
                                 <div class="col-md-9">
-                                    <select name="Ucenik.Odeljenje.Oznaka" class="form-control" id="Ucenik_Odeljenje_Oznaka">
+                                    <select name="Ucenik.Odeljenje.Id" class="form-control" id="Ucenik_Odeljenje_Id">
 
                                     </select>
                                     @Html.ValidationMessageFor(u => u.Ucenik.Odeljenje.Oznaka)
@@ -181,6 +181,7 @@
                         foreach (var odeljenje in smer.Odeljenja)
                         {
                             <input type="hidden" value="@odeljenje.Oznaka" class="@("odeljenje" + smer.SmerID)">
+                            <input type="hidden" value="@odeljenje.Id" id="@("odeljenjeID" + odeljenje.Oznaka)">
                         }
                     }
 
@@ -208,12 +209,12 @@
 
 
         $(document).ready(function () {
-            $("#Ucenik_Smer optgroup[label=4]").prop({ label: "Četvorogodišnji smerovi" });
-            $("#Ucenik_Smer optgroup[label=3]").prop({ label: "Trogodišnji smerovi" });
+            $("#Ucenik_SmerID optgroup[label=4]").prop({ label: "Četvorogodišnji smerovi" });
+            $("#Ucenik_SmerID optgroup[label=3]").prop({ label: "Trogodišnji smerovi" });
 
 
-            $("#Ucenik_Smer").change(function () {
-                var smerId = $("#Ucenik_Smer").val();
+            $("#Ucenik_SmerID").change(function () {
+                var smerId = $("#Ucenik_SmerID").val();
 
                 if (smerId == '') {
                     $("#RazredOdeljenje").hide();
@@ -232,13 +233,13 @@
 
                     $(".odeljenje" + smerId).each(function () {
 
-                        html += '<option value="' + $(this).val() + '">' + $(this).val() + '</option>';
+                        html += '<option value="' + $("#odeljenjeID" + $(this).val()).val() + '">' + $(this).val() + '</option>';
 
 
                     });
 
 
-                    $("#Ucenik_Odeljenje_Oznaka").html(html);
+                    $("#Ucenik_Odeljenje_Id").html(html);
 
                     $("#RazredOdeljenje").show();
                 }

@@ -138,8 +138,6 @@ namespace eDnevnikDev.Models
         /// Grad
         /// </value>
         [ForeignKey("MestoRodjenjaId")]
-        [Display(Name = "Mesto Rođenja")]
-        [Required(ErrorMessage = "Polje za mesto rođenja je obavezno")]
         public Grad MestoRodjenja { get; set; }
 
         /// <summary>
@@ -148,6 +146,8 @@ namespace eDnevnikDev.Models
         /// <value>
         /// int
         /// </value>
+        [Display(Name = "Mesto Rođenja")]
+        [Required(ErrorMessage = "Polje za mesto rođenja je obavezno")]
         public int MestoRodjenjaId { get; set; }
 
         /// <summary>
@@ -166,7 +166,6 @@ namespace eDnevnikDev.Models
         /// Smer
         /// </value>
         [ForeignKey("SmerID")]
-        [Required(ErrorMessage = "Polje za smer je obavezno")]
         public Smer Smer { get; set; }
 
         /// <summary>
@@ -175,6 +174,8 @@ namespace eDnevnikDev.Models
         /// <value>
         /// int
         /// </value>
+        [Required(ErrorMessage = "Polje za smer je obavezno")]
+        [Display(Name = "Smer")]
         public int SmerID { get; set; }
 
         /// <summary>

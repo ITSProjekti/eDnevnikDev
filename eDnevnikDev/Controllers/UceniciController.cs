@@ -72,7 +72,34 @@ namespace eDnevnikDev.Controllers
             return View("Dodaj", ucenikVM);
         }
 
+        [HttpPost]
+        public ActionResult Sacuvaj(UcenikViewModel ucenikVM)
+        {
+            if(!ModelState.IsValid)
+            {
+                var podaci = new UcenikViewModel
+                {
+                    Ucenik = ucenikVM.Ucenik,
+                    Gradovi = _context.Gradovi.OrderBy(g => g.Naziv).ToList(),
+                    Smerovi = _context.Smerovi.Include("Odeljenja").OrderBy(s => s.Trajanje).ToList()
+                };
 
-        
+                return View("Dodaj", podaci);
+            }
+            
+            var ucenik = ucenikVM.Ucenik;
+            
+            ucenik.OdeljenjeId = ucenik.Odeljenje.Id;
+            ucenik.Odeljenje = null;            
+
+            _context.Ucenici.Add(ucenik);
+
+            _context.SaveChanges();
+
+            return RedirectToAction("Index", "Ucenici");
+        }
+
+
+
     }
 }
