@@ -1,0 +1,11 @@
+﻿@model Ucenik
+@{
+    ViewBag.Title = "Index";
+}
+    <div class="form-group">
+        @Html.LabelFor(u => u.Razred, new { @class = "col-md-3 control-label" })
+        <div class="col-md-9">
+            @Html.DropDownListFor(u => u.Razred, new SelectList( Enumerable.Range(1,4)), " ", new { @class = "form-control" })
+            @Html.ValidationMessageFor(u => u.Razred )
+        </div>
+    </div>
