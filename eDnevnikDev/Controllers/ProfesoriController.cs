@@ -59,5 +59,30 @@ namespace eDnevnikDev.Controllers
 
             return View("Dodaj",model);
         }
+
+        [HttpPost]
+        public ActionResult Sacuvaj(ProfesorViewModel pvm)
+        {
+
+            if (ModelState.IsValid)
+            {
+                Profesor profesor = pvm.Profesor;
+                foreach (var pr in pvm.PredmetiIDs)
+                {
+                    Predmet predmet = _context.Predmeti.SingleOrDefault(p => p.PredmetID == pr);
+                    profesor.Predmeti.Add(predmet);
+                }
+                _context.Profesori.Add(pvm.Profesor);
+
+                _context.SaveChanges();
+
+                return RedirectToAction("Index", "Profesori");
+            }
+            else
+            {
+                pvm.Predmeti = _context.Predmeti.ToList();
+                return View("Dodaj", pvm);
+            }
+        }
     }
 }
