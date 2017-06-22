@@ -22,11 +22,13 @@ namespace eDnevnikDev
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/select2.js",
+                      "~/Scripts/jquery-ui-1.12.1.js",
                       "~/Scripts/respond.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/spacelab.css",
                       "~/Content/select2.css",
+                      "~/Content/themes/base/jquery-ui.css",
                       "~/Content/site.css"));
         }
     }

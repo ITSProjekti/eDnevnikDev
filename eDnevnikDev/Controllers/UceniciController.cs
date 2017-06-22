@@ -76,7 +76,8 @@ namespace eDnevnikDev.Controllers
         [HttpPost]
         public ActionResult Sacuvaj(UcenikViewModel ucenikVM)
         {
-            if(!ModelState.IsValid)
+
+            if (!ModelState.IsValid)
             {
                 var podaci = new UcenikViewModel
                 {
