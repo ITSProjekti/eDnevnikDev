@@ -61,6 +61,7 @@ namespace eDnevnikDev.Controllers
         {
             var ucenikVM = new UcenikViewModel
             {
+                Ucenik = new Ucenik { Ime = "Firas", Prezime = "Aburas", Adresa = "Adresa 1", BrojTelefonaRoditelja = "+381-11/1234567", ImeMajke = "Majka", ImeOca = "Otac", PrezimeMajke = "Prezime", PrezimeOca = "Prezime", JMBG = "1708993730202", MestoPrebivalista = "Beograd", MestoRodjenjaId = 3 },
                 Gradovi = _context.Gradovi.OrderBy(g => g.Naziv).ToList(),
                 Smerovi = _context.Smerovi.Include("Odeljenja").OrderBy(s => s.Trajanje).ToList()
 
@@ -88,9 +89,7 @@ namespace eDnevnikDev.Controllers
             }
             
             var ucenik = ucenikVM.Ucenik;
-            
-            ucenik.OdeljenjeId = ucenik.Odeljenje.Id;
-            ucenik.Odeljenje = null;            
+                     
 
             _context.Ucenici.Add(ucenik);
 

@@ -53,7 +53,7 @@ namespace eDnevnikDev.Controllers.Tests
             }.AsQueryable();
             var smerovi = new List<Smer>
             {
-                new Smer {SmerID = 1, NazivSmera = "Veterinarski tehnicar", Trajanje = 4, Odeljenja = new List<Odeljenje> { new Odeljenje {Id = 4, Oznaka = 4, SmerID = 1 }, new Odeljenje { Id = 5, Oznaka = 5, SmerID = 1 } } }, new Smer {SmerID = 2, NazivSmera = "Poljoprivredni tehnicar", Trajanje = 4, Odeljenja = new List<Odeljenje> { new Odeljenje {Id = 1, Oznaka = 1, SmerID = 2 }, new Odeljenje { Id = 2, Oznaka = 2, SmerID = 2 } } }
+                new Smer {SmerID = 1, NazivSmera = "Veterinarski tehnicar", Trajanje = 4, Odeljenja = new List<Odeljenje> { new Odeljenje {Id = 4, Oznaka = 4 }, new Odeljenje { Id = 5, Oznaka = 5} } }, new Smer {SmerID = 2, NazivSmera = "Poljoprivredni tehnicar", Trajanje = 4, Odeljenja = new List<Odeljenje> { new Odeljenje {Id = 1, Oznaka = 1}, new Odeljenje { Id = 2, Oznaka = 2} } }
             }.AsQueryable();
             
 
