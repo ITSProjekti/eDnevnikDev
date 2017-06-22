@@ -201,8 +201,11 @@ namespace eDnevnikDev.Models
         /// <value>
         /// The razred.
         /// </value>
-        [Required(ErrorMessage = "Polje za razred je obavezno")]
+        [Required(ErrorMessage = "Polje za razred je obavezno!")]
         public byte Razred { get; set; }
+
+        [Required(ErrorMessage = "Datum rodjenja je obavezan!")]
+        public DateTime DatumRodjenja { get; set; }
 
 
 

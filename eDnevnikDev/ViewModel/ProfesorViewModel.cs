@@ -1,6 +1,7 @@
 ﻿using eDnevnikDev.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -25,6 +26,8 @@ namespace eDnevnikDev.ViewModel
         /// <value>
         /// The predmeti i ds.List<int> PredmetiIDs Kolekcija
         /// </value>
+        [Required(ErrorMessage ="Izaberite bar jedan predmet")]
+        [Display(Name ="Predmeti")]
         public List<int> PredmetiIDs { get; set; }
 
         /// <summary>

@@ -51,5 +51,20 @@ namespace eDnevnikDev.Controllers
             return View("Dodaj");
         }
 
+        public ActionResult SacuvajPredmet(Predmet predmet)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Predmeti.Add(predmet);
+                _context.SaveChanges();
+                return RedirectToAction("Index", "Predmeti");
+                
+            }
+            else
+            {
+                return View("Dodaj", predmet);
+            }
+        }
+
     }
 }

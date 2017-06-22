@@ -14,7 +14,6 @@
             <table class="table table-striped table-hover ">
                 <thead>
                     <tr>
-                        <th>ID</th>
                         <th>Naziv</th>
                     </tr>
                 </thead>
@@ -22,9 +21,6 @@
                     @foreach (Predmet predmet in Model)
                     {
                         <tr>
-                            <td>
-                                @predmet.PredmetID
-                            </td>
                             <td>
                                 @predmet.NazivPredmeta
                             </td>
