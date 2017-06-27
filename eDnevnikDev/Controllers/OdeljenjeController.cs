@@ -41,7 +41,9 @@ namespace eDnevnikDev.Controllers
 
         public JsonResult OdeljenjeTrajanje(int godina)
         {
-            var kolekcijaOdeljenja = _context.Smerovi.Where(s => s.Trajanje >= godina).Select(s => s.Odeljenja).ToList();
+            var kolekcijaOdeljenja = _context.Smerovi
+                .Where(s => s.Trajanje >= godina)
+                .Select(s => s.Odeljenja).ToList();
 
             var pov = new List<DTOOdeljenje>();
 
@@ -57,6 +59,21 @@ namespace eDnevnikDev.Controllers
             pov = pov.OrderBy(o => o.Oznaka).ToList();
 
             return Json(pov, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult OdeljenjeUcenici(int razred, int idOdeljenja)
+        {
+            var listaUcenika = _context.Ucenici
+                .Where(u => u.Razred == razred && u.OdeljenjeId == idOdeljenja)
+                .OrderBy(u => u.Prezime)
+                .ThenBy(u => u.Ime)
+                .ThenBy(u => u.ImeOca)
+                .Select(u=> new DTOUcenikOdeljenja { ID= u.UcenikID, Ime=u.Ime, Prezime=u.Prezime })
+                .ToList();
+
+            
+             return Json(listaUcenika, JsonRequestBehavior.AllowGet);
+
         }
     }
 }

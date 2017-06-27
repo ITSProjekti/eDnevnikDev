@@ -24,7 +24,7 @@
 
         </div>
     </div>
-    <div class="row">
+    <div class="row" id="ucenici">
         <div class="col-md-3">
             <div class="ucenik-kartica">
                 <img src="http://via.placeholder.com/140x176"  class="ucenik-slika"/>
@@ -32,66 +32,8 @@
                     Petar Petrović
                 </div>
             </div>
-        </div>
-        <div class="col-md-3">
-            <div class="ucenik-kartica">
-                <img src="http://via.placeholder.com/140x176" class="ucenik-slika"/>
-                <div class="ucenik-ime">
-                    Petar Petrović
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="ucenik-kartica">
-                <img src="http://via.placeholder.com/140x176" class="ucenik-slika"/>
-                <div class="ucenik-ime">
-                    Petar Petrović
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="ucenik-kartica">
-                <img src="http://via.placeholder.com/140x176" class="ucenik-slika"/>
-                <div class="ucenik-ime">
-                    Petar Petrović
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="ucenik-kartica">
-                <img src="http://via.placeholder.com/140x176" class="ucenik-slika" />
-                <div class="ucenik-ime">
-                    Petar Petrović
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="ucenik-kartica">
-                <img src="http://via.placeholder.com/140x176" class="ucenik-slika" />
-                <div class="ucenik-ime">
-                    Petar Petrović
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="ucenik-kartica">
-                <img src="http://via.placeholder.com/140x176" class="ucenik-slika" />
-                <div class="ucenik-ime">
-                    Petar Petrović
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="ucenik-kartica">
-                <img src="http://via.placeholder.com/140x176" class="ucenik-slika" />
-                <div class="ucenik-ime">
-                    Petar Petrović
-                </div>
-            </div>
-        </div>
-
-
-    </div>
+        </div>  
+     </div>
 </div>
 
 
@@ -121,6 +63,25 @@
             zahtev.fail(function (gr) { $("#p1").html(gr.statusText); });
         }
 
+        function GenerisiKarticuUcenika(id,ime,prezime)
+        {
+           return   "<div class='col-md-3'>\n\t<div class='ucenik-kartica'>\n\t\t<img src='http://via.placeholder.com/140x176' class='ucenik-slika' />\n\t\t<div class='ucenik-ime'>" + ime + " " + prezime + " </div>\n\t </div>\n</div>";
+            
+        }
+
+        function Ucenici() {
+            var razred = $("#razred").val();
+            var odeljenje = $("#odeljenja").val();
+            var zahtev = $.getJSON("/Odeljenje/OdeljenjeUcenici?razred=" + razred + "&idOdeljenja=" + odeljenje);
+
+            zahtev.done(function (ucenici) {
+
+                for (var ucenik in ucenici) {
+                    $("#ucenici").append(GenerisiKarticuUcenika(ucenici[ucenik].ID,ucenici[ucenik].Ime,ucenici[ucenik].Prezime));
+                }
+            });
+            zahtev.fail(function (gr) { $("#p1").html(gr.statusText); });
+        }
 
         $(function () {
             $("#razred").change(function () {
@@ -130,6 +91,10 @@
             }).change();
 
 
+            $('#odeljenja').change(function () {
+                $("#ucenici").html("");
+                Ucenici();
+            });
 
         });
 
