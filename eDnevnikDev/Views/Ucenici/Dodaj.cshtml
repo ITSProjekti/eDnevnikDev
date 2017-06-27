@@ -44,7 +44,7 @@
                             <div class="col-md-9">
 
                                 <!--    <input type="text" class="form-control" id="inputEmail" placeholder="Email"> -->
-                                @Html.TextBoxFor(u => u.Ucenik.ImeMajke, new { @class = "form-control", placeholder = "Ime Oca" })
+                                @Html.TextBoxFor(u => u.Ucenik.ImeMajke, new { @class = "form-control", placeholder = "Ime Majke" })
                                 @Html.ValidationMessageFor(u => u.Ucenik.ImeMajke)
                             </div>
                         </div>
@@ -55,7 +55,7 @@
                             <div class="col-md-9">
 
                                 <!--    <input type="text" class="form-control" id="inputEmail" placeholder="Email"> -->
-                                @Html.TextBoxFor(u => u.Ucenik.PrezimeMajke, new { @class = "form-control", placeholder = "Prezime Oca" })
+                                @Html.TextBoxFor(u => u.Ucenik.PrezimeMajke, new { @class = "form-control", placeholder = "Prezime Majke" })
                                 @Html.ValidationMessageFor(u => u.Ucenik.PrezimeMajke)
                             </div>
                         </div>
@@ -85,10 +85,10 @@
 
                             @Html.LabelFor(u => u.Ucenik.DatumRodjenja, new { @class = "col-md-3 control-label" })
                             <div class="col-md-9">
-
-                                <input type="text" id="datum" readonly><br />
-                                <input type="hidden" name="Ucenik.DatumRodjenja" id="Ucenik_DatumRodjenja">
-                                @Html.ValidationMessageFor(u => u.Ucenik.DatumRodjenja)
+                                <input type="text" id="datum" class="form-control" name="datum" data-val="true" data-val-required="Polje za datum rođenja je obavezno" readonly>
+                                <input type="hidden" name="Ucenik.DatumRodjenja" id="Ucenik_DatumRodjenja" >
+                                @*@Html.ValidationMessageFor(u => u.Ucenik.DatumRodjenja)*@
+                                <span class="field-validation-valid" data-valmsg-for="datum" data-valmsg-replace="true"></span>
                             </div>
                         </div>
 
@@ -272,6 +272,10 @@
             changeMonth: true,
             changeYear: true,
             yearRange: "1970:"
+        });
+
+        $("#datum").change(function () {
+            $(this).blur();
         });
 
         //$("#datum").val(moment("2013-03-10T02:00:00Z").format("DD.MM.YYYY."))

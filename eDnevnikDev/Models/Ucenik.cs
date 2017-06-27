@@ -206,7 +206,8 @@ namespace eDnevnikDev.Models
         [Required(ErrorMessage = "Polje za razred je obavezno!")]
         public byte Razred { get; set; }
 
-        [Required(ErrorMessage = "Datum rodjenja je obavezan!")]
+        [Required(ErrorMessage = "Polje za datum rođenja je obavezno")]
+        [Display(Name = "Datum rođenja")]
         public DateTime DatumRodjenja { get; set; }
 
 

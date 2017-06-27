@@ -336,6 +336,10 @@
     <Compile Include="Migrations\201706220953124_PopunjavanjeOdeljenjeSmer.Designer.cs">
       <DependentUpon>201706220953124_PopunjavanjeOdeljenjeSmer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201706261053283_DodatDbSetZaOdeljenja.cs" />
+    <Compile Include="Migrations\201706261053283_DodatDbSetZaOdeljenja.Designer.cs">
+      <DependentUpon>201706261053283_DodatDbSetZaOdeljenja.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Grad.cs" />
@@ -570,6 +574,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201706220953124_PopunjavanjeOdeljenjeSmer.resx">
       <DependentUpon>201706220953124_PopunjavanjeOdeljenjeSmer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706261053283_DodatDbSetZaOdeljenja.resx">
+      <DependentUpon>201706261053283_DodatDbSetZaOdeljenja.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

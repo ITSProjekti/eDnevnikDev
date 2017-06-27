@@ -22,3 +22,21 @@ select,
 textarea {
     max-width: 280px;
 }
+
+
+.ucenik-kartica{
+    height: 250px;
+    border: 2px solid #adbcad;
+    padding: 5px;
+    margin-top: 10px;
+}
+
+.ucenik-slika{
+    margin-left: 54px;
+
+}
+.ucenik-ime{
+    text-align:center;
+    font-size: 18px;
+    margin-top: 5px;
+}
