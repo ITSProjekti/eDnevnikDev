@@ -53,7 +53,7 @@ namespace eDnevnikDev.Models
         /// <value>
         /// The smer.
         /// </value>
-        public ICollection<Smer> Smer { get; set; }
+        public virtual ICollection<Smer> Smer { get; set; }
 
 
 

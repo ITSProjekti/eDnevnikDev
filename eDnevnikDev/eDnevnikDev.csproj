@@ -343,6 +343,7 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\ArhivaKreiranjaOdeljenja.cs" />
     <Compile Include="Models\Grad.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -350,6 +351,7 @@
     <Compile Include="Models\Predmet.cs" />
     <Compile Include="Models\Profesor.cs" />
     <Compile Include="Models\Smer.cs" />
+    <Compile Include="Models\StatusOdeljenje.cs" />
     <Compile Include="Models\Ucenik.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />

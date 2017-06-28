@@ -211,6 +211,9 @@ namespace eDnevnikDev.Models
         public DateTime DatumRodjenja { get; set; }
 
 
+        //TO BE DONE
+        public string JedinstveniBroj { get; set; }
+
 
     }
 }
