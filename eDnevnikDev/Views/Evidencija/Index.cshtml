@@ -1,0 +1,82 @@
+﻿@model Ucenik 
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Evidencija</h2>
+
+<p>Datum:@DateTime.Now.ToString("dd/MM/yyy")</p>
+<div class="container">
+    <div class="row">
+        <div class="col-md-3 col-md-offset-4">
+            <label for="razred">Razred</label>
+            <select id="razred">
+                <option value="1">Prvi</option>
+                <option value="2">Drugi</option>
+                <option value="3">Treći</option>
+                <option value="4">Četvrti</option>
+            </select>
+            <label for="odeljenja">Odeljenje</label>
+            <select id="odeljenja"></select>
+
+            <p id="p1"></p>
+
+
+
+    @section Scripts
+{
+        @Scripts.Render("~/bundles/jqueryval");
+
+        <script>
+            function Odeljenja() {
+                alert("a");
+            var razred = $("#razred").val();
+            var zahtev = $.getJSON("/Odeljenje/OdeljenjeTrajanje/"+razred);
+
+            
+            zahtev.done(function (odeljenja) {
+                for (var odeljenje in odeljenja) {
+                    $("#odeljenja").append("<option value='" + odeljenja[odeljenje].Id + "'>" + odeljenja[odeljenje].Oznaka + "</option>");
+                }
+            });
+            zahtev.fail(function (gr) { $("#p1").html(gr.statusText); });
+        }
+
+        function GenerisiKarticuUcenika(id,ime,prezime)
+        {
+           return   "<div class='col-md-3'>\n\t<div class='ucenik-kartica'>\n\t\t<img src='http://via.placeholder.com/140x176' class='ucenik-slika' />\n\t\t<div class='ucenik-ime'>" + ime + " " + prezime + " </div>\n\t </div>\n</div>";
+
+        }
+
+        function Ucenici() {
+            var razred = $("#razred").val();
+            var odeljenje = $("#odeljenja").val();
+            var zahtev = $.getJSON("/Odeljenje/OdeljenjeUcenici?razred=" + razred + "&idOdeljenja=" + odeljenje);
+
+            zahtev.done(function (ucenici) {
+
+                for (var ucenik in ucenici) {
+                    $("#ucenici").append(GenerisiKarticuUcenika(ucenici[ucenik].ID,ucenici[ucenik].Ime,ucenici[ucenik].Prezime));
+                }
+            });
+            zahtev.fail(function (gr) { $("#p1").html(gr.statusText); });
+        }
+
+        $(function () {
+            $("#razred").change(function () {
+                $("#odeljenja").html("");
+
+                Odeljenja();
+            }).change();
+
+
+            $('#odeljenja').change(function () {
+                $("#ucenici").html("");
+                Ucenici();
+            });
+
+        });
+
+        </script>
+
+        }
