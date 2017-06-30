@@ -9,6 +9,7 @@ namespace eDnevnikDev.Models
     {
         public int Id { get; set; }
         public byte Razred { get; set; }
+        public int MyProperty { get; set; }
 
         public int OdeljenjeId{ get; set; }
         public virtual Odeljenje Odeljenje { get; set; }
@@ -18,6 +19,7 @@ namespace eDnevnikDev.Models
         public int StatusId { get; set; }
         public virtual StatusOdeljenje Status { get; set; }
 
+        //
 
     }
 }

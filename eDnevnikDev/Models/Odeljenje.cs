@@ -38,6 +38,7 @@ namespace eDnevnikDev.Models
         [Required(ErrorMessage = "Polje za oznaku je obavezno")]
         [Display(Name = "Oznaka")]
         public int Oznaka { get; set; }
+
         
         /// <summary>
         /// Gets or sets the ucenici. Kolekcija Ucenika
@@ -54,6 +55,8 @@ namespace eDnevnikDev.Models
         /// The smer.
         /// </value>
         public virtual ICollection<Smer> Smer { get; set; }
+
+
 
 
 

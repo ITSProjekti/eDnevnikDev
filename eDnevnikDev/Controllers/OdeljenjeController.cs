@@ -8,6 +8,7 @@ using eDnevnikDev.DTOs;
 
 namespace eDnevnikDev.Controllers
 {
+
     public class OdeljenjeController : Controller
     {
         ApplicationDbContext _context;
