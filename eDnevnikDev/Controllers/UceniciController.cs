@@ -61,15 +61,13 @@ namespace eDnevnikDev.Controllers
         {
             var ucenikVM = new UcenikViewModel
             {
-                Ucenik = new Ucenik { Ime = "Firas", Prezime = "Aburas", Adresa = "Adresa 1", BrojTelefonaRoditelja = "+381-11/1234567", ImeMajke = "Majka", ImeOca = "Otac", PrezimeMajke = "Prezime", PrezimeOca = "Prezime", JMBG = "1708993730202", MestoPrebivalista = "Beograd", MestoRodjenjaId = 3 },
+                Ucenik = new Ucenik { Ime = "Firas", Prezime = "Aburas", Adresa = "Adresa 1", BrojTelefonaRoditelja = "+381-11/1234567", ImeMajke = "Majka", ImeOca = "Otac", PrezimeMajke = "Prezime", PrezimeOca = "Prezime", JMBG = "1708993730202", MestoPrebivalista = "Beograd", MestoRodjenjaId = 3, DatumRodjenja = new DateTime(2011,12,5) },
                 Gradovi = _context.Gradovi.OrderBy(g => g.Naziv).ToList(),
                 Smerovi = _context.Smerovi.Include("Odeljenja").OrderBy(s => s.Trajanje).ToList()
 
             };
 
-            
-
-
+     
             return View("Dodaj", ucenikVM);
         }
 
@@ -90,11 +88,45 @@ namespace eDnevnikDev.Controllers
             }
             
             var ucenik = ucenikVM.Ucenik;
-                     
+
+            var file = ucenikVM.File;
+
+            if (file != null)
+            {
+                string pic = System.IO.Path.GetExtension(file.FileName);
+
+                if (pic != ".jpg" && pic != ".jpeg" && pic != ".png")
+                {
+                    ModelState.AddModelError("File", "Neispravna slika");
+
+                    var podaci = new UcenikViewModel
+                    {
+                        Ucenik = ucenikVM.Ucenik,
+                        Gradovi = _context.Gradovi.OrderBy(g => g.Naziv).ToList(),
+                        Smerovi = _context.Smerovi.Include("Odeljenja").OrderBy(s => s.Trajanje).ToList()
+                    };
+
+                    return View("Dodaj", podaci);
+                }
+            }
 
             _context.Ucenici.Add(ucenik);
 
             _context.SaveChanges();
+
+            if ( file != null)
+            {
+                var id = Ucenik.GetMd5Hash(ucenik.JMBG);
+
+                string pic = System.IO.Path.GetExtension(file.FileName);
+
+                file.SaveAs(HttpContext.Server.MapPath("~/slike/") + id + pic);
+
+                ucenik.Fotografija = id + pic;
+
+                _context.SaveChanges();
+
+            }
 
             return RedirectToAction("Index", "Ucenici");
         }

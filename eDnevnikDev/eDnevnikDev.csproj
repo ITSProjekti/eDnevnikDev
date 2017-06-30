@@ -341,6 +341,14 @@
     <Compile Include="Migrations\201706261053283_DodatDbSetZaOdeljenja.Designer.cs">
       <DependentUpon>201706261053283_DodatDbSetZaOdeljenja.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201706290839151_DodatJedinstveniBrojUUcenika.cs" />
+    <Compile Include="Migrations\201706290839151_DodatJedinstveniBrojUUcenika.Designer.cs">
+      <DependentUpon>201706290839151_DodatJedinstveniBrojUUcenika.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201706291007042_DodatPropertyFotografijaUModelUcenik.cs" />
+    <Compile Include="Migrations\201706291007042_DodatPropertyFotografijaUModelUcenik.Designer.cs">
+      <DependentUpon>201706291007042_DodatPropertyFotografijaUModelUcenik.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ArhivaKreiranjaOdeljenja.cs" />
@@ -437,6 +445,10 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\moment-with-locales.js" />
+    <Content Include="Scripts\moment-with-locales.min.js" />
+    <Content Include="Scripts\moment.js" />
+    <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
@@ -580,6 +592,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201706261053283_DodatDbSetZaOdeljenja.resx">
       <DependentUpon>201706261053283_DodatDbSetZaOdeljenja.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706290839151_DodatJedinstveniBrojUUcenika.resx">
+      <DependentUpon>201706290839151_DodatJedinstveniBrojUUcenika.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706291007042_DodatPropertyFotografijaUModelUcenik.resx">
+      <DependentUpon>201706291007042_DodatPropertyFotografijaUModelUcenik.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

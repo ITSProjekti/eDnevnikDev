@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using eDnevnikDev.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace eDnevnikDev.ViewModel
 {
@@ -33,5 +34,7 @@ namespace eDnevnikDev.ViewModel
         /// The smerovi.IEnumerable<Smer> Kolekcija
         /// </value>
         public IEnumerable<Smer> Smerovi { get; set; }
+
+        public HttpPostedFileBase File { get; set; }
     }
 }
