@@ -11,7 +11,7 @@
         <div class="col-md-8 col-md-offset-2">
             <!--<form class="form-horizontal">-->
             <div class="well">
-                @using (Html.BeginForm("Sacuvaj", "Ucenici", FormMethod.Post, new { @class = "form-horizontal" }))
+                @using (Html.BeginForm("Sacuvaj", "Ucenici", FormMethod.Post, new { @class = "form-horizontal",enctype = "multipart/form-data" }))
             {
                     <fieldset>
                         <legend>Novi</legend>
@@ -175,12 +175,14 @@
                                     @Html.ValidationMessageFor(u => u.Ucenik.Odeljenje.Oznaka)
                                 </div>
                             </div>
-
-
-
-
                         </div>
-
+                        <div class="form-group ">
+                            <label class="col-md-3 control-label" for="File">Postavi sliku:</label>
+                            <div class="col-md-9">
+                                <input type="file" name="File" id="File" style="width: 100%;" />
+                                @Html.ValidationMessageFor(u => u.File)
+                            </div>
+                        </div>
 
                         <div class="form-group">
                             <div class="col-md-10 col-md-offset-2">
@@ -212,7 +214,6 @@
 @section Scripts
 {
     @Scripts.Render("~/bundles/jqueryval")
-
     <script>
         var recnik = {
             1: "Prvi",
@@ -278,9 +279,35 @@
             $(this).blur();
         });
 
-        //$("#datum").val(moment("2013-03-10T02:00:00Z").format("DD.MM.YYYY."))
+        $("form").submit(function (e) {
+            var ext = $("#File").val().split(".").pop().toLowerCase();
 
-       // $('#Ucenik_DatumRodjenja').datepicker('setDate', new Date(2008, 5 - 1, 03))// = set to today
+            if ($.inArray(ext, ['png', 'jpg', 'jpeg']) == -1) {
+                e.preventDefault();
+                $("[data-valmsg-for='File']").text("Slika koju ste izabrali nije ispravna");
+            }
+
+        });
+
+        $("#File").change(function () {
+            var ext = $("#File").val().split(".").pop().toLowerCase();
+
+            if ($.inArray(ext, ['png', 'jpg', 'jpeg']) == -1) {
+                $("[data-valmsg-for='File']").text("Slika koju ste izabrali nije ispravna");
+            }
+            else {
+                $("[data-valmsg-for='File']").text("");
+            }
+        });
+
+        $("#datum").val(moment("@Model.Ucenik.DatumRodjenja.ToString()").format("DD.MM.YYYY."));
+
+        $(function () {
+            var datum = $("#datum").val();
+            $("#Ucenik_DatumRodjenja").val(moment(datum).format("YYYY-MM-DD"));
+        });
+
+       
 
 
     </script>

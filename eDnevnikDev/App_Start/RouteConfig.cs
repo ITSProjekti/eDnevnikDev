@@ -15,7 +15,7 @@ namespace eDnevnikDev
 
             routes.MapRoute(
                 name: "OdeljenjeTrajanje",
-                url: "{controller}/{action}/{godina}",
+                url: "Odeljenje/OdeljenjeTrajanje/{godina}",
                 defaults: new { controller = "Odeljenje", action = "Index", godina = UrlParameter.Optional }
             );
 
