@@ -7,13 +7,13 @@ namespace eDnevnikDev.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class PopunjavanjeOdeljenjeSmer : IMigrationMetadata
+    public sealed partial class ArhivaOdeljenja : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(PopunjavanjeOdeljenjeSmer));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(ArhivaOdeljenja));
         
         string IMigrationMetadata.Id
         {
-            get { return "201706220953124_PopunjavanjeOdeljenjeSmer"; }
+            get { return "201706301242235_ArhivaOdeljenja"; }
         }
         
         string IMigrationMetadata.Source

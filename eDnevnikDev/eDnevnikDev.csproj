@@ -318,10 +318,6 @@
     <Compile Include="Migrations\201706061341326_PovezaniModeliOdeljenjeSmer.Designer.cs">
       <DependentUpon>201706061341326_PovezaniModeliOdeljenjeSmer.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201706061348275_PopunjavanjeOdeljenja.cs" />
-    <Compile Include="Migrations\201706061348275_PopunjavanjeOdeljenja.Designer.cs">
-      <DependentUpon>201706061348275_PopunjavanjeOdeljenja.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\201706220833383_IzmenjenoOdeljenjeDodataKolekcijaZaSmer.cs" />
     <Compile Include="Migrations\201706220833383_IzmenjenoOdeljenjeDodataKolekcijaZaSmer.Designer.cs">
       <DependentUpon>201706220833383_IzmenjenoOdeljenjeDodataKolekcijaZaSmer.cs</DependentUpon>
@@ -333,10 +329,6 @@
     <Compile Include="Migrations\201706220923127_MergeMig21.cs" />
     <Compile Include="Migrations\201706220923127_MergeMig21.Designer.cs">
       <DependentUpon>201706220923127_MergeMig21.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201706220953124_PopunjavanjeOdeljenjeSmer.cs" />
-    <Compile Include="Migrations\201706220953124_PopunjavanjeOdeljenjeSmer.Designer.cs">
-      <DependentUpon>201706220953124_PopunjavanjeOdeljenjeSmer.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\201706261053283_DodatDbSetZaOdeljenja.cs" />
     <Compile Include="Migrations\201706261053283_DodatDbSetZaOdeljenja.Designer.cs">
@@ -350,17 +342,30 @@
     <Compile Include="Migrations\201706291007042_DodatPropertyFotografijaUModelUcenik.Designer.cs">
       <DependentUpon>201706291007042_DodatPropertyFotografijaUModelUcenik.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201706301242235_ArhivaOdeljenja.cs" />
+    <Compile Include="Migrations\201706301242235_ArhivaOdeljenja.Designer.cs">
+      <DependentUpon>201706301242235_ArhivaOdeljenja.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201707030840395_PopunjavanjeOznaka.cs" />
+    <Compile Include="Migrations\201707030840395_PopunjavanjeOznaka.Designer.cs">
+      <DependentUpon>201707030840395_PopunjavanjeOznaka.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201707030846112_PopunjavanjeSmerOznaka.cs" />
+    <Compile Include="Migrations\201707030846112_PopunjavanjeSmerOznaka.Designer.cs">
+      <DependentUpon>201707030846112_PopunjavanjeSmerOznaka.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\ArhivaKreiranjaOdeljenja.cs" />
+    <Compile Include="Models\ArhivaOdeljenja.cs" />
     <Compile Include="Models\Grad.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Odeljenje.cs" />
+    <Compile Include="Models\Oznaka.cs" />
     <Compile Include="Models\Predmet.cs" />
     <Compile Include="Models\Profesor.cs" />
     <Compile Include="Models\Smer.cs" />
-    <Compile Include="Models\StatusOdeljenje.cs" />
+    <Compile Include="Models\Status.cs" />
     <Compile Include="Models\Ucenik.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -577,9 +582,6 @@
     <EmbeddedResource Include="Migrations\201706061341326_PovezaniModeliOdeljenjeSmer.resx">
       <DependentUpon>201706061341326_PovezaniModeliOdeljenjeSmer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201706061348275_PopunjavanjeOdeljenja.resx">
-      <DependentUpon>201706061348275_PopunjavanjeOdeljenja.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201706211049514_DodatDatumRodjenjaUModelUcenika.resx">
       <DependentUpon>201706211049514_DodatDatumRodjenjaUModelUcenika.cs</DependentUpon>
     </EmbeddedResource>
@@ -589,9 +591,6 @@
     <EmbeddedResource Include="Migrations\201706220923127_MergeMig21.resx">
       <DependentUpon>201706220923127_MergeMig21.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201706220953124_PopunjavanjeOdeljenjeSmer.resx">
-      <DependentUpon>201706220953124_PopunjavanjeOdeljenjeSmer.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201706261053283_DodatDbSetZaOdeljenja.resx">
       <DependentUpon>201706261053283_DodatDbSetZaOdeljenja.cs</DependentUpon>
     </EmbeddedResource>
@@ -600,6 +599,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201706291007042_DodatPropertyFotografijaUModelUcenik.resx">
       <DependentUpon>201706291007042_DodatPropertyFotografijaUModelUcenik.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706301242235_ArhivaOdeljenja.resx">
+      <DependentUpon>201706301242235_ArhivaOdeljenja.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201707030840395_PopunjavanjeOznaka.resx">
+      <DependentUpon>201707030840395_PopunjavanjeOznaka.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201707030846112_PopunjavanjeSmerOznaka.resx">
+      <DependentUpon>201707030846112_PopunjavanjeSmerOznaka.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

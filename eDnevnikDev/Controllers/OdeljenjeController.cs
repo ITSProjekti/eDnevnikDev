@@ -41,18 +41,18 @@ namespace eDnevnikDev.Controllers
 
         public JsonResult OdeljenjeTrajanje(int godina)
         {
-            var kolekcijaOdeljenja = _context.Smerovi
+            var kolekcijaOznaka = _context.Smerovi
                 .Where(s => s.Trajanje >= godina)
-                .Select(s => s.Odeljenja).ToList();
+                .Select(s => s.Oznake).ToList();
 
             var pov = new List<DTOOdeljenje>();
 
-            foreach(var lista in kolekcijaOdeljenja)
+            foreach(var lista in kolekcijaOznaka)
             {
-                foreach(var odeljenje in lista)
+                foreach(var oznaka in lista)
                 {
-                    if( !pov.Any( o => o.Oznaka == odeljenje.Oznaka))
-                        pov.Add(new DTOOdeljenje {Id = odeljenje.Id, Oznaka = odeljenje.Oznaka });                    
+                    if( !pov.Any( o => o.Oznaka == oznaka.OznakaId))
+                        pov.Add(new DTOOdeljenje {Oznaka = oznaka.OznakaId }); //Visak properti  u DTO
                 }
             }
 

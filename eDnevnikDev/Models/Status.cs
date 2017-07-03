@@ -5,8 +5,9 @@ using System.Web;
 
 namespace eDnevnikDev.Models
 {
-    public class StatusOdeljenje
+    public class Status
     {
+
         public int StatusId { get; set; }
         public string Opis { get; set; }
 

@@ -10,7 +10,7 @@ namespace eDnevnikDev.Models
     {
         public Smer()
         {
-            Odeljenja = new HashSet<Odeljenje>();
+            Oznake = new HashSet<Oznaka>();
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace eDnevnikDev.Models
         [Display(Name = "Trajanje smera")]
         public byte Trajanje { get; set; }
 
-        public virtual ICollection<Odeljenje> Odeljenja { get; set; }
+        public virtual ICollection<Oznaka> Oznake { get; set; }
 
     }
 }

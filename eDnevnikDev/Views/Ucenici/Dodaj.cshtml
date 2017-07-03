@@ -194,10 +194,10 @@
                     foreach (var smer in Model.Smerovi)
                     {
                         <input type="hidden" value="@smer.Trajanje" id="@("smer" + smer.SmerID)">
-                        foreach (var odeljenje in smer.Odeljenja)
+                        foreach (var oznaka in smer.Oznake)
                         {
-                            <input type="hidden" value="@odeljenje.Oznaka" class="@("odeljenje" + smer.SmerID)">
-                            <input type="hidden" value="@odeljenje.Id" id="@("odeljenjeID" + odeljenje.Oznaka)">
+                            <input type="hidden" value="@oznaka.OznakaId" class="@("odeljenje" + smer.SmerID)">
+                            @*<input type="hidden" value="@odeljenje.Id" id="@("odeljenjeID" + odeljenje.Oznaka)">*@
                         }
                     }
 
@@ -248,7 +248,7 @@
 
                     $(".odeljenje" + smerId).each(function () {
 
-                        html += '<option value="' + $("#odeljenjeID" + $(this).val()).val() + '">' + $(this).val() + '</option>';
+                        html += '<option value="' + $(this).val() + '">' + $(this).val() + '</option>';
 
 
                     });
@@ -280,6 +280,9 @@
         });
 
         $("form").submit(function (e) {
+            if ($("#File").val() == "")
+                return;
+
             var ext = $("#File").val().split(".").pop().toLowerCase();
 
             if ($.inArray(ext, ['png', 'jpg', 'jpeg']) == -1) {

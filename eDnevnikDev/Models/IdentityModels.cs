@@ -23,6 +23,7 @@ namespace eDnevnikDev.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public virtual DbSet<Ucenik> Ucenici { get; set; }
+        public virtual DbSet<ArhivaOdeljenja> ArhivaOdeljenja { get; set; }
         public virtual DbSet<Grad> Gradovi {get;set;}
         public virtual DbSet<Profesor> Profesori { get; set; }
         public virtual DbSet<Smer> Smerovi { get; set; }

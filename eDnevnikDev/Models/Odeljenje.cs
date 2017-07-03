@@ -19,7 +19,6 @@ namespace eDnevnikDev.Models
         public Odeljenje()
                 {
                     Ucenici = new HashSet<Ucenik>();
-                    Smer = new HashSet<Smer>();
                 }
         /// <summary>
         /// Gets or sets the identifier.
@@ -29,6 +28,14 @@ namespace eDnevnikDev.Models
         /// </value>
         public int Id { get; set; }
 
+
+
+
+
+
+
+        public int OznakaID { get; set; }
+
         /// <summary>
         /// Gets or sets the oznaka.
         /// </summary>
@@ -37,24 +44,25 @@ namespace eDnevnikDev.Models
         /// </value>
         [Required(ErrorMessage = "Polje za oznaku je obavezno")]
         [Display(Name = "Oznaka")]
-        public int Oznaka { get; set; }
+        public Oznaka Oznaka { get; set; }
 
-        
+
+
+        [ForeignKey("Status")]
+        public int StatusID { get; set; }
+
+        public Status Status { get; set; }
+
+        public DateTime SkolskaGodina { get; set; }
+
+
         /// <summary>
         /// Gets or sets the ucenici. Kolekcija Ucenika
-        /// </summary>
+        /// </summary>\
         /// <value>
         /// The ucenici.
         /// </value>
         public virtual ICollection<Ucenik> Ucenici { get; set; }
-
-        /// <summary>
-        /// Gets or sets the smer.
-        /// </summary>
-        /// <value>
-        /// The smer.
-        /// </value>
-        public virtual ICollection<Smer> Smer { get; set; }
 
 
 

@@ -14,6 +14,7 @@ namespace eDnevnikDev.Models
     /// </summary>
     public class Ucenik
     {
+
         /// <summary>
         /// Gets or sets the ucenik identifier
         /// Primary key u bazi.
@@ -221,6 +222,7 @@ namespace eDnevnikDev.Models
         public string Fotografija { get; set; }
 
 
+                    
 
         public static string GetMd5Hash(string input)
         {

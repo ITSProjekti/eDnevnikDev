@@ -63,7 +63,7 @@ namespace eDnevnikDev.Controllers
             {
                 Ucenik = new Ucenik { Ime = "Firas", Prezime = "Aburas", Adresa = "Adresa 1", BrojTelefonaRoditelja = "+381-11/1234567", ImeMajke = "Majka", ImeOca = "Otac", PrezimeMajke = "Prezime", PrezimeOca = "Prezime", JMBG = "1708993730202", MestoPrebivalista = "Beograd", MestoRodjenjaId = 3, DatumRodjenja = new DateTime(2011,12,5) },
                 Gradovi = _context.Gradovi.OrderBy(g => g.Naziv).ToList(),
-                Smerovi = _context.Smerovi.Include("Odeljenja").OrderBy(s => s.Trajanje).ToList()
+                Smerovi = _context.Smerovi.Include("Oznake").OrderBy(s => s.Trajanje).ToList()
 
             };
 
