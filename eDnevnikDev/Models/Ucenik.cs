@@ -221,8 +221,10 @@ namespace eDnevnikDev.Models
 
         public string Fotografija { get; set; }
 
+        public int? BrojUDnevniku { get; set; }
 
-                    
+
+
 
         public static string GetMd5Hash(string input)
         {
@@ -244,6 +246,18 @@ namespace eDnevnikDev.Models
 
             // Return the hexadecimal string.
             return sBuilder.ToString();
+        }
+
+        public void GenerisiJedinstveniBroj()
+        {
+            StringBuilder broj = new StringBuilder();
+            broj.Append(BrojUDnevniku.ToString().Length == 1 ? '0' + BrojUDnevniku.ToString() : BrojUDnevniku.ToString());//Ako je broj jednocifren dodaje 0 pre te cifre
+
+            broj.Append(Razred);
+            broj.Append(Odeljenje.OznakaID.ToString().Length == 1 ? '0' + Odeljenje.OznakaID.ToString() : Odeljenje.OznakaID.ToString());
+            broj.Append(Odeljenje.PocetakSkolskeGodine % 100);
+
+            JedinstveniBroj = broj.ToString();
         }
 
     }

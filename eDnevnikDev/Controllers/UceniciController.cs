@@ -22,7 +22,7 @@ namespace eDnevnikDev.Controllers
         public UceniciController()
         {
             _context = new ApplicationDbContext();
-            
+
         }
         public UceniciController(ApplicationDbContext context)
         {
@@ -61,13 +61,13 @@ namespace eDnevnikDev.Controllers
         {
             var ucenikVM = new UcenikViewModel
             {
-                Ucenik = new Ucenik { Ime = "Firas", Prezime = "Aburas", Adresa = "Adresa 1", BrojTelefonaRoditelja = "+381-11/1234567", ImeMajke = "Majka", ImeOca = "Otac", PrezimeMajke = "Prezime", PrezimeOca = "Prezime", JMBG = "1708993730202", MestoPrebivalista = "Beograd", MestoRodjenjaId = 3, DatumRodjenja = new DateTime(2011,12,5) },
+                Ucenik = new Ucenik { Ime = "Firas", Prezime = "Aburas", Adresa = "Adresa 1", BrojTelefonaRoditelja = "+381-11/1234567", ImeMajke = "Majka", ImeOca = "Otac", PrezimeMajke = "Prezime", PrezimeOca = "Prezime", JMBG = "1708993730202", MestoPrebivalista = "Beograd", MestoRodjenjaId = 3, DatumRodjenja = new DateTime(2011, 12, 5) },
                 Gradovi = _context.Gradovi.OrderBy(g => g.Naziv).ToList(),
                 Smerovi = _context.Smerovi.Include("Oznake").OrderBy(s => s.Trajanje).ToList()
 
             };
 
-     
+
             return View("Dodaj", ucenikVM);
         }
 
@@ -86,8 +86,10 @@ namespace eDnevnikDev.Controllers
 
                 return View("Dodaj", podaci);
             }
-            
+
             var ucenik = ucenikVM.Ucenik;
+            var oznaka = ucenikVM.Oznaka;
+            var razred = ucenik.Razred;
 
             var file = ucenikVM.File;
 
@@ -110,11 +112,37 @@ namespace eDnevnikDev.Controllers
                 }
             }
 
-            _context.Ucenici.Add(ucenik);
 
+
+            var odeljenje = _context.Odeljenja
+                .SingleOrDefault(o => o.OznakaID == oznaka && o.Razred == razred && o.Status.Opis != "Arhivirano");
+
+            if (odeljenje == null)
+            {
+                odeljenje = new Odeljenje()
+                {
+                    OznakaID = oznaka,
+                    Razred = razred,
+                    PocetakSkolskeGodine = SledecaSkolskaGodina(razred, oznaka),
+                    StatusID = 2,
+                    KrajSkolskeGodine = SledecaSkolskaGodina(razred, oznaka) + 1
+                };
+
+                
+                _context.Odeljenja.Add(odeljenje);
+                _context.SaveChanges();
+                
+                
+               
+            }
+
+
+            ucenik.OdeljenjeId = odeljenje.Id;
+            _context.Ucenici.Add(ucenik);
             _context.SaveChanges();
 
-            if ( file != null)
+
+            if (file != null)
             {
                 var id = Ucenik.GetMd5Hash(ucenik.JMBG);
 
@@ -129,6 +157,16 @@ namespace eDnevnikDev.Controllers
             }
 
             return RedirectToAction("Index", "Ucenici");
+        }
+
+        private int SledecaSkolskaGodina(int razred, int odeljenje)
+        {
+            var odeljenja = _context.Odeljenja.Where(o => o.OznakaID == odeljenje && o.Razred == razred).ToList();
+
+            if (odeljenja.Any())
+                return odeljenja.Max(o => o.KrajSkolskeGodine);
+            else
+                return DateTime.Now.Year;
         }
 
 

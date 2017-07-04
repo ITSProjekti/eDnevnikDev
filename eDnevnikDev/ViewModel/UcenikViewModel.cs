@@ -36,5 +36,7 @@ namespace eDnevnikDev.ViewModel
         public IEnumerable<Smer> Smerovi { get; set; }
 
         public HttpPostedFileBase File { get; set; }
+
+        public int Oznaka { get; set; }
     }
 }

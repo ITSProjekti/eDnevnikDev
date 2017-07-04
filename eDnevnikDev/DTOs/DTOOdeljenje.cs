@@ -7,8 +7,8 @@ namespace eDnevnikDev.DTOs
 {
     public class DTOOdeljenje
     {
-        public int Id { get; set; }
         public int Oznaka { get; set; }
 
+        public int Razred { get; set; }
     }
 }

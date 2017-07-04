@@ -222,6 +222,7 @@
     <Compile Include="Controllers\ProfesoriController.cs" />
     <Compile Include="Controllers\UceniciController.cs" />
     <Compile Include="DTOs\DTOOdeljenje.cs" />
+    <Compile Include="DTOs\DTOOdeljenjeSaUcenicima.cs" />
     <Compile Include="DTOs\DTOUcenikOdeljenja.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -353,6 +354,22 @@
     <Compile Include="Migrations\201707030846112_PopunjavanjeSmerOznaka.cs" />
     <Compile Include="Migrations\201707030846112_PopunjavanjeSmerOznaka.Designer.cs">
       <DependentUpon>201707030846112_PopunjavanjeSmerOznaka.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201707030938263_PopunjavanjeStatusaOdeljenja.cs" />
+    <Compile Include="Migrations\201707030938263_PopunjavanjeStatusaOdeljenja.Designer.cs">
+      <DependentUpon>201707030938263_PopunjavanjeStatusaOdeljenja.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201707030954305_DodatRazredUOdeljenje.cs" />
+    <Compile Include="Migrations\201707030954305_DodatRazredUOdeljenje.Designer.cs">
+      <DependentUpon>201707030954305_DodatRazredUOdeljenje.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201707031010458_DodataPoljaPocetakIKrajSkolskeGodine.cs" />
+    <Compile Include="Migrations\201707031010458_DodataPoljaPocetakIKrajSkolskeGodine.Designer.cs">
+      <DependentUpon>201707031010458_DodataPoljaPocetakIKrajSkolskeGodine.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201707041217268_DodatBrojUDnevnikuUModeluUcenik.cs" />
+    <Compile Include="Migrations\201707041217268_DodatBrojUDnevnikuUModeluUcenik.Designer.cs">
+      <DependentUpon>201707041217268_DodatBrojUDnevnikuUModeluUcenik.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -608,6 +625,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201707030846112_PopunjavanjeSmerOznaka.resx">
       <DependentUpon>201707030846112_PopunjavanjeSmerOznaka.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201707030938263_PopunjavanjeStatusaOdeljenja.resx">
+      <DependentUpon>201707030938263_PopunjavanjeStatusaOdeljenja.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201707030954305_DodatRazredUOdeljenje.resx">
+      <DependentUpon>201707030954305_DodatRazredUOdeljenje.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201707031010458_DodataPoljaPocetakIKrajSkolskeGodine.resx">
+      <DependentUpon>201707031010458_DodataPoljaPocetakIKrajSkolskeGodine.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201707041217268_DodatBrojUDnevnikuUModeluUcenik.resx">
+      <DependentUpon>201707041217268_DodatBrojUDnevnikuUModeluUcenik.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -12,7 +12,7 @@ namespace eDnevnikDev.Models
     /// </summary>
     public class Odeljenje
     {
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="Odeljenje"/> class.
         /// </summary>
@@ -33,7 +33,7 @@ namespace eDnevnikDev.Models
 
 
 
-
+        [Required(ErrorMessage = "Polje za oznaku je obavezno")]
         public int OznakaID { get; set; }
 
         /// <summary>
@@ -42,7 +42,6 @@ namespace eDnevnikDev.Models
         /// <value>
         /// The oznaka.
         /// </value>
-        [Required(ErrorMessage = "Polje za oznaku je obavezno")]
         [Display(Name = "Oznaka")]
         public Oznaka Oznaka { get; set; }
 
@@ -53,7 +52,10 @@ namespace eDnevnikDev.Models
 
         public Status Status { get; set; }
 
-        public DateTime SkolskaGodina { get; set; }
+        public int PocetakSkolskeGodine { get; set; }
+        public int KrajSkolskeGodine { get; set; }
+
+        public int Razred { get; set; }
 
 
         /// <summary>
@@ -63,8 +65,6 @@ namespace eDnevnikDev.Models
         /// The ucenici.
         /// </value>
         public virtual ICollection<Ucenik> Ucenici { get; set; }
-
-
 
 
 

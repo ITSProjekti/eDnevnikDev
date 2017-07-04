@@ -7,7 +7,7 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-md-3 col-md-offset-4">
+        <div class="col-md-8 col-md-offset-4">
             <label for="razred">Razred</label>
             <select id="razred">
                 <option value="1">Prvi</option>
@@ -20,7 +20,9 @@
                 
             </select>
 
-            <p id="p1"></p>
+            <span id="dugme" ></span>
+
+            @*<p id="p1"></p>*@
 
         </div>
     </div>
@@ -51,13 +53,13 @@
     <script>
         function Odeljenja() {
             var razred = $("#razred").val();
-            var zahtev = $.getJSON("/Odeljenje/OdeljenjeTrajanje/"+razred);
+            var zahtev = $.getJSON("/Odeljenje/OdeljenjeTrajanje?godina="+razred);
 
 
             zahtev.done(function (odeljenja) {
-
+                
                 for (var odeljenje in odeljenja) {
-                    $("#odeljenja").append("<option value='" + odeljenja[odeljenje].Id + "'>" + odeljenja[odeljenje].Oznaka + "</option>");
+                    $("#odeljenja").append("<option value='" + odeljenja[odeljenje].Oznaka + "'>" + odeljenja[odeljenje].Oznaka + "</option>");
                 }
             });
             zahtev.fail(function (gr) { $("#p1").html(gr.statusText); });
@@ -77,13 +79,33 @@
         function Ucenici() {
             var razred = $("#razred").val();
             var odeljenje = $("#odeljenja").val();
-            var zahtev = $.getJSON("/Odeljenje/OdeljenjeUcenici?razred=" + razred + "&idOdeljenja=" + odeljenje);
 
-            zahtev.done(function (ucenici) {
+            if (odeljenje == undefined)
+                odeljenje = 1;
 
-                for (var ucenik in ucenici) {
-                    $("#ucenici").append(GenerisiKarticuUcenika(ucenici[ucenik].ID, ucenici[ucenik].Ime, ucenici[ucenik].Prezime, ucenici[ucenik].Fotografija));
+            var zahtev = $.getJSON("/Odeljenje/OdeljenjeUcenici?razred=" + razred + "&oznakaOdeljenja=" + odeljenje);
+
+            zahtev.done(function (podaci) {
+
+                if (podaci.Ucenici == null)
+                {
+                    $("#ucenici").append('<div class="alert alert-warning" role="alert"><strong>Upozorenje!</strong> Nema učenika u izabranom odeljenju </div>');
+                    return;
                 }
+
+                if (podaci.Kreirano)
+                {
+                    $("#dugme").append("<button class='btn btn-primary' id='dugmeArhiviraj'>Arhiviraj</button> <br/>");
+                    
+                }
+                else
+                    $("#dugme").append("<button type='submit' class='btn btn-primary' id='dugmeKreiraj' onClick=dugmeClick()>Kreiraj</button>");
+
+                for (var ucenik in podaci.Ucenici) {
+                    $("#ucenici").append(GenerisiKarticuUcenika(podaci.Ucenici[ucenik].ID, podaci.Ucenici[ucenik].Ime, podaci.Ucenici[ucenik].Prezime, podaci.Ucenici[ucenik].Fotografija));
+                }
+
+
             });
             zahtev.fail(function (gr) { $("#p1").html(gr.statusText); });
         }
@@ -91,17 +113,36 @@
         $(function () {
             $("#razred").change(function () {
                 $("#odeljenja").html("");
-
+                $('#odeljenja').change();  //Okidanje dogadjaja za promenu drop down-a za izbor odeljenja prilikom promene razreda.
                 Odeljenja();
             }).change();
 
 
             $('#odeljenja').change(function () {
                 $("#ucenici").html("");
+                $("#dugme").html("");
                 Ucenici();
             });
 
         });
+
+        function dugmeClick() {
+                var odeljenje = {
+                    Razred: $("#razred").val(),
+                    Oznaka: $("#odeljenja").val()
+                }
+                var zahtev = $.post("/Odeljenje/KreirajOdeljenje", odeljenje);
+
+                zahtev.done(function (rezultat) {
+                    if (rezultat == 0) {
+                        $('#odeljenja').change();
+                    }
+                });
+                zahtev.fail(function (rezultat) {
+
+                });
+
+        }
 
 
 

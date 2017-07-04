@@ -52,7 +52,7 @@ namespace eDnevnikDev.Controllers
                 foreach(var oznaka in lista)
                 {
                     if( !pov.Any( o => o.Oznaka == oznaka.OznakaId))
-                        pov.Add(new DTOOdeljenje {Oznaka = oznaka.OznakaId }); //Visak properti  u DTO
+                        pov.Add(new DTOOdeljenje {Oznaka = oznaka.OznakaId }); 
                 }
             }
 
@@ -61,19 +61,63 @@ namespace eDnevnikDev.Controllers
             return Json(pov, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult OdeljenjeUcenici(int razred, int idOdeljenja)
+        public JsonResult OdeljenjeUcenici(int razred, int oznakaOdeljenja)
         {
-            var listaUcenika = _context.Ucenici
-                .Where(u => u.Razred == razred && u.OdeljenjeId == idOdeljenja)
+            //var listaUcenika = _context.Ucenici
+            //    .Where(u => u.Razred == razred && u.OdeljenjeId == idOdeljenja)
+            //    .OrderBy(u => u.Prezime)
+            //    .ThenBy(u => u.Ime)
+            //    .ThenBy(u => u.ImeOca)
+            //    .Select(u=> new DTOUcenikOdeljenja { ID= u.UcenikID, Ime=u.Ime, Prezime=u.Prezime, Fotografija=u.Fotografija })
+            //    .ToList();
+
+            var odeljenje = _context.Odeljenja
+                .Include("Status")
+                .SingleOrDefault(o => o.Status.Opis != "Arhivirano" && o.Razred == razred && o.OznakaID == oznakaOdeljenja);
+
+            var podaci = new DTOOdeljenjeSaUcenicima();
+
+            if (odeljenje != null)
+            {
+                podaci.Kreirano = odeljenje.Status.Opis == "Kreirano";
+                podaci.Ucenici = odeljenje.Ucenici
+                    .OrderBy(u => u.Prezime)
+                    .ThenBy(u => u.Ime)
+                    .ThenBy(u => u.ImeOca)
+                    .Select(u => new DTOUcenikOdeljenja { ID = u.UcenikID, Ime = u.Ime, Prezime = u.Prezime, Fotografija = u.Fotografija })
+                    .ToList();                
+            }
+            return Json(podaci, JsonRequestBehavior.AllowGet);
+
+        }
+
+        [HttpPost]
+        public int KreirajOdeljenje(DTOOdeljenje OdeljenjeZaKreiranje)
+        {
+            var odeljenje = _context.Odeljenja.SingleOrDefault(o => o.OznakaID == OdeljenjeZaKreiranje.Oznaka && o.Razred == OdeljenjeZaKreiranje.Razred);
+            if (odeljenje == null)
+                return -1;
+
+            var ucenici = _context.Ucenici
+                .Where(u => u.OdeljenjeId == odeljenje.Id)
                 .OrderBy(u => u.Prezime)
                 .ThenBy(u => u.Ime)
                 .ThenBy(u => u.ImeOca)
-                .Select(u=> new DTOUcenikOdeljenja { ID= u.UcenikID, Ime=u.Ime, Prezime=u.Prezime, Fotografija=u.Fotografija })
                 .ToList();
 
-            
-             return Json(listaUcenika, JsonRequestBehavior.AllowGet);
+            int brojac = 1;
 
+            foreach (Ucenik ucenik in ucenici)
+            {
+                ucenik.BrojUDnevniku = brojac++;
+                ucenik.GenerisiJedinstveniBroj();
+            }
+
+
+            odeljenje.StatusID = 3; //StatudID 3 je Kreirano
+            _context.SaveChanges();
+            return 0;
         }
+
     }
 }

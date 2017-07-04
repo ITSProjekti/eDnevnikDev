@@ -13,11 +13,11 @@ namespace eDnevnikDev
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-            routes.MapRoute(
+         /*   routes.MapRoute(
                 "OdeljenjeTrajanje",
                 "Odeljenje/OdeljenjeTrajanje/{godina}",
                 new { controller = "Odeljenje", action = "OdeljenjeTrajanje", godina = UrlParameter.Optional }
-            );
+            );*/
         
 
             routes.MapRoute(
