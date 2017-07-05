@@ -9,6 +9,7 @@ using eDnevnikDev.Models;
 using System.Data.Entity;
 using Moq;
 using System.Web.Mvc;
+using eDnevnikDev.ViewModel;
 
 namespace eDnevnikDev.Controllers.Tests
 {
@@ -71,6 +72,58 @@ namespace eDnevnikDev.Controllers.Tests
             Assert.AreEqual(1,model.Predmeti.Count());
             Assert.AreEqual("Dodaj", result.ViewName);
 
+        }
+
+        [TestMethod()]
+        public void ProfesoriController_Sacuvaj()
+        {
+
+            var pred = new List<Predmet>()
+                    {
+                    new Predmet { PredmetID = 1, NazivPredmeta = "Mata" },
+                    new Predmet { PredmetID = 2, NazivPredmeta = "Fizika" }
+                     }.AsQueryable();
+
+          
+
+            Profesor prof = new Profesor()
+            {
+                ProfesorID = 1,
+                Ime = "Marko",
+                Prezime = "Markovic",
+                Telefon = "064333333",
+                Adresa = "Neka Adresa",
+                Vanredan = true,
+                RazredniStaresina = true,
+                Predmeti=pred.ToList()
+            
+        };
+
+             ProfesorViewModel pmv = new ProfesorViewModel()
+            {
+                Profesor = prof,
+                PredmetiIDs = pred.Select(p => p.PredmetID).ToList()
+              
+            };
+
+            
+            var mockSet = new Mock<DbSet<Profesor>>();
+            var mockContext = new Mock<ApplicationDbContext>();
+            mockContext.Setup(p => p.Profesori).Returns(mockSet.Object);
+           
+
+            var mockSetPredmeti = new Mock<DbSet<Predmet>>();
+            mockSetPredmeti.As<IQueryable<Predmet>>().Setup(m => m.Provider).Returns(pred.Provider);
+            mockSetPredmeti.As<IQueryable<Predmet>>().Setup(m => m.Expression).Returns(pred.Expression);
+            mockSetPredmeti.As<IQueryable<Predmet>>().Setup(m => m.ElementType).Returns(pred.ElementType);
+            mockSetPredmeti.As<IQueryable<Predmet>>().Setup(m => m.GetEnumerator()).Returns(pred.GetEnumerator());
+
+            mockContext.Setup(p => p.Predmeti).Returns(mockSetPredmeti.Object);
+
+            var service = new ProfesoriController(mockContext.Object);
+            service.Sacuvaj(pmv);
+            mockSet.Verify(m => m.Add(It.IsAny<Profesor>()), Times.Once());
+            mockContext.Verify(m => m.SaveChanges(), Times.Once());
         }
     }
 }
