@@ -8,6 +8,7 @@ using eDnevnikDev.DTOs;
 
 namespace eDnevnikDev.Controllers
 {
+
     public class OdeljenjeController : Controller
     {
         ApplicationDbContext _context;
@@ -20,7 +21,6 @@ namespace eDnevnikDev.Controllers
         public OdeljenjeController(ApplicationDbContext context)
         {
             this._context = context;
-
         }
 
         // GET: Odeljenje
@@ -68,7 +68,7 @@ namespace eDnevnikDev.Controllers
                 .OrderBy(u => u.Prezime)
                 .ThenBy(u => u.Ime)
                 .ThenBy(u => u.ImeOca)
-                .Select(u=> new DTOUcenikOdeljenja { ID= u.UcenikID, Ime=u.Ime, Prezime=u.Prezime })
+                .Select(u=> new DTOUcenikOdeljenja { ID= u.UcenikID, Ime=u.Ime, Prezime=u.Prezime, Fotografija=u.Fotografija })
                 .ToList();
 
             
