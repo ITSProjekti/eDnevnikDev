@@ -119,5 +119,42 @@ namespace eDnevnikDev.Controllers
             return 0;
         }
 
+        public JsonResult MogucnostArhiviranja(int razred, int oznakaOdeljenja)
+        {
+            int razredSledeceGodine = razred + 1;
+
+            if (razred != 4 && _context.Odeljenja.Any(o => o.OznakaID == oznakaOdeljenja && o.Razred == razredSledeceGodine && o.StatusID != 1))//StatusID 1 je Arhivirano
+            {
+                return Json(new { Moguce = false }, JsonRequestBehavior.AllowGet);
+            }
+
+
+            var odeljenje = _context.Odeljenja.SingleOrDefault(o => o.OznakaID == oznakaOdeljenja && o.Razred == razred);
+
+            foreach (var ucenik in odeljenje.Ucenici)
+            {
+                _context.ArhivaOdeljenja.Add(new ArhivaOdeljenja() { OdeljenjeID = odeljenje.Id, UcenikID = ucenik.UcenikID });
+            }
+
+            odeljenje.StatusID = 1;//StatusID 1 je Arhivirano
+
+            if (razred != 4)
+            {
+                var novoOdeljenje = new Odeljenje()
+                {
+                    OznakaID = odeljenje.OznakaID,
+                    Razred = razredSledeceGodine,
+                    PocetakSkolskeGodine = Odeljenje.SledecaSkolskaGodina(razred, oznakaOdeljenja,_context),
+                    StatusID = 2,
+                    KrajSkolskeGodine = Odeljenje.SledecaSkolskaGodina(razred, oznakaOdeljenja,_context) + 1
+                };
+
+
+            }
+
+
+            return Json(new { Moguce = true }, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

@@ -112,9 +112,8 @@ namespace eDnevnikDev.Controllers
                 }
             }
 
-
-
             var odeljenje = _context.Odeljenja
+                .Include("Status")
                 .SingleOrDefault(o => o.OznakaID == oznaka && o.Razred == razred && o.Status.Opis != "Arhivirano");
 
             if (odeljenje == null)
@@ -123,19 +122,25 @@ namespace eDnevnikDev.Controllers
                 {
                     OznakaID = oznaka,
                     Razred = razred,
-                    PocetakSkolskeGodine = SledecaSkolskaGodina(razred, oznaka),
+                    PocetakSkolskeGodine = Odeljenje.SledecaSkolskaGodina(razred, oznaka,_context),
                     StatusID = 2,
-                    KrajSkolskeGodine = SledecaSkolskaGodina(razred, oznaka) + 1
+                    KrajSkolskeGodine = Odeljenje.SledecaSkolskaGodina(razred, oznaka,_context) + 1
                 };
-
                 
                 _context.Odeljenja.Add(odeljenje);
-                _context.SaveChanges();
-                
-                
-               
+                _context.SaveChanges();  
             }
+            else if(odeljenje.Status.Opis == "Kreirano")
+            {
+                var poslednjiBrojUDnevniku = odeljenje.Ucenici.Max(u => u.BrojUDnevniku);
 
+                ucenik.BrojUDnevniku = poslednjiBrojUDnevniku + 1;
+
+                ucenik.Odeljenje = odeljenje;
+
+                ucenik.GenerisiJedinstveniBroj();
+
+            }
 
             ucenik.OdeljenjeId = odeljenje.Id;
             _context.Ucenici.Add(ucenik);
@@ -158,18 +163,5 @@ namespace eDnevnikDev.Controllers
 
             return RedirectToAction("Index", "Ucenici");
         }
-
-        private int SledecaSkolskaGodina(int razred, int odeljenje)
-        {
-            var odeljenja = _context.Odeljenja.Where(o => o.OznakaID == odeljenje && o.Razred == razred).ToList();
-
-            if (odeljenja.Any())
-                return odeljenja.Max(o => o.KrajSkolskeGodine);
-            else
-                return DateTime.Now.Year;
-        }
-
-
-
     }
 }

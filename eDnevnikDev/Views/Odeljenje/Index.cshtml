@@ -22,30 +22,36 @@
 
             <span id="dugme" ></span>
 
-            @*<p id="p1"></p>*@
+            <p id="p1"></p>
 
         </div>
     </div>
+    <div id="poruka">  </div>
     <div class="row" id="ucenici">
-        <div class="col-md-3">
-            <div class="ucenik-kartica">
-                <img src="http://via.placeholder.com/140x176"  class="ucenik-slika"/>
-                <div class="ucenik-ime">
-                    Petar Petrović
+
+    </div>
+
+    <div class="modal fade" id="potvrda" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Da li ste sigurni?</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Posle arhiviranja odeljenje nije moguće vratiti.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" onclick="dugmeClickArhiviraj()">Potvrdi</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Zatvori</button>
                 </div>
             </div>
-        </div>  
-     </div>
+        </div>
+    </div>
+
+
 </div>
 
-
-    @*<div class="form-group">
-        @Html.LabelFor(u => u.Razred, new { @class = "col-md-3 control-label" })
-        <div class="col-md-9">
-            @Html.DropDownListFor(u => u.Razred, new SelectList( Enumerable.Range(1,4)), " ", new { @class = "form-control" })
-            @Html.ValidationMessageFor(u => u.Razred )
-        </div>
-    </div>*@
 @section Scripts
 {
     @Scripts.Render("~/bundles/jqueryval");
@@ -72,8 +78,8 @@
             else
                 fotografija = "/slike/" + fotografija;
 
-            return   "<div class='col-md-3'>\n\t<div class='ucenik-kartica'>\n\t\t<img src='" + fotografija + "' class='ucenik-slika' style='width:140px;height:176px;' />\n\t\t<div class='ucenik-ime'>" + ime + " " + prezime + " </div>\n\t </div>\n</div>";
-            
+            //return   "<div class='col-md-3'><div class='ucenik-kartica'><img src='" + fotografija + "' class='ucenik-slika' style='width:140px;height:176px;' /><div class='ucenik-ime'>" + ime + " " + prezime + " </div></div></div>";
+            return '<div class="col-sm-6 col-md-3" style="text-align:center; "><div class="thumbnail"><img src="' + fotografija + '" style="width:140px; height:176px; display: block;"> <div class="caption"> <h3>' + ime + ' ' + prezime + '</h3> </div></div> </div>';
         }
 
         function Ucenici() {
@@ -95,11 +101,11 @@
 
                 if (podaci.Kreirano)
                 {
-                    $("#dugme").append("<button class='btn btn-primary' id='dugmeArhiviraj'>Arhiviraj</button> <br/>");
+                    $("#dugme").append("<button class='btn btn-primary' id='dugmeArhiviraj' data-toggle='modal' data-target='#potvrda'>Arhiviraj</button> <br/>");
                     
                 }
                 else
-                    $("#dugme").append("<button type='submit' class='btn btn-primary' id='dugmeKreiraj' onClick=dugmeClick()>Kreiraj</button>");
+                    $("#dugme").append("<button type='submit' class='btn btn-primary' id='dugmeKreiraj' onClick=dugmeClickKreiraj()>Kreiraj</button>");
 
                 for (var ucenik in podaci.Ucenici) {
                     $("#ucenici").append(GenerisiKarticuUcenika(podaci.Ucenici[ucenik].ID, podaci.Ucenici[ucenik].Ime, podaci.Ucenici[ucenik].Prezime, podaci.Ucenici[ucenik].Fotografija));
@@ -122,11 +128,12 @@
                 $("#ucenici").html("");
                 $("#dugme").html("");
                 Ucenici();
-            });
+            }).change();
 
         });
 
-        function dugmeClick() {
+        function dugmeClickKreiraj()
+        {
                 var odeljenje = {
                     Razred: $("#razred").val(),
                     Oznaka: $("#odeljenja").val()
@@ -136,6 +143,10 @@
                 zahtev.done(function (rezultat) {
                     if (rezultat == 0) {
                         $('#odeljenja').change();
+                        //$("#poruka").append('<div class="alert alert-success alert-dismissable"><strong>Uspeh!</strong> Uspešno kreirano odeljenje.</div>');
+                        $("#poruka").append('<div class="alert alert-success alert-dismissable"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Uspeh!</strong> Uspešno kreirano odeljenje.</div>');
+
+
                     }
                 });
                 zahtev.fail(function (rezultat) {
@@ -144,14 +155,30 @@
 
         }
 
+        function dugmeClickArhiviraj()
+        {
+
+            var razred = $("#razred").val();
+            var odeljenje = $("#odeljenja").val();
+
+            var zahtev = $.getJSON("/Odeljenje/MogucnostArhiviranja?razred=" + razred + "&oznakaOdeljenja=" + odeljenje);
+
+            zahtev.done(function (podaci) {
+                if (podaci.Moguce)
+                    console.log("radi")
+                else
+                    console.log("ne radi")
+            });
+
+            zahtev.fail(function (gr) { $("#p1").html(gr.statusText); });
+
+
+
+        }
+
 
 
 
     </script>
     
-
-
-
-
-
 }

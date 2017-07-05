@@ -66,6 +66,15 @@ namespace eDnevnikDev.Models
         /// </value>
         public virtual ICollection<Ucenik> Ucenici { get; set; }
 
+        public static int SledecaSkolskaGodina(int razred, int odeljenje, ApplicationDbContext _context)
+        {
+            var odeljenja = _context.Odeljenja.Where(o => o.OznakaID == odeljenje && o.Razred == razred).ToList();
+
+            if (odeljenja.Any())
+                return odeljenja.Max(o => o.KrajSkolskeGodine);
+            else
+                return DateTime.Now.Year;
+        }
 
 
     }
