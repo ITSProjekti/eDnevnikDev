@@ -10,6 +10,7 @@ using System.Data.Entity;
 using Moq;
 using System.Web.Mvc;
 using eDnevnikDev.ViewModel;
+using eDnevnikDev.DTOs;
 
 
 namespace eDnevnikDev.Tests.Controllers
@@ -28,6 +29,80 @@ namespace eDnevnikDev.Tests.Controllers
             var viewResult = result as ViewResult;
 
             Assert.AreEqual(result, viewResult);
+        }
+        [TestMethod]
+        public void OdeljenjeController_OdeljenjeUcenici()
+        {
+            byte razred = 1;
+            int odeljenje = 1;
+
+            var listaUce = new List<Ucenik>()
+            {
+                new Ucenik()
+                { Adresa = "Adresa1",
+                BrojTelefonaRoditelja = "064111222",
+                DatumRodjenja = DateTime.Now,
+                Ime = "Firas",
+                Prezime = "Aburas",
+                ImeMajke = "Mama",
+                PrezimeMajke = "PrezimeMame",
+                ImeOca = "Tata",
+                PrezimeOca = "PrezimeTate",
+                JedinstveniBroj = "1",
+                JMBG = "1234567891012",
+                MestoPrebivalista = "Beograd",
+                MestoRodjenja = new Grad(),
+                MestoRodjenjaId = 1,
+                Odeljenje = new Odeljenje(),
+                OdeljenjeId = odeljenje,
+                Razred = razred,
+                Smer = new Smer(),
+                SmerID = 1,
+                UcenikID = 1,
+                Vanredan = false },
+
+                new Ucenik()
+                { Adresa = "Adresa1",
+                BrojTelefonaRoditelja = "064111222",
+                DatumRodjenja = DateTime.Now,
+                Ime = "Firas",
+                Prezime = "Aburas",
+                ImeMajke = "Mama",
+                PrezimeMajke = "PrezimeMame",
+                ImeOca = "Tata",
+                PrezimeOca = "PrezimeTate",
+                JedinstveniBroj = "1",
+                JMBG = "1234567891012",
+                MestoPrebivalista = "Beograd",
+                MestoRodjenja = new Grad(),
+                MestoRodjenjaId = 1,
+                Odeljenje = new Odeljenje(),
+                OdeljenjeId = odeljenje,
+                Razred = razred,
+                Smer = new Smer(),
+                SmerID = 1,
+                UcenikID = 2,
+                Vanredan = false }
+            }.AsQueryable();
+
+            var mockContext = new Mock<ApplicationDbContext>();
+            var mockSetUcenik = new Mock<DbSet<Ucenik>>();
+            mockSetUcenik.As<IQueryable<Ucenik>>().Setup(m => m.Provider).Returns(listaUce.Provider);
+            mockSetUcenik.As<IQueryable<Ucenik>>().Setup(m => m.Expression).Returns(listaUce.Expression);
+            mockSetUcenik.As<IQueryable<Ucenik>>().Setup(m => m.ElementType).Returns(listaUce.ElementType);
+            mockSetUcenik.As<IQueryable<Ucenik>>().Setup(m => m.GetEnumerator()).Returns(listaUce.GetEnumerator());
+
+            foreach (var item in listaUce)
+            {
+                mockSetUcenik.Setup(p => p.Add(item));
+            }
+     
+            mockContext.Setup(p => p.Ucenici).Returns(mockSetUcenik.Object);
+          
+
+            var odeljenjeController = new OdeljenjeController(mockContext.Object);
+            var result = odeljenjeController.OdeljenjeUcenici(razred, odeljenje) as JsonResult;
+
         }
 
 
