@@ -371,9 +371,14 @@
     <Compile Include="Migrations\201707041217268_DodatBrojUDnevnikuUModeluUcenik.Designer.cs">
       <DependentUpon>201707041217268_DodatBrojUDnevnikuUModeluUcenik.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201707061049423_DodatModelEvidencija.cs" />
+    <Compile Include="Migrations\201707061049423_DodatModelEvidencija.Designer.cs">
+      <DependentUpon>201707061049423_DodatModelEvidencija.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ArhivaOdeljenja.cs" />
+    <Compile Include="Models\Evidencija.cs" />
     <Compile Include="Models\Grad.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -637,6 +642,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201707041217268_DodatBrojUDnevnikuUModeluUcenik.resx">
       <DependentUpon>201707041217268_DodatBrojUDnevnikuUModeluUcenik.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201707061049423_DodatModelEvidencija.resx">
+      <DependentUpon>201707061049423_DodatModelEvidencija.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
