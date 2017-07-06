@@ -11,7 +11,8 @@ using Moq;
 using System.Web.Mvc;
 using eDnevnikDev.ViewModel;
 using eDnevnikDev.DTOs;
-
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace eDnevnikDev.Tests.Controllers
 {
@@ -96,16 +97,34 @@ namespace eDnevnikDev.Tests.Controllers
             {
                 mockSetUcenik.Setup(p => p.Add(item));
             }
-     
-            mockContext.Setup(p => p.Ucenici).Returns(mockSetUcenik.Object);
-          
 
+            mockContext.Setup(p => p.Ucenici).Returns(mockSetUcenik.Object);
             var odeljenjeController = new OdeljenjeController(mockContext.Object);
             var result = odeljenjeController.OdeljenjeUcenici(razred, odeljenje) as JsonResult;
 
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.JsonRequestBehavior == JsonRequestBehavior.AllowGet);
+
+            string jsonString = JsonConvert.SerializeObject(result.Data);
+            System.Diagnostics.Debug.WriteLine(jsonString);
+
+            var jsonArray = JArray.Parse(jsonString);
+
+                foreach (JObject item in jsonArray)
+                {
+                    
+                    string id = item["ID"].ToString();
+                    string Ime = item["Ime"].ToString();
+                    string Prezime = item["Prezime"].ToString();
+
+                    Ucenik temp = listaUce.FirstOrDefault(x => x.UcenikID == int.Parse(id));
+                    Assert.AreEqual<string>(id, temp.UcenikID.ToString());
+                    Assert.AreEqual<string>(Ime, temp.Ime.ToString());
+                    Assert.AreEqual<string>(Prezime, temp.Prezime.ToString());
+                }
+            Assert.AreEqual<int>(jsonArray.Count, 2);
+
         }
-
-
     }
 
 }
