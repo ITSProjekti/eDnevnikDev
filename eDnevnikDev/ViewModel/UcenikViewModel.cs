@@ -38,5 +38,7 @@ namespace eDnevnikDev.ViewModel
         public HttpPostedFileBase File { get; set; }
 
         public int Oznaka { get; set; }
+
+        public int SmestiUNovoOdeljenje { get; set; }
     }
 }

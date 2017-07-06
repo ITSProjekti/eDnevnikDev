@@ -112,9 +112,10 @@ namespace eDnevnikDev.Controllers
                 }
             }
 
+
             var odeljenje = _context.Odeljenja
                 .Include("Status")
-                .SingleOrDefault(o => o.OznakaID == oznaka && o.Razred == razred && o.Status.Opis != "Arhivirano");
+                .SingleOrDefault(o => o.OznakaID == oznaka && o.Razred == razred && o.StatusID == ucenikVM.SmestiUNovoOdeljenje);
 
             if (odeljenje == null)
             {
@@ -130,7 +131,7 @@ namespace eDnevnikDev.Controllers
                 _context.Odeljenja.Add(odeljenje);
                 _context.SaveChanges();  
             }
-            else if(odeljenje.Status.Opis == "Kreirano")
+            else if(odeljenje.StatusID == 3)
             {
                 var poslednjiBrojUDnevniku = odeljenje.Ucenici.Max(u => u.BrojUDnevniku);
 
@@ -162,6 +163,15 @@ namespace eDnevnikDev.Controllers
             }
 
             return RedirectToAction("Index", "Ucenici");
+        }
+
+        public JsonResult DaLiPostojiKreirano(int razred,int oznaka)
+        {
+           var odeljenje =  _context.Odeljenja
+                            .Include("Status")
+                             .SingleOrDefault(o => o.OznakaID == oznaka && o.Razred == razred && o.StatusID == 3);
+           return odeljenje == null ? Json(new { Kreirano = false }, JsonRequestBehavior.AllowGet) : Json(new { Kreirano = true }, JsonRequestBehavior.AllowGet);
+
         }
     }
 }

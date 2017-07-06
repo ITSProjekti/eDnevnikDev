@@ -30,12 +30,13 @@ namespace eDnevnikDev.Controllers
         /// <returns>Vraca View za Index</returns>
         public ActionResult Index()
         {
-            
+            ViewBag.SkolskaGodina = Odeljenje.SledecaSkolskaGodina(1, 1, _context);
 
+            return View();
+        }
 
-
-
-
+        public ActionResult PregledKreiranih()
+        {
             return View();
         }
 
@@ -61,7 +62,7 @@ namespace eDnevnikDev.Controllers
             return Json(pov, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult OdeljenjeUcenici(int razred, int oznakaOdeljenja)
+        public JsonResult OdeljenjeUcenici(int razred, int oznakaOdeljenja, int status)
         {
             //var listaUcenika = _context.Ucenici
             //    .Where(u => u.Razred == razred && u.OdeljenjeId == idOdeljenja)
@@ -73,7 +74,7 @@ namespace eDnevnikDev.Controllers
 
             var odeljenje = _context.Odeljenja
                 .Include("Status")
-                .SingleOrDefault(o => o.Status.Opis != "Arhivirano" && o.Razred == razred && o.OznakaID == oznakaOdeljenja);
+                .SingleOrDefault(o => o.StatusID == status && o.Razred == razred && o.OznakaID == oznakaOdeljenja);
 
             var podaci = new DTOOdeljenjeSaUcenicima();
 
@@ -91,15 +92,71 @@ namespace eDnevnikDev.Controllers
 
         }
 
+        public int ArhivirajOdeljenje(Odeljenje o)
+        {
+            foreach (var ucenik in o.Ucenici)
+            {
+                _context.ArhivaOdeljenja.Add(new ArhivaOdeljenja() { OdeljenjeID = o.Id, UcenikID = ucenik.UcenikID });
+            }
+
+            o.StatusID = 1; // Status 1 je Arhivirano
+
+            _context.SaveChanges();
+
+            return 0;
+        }
+
+        public int PremestiUSledecuGodinu(Odeljenje odeljenje)
+        {
+            if (odeljenje.Razred == 4)
+                return 0;
+
+            var sledecaGodinaOdeljenjeUToku = _context.Odeljenja.SingleOrDefault(o => o.OznakaID == odeljenje.OznakaID && o.Razred == odeljenje.Razred + 1 && o.StatusID == 2); // Status 2 je U toku
+
+            if (sledecaGodinaOdeljenjeUToku == null)
+            {
+                sledecaGodinaOdeljenjeUToku = new Odeljenje()
+                {
+                    OznakaID = odeljenje.OznakaID,
+                    Razred = odeljenje.Razred+1,
+                    PocetakSkolskeGodine = Odeljenje.SledecaSkolskaGodina(odeljenje.Razred + 1, odeljenje.OznakaID, _context),
+                    StatusID = 2,
+                    KrajSkolskeGodine = Odeljenje.SledecaSkolskaGodina(odeljenje.Razred + 1, odeljenje.OznakaID, _context) + 1
+                };
+
+                _context.Odeljenja.Add(sledecaGodinaOdeljenjeUToku);
+                _context.SaveChanges();
+            }
+
+            foreach (var ucenik in odeljenje.Ucenici)
+            {
+                ucenik.OdeljenjeId = sledecaGodinaOdeljenjeUToku.Id;
+            }
+
+            _context.SaveChanges();
+
+            return 0;
+        }
+
+
         [HttpPost]
         public int KreirajOdeljenje(DTOOdeljenje OdeljenjeZaKreiranje)
         {
-            var odeljenje = _context.Odeljenja.SingleOrDefault(o => o.OznakaID == OdeljenjeZaKreiranje.Oznaka && o.Razred == OdeljenjeZaKreiranje.Razred);
-            if (odeljenje == null)
+            var tekuceKreiranoOdeljenje = _context.Odeljenja.SingleOrDefault(o => o.OznakaID == OdeljenjeZaKreiranje.Oznaka && o.Razred == OdeljenjeZaKreiranje.Razred && o.StatusID == 3); //Status 3 je Kreirano
+
+            if(tekuceKreiranoOdeljenje != null)
+            {
+                ArhivirajOdeljenje(tekuceKreiranoOdeljenje);
+                PremestiUSledecuGodinu(tekuceKreiranoOdeljenje);
+            }
+
+            var odeljenjeZaPromenuStatusa = _context.Odeljenja.SingleOrDefault(o => o.OznakaID == OdeljenjeZaKreiranje.Oznaka && o.Razred == OdeljenjeZaKreiranje.Razred && o.StatusID == 2); //Status 2 je U toku
+            
+            if (odeljenjeZaPromenuStatusa == null)
                 return -1;
 
             var ucenici = _context.Ucenici
-                .Where(u => u.OdeljenjeId == odeljenje.Id)
+                .Where(u => u.OdeljenjeId == odeljenjeZaPromenuStatusa.Id)
                 .OrderBy(u => u.Prezime)
                 .ThenBy(u => u.Ime)
                 .ThenBy(u => u.ImeOca)
@@ -114,7 +171,7 @@ namespace eDnevnikDev.Controllers
             }
 
 
-            odeljenje.StatusID = 3; //StatudID 3 je Kreirano
+            odeljenjeZaPromenuStatusa.StatusID = 3; //StatudID 3 je Kreirano
             _context.SaveChanges();
             return 0;
         }

@@ -175,6 +175,15 @@
                                     @Html.ValidationMessageFor(u => u.Oznaka)
                                 </div>
                             </div>
+                            <div class="form-group">
+                                @Html.LabelFor(u => u.SmestiUNovoOdeljenje, new { @class = "col-md-3 control-label" })
+                                <div class="col-md-9">
+                                    <select name="SmestiUNovoOdeljenje" class="form-control" id="SmestiUNovoOdeljenje">
+                                        <option value="2">U toku</option>
+                                    </select>
+                                    @Html.ValidationMessageFor(u => u.SmestiUNovoOdeljenje)
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group ">
                             <label class="col-md-3 control-label" for="File">Postavi sliku:</label>
@@ -259,6 +268,8 @@
                     $("#RazredOdeljenje").show();
                 }
 
+                PostojiKreirano();
+
             }).change();
 
 
@@ -309,6 +320,40 @@
             var datum = $("#datum").val();
             $("#Ucenik_DatumRodjenja").val(moment(datum).format("YYYY-MM-DD"));
         });
+
+        function PostojiKreirano()
+        {
+            var razred = $("#Ucenik_Razred").val();
+            var odeljenje = $("#Oznaka").val();
+
+            var zahtev = $.getJSON("/Ucenici/DaLiPostojiKreirano?razred=" + razred + "&oznaka=" + odeljenje);
+
+            zahtev.done(function (podaci) {
+                if(podaci.Kreirano)
+                {
+                    if($("#SmestiUNovoOdeljenje option[value='3']").length == 0)
+                        $("#SmestiUNovoOdeljenje").append("<option value='3'>Kreirano</option>");
+                }
+                else
+                {
+                    $("#SmestiUNovoOdeljenje option[value='3']").remove();
+                }
+            });
+
+            zahtev.fail(function (gr) { $("#p1").html(gr.statusText); });
+
+        }
+
+
+
+        $(function () {
+            $("#Ucenik_Razred").change(function () {
+                PostojiKreirano();
+            });
+            $("#Oznaka").change(function () {
+                PostojiKreirano();
+            });
+        })
 
        
 
