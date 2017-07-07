@@ -52,7 +52,7 @@
             zahtev.fail(function (gr) { $("#p1").html(gr.statusText); });
         }
 
-        function GenerisiKarticuUcenika(id,ime,prezime,fotografija)
+        function GenerisiKarticuUcenika(id,ime,prezime,fotografija,brojudnevniku)
         {
             if (fotografija == null)
                 fotografija = "http://via.placeholder.com/140x176";
@@ -60,7 +60,7 @@
                 fotografija = "/slike/" + fotografija;
 
             //return   "<div class='col-md-3'><div class='ucenik-kartica'><img src='" + fotografija + "' class='ucenik-slika' style='width:140px;height:176px;' /><div class='ucenik-ime'>" + ime + " " + prezime + " </div></div></div>";
-            return '<div class="col-sm-6 col-md-3" style="text-align:center; "><div class="thumbnail"><img src="' + fotografija + '" style="width:140px; height:176px; display: block;"> <div class="caption"> <h3>' + ime + ' ' + prezime + '</h3> </div></div> </div>';
+            return '<div class="col-sm-6 col-md-3" style="text-align:center; "><div class="thumbnail"><img src="' + fotografija + '" style="width:140px; height:176px; display: block;"> <div class="caption"> <h3>'+ brojudnevniku + '. ' + ime + ' ' + prezime + '</h3> </div></div> </div>';
         }
 
         function Ucenici() {
@@ -81,7 +81,7 @@
                 }
 
                 for (var ucenik in podaci.Ucenici) {
-                    $("#ucenici").append(GenerisiKarticuUcenika(podaci.Ucenici[ucenik].ID, podaci.Ucenici[ucenik].Ime, podaci.Ucenici[ucenik].Prezime, podaci.Ucenici[ucenik].Fotografija));
+                    $("#ucenici").append(GenerisiKarticuUcenika(podaci.Ucenici[ucenik].ID, podaci.Ucenici[ucenik].Ime, podaci.Ucenici[ucenik].Prezime, podaci.Ucenici[ucenik].Fotografija, podaci.Ucenici[ucenik].BrojUDnevniku));
                 }
 
 

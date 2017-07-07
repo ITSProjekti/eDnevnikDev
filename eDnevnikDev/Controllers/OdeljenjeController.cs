@@ -80,13 +80,24 @@ namespace eDnevnikDev.Controllers
 
             if (odeljenje != null)
             {
-                podaci.Kreirano = odeljenje.Status.Opis == "Kreirano";
-                podaci.Ucenici = odeljenje.Ucenici
-                    .OrderBy(u => u.Prezime)
-                    .ThenBy(u => u.Ime)
-                    .ThenBy(u => u.ImeOca)
-                    .Select(u => new DTOUcenikOdeljenja { ID = u.UcenikID, Ime = u.Ime, Prezime = u.Prezime, Fotografija = u.Fotografija })
-                    .ToList();                
+                //podaci.Kreirano = odeljenje.Status.Opis == "Kreirano";
+                if (status == 2)
+                {
+                    podaci.Ucenici = odeljenje.Ucenici
+                        .OrderBy(u => u.Prezime)
+                        .ThenBy(u => u.Ime)
+                        .ThenBy(u => u.ImeOca)
+                        .Select(u => new DTOUcenikOdeljenja { ID = u.UcenikID, Ime = u.Ime, Prezime = u.Prezime, Fotografija = u.Fotografija, BrojUDnevniku = u.BrojUDnevniku })
+                        .ToList();
+                }
+                else
+                {
+                    podaci.Ucenici = odeljenje.Ucenici
+                        .OrderBy(u => u.BrojUDnevniku)
+                        .Select(u => new DTOUcenikOdeljenja { ID = u.UcenikID, Ime = u.Ime, Prezime = u.Prezime, Fotografija = u.Fotografija, BrojUDnevniku = u.BrojUDnevniku })
+                        .ToList();
+                }
+                              
             }
             return Json(podaci, JsonRequestBehavior.AllowGet);
 
