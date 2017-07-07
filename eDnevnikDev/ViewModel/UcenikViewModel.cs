@@ -35,6 +35,12 @@ namespace eDnevnikDev.ViewModel
         /// </value>
         public IEnumerable<Smer> Smerovi { get; set; }
 
+        /// <summary>
+        /// Gets or sets the file.
+        /// </summary>
+        /// <value>
+        /// HttpPostedFileBase
+        /// </value>
         public HttpPostedFileBase File { get; set; }
     }
 }

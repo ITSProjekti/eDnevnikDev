@@ -51,6 +51,11 @@ namespace eDnevnikDev.Controllers
             return View("Dodaj");
         }
 
+        /// <summary>
+        /// Cuva predmet Unet u Spisak predmeta.
+        /// </summary>
+        /// <param name="predmet">The predmet.</param>
+        /// <returns>Vraca nas na index stranu Predmeta</returns>
         public ActionResult SacuvajPredmet(Predmet predmet)
         {
             if (ModelState.IsValid)

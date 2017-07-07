@@ -39,6 +39,11 @@ namespace eDnevnikDev.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Odeljenjes the trajanje.
+        /// </summary>
+        /// <param name="godina">The godina.</param>
+        /// <returns>Vraca sva odeljenja u Zavisnosti od godine</returns>
         public JsonResult OdeljenjeTrajanje(int godina)
         {
             var kolekcijaOdeljenja = _context.Smerovi
@@ -61,6 +66,12 @@ namespace eDnevnikDev.Controllers
             return Json(pov, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// Odeljenjes the ucenici.
+        /// </summary>
+        /// <param name="razred">The razred.</param>
+        /// <param name="idOdeljenja">The identifier odeljenja.</param>
+        /// <returns>Vraca sortiranu listuUcenika iz zadate godine i odeljenja</returns>
         public JsonResult OdeljenjeUcenici(int razred, int idOdeljenja)
         {
             var listaUcenika = _context.Ucenici

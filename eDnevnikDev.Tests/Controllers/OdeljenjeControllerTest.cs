@@ -125,6 +125,12 @@ namespace eDnevnikDev.Tests.Controllers
             Assert.AreEqual<int>(jsonArray.Count, 2);
 
         }
+        
+        [TestMethod]
+        public void OdeljenjeController_OdeljenjeTrajanje()
+        {
+           
+        }
     }
 
 }

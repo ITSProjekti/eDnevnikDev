@@ -71,6 +71,11 @@ namespace eDnevnikDev.Controllers
             return View("Dodaj", ucenikVM);
         }
 
+        /// <summary>
+        /// Cuvamo Ucenika
+        /// </summary>
+        /// <param name="ucenikVM">The ucenik vm.</param>
+        /// <returns>Vraca nas na Index stranicu Ucenika</returns>
         [HttpPost]
         public ActionResult Sacuvaj(UcenikViewModel ucenikVM)
         {

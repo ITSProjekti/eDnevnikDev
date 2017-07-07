@@ -33,10 +33,22 @@ namespace eDnevnikDev.Models
         [Display(Name = "Naziv smera")]
         public string NazivSmera { get; set; }
 
+        /// <summary>
+        /// Cuvanje Trajanje Smera
+        /// </summary>
+        /// <value>
+        /// The trajanje.
+        /// </value>
         [Required( ErrorMessage = "Polje za trajanje smera je obavezno")]
         [Display(Name = "Trajanje smera")]
         public byte Trajanje { get; set; }
 
+        /// <summary>
+        /// Kolekcija Odeljenja
+        /// </summary>
+        /// <value>
+        /// The odeljenja.
+        /// </value>
         public virtual ICollection<Odeljenje> Odeljenja { get; set; }
 
     }
