@@ -24,19 +24,12 @@ textarea {
 }
 
 
-.ucenik-kartica{
-    height: 250px;
-    border: 2px solid #adbcad;
-    padding: 5px;
-    margin-top: 10px;
-}
-
-.ucenik-slika{
-    margin-left: 54px;
+.karticaUcenik-prisutan{
+    border:solid 5px #00d631;
 
 }
-.ucenik-ime{
-    text-align:center;
-    font-size: 18px;
-    margin-top: 5px;
+
+.karticaUcenik-odsutan{
+    border:solid 5px #ff0000;
+
 }

@@ -1,11 +1,12 @@
 ﻿@model Profesor 
+@using System.Globalization
 @{
     ViewBag.Title = "Index";
 }
 
 <h2>Evidencija</h2>
 
-<p>Datum:@DateTime.Now.ToString("dd/MM/yyy")</p>
+<h3>Datum: @DateTime.Now.ToString("dddd dd.MM.yyy", CultureInfo.CreateSpecificCulture("sr-Latn-CS"))</h3>
 <div class="container">
     <div class="row">
         <div class="col-md-3 col-md-offset-4">
@@ -18,71 +19,124 @@
             </select>
             <label for="odeljenja">Odeljenje</label>
             <select id="odeljenja"></select>
-
+        </div>
+    </div>
             <p id="p1"></p>
-            <div class="form-group">
-                @Html.LabelFor(p => p.Predmeti, new { @class = "col-md-3 control-label" })@*Model za evidenciju*@
-                <div class="col-md-9">
-                    @Html.DropDownListFor(p => p.Predmeti, new SelectList(Model.Predmeti, "PredmetID", "NazivPredmeta"), new { @class = "form-control" })
-                    @Html.ValidationMessageFor(p => p.Predmeti)
-                </div>
+            <div id="poruka">  </div>
+            <div class="row" id="ucenici">
+
             </div>
 
+            <div class="modal fade" id="potvrda" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Da li ste sigurni da želite da kreirate odeljenje?</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>Posle kreiranja odeljenja kreirano odeljenje ćete moći da pregledate u delu <strong>Pregled kreiranih</strong></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="dugmeClickKreiraj()">Potvrdi</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Zatvori</button>
+                        </div>
+                    </div>
+                </div>
+            </div>  
 
-    @section Scripts
+</div>
+@section Scripts
 {
-        @Scripts.Render("~/bundles/jqueryval");
 
-        <script>
-            function Odeljenja() {
-
+    <script>
+        function Odeljenja() {
             var razred = $("#razred").val();
-            var zahtev = $.getJSON("/Odeljenje/OdeljenjeTrajanje/"+razred);
+            var zahtev = $.getJSON("/Odeljenje/OdeljenjeTrajanje?godina="+razred);
 
-            
+
             zahtev.done(function (odeljenja) {
+
                 for (var odeljenje in odeljenja) {
-                    $("#odeljenja").append("<option value='" + odeljenja[odeljenje].Id + "'>" + odeljenja[odeljenje].Oznaka + "</option>");
+                    $("#odeljenja").append("<option value='" + odeljenja[odeljenje].Oznaka + "'>" + odeljenja[odeljenje].Oznaka + "</option>");
                 }
             });
             zahtev.fail(function (gr) { $("#p1").html(gr.statusText); });
         }
 
-        function GenerisiKarticuUcenika(id,ime,prezime)
+        function GenerisiKarticuUcenika(id,ime,prezime,fotografija,brojudnevniku)
         {
-           return   "<div class='col-md-3'>\n\t<div class='ucenik-kartica'>\n\t\t<img src='http://via.placeholder.com/140x176' class='ucenik-slika' />\n\t\t<div class='ucenik-ime'>" + ime + " " + prezime + " </div>\n\t </div>\n</div>";
+            if (fotografija == null)
+                fotografija = "http://via.placeholder.com/140x176";
+            else
+                fotografija = "/slike/" + fotografija;
 
+            //return   "<div class='col-md-3'><div class='ucenik-kartica'><img src='" + fotografija + "' class='ucenik-slika' style='width:140px;height:176px;' /><div class='ucenik-ime'>" + ime + " " + prezime + " </div></div></div>";
+            return '<div class="col-sm-6 col-md-3 " style="text-align:center; "><div class="thumbnail karticaUcenik-prisutan" onclick="klikUcenikKartica(this)"><img src="' + fotografija + '" style="width:140px; height:176px; display: block;"> <div class="caption"><input id="idUcenika" type="hidden" value="' + id + '" > <h3>' + brojudnevniku + '. ' + ime + ' ' + prezime + '</h3> </div></div> </div>';
         }
 
         function Ucenici() {
             var razred = $("#razred").val();
             var odeljenje = $("#odeljenja").val();
-            var zahtev = $.getJSON("/Odeljenje/OdeljenjeUcenici?razred=" + razred + "&idOdeljenja=" + odeljenje);
 
-            zahtev.done(function (ucenici) {
+            if (odeljenje == undefined)
+                odeljenje = 1;
 
-                for (var ucenik in ucenici) {
-                    $("#ucenici").append(GenerisiKarticuUcenika(ucenici[ucenik].ID,ucenici[ucenik].Ime,ucenici[ucenik].Prezime));
+            var zahtev = $.getJSON("/Odeljenje/OdeljenjeUcenici?razred=" + razred + "&oznakaOdeljenja=" + odeljenje + '&status=3');
+
+            zahtev.done(function (podaci) {
+
+                if (podaci.Ucenici == null)
+                {
+                    $("#ucenici").append('<div class="alert alert-warning" role="alert"><strong>Upozorenje!</strong> Nema učenika u izabranom odeljenju </div>');
+                    return;
                 }
+
+                for (var ucenik in podaci.Ucenici) {
+                    $("#ucenici").append(GenerisiKarticuUcenika(podaci.Ucenici[ucenik].ID, podaci.Ucenici[ucenik].Ime, podaci.Ucenici[ucenik].Prezime, podaci.Ucenici[ucenik].Fotografija, podaci.Ucenici[ucenik].BrojUDnevniku));
+                }
+
+
             });
             zahtev.fail(function (gr) { $("#p1").html(gr.statusText); });
+        }
+
+        function klikUcenikKartica(elem) {
+            var klasa = $(elem).attr("class").split(' ')[1];
+
+            if (klasa == 'karticaUcenik-prisutan')
+            {
+                $(elem).removeClass('karticaUcenik-prisutan')
+                $(elem).addClass('karticaUcenik-odsutan')
+            }
+            else
+            {
+                $(elem).removeClass('karticaUcenik-odsutan')
+                $(elem).addClass('karticaUcenik-prisutan')
+            }
         }
 
         $(function () {
             $("#razred").change(function () {
                 $("#odeljenja").html("");
-
+                $('#odeljenja').change();  //Okidanje dogadjaja za promenu drop down-a za izbor odeljenja prilikom promene razreda.
                 Odeljenja();
             }).change();
 
 
             $('#odeljenja').change(function () {
                 $("#ucenici").html("");
+                $("#dugme").html("");
                 Ucenici();
-            });
+            }).change();
+
+            
 
         });
 
-        </script>
 
-        }
+
+
+    </script>
+
+}

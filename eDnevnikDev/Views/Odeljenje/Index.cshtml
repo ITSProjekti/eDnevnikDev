@@ -3,7 +3,7 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Formiranje odeljenja za školsku godinu: @ViewBag.SkolskaGodina/@(ViewBag.SkolskaGodina+1)    </h2>
+<h2 id="porukaZaSkolskuGodinu"></h2>
 
 <div class="container">
     <div class="row">
@@ -111,11 +111,40 @@
             zahtev.fail(function (gr) { $("#p1").html(gr.statusText); });
         }
 
+        function PopuniSkolskuGodinu()
+        {
+            var razred = $("#razred").val();
+            var odeljenje = $("#odeljenja").val();
+
+            if (odeljenje == undefined)
+                odeljenje = 1;
+
+            var zahtev = $.getJSON("/Odeljenje/OdeljenjeSkolskaGodina?godina=" + razred + "&oznaka=" + odeljenje);
+
+            zahtev.done(function (podaci) {
+
+                if (podaci.PocetakSkolskeGodine != 0) {
+                    $("#porukaZaSkolskuGodinu").html("Formiranje odeljenja za školsku godinu: <span id='skolskaGodina'></span>");
+                    $("#skolskaGodina").html(podaci.PocetakSkolskeGodine + '/' + (parseInt(podaci.PocetakSkolskeGodine) + 1));
+                }
+                else
+                {
+                    $("#porukaZaSkolskuGodinu").html("");
+                }
+                
+
+            });
+
+            zahtev.fail(function (gr) { $("#p1").html(gr.statusText); });
+
+        }
+
         $(function () {
             $("#razred").change(function () {
                 $("#odeljenja").html("");
                 $('#odeljenja').change();  //Okidanje dogadjaja za promenu drop down-a za izbor odeljenja prilikom promene razreda.
                 Odeljenja();
+                PopuniSkolskuGodinu();
             }).change();
 
 
@@ -123,6 +152,7 @@
                 $("#ucenici").html("");
                 $("#dugme").html("");
                 Ucenici();
+                PopuniSkolskuGodinu();
             }).change();
 
         });

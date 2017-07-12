@@ -16,9 +16,8 @@ namespace eDnevnikDev.Controllers
         }
         // GET: Evidencija
         public ActionResult Index()
-        {
-            var profesor = _context.Profesori.SingleOrDefault(p => p.ProfesorID == 1);
-            return View(profesor);
+        {            
+            return View();
         }
     }
 }

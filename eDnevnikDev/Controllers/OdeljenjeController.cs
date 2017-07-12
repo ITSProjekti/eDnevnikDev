@@ -30,8 +30,6 @@ namespace eDnevnikDev.Controllers
         /// <returns>Vraca View za Index</returns>
         public ActionResult Index()
         {
-            ViewBag.SkolskaGodina = Odeljenje.SledecaSkolskaGodina(1, 1, _context);
-
             return View();
         }
 
@@ -60,6 +58,17 @@ namespace eDnevnikDev.Controllers
             pov = pov.OrderBy(o => o.Oznaka).ToList();
 
             return Json(pov, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult OdeljenjeSkolskaGodina(int godina, int oznaka, int status = 2)
+        {
+            var pov = _context.Odeljenja.SingleOrDefault(o => o.OznakaID == oznaka && o.Razred == godina && o.StatusID == status);
+
+            if(pov != null)
+                return Json(new { PocetakSkolskeGodine = pov.PocetakSkolskeGodine }, JsonRequestBehavior.AllowGet);
+
+
+            return Json(new { PocetakSkolskeGodine = 0 }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult OdeljenjeUcenici(int razred, int oznakaOdeljenja, int status)
