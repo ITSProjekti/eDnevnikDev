@@ -15,6 +15,10 @@ namespace eDnevnikDev.Controllers
             _context = new ApplicationDbContext();
         }
         // GET: Evidencija
+        /// <summary>
+        /// Menjace se controla/Nije zavrseno
+        /// </summary>
+        /// <returns>Vraca sve profesore</returns>
         public ActionResult Index()
         {            
             return View();

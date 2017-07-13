@@ -60,6 +60,11 @@ namespace eDnevnikDev.Controllers
             return View("Dodaj",model);
         }
 
+        /// <summary>
+        /// Cuvamo Profesora 
+        /// </summary>
+        /// <param name="pvm">The PVM.</param>
+        /// <returns>Vraca nas na Index stranu Profesora</returns>
         [HttpPost]
         public ActionResult Sacuvaj(ProfesorViewModel pvm)
         {

@@ -9,6 +9,8 @@ using eDnevnikDev.Models;
 using Moq;
 using System.Data.Entity;
 using System.Web.Mvc;
+using System.Web;
+using System.Linq.Expressions;
 
 namespace eDnevnikDev.Controllers.Tests
 {
@@ -51,5 +53,26 @@ namespace eDnevnikDev.Controllers.Tests
             var rezultat = kontroler.Dodaj() as ViewResult;
             Assert.AreEqual("Dodaj", rezultat.ViewName);
         }
+        [TestMethod()]
+        public void PredmetiController_SacuvajPredmet()
+        {
+            var predmet = new Predmet();
+            predmet.NazivPredmeta = "Matematika";
+
+            var mockSet = new Mock<DbSet<Predmet>>();
+
+            var mockContext = new Mock<ApplicationDbContext>();
+            mockContext.Setup(p => p.Predmeti).Returns(mockSet.Object);
+
+            var services = new PredmetiController(mockContext.Object);
+            services.SacuvajPredmet(predmet);
+
+            mockSet.Verify(p => p.Add(It.IsAny<Predmet>()), Times.Once());
+              mockContext.Verify(p => p.SaveChanges(), Times.Once());
+          
+
+
+        }
+
     }
 }
