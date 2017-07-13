@@ -16,9 +16,10 @@ namespace eDnevnikDev.Controllers
         }
         // GET: Evidencija
         /// <summary>
-        /// Menjace se controla/Nije zavrseno
+        /// Vraca spisak svih ucenika po odeljenjima sortirane po azbucnom redu.Sve se renderuje na klijentskoj strani.
+        /// NOT TESTED
         /// </summary>
-        /// <returns>Vraca sve profesore</returns>
+        /// <returns>Spisak ucenika u odredjenom odeljenju</returns>
         public ActionResult Index()
         {            
             return View();

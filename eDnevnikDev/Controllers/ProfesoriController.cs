@@ -36,7 +36,7 @@ namespace eDnevnikDev.Controllers
         }
         // GET: Profesori
         /// <summary>
-        /// Uzima se lista profesora iz Baze
+        /// Uzima se lista profesora iz Baze. Test name=ProfesoriController_Index
         /// </summary>
         /// <returns>Vraca listu u View</returns>
         public ActionResult Index()
@@ -45,7 +45,7 @@ namespace eDnevnikDev.Controllers
             return View("Index",ListaProfesora);
         }
         /// <summary>
-        /// Dodaje se Profesor u Listu Profesora
+        /// Dodaje se Profesor u Listu Profesora. Test name=ProfesoriController_Dodaj
         /// </summary>
         /// <returns>Vraca novog profesora, <see cref="ProfesorViewModel"/></returns>
         public ActionResult Dodaj()
@@ -54,14 +54,11 @@ namespace eDnevnikDev.Controllers
             {
                 Predmeti = _context.Predmeti.ToList()
             };
-
-
-
             return View("Dodaj",model);
         }
 
         /// <summary>
-        /// Cuvamo Profesora 
+        /// Cuvamo Profesora. Test name=ProfesoriController_Sacuvaj
         /// </summary>
         /// <param name="pvm">The PVM.</param>
         /// <returns>Vraca nas na Index stranu Profesora</returns>

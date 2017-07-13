@@ -25,14 +25,19 @@ namespace eDnevnikDev.Controllers
 
         // GET: Odeljenje
         /// <summary>
-        /// Index kontrola
+        /// Index kontrola. Test name= OdeljenjeController_Index
         /// </summary>
-        /// <returns>Vraca View za Index</returns>
+        /// <returns>Vraca Index View</returns>
         public ActionResult Index()
         {
             return View();
         }
-
+        /// <summary>
+        /// Ukoliko je odeljenje vec kreirano tojest pocela je skolska godina, prikazuju se svi ucenici koji se trenutno
+        /// nalaze u odeljenju koje je trenutno u toku u odredjenoj skolskoj godini. Status: U toku.
+        /// NOT TESTED
+        /// </summary>
+        /// <returns></returns>
         public ActionResult PregledKreiranih()
         {
             return View();
@@ -225,11 +230,7 @@ namespace eDnevnikDev.Controllers
                     StatusID = 2,
                     KrajSkolskeGodine = Odeljenje.SledecaSkolskaGodina(razred, oznakaOdeljenja,_context) + 1
                 };
-
-
             }
-
-
             return Json(new { Moguce = true }, JsonRequestBehavior.AllowGet);
         }
 

@@ -44,6 +44,7 @@ namespace eDnevnikDev.Controllers
         /// <summary>
         /// Indexes this instance.
         /// Pravi instancu liste ucenika i prosledjuje je u view;
+        /// Test name=UceniciController_Index
         /// </summary>
         /// <returns></returns>
         public ActionResult Index()
@@ -53,7 +54,7 @@ namespace eDnevnikDev.Controllers
             return View("Index", ListaUcenika);
         }
         /// <summary>
-        /// Dodajs this instance.
+        /// 
         /// Funkcija koja vraca view dodaj.
         /// </summary>
         /// <returns></returns>

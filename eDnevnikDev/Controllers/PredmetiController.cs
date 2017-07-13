@@ -33,7 +33,7 @@ namespace eDnevnikDev.Controllers
         }
         // GET: Profesori
         /// <summary>
-        /// Ucitavamo Listu Predmeta iz Baze
+        /// Ucitavamo Listu Predmeta iz Baze. Test name=PredmetController_Index
         /// </summary>
         /// <returns>Vracamo View sa Listom Predmeta</returns>
         public ActionResult Index()
@@ -43,7 +43,7 @@ namespace eDnevnikDev.Controllers
         }
 
         /// <summary>
-        /// Ucitava View za dodavanje predmeta
+        /// Ucitava View za dodavanje predmeta. Test name=PredmetController_Dodaj
         /// </summary>
         /// <returns>Vraca View  Dodaj</returns>
         public ActionResult Dodaj()
@@ -52,7 +52,7 @@ namespace eDnevnikDev.Controllers
         }
 
         /// <summary>
-        /// Cuva predmet Unet u Spisak predmeta.
+        /// Cuva predmet Unet u Spisak predmeta. Test name=PredmetController_SacuvajPredmet
         /// </summary>
         /// <param name="predmet">The predmet.</param>
         /// <returns>Vraca nas na index stranu Predmeta</returns>

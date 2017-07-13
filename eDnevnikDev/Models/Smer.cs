@@ -33,10 +33,23 @@ namespace eDnevnikDev.Models
         [Display(Name = "Naziv smera")]
         public string NazivSmera { get; set; }
 
+
+        /// <summary>
+        /// Cuva se trajanje smera izrazeno u godinama.
+        /// </summary>
+        /// <value>
+        /// godine trajanja smera.
+        /// </value>
         [Required( ErrorMessage = "Polje za trajanje smera je obavezno")]
         [Display(Name = "Trajanje smera")]
         public byte Trajanje { get; set; }
 
+        /// <summary>
+        /// Definisu se tacno oznake odeljenja koja smeju da pripadaju odredjenom smeru.
+        /// </summary>
+        /// <value>
+        /// Lista oznaka odeljenja vezana za taj smer.
+        /// </value>
         public virtual ICollection<Oznaka> Oznake { get; set; }
 
     }
