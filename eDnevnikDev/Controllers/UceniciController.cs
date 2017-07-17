@@ -80,6 +80,8 @@ namespace eDnevnikDev.Controllers
         [HttpPost]
         public ActionResult Sacuvaj(UcenikViewModel ucenikVM)
         {
+            if (_context.Ucenici.Where(x => x.JMBG == ucenikVM.Ucenik.JMBG).Any())
+                ModelState.AddModelError("Ucenik.JMBG", "JMBG vec postoji u bazi!");
 
             if (!ModelState.IsValid)
             {
@@ -87,7 +89,7 @@ namespace eDnevnikDev.Controllers
                 {
                     Ucenik = ucenikVM.Ucenik,
                     Gradovi = _context.Gradovi.OrderBy(g => g.Naziv).ToList(),
-                    Smerovi = _context.Smerovi.Include("Odeljenja").OrderBy(s => s.Trajanje).ToList()
+                    Smerovi = _context.Smerovi.Include("Oznake").OrderBy(s => s.Trajanje).ToList()
                 };
 
                 return View("Dodaj", podaci);
