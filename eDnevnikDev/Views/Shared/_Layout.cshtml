@@ -62,18 +62,10 @@
                         </a>
                         <ul class="children collapse" id="sub-item-1">
                             <li>
-                                <a class="" href="lista_ucenika.html">
-                                    <svg class="glyph stroked chevron-right">
-                                        <use xlink:href="#stroked-chevron-right"></use>
-                                    </svg> Lista
-                                </a>
+                                @Html.ActionLink("Dodaj ucenika", "Dodaj", "Ucenici")
                             </li>
                             <li>
-                                <a class="" href="dodaj_ucenika.html">
-                                    <svg class="glyph stroked chevron-right">
-                                        <use xlink:href="#stroked-chevron-right"></use>
-                                    </svg> Dodaj učenika
-                                </a>
+                                @Html.ActionLink("Lista ucenika", "Index", "Ucenici")
                             </li>
                         </ul>
                     </li>
@@ -83,18 +75,10 @@
                         </a>
                         <ul class="children collapse" id="sub-item-2">
                             <li>
-                                <a class="" href="#">
-                                    <svg class="glyph stroked chevron-right">
-                                        <use xlink:href="#stroked-chevron-right"></use>
-                                    </svg> Lista
-                                </a>
+                                @Html.ActionLink("Dodaj profesora", "Dodaj", "Profesori")
                             </li>
                             <li>
-                                <a class="" href="#">
-                                    <svg class="glyph stroked chevron-right">
-                                        <use xlink:href="#stroked-chevron-right"></use>
-                                    </svg> Dodaj profesora
-                                </a>
+                                @Html.ActionLink("Lista profesora", "Index", "Profesori")
                             </li>
                         </ul>
                     </li>
@@ -104,39 +88,10 @@
                         </a>
                         <ul class="children collapse" id="sub-item-3">
                             <li>
-                                <a class="" href="#">
-                                    <svg class="glyph stroked chevron-right">
-                                        <use xlink:href="#stroked-chevron-right"></use>
-                                    </svg> Lista
-                                </a>
+                                @Html.ActionLink("Dodaj predmet", "Dodaj", "Predmeti")
                             </li>
                             <li>
-                                <a class="" href="#">
-                                    <svg class="glyph stroked chevron-right">
-                                        <use xlink:href="#stroked-chevron-right"></use>
-                                    </svg> Dodaj predmet
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="parent ">
-                        <a href="#">
-                            <span data-toggle="collapse" href="#sub-item-4"><svg class="glyph stroked chevron-down"><use xlink:href="#stroked-chevron-down"></use></svg></span> Smerovi
-                        </a>
-                        <ul class="children collapse" id="sub-item-4">
-                            <li>
-                                <a class="" href="#">
-                                    <svg class="glyph stroked chevron-right">
-                                        <use xlink:href="#stroked-chevron-right"></use>
-                                    </svg> Lista
-                                </a>
-                            </li>
-                            <li>
-                                <a class="" href="#">
-                                    <svg class="glyph stroked chevron-right">
-                                        <use xlink:href="#stroked-chevron-right"></use>
-                                    </svg> Dodaj smer
-                                </a>
+                                @Html.ActionLink("Lista predmeta", "Index", "Predmeti")
                             </li>
                         </ul>
                     </li>
@@ -146,30 +101,20 @@
                         </a>
                         <ul class="children collapse linkovi" id="sub-item-5">
                             <li>
-                                <a class="" href="formiranje_u_toku.html">
-                                    <svg class="glyph stroked chevron-right">
-                                        <use xlink:href="#stroked-chevron-right"></use>
-                                    </svg> Formiranje u toku
-                                </a>
+                                @Html.ActionLink("Pregled formiranih odeljenja", "PregledKreiranih", "Odeljenje")
+
+
                             </li>
                             <li>
-                                <a class="" href="pregled_formiranih.html">
-                                    <svg class="glyph stroked chevron-right">
-                                        <use xlink:href="#stroked-chevron-right"></use>
-                                    </svg> Pregled formiranih
-                                </a>
+                                @Html.ActionLink("Formiranje odeljenja u toku", "Index", "Odeljenje")
+
+
                             </li>
                         </ul>
                     </li>
 
-                    <li role="presentation" class="divider"></li>
-                    <li>
-                        <a href="login.html">
-                            <svg class="glyph stroked male-user">
-                                <use xlink:href="#stroked-male-user"></use>
-                            </svg> Login Page
-                        </a>
-                    </li>
+                  
+                    
                 </ul>
             </div>
             <!--/.sidebar-->
