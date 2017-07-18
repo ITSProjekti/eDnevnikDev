@@ -24,12 +24,14 @@ namespace eDnevnikDev
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",                     
-                      "~/Scripts/respond.js"));
+                      "~/Scripts/respond.js",
+                      "~/Scripts/lumino.glyphs.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/spacelab.css",
                       "~/Content/select2.css",
                       "~/Content/themes/base/jquery-ui.css",
+                      "~/Content/styles.css",
+                      "~/Content/bootstrap.min.css",
                       "~/Content/site.css"));
         }
     }
