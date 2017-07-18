@@ -30,9 +30,9 @@ namespace eDnevnikDev
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/select2.css",
                       "~/Content/themes/base/jquery-ui.css",
-                      "~/Content/site.css",
                       "~/Content/styles.css",
-                      "~/Content/bootstrap.min.css"));
+                      "~/Content/bootstrap.min.css",
+                      "~/Content/site.css"));
         }
     }
 }

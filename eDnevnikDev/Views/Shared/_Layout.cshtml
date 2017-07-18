@@ -95,11 +95,11 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="parent">
+                    <li class="parent" >
                         <a href="#">
-                            <span data-toggle="collapse" href="#sub-item-5"><svg class="glyph stroked chevron-down"><use xlink:href="#stroked-chevron-down"></use></svg></span> Odeljenja
+                            <span data-toggle="collapse" href="#sub-item-4"><svg class="glyph stroked chevron-down"><use xlink:href="#stroked-chevron-down"></use></svg></span> Odeljenja
                         </a>
-                        <ul class="children collapse linkovi" id="sub-item-5">
+                        <ul class="children collapse linkovi" id="sub-item-4">
                             <li>
                                 @Html.ActionLink("Pregled formiranih odeljenja", "PregledKreiranih", "Odeljenje")
 
@@ -107,11 +107,20 @@
                             </li>
                             <li>
                                 @Html.ActionLink("Formiranje odeljenja u toku", "Index", "Odeljenje")
-
-
                             </li>
                         </ul>
                     </li>
+                    <li class="parent">
+                        <a href="#">
+                            <span data-toggle="collapse" href="#sub-item-5"><svg class="glyph stroked chevron-down"><use xlink:href="#stroked-chevron-down"></use></svg></span> Evidencija prisutnosi
+                        </a>
+                        <ul class="children collapse linkovi" id="sub-item-5">
+                            <li>
+                                @Html.ActionLink("Evidencija prisutnosi", "Index", "Evidencija")
+
+                            </li>
+                            </ul>
+                        </li>
 
                   
                     

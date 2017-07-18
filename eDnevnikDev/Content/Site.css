@@ -25,11 +25,11 @@ textarea {
 
 
 .karticaUcenik-prisutan{
-    border:solid 5px #00d631;
+    border:solid 5px #00d631 !important;
 
 }
 
 .karticaUcenik-odsutan{
-    border:solid 5px #ff0000;
+    border:solid 5px #ff0000 !important;
 
 }
