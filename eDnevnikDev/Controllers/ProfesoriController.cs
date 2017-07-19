@@ -58,7 +58,8 @@ namespace eDnevnikDev.Controllers
         }
 
         /// <summary>
-        /// Cuvamo Profesora. Test name=ProfesoriController_Sacuvaj
+        /// Cuvamo Profesora. <see cref="Profesor"/> 
+        /// Test name=ProfesoriController_Sacuvaj
         /// </summary>
         /// <param name="pvm">The PVM.</param>
         /// <returns>Vraca nas na Index stranu Profesora</returns>

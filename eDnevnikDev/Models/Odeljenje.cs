@@ -66,10 +66,18 @@ namespace eDnevnikDev.Models
         /// </value>
         public virtual ICollection<Ucenik> Ucenici { get; set; }
 
-        public static int SledecaSkolskaGodina(int razred, int odeljenje, ApplicationDbContext _context)
+        /// <summary>
+        /// Metoda vraca godinu jednu posle maksimalne godine nadjene u tabeli odeljenje na osnovu razreda i oznake odeljenja.
+        /// </summary>
+        /// <param name="razred"></param>
+        /// <param name="odeljenje"></param>
+        /// <param name="_context"></param>
+        /// <returns></returns>
+        public static int SledecaSkolskaGodina(int razred, int oznaka, ApplicationDbContext _context)
         {
-            var odeljenja = _context.Odeljenja.Where(o => o.OznakaID == odeljenje && o.Razred == razred).ToList();
+            var odeljenja = _context.Odeljenja.Where(o => o.OznakaID == oznaka && o.Razred == razred).ToList();
 
+            //Ukoliko ne nadje,znaci da ne postoji ni jedno odeljenje.Jos.
             if (odeljenja.Any())
                 return odeljenja.Max(o => o.KrajSkolskeGodine);
             else

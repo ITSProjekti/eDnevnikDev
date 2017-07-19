@@ -248,6 +248,9 @@ namespace eDnevnikDev.Models
             return sBuilder.ToString();
         }
 
+        /// <summary>
+        /// Metoda za generisanje jedinstvenog broja ucenika na osnovu Broja u dnevniku(REFACTOR), razreda,odeljnja i godine upisa.
+        /// </summary>
         public void GenerisiJedinstveniBroj()
         {
             StringBuilder broj = new StringBuilder();

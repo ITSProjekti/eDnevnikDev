@@ -53,6 +53,7 @@ namespace eDnevnikDev.Controllers
 
         /// <summary>
         /// Cuva predmet Unet u Spisak predmeta. Test name=PredmetController_SacuvajPredmet
+        /// <see cref="Predmet"/>
         /// </summary>
         /// <param name="predmet">The predmet.</param>
         /// <returns>Vraca nas na index stranu Predmeta</returns>

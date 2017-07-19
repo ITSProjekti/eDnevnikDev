@@ -55,7 +55,7 @@ namespace eDnevnikDev.Controllers
         }
         /// <summary>
         /// 
-        /// Funkcija koja vraca view dodaj.
+        /// Funkcija koja vraca view dodaj. <see cref="UcenikViewModel"/> 
         /// </summary>
         /// <returns></returns>
         public ActionResult Dodaj()
@@ -73,13 +73,19 @@ namespace eDnevnikDev.Controllers
         }
 
         /// <summary>
-        /// Cuvamo Ucenika
+        /// Cuvamo Ucenika. Provera da li je model ucenika validan sa unosa. Provera da li je slika validna i ubacivanje.
+        /// Ubacivanje ucenika u odeljenje sa odredjenim statusom. status 2 = u toku, status 3 = kreirano.
+        /// Kreiranje novog odeljenja u bazi ukoliko jos uvek ne postoji.
+        /// Test name= UceniciController_Sacuvaj
+        /// <see cref="Ucenik"/>
+        /// <see cref="UcenikViewModel"/>
         /// </summary>
         /// <param name="ucenikVM">The ucenik vm.</param>
         /// <returns>Vraca nas na Index stranicu Ucenika</returns>
         [HttpPost]
         public ActionResult Sacuvaj(UcenikViewModel ucenikVM)
         {
+            //Proverava postajanje istog JMBG
             if (_context.Ucenici.Where(x => x.JMBG == ucenikVM.Ucenik.JMBG).Any())
                 ModelState.AddModelError("Ucenik.JMBG", "JMBG vec postoji u bazi!");
 
@@ -101,6 +107,7 @@ namespace eDnevnikDev.Controllers
 
             var file = ucenikVM.File;
 
+            //Provera slike i vracanje na view ukoliko je NEVALIDNA. ne ubacuje ovde. save = line 164.
             if (file != null)
             {
                 string pic = System.IO.Path.GetExtension(file.FileName);
@@ -120,11 +127,12 @@ namespace eDnevnikDev.Controllers
                 }
             }
 
-
+            //Dodeljuje se odeljenje sa statusom koji je izabran na formi.
             var odeljenje = _context.Odeljenja
                 .Include("Status")
                 .SingleOrDefault(o => o.OznakaID == oznaka && o.Razred == razred && o.StatusID == ucenikVM.SmestiUNovoOdeljenje);
 
+            //Ukoliko odeljenje nije ni kreirano u bazi bez obzira na status,kreira se.
             if (odeljenje == null)
             {
                 odeljenje = new Odeljenje()
@@ -132,18 +140,19 @@ namespace eDnevnikDev.Controllers
                     OznakaID = oznaka,
                     Razred = razred,
                     PocetakSkolskeGodine = Odeljenje.SledecaSkolskaGodina(razred, oznaka,_context),
-                    StatusID = 2,
+                    StatusID = 2, //Status 2 = u toku.
                     KrajSkolskeGodine = Odeljenje.SledecaSkolskaGodina(razred, oznaka,_context) + 1
                 };
                 
                 _context.Odeljenja.Add(odeljenje);
                 _context.SaveChanges();  
             }
-            else if(odeljenje.StatusID == 3)
+
+            else if(odeljenje.StatusID == 3)   //Status 3 = kreirano.
             {
                 var poslednjiBrojUDnevniku = odeljenje.Ucenici.Max(u => u.BrojUDnevniku);
 
-                ucenik.BrojUDnevniku = poslednjiBrojUDnevniku + 1;
+                ucenik.BrojUDnevniku = poslednjiBrojUDnevniku + 1; //Ucenik se dodaje na kraj dnevnika.
 
                 ucenik.Odeljenje = odeljenje;
 
@@ -155,7 +164,7 @@ namespace eDnevnikDev.Controllers
             _context.Ucenici.Add(ucenik);
             _context.SaveChanges();
 
-
+            //Ubacivanje slike u fotografija property ucenika i save.
             if (file != null)
             {
                 var id = Ucenik.GetMd5Hash(ucenik.JMBG);
@@ -173,12 +182,20 @@ namespace eDnevnikDev.Controllers
             return RedirectToAction("Index", "Ucenici");
         }
 
-        public JsonResult DaLiPostojiKreirano(int razred,int oznaka)
+        /// <summary>
+        /// Na formi za unos ucenika menja se opcija da li se ucenik dodaje u aktuelno odeljenje ili u odeljenje za sledecu skolsku godinu.
+        /// </summary>
+        /// <param name="razred"></param>
+        /// <param name="oznaka"></param>
+        /// <returns></returns>
+        public JsonResult DaLiPostojiKreirano(int razred, int oznaka)
         {
-           var odeljenje =  _context.Odeljenja
-                            .Include("Status")
-                             .SingleOrDefault(o => o.OznakaID == oznaka && o.Razred == razred && o.StatusID == 3);
-           return odeljenje == null ? Json(new { Kreirano = false }, JsonRequestBehavior.AllowGet) : Json(new { Kreirano = true }, JsonRequestBehavior.AllowGet);
+            //Uzima se odeljenje koje je kreirano.ako ga ima.
+            var odeljenje = _context.Odeljenja
+                             .Include("Status")
+                              .SingleOrDefault(o => o.OznakaID == oznaka && o.Razred == razred && o.StatusID == 3);
+            //Ukoliko je null vraca se false, ako jeste vraca se true.
+            return odeljenje == null ? Json(new { Kreirano = false }, JsonRequestBehavior.AllowGet) : Json(new { Kreirano = true }, JsonRequestBehavior.AllowGet);
 
         }
     }

@@ -43,32 +43,52 @@ namespace eDnevnikDev.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Koristi se svude gde se bira godina, i popunjava se combobox sa listom odeljenja za tu godinu.
+        /// Primer: 4-godina (1,2,3,4,5,6). 3-godina (1,2,3,4,5,6,7).
+        /// <see cref="DTOOdeljenje"/>
+        /// Test name= OdeljenjeController_OdeljenjeTrajanje
+        /// </summary>
+        /// <param name="godina"></param>
+        /// <returns></returns>
         public JsonResult OdeljenjeTrajanje(int godina)
         {
+            //Kreiranje kolekcije oznaka koje mogu ciniti odeljenja na godini koja je prosledjena kao parameta. O.O
             var kolekcijaOznaka = _context.Smerovi
                 .Where(s => s.Trajanje >= godina)
                 .Select(s => s.Oznake).ToList();
 
+            //Koristi se DTOOdeljnje, iako je Razred visak. Ne menja stvari na frontendu.
             var pov = new List<DTOOdeljenje>();
 
             foreach(var lista in kolekcijaOznaka)
             {
                 foreach(var oznaka in lista)
                 {
-                    if( !pov.Any( o => o.Oznaka == oznaka.OznakaId))
+                   if( !pov.Any( o => o.Oznaka == oznaka.OznakaId))
                         pov.Add(new DTOOdeljenje {Oznaka = oznaka.OznakaId }); 
                 }
             }
-
+            //Sortiranje.
             pov = pov.OrderBy(o => o.Oznaka).ToList();
-
+            //Formatiranje JSON-a.
             return Json(pov, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// Formatira se Json sa informacijom za koju skolsku godinu se ubacuju ucenici u odeljenje sa statusom u toku.
+        /// <see cref="Odeljenje.PocetakSkolskeGodine"/>
+        /// </summary>
+        /// <param name="godina"></param>
+        /// <param name="oznaka"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
         public JsonResult OdeljenjeSkolskaGodina(int godina, int oznaka, int status = 2)
         {
+            //Trazi odeljenje sa prosledjenom godinom oznakom i statusom u toku(Moze i hardcode).
             var pov = _context.Odeljenja.SingleOrDefault(o => o.OznakaID == oznaka && o.Razred == godina && o.StatusID == status);
 
+            //Ukoliko je pronadjeno odeljenje vraca se sledeca skolska godina
             if(pov != null)
                 return Json(new { PocetakSkolskeGodine = pov.PocetakSkolskeGodine }, JsonRequestBehavior.AllowGet);
 
@@ -76,25 +96,34 @@ namespace eDnevnikDev.Controllers
             return Json(new { PocetakSkolskeGodine = 0 }, JsonRequestBehavior.AllowGet);
         }
 
+
+
+        /// <summary>
+        /// Vraca listu ucenika u JSON-u, i sortira ih u zavisnosti od statusa odeljenja.
+        /// NPR: odeljenje za koje je upis u toku sortira po prezimenu,dok odeljenje koje je vec kreirano sortira po
+        /// broju u dnevniku
+        /// <see cref="DTOOdeljenjeSaUcenicima"/>
+        /// <see cref="DTOUcenikOdeljenja"/> 
+        /// </summary>
+        /// <param name="razred"></param>
+        /// <param name="oznakaOdeljenja"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
         public JsonResult OdeljenjeUcenici(int razred, int oznakaOdeljenja, int status)
         {
-            //var listaUcenika = _context.Ucenici
-            //    .Where(u => u.Razred == razred && u.OdeljenjeId == idOdeljenja)
-            //    .OrderBy(u => u.Prezime)
-            //    .ThenBy(u => u.Ime)
-            //    .ThenBy(u => u.ImeOca)
-            //    .Select(u=> new DTOUcenikOdeljenja { ID= u.UcenikID, Ime=u.Ime, Prezime=u.Prezime, Fotografija=u.Fotografija })
-            //    .ToList();
-
+          
+            //Pronalazi odeljenje.
             var odeljenje = _context.Odeljenja
                 .Include("Status")
                 .SingleOrDefault(o => o.StatusID == status && o.Razred == razred && o.OznakaID == oznakaOdeljenja);
 
+            
             var podaci = new DTOOdeljenjeSaUcenicima();
 
             if (odeljenje != null)
             {
-                //podaci.Kreirano = odeljenje.Status.Opis == "Kreirano";
+                //Ako je status u toku, prikazuju se ucenici ubaceni u to odeljenje sortirani po:
+                //1. prezime, 2. ime, 3. ImeOca.
                 if (status == 2)
                 {
                     podaci.Ucenici = odeljenje.Ucenici
@@ -104,6 +133,7 @@ namespace eDnevnikDev.Controllers
                         .Select(u => new DTOUcenikOdeljenja { ID = u.UcenikID, Ime = u.Ime, Prezime = u.Prezime, Fotografija = u.Fotografija, BrojUDnevniku = u.BrojUDnevniku })
                         .ToList();
                 }
+                //Ako je status kreirano, sortiraju se ucenici po broju u dnevniku.
                 else
                 {
                     podaci.Ucenici = odeljenje.Ucenici
@@ -116,6 +146,12 @@ namespace eDnevnikDev.Controllers
             return Json(podaci, JsonRequestBehavior.AllowGet);
 
         }
+        /// <summary>
+        /// Popounjava se tabela ArhivaOdeljenja u bazi. I postavlja se status odeljenja na 1.(Arhivirano).
+        /// <see cref="ArhivaOdeljenja"/> 
+        /// </summary>
+        /// <param name="o"></param>
+        /// <returns></returns>
 
         public int ArhivirajOdeljenje(Odeljenje o)
         {
@@ -131,8 +167,14 @@ namespace eDnevnikDev.Controllers
             return 0;
         }
 
+        /// <summary>
+        /// TO BE REFACTORED. BEWARE. STAY OUT.
+        /// </summary>
+        /// <param name="odeljenje"></param>
+        /// <returns></returns>
         public int PremestiUSledecuGodinu(Odeljenje odeljenje)
         {
+            //Ukoliko je 4. razred ucenici se ne premestaju nigde.
             if (odeljenje.Razred == 4)
                 return 0;
 
