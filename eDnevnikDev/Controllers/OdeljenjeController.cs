@@ -168,18 +168,24 @@ namespace eDnevnikDev.Controllers
         }
 
         /// <summary>
-        /// TO BE REFACTORED. BEWARE. STAY OUT.
+        /// Akcija za premestanje ucenika u sledeci razred u odeljenje sa istom oznakom kao i proslo,i prebacivanje ucenika u to novo odeljenje prilikom
+        /// arhiviranja trenutnog odeljenje usled zavrsetka skolske godine. 
         /// </summary>
         /// <param name="odeljenje"></param>
         /// <returns></returns>
         public int PremestiUSledecuGodinu(Odeljenje odeljenje)
         {
-            //Ukoliko je 4. razred ucenici se ne premestaju nigde.
-            if (odeljenje.Razred == 4)
+            var pom = _context.Odeljenja.Include("Oznaka").SingleOrDefault(o => o.Id == odeljenje.Id);
+
+            //Ukoliko je 4. razred ucenici se ne premestaju nigde,ili ukoliko je odljenje na trecoj godini na trogodisnjem smeru.
+            if (odeljenje.Razred == 4 || pom.Oznaka.Smerovi.Any(x => x.Trajanje == 3 && odeljenje.Razred == 3)) 
                 return 0;
 
+            //objekat u kom se cuva odeljenje iste oznake za sledecu godinu,u koje treba ucenici automatksi da se premeste.
             var sledecaGodinaOdeljenjeUToku = _context.Odeljenja.SingleOrDefault(o => o.OznakaID == odeljenje.OznakaID && o.Razred == odeljenje.Razred + 1 && o.StatusID == 2); // Status 2 je U toku
 
+            //Ukoliko ne postoji odeljenje koje je kreirano i u toku,kreira se novo sa godinom upisa jednom vecom od prosle godine.
+            ///<see cref="Odeljenje.SledecaSkolskaGodina(int, int, ApplicationDbContext)"/>
             if (sledecaGodinaOdeljenjeUToku == null)
             {
                 sledecaGodinaOdeljenjeUToku = new Odeljenje()
@@ -194,7 +200,7 @@ namespace eDnevnikDev.Controllers
                 _context.Odeljenja.Add(sledecaGodinaOdeljenjeUToku);
                 _context.SaveChanges();
             }
-
+            //Dodavanje ucenika u isto odeljenje sledeceg razreda sa statusom u toku.
             foreach (var ucenik in odeljenje.Ucenici)
             {
                 ucenik.OdeljenjeId = sledecaGodinaOdeljenjeUToku.Id;
@@ -205,23 +211,33 @@ namespace eDnevnikDev.Controllers
             return 0;
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="OdeljenjeZaKreiranje"></param>
+        /// <returns></returns>
         [HttpPost]
         public int KreirajOdeljenje(DTOOdeljenje OdeljenjeZaKreiranje)
         {
+            //Objekat vec kreiranog odeljenja.
             var tekuceKreiranoOdeljenje = _context.Odeljenja.SingleOrDefault(o => o.OznakaID == OdeljenjeZaKreiranje.Oznaka && o.Razred == OdeljenjeZaKreiranje.Razred && o.StatusID == 3); //Status 3 je Kreirano
 
+            //Ukoliko postoji,to odeljenje se arhivira i ucenici iz njega se premestaju u sledecu godinu status odeljenja u toku.
             if(tekuceKreiranoOdeljenje != null)
             {
                 ArhivirajOdeljenje(tekuceKreiranoOdeljenje);
                 PremestiUSledecuGodinu(tekuceKreiranoOdeljenje);
             }
-
+            
+            //Tekuce odeljenje koje trenutno ima status u toku a treba se kreira.
             var odeljenjeZaPromenuStatusa = _context.Odeljenja.SingleOrDefault(o => o.OznakaID == OdeljenjeZaKreiranje.Oznaka && o.Razred == OdeljenjeZaKreiranje.Razred && o.StatusID == 2); //Status 2 je U toku
             
+            //Ukoliko je null doslo je do nepoklapanja interfejsa na frontendu i podataka u bazi. 
             if (odeljenjeZaPromenuStatusa == null)
                 return -1;
 
+            //Svi ucenici koji su bili u odeljenju u toku se dodaju u listu,sortirani po
+            //Prezime, Ime, Ime oca
             var ucenici = _context.Ucenici
                 .Where(u => u.OdeljenjeId == odeljenjeZaPromenuStatusa.Id)
                 .OrderBy(u => u.Prezime)
@@ -229,6 +245,8 @@ namespace eDnevnikDev.Controllers
                 .ThenBy(u => u.ImeOca)
                 .ToList();
 
+            //Brojac radi dodavanja broja u dnevniku, i generisanja jedinstvenog broja.
+            ///<see cref="Ucenik.GenerisiJedinstveniBroj"/>
             int brojac = 1;
 
             foreach (Ucenik ucenik in ucenici)
@@ -237,44 +255,13 @@ namespace eDnevnikDev.Controllers
                 ucenik.GenerisiJedinstveniBroj();
             }
 
-
+            //Promena statusa odeljenja na "Kreirano".
             odeljenjeZaPromenuStatusa.StatusID = 3; //StatudID 3 je Kreirano
             _context.SaveChanges();
             return 0;
         }
 
-        public JsonResult MogucnostArhiviranja(int razred, int oznakaOdeljenja)
-        {
-            int razredSledeceGodine = razred + 1;
-
-            if (razred != 4 && _context.Odeljenja.Any(o => o.OznakaID == oznakaOdeljenja && o.Razred == razredSledeceGodine && o.StatusID != 1))//StatusID 1 je Arhivirano
-            {
-                return Json(new { Moguce = false }, JsonRequestBehavior.AllowGet);
-            }
-
-
-            var odeljenje = _context.Odeljenja.SingleOrDefault(o => o.OznakaID == oznakaOdeljenja && o.Razred == razred);
-
-            foreach (var ucenik in odeljenje.Ucenici)
-            {
-                _context.ArhivaOdeljenja.Add(new ArhivaOdeljenja() { OdeljenjeID = odeljenje.Id, UcenikID = ucenik.UcenikID });
-            }
-
-            odeljenje.StatusID = 1;//StatusID 1 je Arhivirano
-
-            if (razred != 4)
-            {
-                var novoOdeljenje = new Odeljenje()
-                {
-                    OznakaID = odeljenje.OznakaID,
-                    Razred = razredSledeceGodine,
-                    PocetakSkolskeGodine = Odeljenje.SledecaSkolskaGodina(razred, oznakaOdeljenja,_context),
-                    StatusID = 2,
-                    KrajSkolskeGodine = Odeljenje.SledecaSkolskaGodina(razred, oznakaOdeljenja,_context) + 1
-                };
-            }
-            return Json(new { Moguce = true }, JsonRequestBehavior.AllowGet);
-        }
+      
 
     }
 }
