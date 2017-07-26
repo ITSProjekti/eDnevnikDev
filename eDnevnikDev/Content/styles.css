@@ -342,9 +342,15 @@ a.bg-danger:hover {
     display: none;
 }
 
+@media (max-width: 992px)
+{
+    .navbar-toggle
+    {
+        display:block;
+    }
+}
 
-
-@media (min-width: 768px) {
+@media (min-width: 992px) {
     .sidebar {
         display: block;
         position: fixed;
