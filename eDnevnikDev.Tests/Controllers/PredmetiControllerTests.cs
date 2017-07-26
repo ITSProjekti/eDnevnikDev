@@ -17,6 +17,9 @@ namespace eDnevnikDev.Controllers.Tests
     [TestClass()]
     public class PredmetiControllerTests
     {
+        /// <summary>
+        /// Testira akciju <see cref="PredmetController_Index"/>, <see cref="PredmetiController"/>.
+        /// </summary>
         [TestMethod()]
         public void PredmetController_Index()
         {
@@ -46,6 +49,9 @@ namespace eDnevnikDev.Controllers.Tests
 
         }
 
+        /// <summary>
+        /// Testira akciju <see cref="PredmetiController_Dodaj"/>, <see cref="PredmetiController"/>.
+        /// </summary>
         [TestMethod()]
         public void PredmetiController_Dodaj()
         {
@@ -53,6 +59,10 @@ namespace eDnevnikDev.Controllers.Tests
             var rezultat = kontroler.Dodaj() as ViewResult;
             Assert.AreEqual("Dodaj", rezultat.ViewName);
         }
+
+        /// <summary>
+        /// Testira akciju <see cref="PredmetiController_SacuvajPredmet"/>, <see cref="PredmetiController"/>.
+        /// </summary>
         [TestMethod()]
         public void PredmetiController_SacuvajPredmet()
         {
