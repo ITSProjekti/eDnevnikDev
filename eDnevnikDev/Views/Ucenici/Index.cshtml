@@ -8,14 +8,9 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-10 col-xs-12 col-md-offset-2">
 
-            <h2 style="text-align:center">Učenici</h2>
-         
-            @Html.ActionLink("Dodaj Novog", "Dodaj", "Ucenici", null, new { @class = "btn btn-primary btn-lg" })
-           
-
-            <table class="table table-striped table-hover ">
+            <table class="table table-striped table-hover" id="podaci">
                 <thead>
                     <tr>
                         <th>JMBG</th>
@@ -39,3 +34,19 @@
         </div>
     </div>
 </div>
+
+@section Scripts
+{
+    <script>
+        $(function () {
+            $('#podaci').DataTable({
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Serbian.json"
+                }
+            });
+        });
+
+
+    </script>
+
+}
