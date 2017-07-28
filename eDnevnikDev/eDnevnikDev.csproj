@@ -227,6 +227,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\IdentityHelper.cs" />
     <Compile Include="Migrations\201705231259184_IntialModelUcenik.cs" />
     <Compile Include="Migrations\201705231259184_IntialModelUcenik.Designer.cs">
       <DependentUpon>201705231259184_IntialModelUcenik.cs</DependentUpon>
@@ -386,6 +387,7 @@
     <Compile Include="Models\Oznaka.cs" />
     <Compile Include="Models\Predmet.cs" />
     <Compile Include="Models\Profesor.cs" />
+    <Compile Include="Models\RoleNames.cs" />
     <Compile Include="Models\Smer.cs" />
     <Compile Include="Models\Status.cs" />
     <Compile Include="Models\Ucenik.cs" />
