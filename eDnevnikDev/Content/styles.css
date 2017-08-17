@@ -48,6 +48,7 @@ h4 {
 
 .container {
     width: 90%;
+    margin-top:50px;
 }
 
 .large {
@@ -90,7 +91,7 @@ h4 {
     box-shadow: inset 0px 0px 0px 1px #30a5ff;
 }
 
-.navbar-header .navbar-brand {
+   .navbar-brand {
     color: #fff;
     font-size: 16px;
     text-transform: uppercase;
@@ -98,7 +99,7 @@ h4 {
     letter-spacing: 2px;
 }
 
-.navbar-header .navbar-brand span {
+  .navbar-brand span {
     color: #9dbf75;
 }
 
@@ -336,7 +337,6 @@ a.bg-danger:hover {
 /* Sidebar */
 
 .sidebar {
-    display: block;
     background-color: #444 !important;
     padding: 0;
     display: none;
@@ -347,27 +347,25 @@ a.bg-danger:hover {
     .navbar-toggle
     {
         display:block;
+        float:right !important;
     }
 }
 
 @media (min-width: 992px) {
     .sidebar {
-        display: block;
+        display: block !important;
         position: fixed;
         top: 50px;
         bottom: 0;
         left: 0;
         z-index: 1000;
-        display: block;
         margin: 0;
         padding: 0;
         overflow-x: hidden;
         overflow-y: hidden;
         background-color: #fff;
         box-shadow: 1px 0px 10px rgba(0, 0, 0, .05);
-    }
-    .navbar-header {
-        width: 100%;
+        height:100% !important;
     }
 }
 
@@ -566,11 +564,11 @@ a.bg-danger:hover {
         display: block;
         margin-left: auto;
         margin-right: auto;
-        width: 80%;
+        width: 60%;
         background-color: red !important;
     }
     #upload {
-        margin: 20% auto;
+        margin: 10% 30%;
         display: block;
     }
     .form-horizontal {
@@ -592,13 +590,11 @@ a.bg-danger:hover {
     width: 70px;
 }
 
-
-
 }
 
 @media only screen and (max-width: 768px) {
-    #ime {
-        display: none;
+    #naziv {
+        display:none;
     }
     
 
@@ -648,3 +644,7 @@ a.bg-danger:hover {
 
 
 
+#hamburger
+{
+    float:right;
+}

@@ -45,54 +45,76 @@ namespace eDnevnikDev.Controllers.Tests
         }
 
         //TO BE DONE
-       //[TestMethod]
-       // public void UceniciController_Dodaj()
-       // {
-       //     var gradovi = new List<Grad>
-       //     {
-       //         new Grad { Id = 1, Naziv = "Beograd" }, new Grad { Id = 2, Naziv = "Nis" }, new Grad { Id = 3, Naziv = "Kragujevac" }, new Grad { Id = 4, Naziv = "Subotica" }, new Grad { Id = 5, Naziv = "Novi Sad" }
-       //     }.AsQueryable();
-       //     var smerovi = new List<Smer>
-       //     {
-       //         ?
-       //     }.AsQueryable();
+        [TestMethod]
+        public void UceniciController_Dodaj()
+        {
+            var gradovi = new List<Grad>
+            {
+                new Grad { Id = 1, Naziv = "Beograd" }, new Grad { Id = 2, Naziv = "Nis" }, new Grad { Id = 3, Naziv = "Kragujevac" }, new Grad { Id = 4, Naziv = "Subotica" }, new Grad { Id = 5, Naziv = "Novi Sad" }
+            }.AsQueryable();
+            var oznake= new List<Oznaka>
+            {
+                new Oznaka {OznakaId = 1},
+                new Oznaka {OznakaId = 2},
+                new Oznaka {OznakaId = 3},
+                new Oznaka {OznakaId = 4},
+            }
+            var smerovi = new List<Smer>
+            {
+                new Smer {SmerID=1,NazivSmera="Smer1"},
+                new Smer {SmerID=1,NazivSmera="Smer1"}
+                new Smer {SmerID=1,NazivSmera="Smer1"},
+                new Smer {SmerID=1,NazivSmera="Smer1"},
+                new Smer {SmerID=1,NazivSmera="Smer1"},
 
 
-       //     var mockSetGradovi = new Mock<DbSet<Grad>>();
-       //     mockSetGradovi.As<IQueryable<Grad>>().Setup(m => m.Provider).Returns(gradovi.Provider);
-       //     mockSetGradovi.As<IQueryable<Grad>>().Setup(m => m.Expression).Returns(gradovi.Expression);
-       //     mockSetGradovi.As<IQueryable<Grad>>().Setup(m => m.ElementType).Returns(gradovi.ElementType);
-       //     mockSetGradovi.As<IQueryable<Grad>>().Setup(m => m.GetEnumerator()).Returns(gradovi.GetEnumerator());
+            }.AsQueryable();
 
-       //     var mockSetSmerovi = new Mock<DbSet<Smer>>();
-       //     mockSetSmerovi.As<IQueryable<Smer>>().Setup(m => m.Provider).Returns(smerovi.Provider);
-       //     mockSetSmerovi.As<IQueryable<Smer>>().Setup(m => m.Expression).Returns(smerovi.Expression);
-       //     mockSetSmerovi.As<IQueryable<Smer>>().Setup(m => m.ElementType).Returns(smerovi.ElementType);
-       //     mockSetSmerovi.As<IQueryable<Smer>>().Setup(m => m.GetEnumerator()).Returns(smerovi.GetEnumerator());
 
-       //     mockSetSmerovi.Setup(m => m.Include(It.IsAny<String>())).Returns(mockSetSmerovi.Object);
+         
+            var mockSetGradovi = new Mock<DbSet<Grad>>();
+            mockSetGradovi.As<IQueryable<Grad>>().Setup(m => m.Provider).Returns(gradovi.Provider);
+            mockSetGradovi.As<IQueryable<Grad>>().Setup(m => m.Expression).Returns(gradovi.Expression);
+            mockSetGradovi.As<IQueryable<Grad>>().Setup(m => m.ElementType).Returns(gradovi.ElementType);
+            mockSetGradovi.As<IQueryable<Grad>>().Setup(m => m.GetEnumerator()).Returns(gradovi.GetEnumerator());
 
-       //     var mockContext = new Mock<ApplicationDbContext>();
-       //     mockContext.Setup(c => c.Gradovi).Returns(mockSetGradovi.Object);
-       //     mockContext.Setup(c => c.Smerovi).Returns(mockSetSmerovi.Object);
+            var mockSetSmerovi = new Mock<DbSet<Smer>>();
+            mockSetSmerovi.As<IQueryable<Smer>>().Setup(m => m.Provider).Returns(smerovi.Provider);
+            mockSetSmerovi.As<IQueryable<Smer>>().Setup(m => m.Expression).Returns(smerovi.Expression);
+            mockSetSmerovi.As<IQueryable<Smer>>().Setup(m => m.ElementType).Returns(smerovi.ElementType);
+            mockSetSmerovi.As<IQueryable<Smer>>().Setup(m => m.GetEnumerator()).Returns(smerovi.GetEnumerator());
 
-       //     var kontroler = new UceniciController(mockContext.Object);
+            mockSetSmerovi.Setup(m => m.Include(It.IsAny<String>())).Returns(mockSetSmerovi.Object);
 
-       //     var result = kontroler.Dodaj() as ViewResult;
-       //     var model = result.Model as UcenikViewModel;
-       //     // Assert
-       //     Assert.IsNotNull(result);
-       //     Assert.AreEqual(5, model.Gradovi.Count());
-       //     Assert.AreEqual(2, model.Smerovi.Count());
-       //     Assert.AreEqual("Dodaj", result.ViewName);
+            var mockContext = new Mock<ApplicationDbContext>();
+            mockContext.Setup(c => c.Gradovi).Returns(mockSetGradovi.Object);
+            mockContext.Setup(c => c.Smerovi).Returns(mockSetSmerovi.Object);
 
-       // }
+            var kontroler = new UceniciController(mockContext.Object);
 
-       //TO BE DONE
+            var result = kontroler.Dodaj() as ViewResult;
+            var model = result.Model as UcenikViewModel;
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(5, model.Gradovi.Count());
+            Assert.AreEqual(2, model.Smerovi.Count());
+            Assert.AreEqual("Dodaj", result.ViewName);
+
+        }
+
+        //TO BE DONE
         [TestMethod]
         public void UceniciController_Sacuvaj()
         {
+            //aded
 
+            var mockSetUcenik = new Mock<DbSet<Ucenik>>();
+            mockSetUcenik.As<IQueryable<Ucenik>>().Setup(m => m.Provider).Returns(gradovi.Provider);
+            mockSetUcenik.As<IQueryable<Ucenik>>().Setup(m => m.Expression).Returns(gradovi.Expression);
+            mockSetUcenik.As<IQueryable<Ucenik>>().Setup(m => m.ElementType).Returns(gradovi.ElementType);
+            mockSetUcenik.As<IQueryable<Ucenik>>().Setup(m => m.GetEnumerator()).Returns(gradovi.GetEnumerator());
+
+            //
             var grad = new List<Grad>()
             {
                 new Grad {Id=1,Naziv="Beograd" },

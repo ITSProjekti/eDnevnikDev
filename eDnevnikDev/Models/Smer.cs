@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Script.Serialization;
 
 namespace eDnevnikDev.Models
 {
@@ -50,6 +52,9 @@ namespace eDnevnikDev.Models
         /// <value>
         /// Lista oznaka odeljenja vezana za taj smer.
         /// </value>
+        /// 
+
+
         public virtual ICollection<Oznaka> Oznake { get; set; }
 
     }

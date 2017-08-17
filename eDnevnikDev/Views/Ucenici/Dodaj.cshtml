@@ -6,31 +6,25 @@
 }
 
 <h2 style="text-align:center">Nov učenik</h2>
-    <div class="row">
+
 @using (Html.BeginForm("Sacuvaj", "Ucenici", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
 {
-        <div class="col-md-3 col-sm-4 fff">
-            <li class="col-lg-12 col-md-12 col-sm-12">
+        <div class="col-md-3 col-sm-5 fff">
 
                 <a href="#"><img src="http://placehold.it/230x240" id="placeholder" alt=""></a>
-
-               
 
                 <label class="btn btn-success uploadbutton" id="upload">
                     DODAJ SLIKU <input type="file" name="File" id="File" style="display: none;" onchange="loadFile(event)">
                 </label>
                 @Html.ValidationMessageFor(u => u.File)
 
-
-             
-            </li>
         </div>
-        <div class="col-md-7 col-sm-6 col-md-offset-2">
+        <div class="col-md-7 col-sm-7 col-md-offset-2 ">
             <!--<form class="form-horizontal">-->
             
             <div class="well">
             
-                    <fieldset>
+                    <fieldset >
                         <legend>Novi</legend>
                         <div class="form-group">
                             <!--<label for="inputEmail" class="col-lg-2 control-label">Email</label>-->
@@ -161,14 +155,14 @@
                         <div class="form-group">
                                                             
                                     @Html.LabelFor(u => u.Ucenik.Vanredan, new { @class = "col-md-3 control-label" })
-                                    <div class="checkbox col-md-9">
+                                    <div class="checkbox col-md-9 col-md-offset-3 col-sm-offset-1">
                                         @Html.CheckBoxFor(u => u.Ucenik.Vanredan)
                                     </div>
                          </div>
                                       
                         <div class="form-group">
                             @Html.LabelFor(u => u.Ucenik.SmerID, new { @class = "col-md-3 control-label" })
-                            <div class="col-md-9">
+                            <div class="col-md-9 ">
                                 @Html.DropDownListFor(u => u.Ucenik.SmerID, smerovi, " ", new { @class = "form-control" })
                                 @Html.ValidationMessageFor(u => u.Ucenik.SmerID)
                             </div>
@@ -194,7 +188,7 @@
                             </div>
                             <div class="form-group">
                                 @Html.LabelFor(u => u.SmestiUNovoOdeljenje, new { @class = "col-md-3 control-label" })
-                                <div class="col-md-9">
+                                <div class="col-md-9 ">
                                     <select name="SmestiUNovoOdeljenje" class="form-control" id="SmestiUNovoOdeljenje">
                                         <option value="2">U toku</option>
                                     </select>
@@ -205,7 +199,7 @@
                         
 
                         <div class="form-group">
-                            <div class="col-md-10 col-md-offset-2">
+                            <div class="col-md-10 col-md-offset-4 col-sm-offset-2 col-xs-offset-2">
                                 <button type="reset" class="btn btn-default">Poništi</button>
                                 <button type="submit" class="btn btn-success">Sačuvaj</button>
                             </div>
@@ -228,7 +222,7 @@
             
         </div>
 }
-    </div>
+    
 <!--       </form> -->
 
 

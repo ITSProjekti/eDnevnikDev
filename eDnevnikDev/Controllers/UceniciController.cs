@@ -54,8 +54,9 @@ namespace eDnevnikDev.Controllers
             return View("Index", ListaUcenika);
         }
         /// <summary>
-        /// 
+        ///
         /// Funkcija koja vraca view dodaj. <see cref="UcenikViewModel"/> 
+        /// TO BE TESTED
         /// </summary>
         /// <returns></returns>
         public ActionResult Dodaj()
@@ -197,6 +198,18 @@ namespace eDnevnikDev.Controllers
             //Ukoliko je null vraca se false, ako jeste vraca se true.
             return odeljenje == null ? Json(new { Kreirano = false }, JsonRequestBehavior.AllowGet) : Json(new { Kreirano = true }, JsonRequestBehavior.AllowGet);
 
+        }
+
+        public JsonResult test()
+        {
+            var lista = new List<Smer>();
+            var temp = _context.Smerovi.Include("Oznake");
+            foreach (var item in temp)
+            {
+                lista.Add(item);
+            }
+                
+            return Json(lista,JsonRequestBehavior.AllowGet);
         }
     }
 }

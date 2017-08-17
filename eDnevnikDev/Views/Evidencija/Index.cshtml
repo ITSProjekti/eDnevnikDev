@@ -9,18 +9,24 @@
 <h3>Datum: @DateTime.Now.ToString("dddd dd.MM.yyy", CultureInfo.CreateSpecificCulture("sr-Latn-CS"))</h3>
 <div class="container">
     <div class="row">
-        <div class="col-md-3 col-md-offset-4">
-            <label for="razred">Razred</label>
-            <select id="razred">
-                <option value="1">Prvi</option>
-                <option value="2">Drugi</option>
-                <option value="3">Treći</option>
-                <option value="4">Četvrti</option>
-            </select>
-            <label for="odeljenja">Odeljenje</label>
-            <select id="odeljenja"></select>
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="razred">Razred</label>
+                    <select id="razred" class="form-control">
+                        <option value="1">Prvi</option>
+                        <option value="2">Drugi</option>
+                        <option value="3">Treći</option>
+                        <option value="4">Četvrti</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="odeljenja">Odeljenje</label>
+                    <select id="odeljenja" class="form-control"></select>
+                </div>
         </div>
     </div>
+        </div>
             <p id="p1"></p>
             <div id="poruka">  </div>
             <div class="row" id="ucenici">

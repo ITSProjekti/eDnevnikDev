@@ -17,6 +17,6 @@ namespace eDnevnikDev.Models
 
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int OznakaId { get; set; }
-        public ICollection<Smer> Smerovi { get; set; }
+        public virtual ICollection<Smer> Smerovi { get; set; }
     }
 }
