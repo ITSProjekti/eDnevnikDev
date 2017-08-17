@@ -73,12 +73,37 @@
         function GenerisiKarticuUcenika(id,ime,prezime,fotografija,brojudnevniku)
         {
             if (fotografija == null)
-                fotografija = "http://via.placeholder.com/140x176";
+                fotografija = "http://via.placeholder.com/140x140";
             else
                 fotografija = "/slike/" + fotografija;
 
             //return   "<div class='col-md-3'><div class='ucenik-kartica'><img src='" + fotografija + "' class='ucenik-slika' style='width:140px;height:176px;' /><div class='ucenik-ime'>" + ime + " " + prezime + " </div></div></div>";
-            return '<div class="col-sm-6 col-md-3 " style="text-align:center; "><div class="thumbnail karticaUcenik-prisutan" onclick="klikUcenikKartica(this)"><img src="' + fotografija + '" style="width:140px; height:176px; display: block;"> <div class="caption"><input id="idUcenika" type="hidden" value="' + id + '" > <h3>' + brojudnevniku + '. ' + ime + ' ' + prezime + '</h3> </div></div> </div>';
+            return '<div class="col-sm-6 col-md-3 "><div class="evidencijaKartica"><div id="circle"><img src=' + fotografija + ' alt="evidencijaucenik" style="width:100%" id="img_pregled" /></div><div class="container_pregled_ucenika"><h4>Miodrag Radivojevic</h4><p class="evidencijatitle">15.</p><div id="pbutton"><a id="evidencijabutton" onclick="klik()"><span id="glyph" class="glyphicon glyphicon-ok"></span></a></div></div></div></div>';
+        }
+
+        
+        function klik() {
+                $('.evidencijaKartica').toggleClass("borderevidencijacolor");
+                $('#evidencijabutton').toggleClass("buttonevidencijacolor");
+                $('#glyph').toggleClass('glyphicon-ok glyphicon-remove');
+     
+        }
+        function klikUcenikKartica(elem) {
+            var klasa = $(elem).attr("class").split(' ')[1];
+
+            if (klasa == 'karticaUcenik-prisutan') {
+                $(elem).removeClass('karticaUcenik-prisutan')
+                $(elem).addClass('karticaUcenik-odsutan')
+
+                $('.evidencijaKartica').toggleClass("borderevidencijacolor");
+                $('#evidencijabutton').toggleClass("buttonevidencijacolor");
+            }
+            else {
+                $(elem).removeClass('karticaUcenik-odsutan')
+                $(elem).addClass('karticaUcenik-prisutan')
+                 $('.evidencijaKartica').toggleClass("borderevidencijacolor");
+            $('#evidencijabutton').toggleClass("buttonevidencijacolor");
+            }
         }
 
         function Ucenici() {
@@ -107,20 +132,7 @@
             zahtev.fail(function (gr) { $("#p1").html(gr.statusText); });
         }
 
-        function klikUcenikKartica(elem) {
-            var klasa = $(elem).attr("class").split(' ')[1];
-
-            if (klasa == 'karticaUcenik-prisutan')
-            {
-                $(elem).removeClass('karticaUcenik-prisutan')
-                $(elem).addClass('karticaUcenik-odsutan')
-            }
-            else
-            {
-                $(elem).removeClass('karticaUcenik-odsutan')
-                $(elem).addClass('karticaUcenik-prisutan')
-            }
-        }
+      
 
         $(function () {
             $("#razred").change(function () {
