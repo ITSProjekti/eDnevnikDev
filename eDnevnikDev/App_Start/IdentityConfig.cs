@@ -11,13 +11,59 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using eDnevnikDev.Models;
+using System.Net.Mail;
+using System.Net.Mime;
 
 namespace eDnevnikDev
 {
     public class EmailService : IIdentityMessageService
     {
+
         public Task SendAsync(IdentityMessage message)
         {
+            string text = message.Body;
+            string html = message.Body;
+            //do whatever you want to the message        
+            MailMessage msg = new MailMessage();
+            msg.From = new MailAddress("ednevnik@ednevnikdev.rs");
+            msg.To.Add(new MailAddress(message.Destination));
+            msg.Subject = message.Subject;
+            msg.AlternateViews.Add(AlternateView.CreateAlternateViewFromString(text, null, MediaTypeNames.Text.Plain));
+            msg.AlternateViews.Add(AlternateView.CreateAlternateViewFromString(html, null, MediaTypeNames.Text.Html));
+
+            SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", Convert.ToInt32(587));
+            smtpClient.EnableSsl = true;
+            smtpClient.Timeout = 10000;
+            smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+            smtpClient.UseDefaultCredentials = false;
+            smtpClient.Credentials = new System.Net.NetworkCredential("phpprojekat@gmail.com", "phpprojekat123");
+            
+            smtpClient.Send(msg);
+
+            /*
+             * // Command line argument must the the SMTP host.
+                    SmtpClient client = new SmtpClient();
+                    client.Port = 587;
+                    client.Host = "smtp.gmail.com";
+                    client.EnableSsl = true;
+                    client.Timeout = 10000;
+                    client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    client.UseDefaultCredentials = false;
+                    client.Credentials = new System.Net.NetworkCredential("user@gmail.com","password");
+
+                    MailMessage mm = new MailMessage("donotreply@domain.com", "sendtomyemail@domain.co.uk", "test", "test");
+                    mm.BodyEncoding = UTF8Encoding.UTF8;
+                    mm.DeliveryNotificationOptions = DeliveryNotificationOptions.OnFailure;
+
+                    client.Send(mm);
+             * 
+             * 
+             * 
+             * 
+             */
+
+
+
             // Plug in your email service here to send an email.
             return Task.FromResult(0);
         }
@@ -73,8 +119,8 @@ namespace eDnevnikDev
             });
             manager.RegisterTwoFactorProvider("Email Code", new EmailTokenProvider<ApplicationUser>
             {
-                Subject = "Security Code",
-                BodyFormat = "Your security code is {0}"
+                Subject = "Sigurnosni Kod",
+                BodyFormat = "Vaš sigurnosni kod je: {0}"
             });
             manager.EmailService = new EmailService();
             manager.SmsService = new SmsService();

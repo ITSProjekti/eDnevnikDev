@@ -1,4 +1,6 @@
-﻿using System;
+﻿using eDnevnikDev.Helpers;
+using eDnevnikDev.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -16,6 +18,8 @@ namespace eDnevnikDev
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            ApplicationDbContext context = new ApplicationDbContext();
+            IdentityHelper.SeedIdentities(context);
         }
     }
 }

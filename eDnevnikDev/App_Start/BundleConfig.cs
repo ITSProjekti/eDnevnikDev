@@ -12,7 +12,8 @@ namespace eDnevnikDev
                         "~/Scripts/jquery-{version}.js",
                         "~/Scripts/select2.js",
                         "~/Scripts/jquery-ui-1.12.1.js",
-                        "~/Scripts/moment.js"));
+                        "~/Scripts/moment.js",
+                        "~/Scripts/jquery.dataTables.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
@@ -32,6 +33,7 @@ namespace eDnevnikDev
                       "~/Content/themes/base/jquery-ui.css",
                       "~/Content/styles.css",
                       "~/Content/bootstrap.min.css",
+                      "~/Content/jquery.dataTables.min.css",
                       "~/Content/site.css"));
         }
     }

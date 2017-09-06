@@ -20,6 +20,7 @@ namespace eDnevnikDev.Models
         /// <value>
         /// The predmet identifier.
         /// </value>
+        
         public int PredmetID { get; set; }
 
         /// <summary>
