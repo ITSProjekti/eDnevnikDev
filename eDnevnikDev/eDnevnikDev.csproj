@@ -217,6 +217,7 @@
     <Compile Include="Controllers\EvidencijaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\OceneController.cs" />
     <Compile Include="Controllers\OdeljenjeController.cs" />
     <Compile Include="Controllers\PredmetiController.cs" />
     <Compile Include="Controllers\ProfesoriController.cs" />
@@ -391,10 +392,6 @@
     <Compile Include="Migrations\201709141045270_UpdateModelaCas.cs" />
     <Compile Include="Migrations\201709141045270_UpdateModelaCas.Designer.cs">
       <DependentUpon>201709141045270_UpdateModelaCas.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201709141136453_DodavanjeModela_Ocena_TipOcena_TipOpisneOcene.cs" />
-    <Compile Include="Migrations\201709141136453_DodavanjeModela_Ocena_TipOcena_TipOpisneOcene.Designer.cs">
-      <DependentUpon>201709141136453_DodavanjeModela_Ocena_TipOcena_TipOpisneOcene.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -816,6 +813,12 @@
     <Content Include="Views\Odeljenje\Index.cshtml" />
     <Content Include="Views\Evidencija\Index.cshtml" />
     <Content Include="Views\Odeljenje\PregledKreiranih.cshtml" />
+    <Content Include="Views\Ocene\Create.cshtml" />
+    <Content Include="Views\Ocene\Delete.cshtml" />
+    <Content Include="Views\Ocene\Details.cshtml" />
+    <Content Include="Views\Ocene\Edit.cshtml" />
+    <Content Include="Views\Ocene\Index.cshtml" />
+    <Content Include="Views\Ocene\Predmeti.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -947,9 +950,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201709141045270_UpdateModelaCas.resx">
       <DependentUpon>201709141045270_UpdateModelaCas.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201709141136453_DodavanjeModela_Ocena_TipOcena_TipOpisneOcene.resx">
-      <DependentUpon>201709141136453_DodavanjeModela_Ocena_TipOcena_TipOpisneOcene.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -1,0 +1,69 @@
+﻿@model IEnumerable<eDnevnikDev.Models.Ocena>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Cas.Opis)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TipOcene.Tip)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TipOpisneOcene.Tip)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Ucenik.ImeOca)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Oznaka)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Plus)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Napomena)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Cas.Opis)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TipOcene.Tip)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TipOpisneOcene.Tip)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Ucenik.ImeOca)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Oznaka)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Plus)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Napomena)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.OcenaId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.OcenaId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.OcenaId })
+        </td>
+    </tr>
+}
+
+</table>

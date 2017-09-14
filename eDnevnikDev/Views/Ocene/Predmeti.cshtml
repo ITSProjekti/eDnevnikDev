@@ -1,0 +1,33 @@
+﻿@model IEnumerable<eDnevnikDev.Models.Predmet>
+
+@{
+    ViewBag.Title = "Predmeti";
+}
+
+<h2>Predmeti</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.NazivPredmeta)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.NazivPredmeta)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.PredmetID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.PredmetID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.PredmetID })
+        </td>
+    </tr>
+}
+
+</table>
