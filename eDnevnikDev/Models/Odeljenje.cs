@@ -66,6 +66,9 @@ namespace eDnevnikDev.Models
         /// </value>
         public virtual ICollection<Ucenik> Ucenici { get; set; }
 
+        public virtual ICollection<Cas> Casovi { get; set; }
+
+
         /// <summary>
         /// Metoda vraca godinu jednu posle maksimalne godine nadjene u tabeli odeljenje na osnovu razreda i oznake odeljenja.
         /// </summary>

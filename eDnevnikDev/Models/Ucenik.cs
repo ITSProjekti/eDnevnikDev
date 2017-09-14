@@ -14,7 +14,11 @@ namespace eDnevnikDev.Models
     /// </summary>
     public class Ucenik
     {
-
+        public Ucenik()
+        {
+            Odsustva = new HashSet<Odsustvo>();
+            Napomene = new HashSet<Napomena>();
+        }
         /// <summary>
         /// Gets or sets the ucenik identifier
         /// Primary key u bazi.
@@ -224,6 +228,27 @@ namespace eDnevnikDev.Models
         public int? BrojUDnevniku { get; set; }
 
 
+        /// <summary>
+        ///  Služi za čuvanje ID-a korisnika kojii je upisan u tabelu AspNetUsers
+        /// </summary>
+        /// <value>
+        /// string
+        /// </value>
+        [ForeignKey("User")]
+        public string UserUcenikId { get; set; }
+
+
+        /// <summary>
+        ///  Služi za povezivanje sa tabelom AspNetUsers
+        /// </summary>
+        /// <value>
+        /// ApplicationUser
+        /// </value>
+        public virtual ApplicationUser User { get; set; }
+
+        public virtual ICollection<Odsustvo> Odsustva { get; set; }
+
+        public virtual ICollection<Napomena> Napomene { get; set; }
 
 
         public static string GetMd5Hash(string input)

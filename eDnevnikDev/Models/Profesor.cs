@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace eDnevnikDev.Models
 {
@@ -11,6 +12,8 @@ namespace eDnevnikDev.Models
         public Profesor()
         {
             Predmeti = new HashSet<Predmet>();
+            Napomene = new HashSet<Napomena>();
+            Casovi = new HashSet<Cas>();
         }
 
         /// <summary>
@@ -84,6 +87,28 @@ namespace eDnevnikDev.Models
         [Display(Name = "Razredni Starešina")]
         public bool RazredniStaresina { get; set; }
 
+        
+
+
+
+        /// <summary>
+        ///  Služi za čuvanje ID-a korisnika kojii je upisan u tabelu AspNetUsers
+        /// </summary>
+        /// <value>
+        /// string
+        /// </value>
+        [ForeignKey("User")]
+        public string UserProfesorId { get; set; }
+
+
+        /// <summary>
+        ///  Služi za povezivanje sa tabelom AspNetUsers
+        /// </summary>
+        /// <value>
+        /// ApplicationUser
+        /// </value>
+        public virtual ApplicationUser User { get; set; }
+
         /// <summary>
         ///  Služi za čuvanje predmeta na kojima profesor predaje
         /// </summary>
@@ -91,6 +116,14 @@ namespace eDnevnikDev.Models
         /// ICollection<Predmet>
         /// </value>
         public virtual ICollection<Predmet> Predmeti { get; set; }
+
+        public virtual ICollection<Napomena> Napomene { get; set; }
+
+        public virtual ICollection<Cas> Casovi { get; set; }
+
+       
+
+
 
 
     }

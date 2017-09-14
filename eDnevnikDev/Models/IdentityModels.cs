@@ -18,6 +18,10 @@ namespace eDnevnikDev.Models
             // Add custom user claims here
             return userIdentity;
         }
+
+        //public virtual Ucenik Ucenik { get; set; }
+        //public virtual Profesor Profesor { get; set; }
+
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -29,6 +33,9 @@ namespace eDnevnikDev.Models
         public virtual DbSet<Smer> Smerovi { get; set; }
         public virtual DbSet<Predmet> Predmeti { get; set; }
         public virtual DbSet<Odeljenje> Odeljenja { get; set; }
+        public virtual DbSet<Odsustvo> Odsustva { get; set; }
+        public virtual DbSet<Napomena> Napomene { get; set; }
+        public virtual DbSet<Cas> Casovi { get; set; }
 
 
         public ApplicationDbContext()

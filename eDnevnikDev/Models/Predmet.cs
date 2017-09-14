@@ -11,6 +11,7 @@ namespace eDnevnikDev.Models
         public Predmet()
         {
             Profesori = new HashSet<Profesor>();
+            Casovi = new HashSet<Cas>();
         }
 
         /// <summary>
@@ -41,6 +42,9 @@ namespace eDnevnikDev.Models
         /// ICollection<Predmet>
         /// </value>
         public virtual ICollection<Profesor> Profesori { get; set; }
+
+        public virtual ICollection<Cas> Casovi { get; set; }
+
 
 
     }
