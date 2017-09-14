@@ -392,6 +392,10 @@
     <Compile Include="Migrations\201709141045270_UpdateModelaCas.Designer.cs">
       <DependentUpon>201709141045270_UpdateModelaCas.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201709141136453_DodavanjeModela_Ocena_TipOcena_TipOpisneOcene.cs" />
+    <Compile Include="Migrations\201709141136453_DodavanjeModela_Ocena_TipOcena_TipOpisneOcene.Designer.cs">
+      <DependentUpon>201709141136453_DodavanjeModela_Ocena_TipOcena_TipOpisneOcene.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ArhivaOdeljenja.cs" />
@@ -401,6 +405,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Napomena.cs" />
+    <Compile Include="Models\Ocena.cs" />
     <Compile Include="Models\Odeljenje.cs" />
     <Compile Include="Models\Odsustvo.cs" />
     <Compile Include="Models\Oznaka.cs" />
@@ -409,6 +414,8 @@
     <Compile Include="Models\RoleNames.cs" />
     <Compile Include="Models\Smer.cs" />
     <Compile Include="Models\Status.cs" />
+    <Compile Include="Models\TipOcene.cs" />
+    <Compile Include="Models\TipOpisneOcene.cs" />
     <Compile Include="Models\Ucenik.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -940,6 +947,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201709141045270_UpdateModelaCas.resx">
       <DependentUpon>201709141045270_UpdateModelaCas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709141136453_DodavanjeModela_Ocena_TipOcena_TipOpisneOcene.resx">
+      <DependentUpon>201709141136453_DodavanjeModela_Ocena_TipOcena_TipOpisneOcene.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

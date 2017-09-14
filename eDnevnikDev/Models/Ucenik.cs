@@ -18,6 +18,7 @@ namespace eDnevnikDev.Models
         {
             Odsustva = new HashSet<Odsustvo>();
             Napomene = new HashSet<Napomena>();
+            Ocene = new HashSet<Ocena>();
         }
         /// <summary>
         /// Gets or sets the ucenik identifier
@@ -249,6 +250,9 @@ namespace eDnevnikDev.Models
         public virtual ICollection<Odsustvo> Odsustva { get; set; }
 
         public virtual ICollection<Napomena> Napomene { get; set; }
+
+        public virtual ICollection<Ocena> Ocene { get; set; }
+
 
 
         public static string GetMd5Hash(string input)

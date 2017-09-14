@@ -13,6 +13,7 @@ namespace eDnevnikDev.Models
         {
             Napomene = new HashSet<Napomena>();
             Odsustva = new HashSet<Odsustvo>();
+            Ocene = new HashSet<Ocena>();
         }
         public int CasId { get; set; }
 
@@ -57,7 +58,7 @@ namespace eDnevnikDev.Models
 
         public virtual ICollection<Napomena> Napomene { get; set; }
         public virtual ICollection<Odsustvo> Odsustva { get; set; }
-
+        public virtual ICollection<Ocena> Ocene { get; set; }
 
 
 

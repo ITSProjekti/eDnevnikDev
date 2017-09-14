@@ -36,6 +36,9 @@ namespace eDnevnikDev.Models
         public virtual DbSet<Odsustvo> Odsustva { get; set; }
         public virtual DbSet<Napomena> Napomene { get; set; }
         public virtual DbSet<Cas> Casovi { get; set; }
+        public virtual DbSet<Ocena> Ocene { get; set; }
+        public virtual DbSet<TipOcene> TipoviOcena { get; set; }
+        public virtual DbSet<TipOpisneOcene> TipoviOpisnihOcena { get; set; }
 
 
         public ApplicationDbContext()
