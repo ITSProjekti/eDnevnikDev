@@ -31,7 +31,7 @@
             <div id="poruka">  </div>
             <div class="row" id="ucenici">
 
-            </div>
+            </div>            
 
             <div class="modal fade" id="potvrda" role="dialog">
                 <div class="modal-dialog">
@@ -73,12 +73,12 @@
         function GenerisiKarticuUcenika(id,ime,prezime,fotografija,brojudnevniku)
         {
             if (fotografija == null)
-                fotografija = "http://via.placeholder.com/140x140";
+                fotografija = "http://www.bu.edu/com/files/2016/12/Rohan-Panjiar-e1482180912553.jpg";
             else
                 fotografija = "/slike/" + fotografija;
 
             //return   "<div class='col-md-3'><div class='ucenik-kartica'><img src='" + fotografija + "' class='ucenik-slika' style='width:140px;height:176px;' /><div class='ucenik-ime'>" + ime + " " + prezime + " </div></div></div>";
-            return '<div class="col-sm-6 col-md-3 "><div class="evidencijaKartica"><div id="circle"><img src=' + fotografija + ' alt="evidencijaucenik" style="width:100%" id="img_pregled" /></div><div class="container_pregled_ucenika"><h4>Miodrag Radivojevic</h4><p class="evidencijatitle">15.</p><div id="pbutton"><a id="evidencijabutton" onclick="klik()"><span id="glyph" class="glyphicon glyphicon-ok"></span></a></div></div></div></div>';
+            return '<div class="col-sm-6 col-md-3 "><div class="thumbnail"><div id="circle"><img src=' + fotografija + ' alt="evidencijaucenik" style="width:100%" id="img_pregled" /></div><div class="container_pregled_ucenika"><h4 align="center">Miodrag Radivojevic</h4><p class="evidencijatitle" align="center">15.</p>  <p><div class="btn-group btn-group-justified" role="group" aria-label="..."><div class="btn-group" role="group"><button type="button" class="btn btn-default">Ocene</button></div><div class="btn-group" role="group"><button type="button" class="btn btn-default">Napomene</button></div></div></p> <div id="pbutton"><a id="evidencijabutton" onclick="klik()"><span id="glyph" class="glyphicon glyphicon-ok"></span></a></div></div></div></div>';
         }
 
         

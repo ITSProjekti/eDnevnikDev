@@ -29,6 +29,7 @@ namespace eDnevnikDev.Models
         public virtual DbSet<Smer> Smerovi { get; set; }
         public virtual DbSet<Predmet> Predmeti { get; set; }
         public virtual DbSet<Odeljenje> Odeljenja { get; set; }
+        public virtual DbSet<Status> Statusi{ get; set; }
 
 
         public ApplicationDbContext()
