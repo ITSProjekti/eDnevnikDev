@@ -13,6 +13,7 @@ using eDnevnikDev.ViewModel;
 using eDnevnikDev.DTOs;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using eDnevnikDev.Tests.helpers;
 
 
     
@@ -137,7 +138,7 @@ namespace eDnevnikDev.Tests.Controllers
             mockSetStatus.As<IQueryable<Status>>().Setup(m => m.ElementType).Returns(statusi.ElementType);
             mockSetStatus.As<IQueryable<Status>>().Setup(m => m.GetEnumerator()).Returns(statusi.GetEnumerator());
 
-            foreach(var item in statusi)
+            foreach (var item in statusi)
                 mockSetStatus.Setup(p => p.Add(item));
             mockContext.Setup(p => p.Statusi).Returns(mockSetStatus.Object);
 
@@ -150,31 +151,36 @@ namespace eDnevnikDev.Tests.Controllers
                 mockSetOdeljenje.Setup(p => p.Add(item));
             mockContext.Setup(p => p.Odeljenja).Returns(mockSetOdeljenje.Object);
 
+            mockSetOdeljenje.Setup(x => x.Include("Status")).Returns(mockSetOdeljenje.Object);
+
             var odeljenjeController = new OdeljenjeController(mockContext.Object);
-            var result = odeljenjeController.OdeljenjeUcenici(razred, oznakaOdeljenje,status) as JsonResult;
+            var result = odeljenjeController.OdeljenjeUcenici(razred, oznakaOdeljenje, status) as JsonResult;
+
+
             Assert.IsNotNull(result);
             Assert.IsTrue(result.JsonRequestBehavior == JsonRequestBehavior.AllowGet);
 
             string jsonString = JsonConvert.SerializeObject(result.Data);
             System.Diagnostics.Debug.WriteLine(jsonString);
 
-            var jsonArray = JArray.Parse(jsonString);
-
-
+            var jsonArray = JArray.Parse(Helper.checkJsonJArray(jsonString));
             foreach (JObject item in jsonArray)
             {
+                var ucenik = item.GetValue("Ucenici");
+                foreach (JObject itemInner in ucenik)
+                {
+                    string id = itemInner["ID"].ToString();
+                    string Ime = itemInner["Ime"].ToString();
+                    string Prezime = itemInner["Prezime"].ToString();
 
-                string id = item["ID"].ToString();
-                string Ime = item["Ime"].ToString();
-                string Prezime = item["Prezime"].ToString();
-                
 
-                Ucenik temp = listaUce.FirstOrDefault(x => x.UcenikID == int.Parse(id));
-                Assert.AreEqual<string>(id, temp.UcenikID.ToString());
-                Assert.AreEqual<string>(Ime, temp.Ime.ToString());
-                Assert.AreEqual<string>(Prezime, temp.Prezime.ToString());
+                    Ucenik temp = listaUce.FirstOrDefault(x => x.UcenikID == int.Parse(id));
+                    Assert.AreEqual<string>(id, temp.UcenikID.ToString());
+                    Assert.AreEqual<string>(Ime, temp.Ime.ToString());
+                    Assert.AreEqual<string>(Prezime, temp.Prezime.ToString());
+                }
             }
-            Assert.AreEqual<int>(jsonArray.Count, 2);
+            Assert.AreEqual<int>(jsonArray.First.Count(), 2);
 
         }
 
