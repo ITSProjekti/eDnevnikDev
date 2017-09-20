@@ -25,7 +25,7 @@ namespace eDnevnikDev.Controllers
 
         // GET: Odeljenje
         /// <summary>
-        /// Index kontrola. Test name= OdeljenjeController_Index
+        /// Index kontrola. Test name= OdeljenjeController_Index()
         /// </summary>
         /// <returns>Vraca Index View</returns>
         public ActionResult Index()
@@ -35,7 +35,7 @@ namespace eDnevnikDev.Controllers
         /// <summary>
         /// Ukoliko je odeljenje vec kreirano tojest pocela je skolska godina, prikazuju se svi ucenici koji se trenutno
         /// nalaze u odeljenju koje je trenutno u toku u odredjenoj skolskoj godini. Status: U toku.
-        /// NOT TESTED
+        /// Test name=PregledKreiranihTest()
         /// </summary>
         /// <returns></returns>
         public ActionResult PregledKreiranih()
@@ -53,7 +53,7 @@ namespace eDnevnikDev.Controllers
         /// <returns></returns>
         public JsonResult OdeljenjeTrajanje(int godina)
         {
-            //Kreiranje kolekcije oznaka koje mogu ciniti odeljenja na godini koja je prosledjena kao parameta. O.O
+            //Kreiranje kolekcije oznaka koje mogu ciniti odeljenja na godini koja je prosledjena kao parametar. O.O
             var kolekcijaOznaka = _context.Smerovi
                 .Where(s => s.Trajanje >= godina)
                 .Select(s => s.Oznake).ToList();
