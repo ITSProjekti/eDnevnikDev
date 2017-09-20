@@ -1,0 +1,125 @@
+﻿@model ProfesorRoleViewModel
+@using eDnevnikDev.ViewModel;
+
+@{
+    ViewBag.Title = "PromeniPravoPristupaProfesora";
+}
+
+
+<h4>@Model.Ime @Model.Prezime</h4>
+
+<input type="hidden" id="UserProfesorId"  value="@Model.UserProfesorId"/>
+
+<br />
+<br />
+
+@if (Model.RolaProfesor)
+{
+    <input type="checkbox"  checked="checked" value="@RoleNames.ROLE_PROFESOR" id="Profesor" /><strong>@RoleNames.ROLE_PROFESOR</strong>
+
+}
+else
+{
+    <input type="checkbox"  value="@RoleNames.ROLE_PROFESOR" id="Profesor" /><strong>@RoleNames.ROLE_PROFESOR</strong>
+}
+
+<br />
+
+@if (Model.RolaEditor)
+{
+    <input type="checkbox" checked="checked" value="@RoleNames.ROLE_EDITOR" id="Editor" /><strong>@RoleNames.ROLE_EDITOR</strong>
+
+}
+else
+{
+    <input type="checkbox" value="@RoleNames.ROLE_EDITOR" id="Editor" /><strong>@RoleNames.ROLE_EDITOR</strong>
+
+}
+
+<br/>
+<br />
+
+<a href="/Role/Index">Nazad na listu</a>
+
+@section Scripts{
+    <script>
+
+        $(function () {
+            $("#Profesor").change(function () {
+
+                var rola = {
+                    KorisnikID: $("#UserProfesorId").val(),
+                    Rola: $("#Profesor").val()
+                };
+
+                var url = "";
+
+                if ($("#Profesor").is(':checked')) {
+      
+                    url = "/Role/DodajRolu";
+
+                }
+                else {
+                    url = "/Role/ObrisiRolu";
+
+                }
+
+
+
+              var zahtev=  $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: JSON.stringify(rola),
+                    dataType: "text",
+                    contentType: "application/json"
+
+              });
+
+            });
+
+
+
+            $("#Editor").change(function () {
+
+                var rola = {
+                    KorisnikID: $("#UserProfesorId").val(),
+                    Rola: $("#Editor").val()
+                };
+
+                var url = "";
+
+                if ($("#Editor").is(':checked')) {
+
+                    url = "/Role/DodajRolu";
+
+                }
+                else {
+                    url = "/Role/ObrisiRolu";
+
+                }
+
+
+
+                var zahtev = $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: JSON.stringify(rola),
+                    dataType: "text",
+                    contentType: "application/json"
+
+                });
+
+            });
+
+
+        });
+        
+       
+
+    </script>
+
+}
+
+
+
+

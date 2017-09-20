@@ -19,8 +19,7 @@ namespace eDnevnikDev.Models
             return userIdentity;
         }
 
-        //public virtual Ucenik Ucenik { get; set; }
-        //public virtual Profesor Profesor { get; set; }
+
 
     }
 
