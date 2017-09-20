@@ -8,7 +8,17 @@ namespace eDnevnikDev.Models
 {
     public class Napomena
     {
-        
+        public Napomena(string opis, int ucenikId, int profesorId, int casId)
+        {
+            this.Opis = opis;
+            this.UcenikId = ucenikId;
+            this.ProfesorId = profesorId;
+            this.CasId = casId;
+        }
+        public Napomena()
+        {
+
+        }
         public int NapomenaId { get; set; }
 
         public string Opis { get; set; }

@@ -217,10 +217,12 @@
     <Compile Include="Controllers\EvidencijaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\NapomeneController.cs" />
     <Compile Include="Controllers\OdeljenjeController.cs" />
     <Compile Include="Controllers\PredmetiController.cs" />
     <Compile Include="Controllers\ProfesoriController.cs" />
     <Compile Include="Controllers\UceniciController.cs" />
+    <Compile Include="DTOs\DTONapomena.cs" />
     <Compile Include="DTOs\DTOOdeljenje.cs" />
     <Compile Include="DTOs\DTOOdeljenjeSaUcenicima.cs" />
     <Compile Include="DTOs\DTOUcenikOdeljenja.cs" />
@@ -816,6 +818,11 @@
     <Content Include="Views\Odeljenje\Index.cshtml" />
     <Content Include="Views\Evidencija\Index.cshtml" />
     <Content Include="Views\Odeljenje\PregledKreiranih.cshtml" />
+    <Content Include="Views\Napomene\Create.cshtml" />
+    <Content Include="Views\Napomene\Delete.cshtml" />
+    <Content Include="Views\Napomene\Details.cshtml" />
+    <Content Include="Views\Napomene\Edit.cshtml" />
+    <Content Include="Views\Napomene\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

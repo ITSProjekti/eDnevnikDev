@@ -1,0 +1,50 @@
+﻿@model eDnevnikDev.Models.Napomena
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Napomena</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Cas.Opis)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cas.Opis)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Profesor.Ime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Profesor.Ime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Ucenik.ImeOca)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Ucenik.ImeOca)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Opis)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Opis)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.NapomenaId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

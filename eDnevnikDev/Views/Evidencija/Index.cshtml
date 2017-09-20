@@ -5,7 +5,7 @@
 }
 
 <h2>Evidencija</h2>
-
+<textarea id="proba"></textarea>
 <h3>Datum: @DateTime.Now.ToString("dddd dd.MM.yyy", CultureInfo.CreateSpecificCulture("sr-Latn-CS"))</h3>
 <div class="container">
     <div class="row">
@@ -24,6 +24,7 @@
                     <label for="odeljenja">Odeljenje</label>
                     <select id="odeljenja" class="form-control"></select>
                 </div>
+
         </div>
     </div>
         </div>
@@ -56,6 +57,7 @@
 {
 
     <script>
+        
         function Odeljenja() {
             var razred = $("#razred").val();
             var zahtev = $.getJSON("/Odeljenje/OdeljenjeTrajanje?godina="+razred);
@@ -70,6 +72,7 @@
             zahtev.fail(function (gr) { $("#p1").html(gr.statusText); });
         }
 
+        
         function GenerisiKarticuUcenika(id,ime,prezime,fotografija,brojudnevniku)
         {
             if (fotografija == null)
@@ -78,16 +81,155 @@
                 fotografija = "/slike/" + fotografija;
 
             //return   "<div class='col-md-3'><div class='ucenik-kartica'><img src='" + fotografija + "' class='ucenik-slika' style='width:140px;height:176px;' /><div class='ucenik-ime'>" + ime + " " + prezime + " </div></div></div>";
-            return '<div class="col-sm-6 col-md-3 "><div class="evidencijaKartica"><div id="circle"><img src=' + fotografija + ' alt="evidencijaucenik" style="width:100%" id="img_pregled" /></div><div class="container_pregled_ucenika"><h4>Miodrag Radivojevic</h4><p class="evidencijatitle">15.</p><div id="pbutton"><a id="evidencijabutton" onclick="klik()"><span id="glyph" class="glyphicon glyphicon-ok"></span></a></div></div></div></div>';
-        }
+            return '<div class="col-sm-6 col-md-3 ">'
+                        +'<div class="evidencijaKartica">'
+                            +'<div id="circle">'
+                                +'<img src=' + fotografija + ' alt="evidencijaucenik" style="width:100%" id="img_pregled" />'
+                            +'</div>'
+                            +'<div class="container_pregled_ucenika">' 
+                                +'<h4>'+ ime +' '+ prezime +'</h4>'
+                                + '<p class="evidencijatitle">' + brojudnevniku + '</p>'
 
+                                +'<div id="pbutton">'
+                                    +'<a id="evidencijabutton" onclick="klik()"><span id="glyph" class="glyphicon glyphicon-ok"></span></a>'
+                                + '</div>'
+
+                                + '<div id="buttonPopUpNapomena">'
+                                    + '<a id="evidencijabutton" onclick="showPopUpNapomena()"><span id="glyph" class="glyphicon glyphicon-ok"></span></a>'
+                                + '</div>'
+
+                                + '<div id="popUpNapomena" class="table-responsive" style="display:none">'
+                                    + '<div id="textareadiv">'
+                                        + '<textarea id="tekstNapomene" cols="80" rows="10" type="text" name="tekstNapomene" style="resize:none"></textarea>'
+                                    +'</div>'
+                                + '</div>'
+                            +'</div>'
+                        +'</div>'
+                    +'</div>';
+        }
+        
         
         function klik() {
                 $('.evidencijaKartica').toggleClass("borderevidencijacolor");
                 $('#evidencijabutton').toggleClass("buttonevidencijacolor");
                 $('#glyph').toggleClass('glyphicon-ok glyphicon-remove');
-     
         }
+
+        function VratiNapomenu()
+        {
+            var ucenikId = 23;
+            var casId = 1;
+
+            var zahtev = $.ajax({
+                type: "POST",
+                url: "/Napomene/VratiNapomenu?ucenikId=" + ucenikId + "&casId=" + casId,
+                contentType:"application/json"
+            }).done(function (podaci) {
+                alert(podaci.Opis);
+                //var pom = podaci.Opis;
+                //$("#tekstNapomene").val(pom);
+                //$("#popUpNapomena").find("#tekstNapomene").(pom);
+                //document.getElementById("tekstNapomene").value=pom;
+                //$("textarea").first().val(pom);
+                //document.getElementById("tekstNapomene").value = pom;
+                //$(this).find("#tekstNapomene").val(pom);
+                $("#tekstNapomene").val(podaci.Opis);
+                //$(this).find("#tekstNapomene").val()=pom;
+                //$("#popUpNapomena").find("#tekstNapomene").attr(pom);
+                //$("#tekstNapomene").val(pom);
+                //$("#proba").val(pom);
+
+                //$("#popUpNapomena").on("show.bs.modal", function (podaci)
+                //{
+                //    alert(podaci.Opis);
+                //    var pom = podaci.Opis;
+                //    $("#tekstNapomene").val(pom);
+                //})
+            });
+        }
+
+        
+
+        function showPopUpNapomena() {
+            //VratiNapomenu();
+            $("#popUpNapomena").dialog({
+                
+                
+                height: 400,
+                width: 500,
+                modal: true,
+                buttons: {
+                    "Sačuvaj": function () {
+                        //var tekstNapomene = document.getElementById("tekstNapomene").value;
+                        //var tekstNapomene = $("#tekstNapomene", opener.document).val();
+                        //var tekstNapomene=$("input:text").val();
+                        //var tekstNapomene = $("#popUpNapomena").find("#tekstNapomene").val();
+
+                        var tekstNapomene = $(this).find("#tekstNapomene").val();
+
+                        var dtoNapomena = {
+                            Opis: tekstNapomene,
+                            UcenikId: 23,
+                            ProfesorId: 1,
+                            CasId : 1
+                        };
+                        
+
+                        var zahtev = $.ajax({
+                            type:"POST",
+                            data:JSON.stringify(dtoNapomena),
+                            //datatype:"text",
+                            url:"/Napomene/Create",
+                            contentType:"application/json"
+                        }).done(function () {
+                            alert("Uspešno sačuvano!");
+                        });
+                        
+
+                        zahtev.fail(function (rez) {
+                            $("#p1").text("greska: " + rez);
+                        });
+                        
+                        $(this).dialog("close");
+
+                    },
+                    "Otkaži": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+            
+
+        }
+        //function showPopUpNapomena() {
+        //    $("#popUpNapomena").dialog({
+        //        height: 400,
+        //        width: 500,
+        //        modal: true,
+        //        buttons: {
+        //            id: "dugmeSacuvaj",
+        //            text: "Sačuvaj",
+        //            click: function () {
+        //                var opis=$("#tekstNapomene").val();
+        //                var casId = 1;
+        //                var profesorId = 1;
+        //                $.ajax({
+        //                    type: "POST",
+        //                    url: "/Napomene/Create",
+        //                    data: { Opis: opis, UcenikId: id, ProfesorId: profesorId, CasId: casId }
+        //                });
+        //                $(this).dialog("close");
+        //                alert("Uspešno sačuvano!");
+        //            },
+        //            id: "dugmeOtkazi",
+        //            text: "Otkaži",
+        //            click: function () {
+        //                $(this).dialog("close");
+        //            }
+        //        }
+        //    });
+        //}
+
         function klikUcenikKartica(elem) {
             var klasa = $(elem).attr("class").split(' ')[1];
 
@@ -148,6 +290,7 @@
                 Ucenici();
             }).change();
 
+                
             
 
         });
