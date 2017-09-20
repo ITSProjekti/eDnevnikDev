@@ -220,9 +220,13 @@
     <Compile Include="Controllers\OdeljenjeController.cs" />
     <Compile Include="Controllers\PredmetiController.cs" />
     <Compile Include="Controllers\ProfesoriController.cs" />
+    <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\UceniciController.cs" />
     <Compile Include="DTOs\DTOOdeljenje.cs" />
     <Compile Include="DTOs\DTOOdeljenjeSaUcenicima.cs" />
+    <Compile Include="DTOs\DTOProfesor.cs" />
+    <Compile Include="DTOs\DTORola.cs" />
+    <Compile Include="DTOs\DTOUcenik.cs" />
     <Compile Include="DTOs\DTOUcenikOdeljenja.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -412,7 +416,9 @@
     <Compile Include="Models\Ucenik.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModel\ProfesorRoleViewModel.cs" />
     <Compile Include="ViewModel\ProfesorViewModel.cs" />
+    <Compile Include="ViewModel\UcenikRoleViewModel.cs" />
     <Compile Include="ViewModel\UcenikViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -809,6 +815,9 @@
     <Content Include="Views\Odeljenje\Index.cshtml" />
     <Content Include="Views\Evidencija\Index.cshtml" />
     <Content Include="Views\Odeljenje\PregledKreiranih.cshtml" />
+    <Content Include="Views\Role\Index.cshtml" />
+    <Content Include="Views\Role\PromeniPravoPristupaProfesora.cshtml" />
+    <Content Include="Views\Role\PromeniPravoPristupaUcenika.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

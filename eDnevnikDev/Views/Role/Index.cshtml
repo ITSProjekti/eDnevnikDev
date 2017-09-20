@@ -1,0 +1,117 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<select class="form-control" id="Korisnici">
+    <option value="Profesori">Profesori</option>
+    <option value="Ucenici">Ucenici</option>
+
+</select>
+<table id="tabela"  class="table">
+
+</table>
+
+
+@section Scripts{
+    <script>
+
+        $(function () {
+            $("#Korisnici").val('Profesori');
+            VratiProfesore();
+        });
+
+        $(function () {
+            $("#Korisnici").change(function () {
+                if ($("#Korisnici").val() == "Profesori") {
+
+                    VratiProfesore();
+
+                }
+                else
+                {
+                    VratiUcenike();
+                }
+            })
+        });
+
+        function VratiProfesore() {
+
+
+            var zahtev = $.getJSON("/Role/VratiProfesore");
+            var tabelaHTML = "<tr><th>Ime</th><th>Prezime</th><th>Role</th><th>Opcije</th></tr>";
+
+            zahtev.done(function (profesori) {
+
+
+                for (var i = 0; i < profesori.length; i++) {
+
+                    var roleIdentity = profesori[i].Role;
+                    var roleHTML = "";
+                    for (var j = 0; j < roleIdentity.length; j++) {
+                        if (j != roleIdentity.length - 1) {
+                            roleHTML+= roleIdentity[j] + ", ";
+                        }
+                        else
+                        {
+                            roleHTML += roleIdentity[j];
+                        }
+
+
+                    }
+                    tabelaHTML += "<tr><td>" + profesori[i].Ime + "</td><td>" + profesori[i].Prezime + "</td><td>" + roleHTML + "</td><td><a href='/Role/PromeniPravoPristupaProfesora/" + profesori[i].Id + "'>Edit role</a></td></tr>";
+
+
+                }
+
+                $("#tabela").html(tabelaHTML);
+
+
+            });
+
+
+        }
+
+
+        function VratiUcenike() {
+
+
+            var zahtev = $.getJSON("/Role/VratiUcenike");
+
+            var tabelaHTML = "<tr><th>JMBG</th><th>Ime</th><th>Prezime</th><th>Role</th><th>Opcije</th></tr>";
+
+            zahtev.done(function (ucenici) {
+
+
+                for (var i = 0; i < ucenici.length; i++) {
+
+                    var roleIdentity = ucenici[i].Role;
+                    var roleHTML = "";
+                    for (var j = 0; j < roleIdentity.length; j++) {
+                        if (j != roleIdentity.length - 1) {
+                            roleHTML += roleIdentity[j] + ", ";
+                        }
+                        else {
+                            roleHTML += roleIdentity[j];
+                        }
+
+
+                    }
+                    tabelaHTML += "<tr><td>" + ucenici[i].JMBG + "</td><td>" + ucenici[i].Ime + "</td><td>" + ucenici[i].Prezime + "</td><td>" + roleHTML + "</td><td><a href='/Role/PromeniPravoPristupaUcenika/" + ucenici[i].Id + "'>Edit role</a></td></tr>";
+
+
+                }
+
+                $("#tabela").html(tabelaHTML);
+
+
+            });
+
+
+        }
+
+  
+    </script>
+
+}
