@@ -217,6 +217,7 @@
     <Compile Include="Controllers\EvidencijaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\OceneController.cs" />
     <Compile Include="Controllers\OdeljenjeController.cs" />
     <Compile Include="Controllers\PredmetiController.cs" />
     <Compile Include="Controllers\ProfesoriController.cs" />
@@ -228,6 +229,7 @@
     <Compile Include="DTOs\DTORola.cs" />
     <Compile Include="DTOs\DTOUcenik.cs" />
     <Compile Include="DTOs\DTOUcenikOdeljenja.cs" />
+    <Compile Include="DTOs\DTOVratiOcene.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -376,10 +378,6 @@
     <Compile Include="Migrations\201707041217268_DodatBrojUDnevnikuUModeluUcenik.Designer.cs">
       <DependentUpon>201707041217268_DodatBrojUDnevnikuUModeluUcenik.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201707061049423_DodatModelEvidencija.cs" />
-    <Compile Include="Migrations\201707061049423_DodatModelEvidencija.Designer.cs">
-      <DependentUpon>201707061049423_DodatModelEvidencija.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\201709131214531_acaIdentity.cs" />
     <Compile Include="Migrations\201709131214531_acaIdentity.Designer.cs">
       <DependentUpon>201709131214531_acaIdentity.cs</DependentUpon>
@@ -399,6 +397,10 @@
     <Compile Include="Migrations\201709141136453_DodavanjeModela_Ocena_TipOcena_TipOpisneOcene.cs" />
     <Compile Include="Migrations\201709141136453_DodavanjeModela_Ocena_TipOcena_TipOpisneOcene.Designer.cs">
       <DependentUpon>201709141136453_DodavanjeModela_Ocena_TipOcena_TipOpisneOcene.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709211232383_remodelOceneNullable.cs" />
+    <Compile Include="Migrations\201709211232383_remodelOceneNullable.Designer.cs">
+      <DependentUpon>201709211232383_remodelOceneNullable.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -828,6 +830,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Ocene\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -942,9 +945,6 @@
     <EmbeddedResource Include="Migrations\201707041217268_DodatBrojUDnevnikuUModeluUcenik.resx">
       <DependentUpon>201707041217268_DodatBrojUDnevnikuUModeluUcenik.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201707061049423_DodatModelEvidencija.resx">
-      <DependentUpon>201707061049423_DodatModelEvidencija.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201709131214531_acaIdentity.resx">
       <DependentUpon>201709131214531_acaIdentity.cs</DependentUpon>
     </EmbeddedResource>
@@ -959,6 +959,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201709141136453_DodavanjeModela_Ocena_TipOcena_TipOpisneOcene.resx">
       <DependentUpon>201709141136453_DodavanjeModela_Ocena_TipOcena_TipOpisneOcene.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709211232383_remodelOceneNullable.resx">
+      <DependentUpon>201709211232383_remodelOceneNullable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

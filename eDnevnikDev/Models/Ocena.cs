@@ -24,7 +24,7 @@ namespace eDnevnikDev.Models
         /// The oznaka.
         /// </value>
         [Range(1,5, ErrorMessage ="Ocena mora da bude od 1 do 5")]
-        public int Oznaka { get; set; }
+        public int? Oznaka { get; set; }
 
         
 
@@ -34,7 +34,7 @@ namespace eDnevnikDev.Models
         /// <value>
         ///   <c>true</c> if plus; otherwise, <c>false</c>.
         /// </value>
-        public bool Plus { get; set; }
+        public bool? Plus { get; set; }
 
         /// <summary>
         /// Gets or sets the ucenik identifier.
@@ -66,7 +66,7 @@ namespace eDnevnikDev.Models
         /// <value>
         /// The tip opisne ocene identifier.
         /// </value>
-        public int TipOpisneOceneId { get; set; }
+        public int? TipOpisneOceneId { get; set; }
 
 
         /// <summary>

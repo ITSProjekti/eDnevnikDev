@@ -184,11 +184,58 @@ namespace eDnevnikDev.Tests.Controllers
 
         }
 
+
         [TestMethod]
-        public void OdeljenjeController_OdeljenjeTrajanje()
+        public void OdeljenjeController_OdeljenjeSkolskaGodina()
         {
-           
+            int godina = 1;
+            int oznakaOdeljenje = 1;
+            int status = 1;
+
+            var odeljenja = new List<Odeljenje>()
+            {
+                new Odeljenje() {Id=1,OznakaID=1,PocetakSkolskeGodine=2017,Razred=1,StatusID=1 },
+                new Odeljenje() {Id=2,OznakaID=6,PocetakSkolskeGodine=2018,Razred=3,StatusID=3 },
+                new Odeljenje() {Id=3,OznakaID=3,PocetakSkolskeGodine=2016,Razred=4,StatusID=2 },
+
+            }.AsQueryable();
+
+            var mockContext = new Mock<ApplicationDbContext>();
+
+            var mockSetOdeljenje = new Mock<DbSet<Odeljenje>>();
+            mockSetOdeljenje.As<IQueryable<Odeljenje>>().Setup(m => m.Provider).Returns(odeljenja.Provider);
+            mockSetOdeljenje.As<IQueryable<Odeljenje>>().Setup(m => m.Expression).Returns(odeljenja.Expression);
+            mockSetOdeljenje.As<IQueryable<Odeljenje>>().Setup(m => m.ElementType).Returns(odeljenja.ElementType);
+            mockSetOdeljenje.As<IQueryable<Odeljenje>>().Setup(m => m.GetEnumerator()).Returns(odeljenja.GetEnumerator());
+
+            foreach (var item in odeljenja)
+                mockSetOdeljenje.Setup(p => p.Add(item));
+            mockContext.Setup(o => o.Odeljenja).Returns(mockSetOdeljenje.Object);
+
+            var odeljenjeController = new OdeljenjeController(mockContext.Object);
+            var result = odeljenjeController.OdeljenjeSkolskaGodina(godina, oznakaOdeljenje, status)as JsonResult;
+
+
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.JsonRequestBehavior == JsonRequestBehavior.AllowGet);
+
+            string jsonString = JsonConvert.SerializeObject(result.Data);
+            System.Diagnostics.Debug.WriteLine(jsonString);
+
+            var jsonArray = JArray.Parse(Helper.checkJsonJArray(jsonString));
+
+            foreach (JObject item in jsonArray)
+            {
+                string pocetakSkolskeGodine = item["PocetakSkolskeGodine"].ToString();
+
+                Odeljenje odeljenje = odeljenja.FirstOrDefault(x => x.PocetakSkolskeGodine == int.Parse(pocetakSkolskeGodine));
+                Assert.AreEqual<string>(pocetakSkolskeGodine, odeljenje.PocetakSkolskeGodine.ToString());
+
+            }
+            Assert.AreEqual<int>(jsonArray.Count(), 1);
+
         }
+ 
     }
 
 }

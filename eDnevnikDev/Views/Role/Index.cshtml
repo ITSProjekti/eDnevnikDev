@@ -17,12 +17,15 @@
 @section Scripts{
     <script>
 
+        //Prilikom ucitavanja stranice u comboboxu se selektuju profesori
+        //i ispisuju u tabeli
         $(function () {
             $("#Korisnici").val('Profesori');
             VratiProfesore();
         });
 
         $(function () {
+            //Ispis profesora ili ucenika u zavisnosti od vrednosti u comboboxu
             $("#Korisnici").change(function () {
                 if ($("#Korisnici").val() == "Profesori") {
 
@@ -36,10 +39,12 @@
             })
         });
 
+        //Metoda popunjava tabelu sa profesorima
         function VratiProfesore() {
 
-
             var zahtev = $.getJSON("/Role/VratiProfesore");
+
+            //Zaglavlje tabele
             var tabelaHTML = "<tr><th>Ime</th><th>Prezime</th><th>Role</th><th>Opcije</th></tr>";
 
             zahtev.done(function (profesori) {
@@ -47,12 +52,19 @@
 
                 for (var i = 0; i < profesori.length; i++) {
 
+                    //Lista rola za datog profesora
                     var roleIdentity = profesori[i].Role;
+
+                    //Promenljiva za smestanje rola
                     var roleHTML = "";
+
                     for (var j = 0; j < roleIdentity.length; j++) {
+
+                        //Ukoliko rola nije poslednja u listi
                         if (j != roleIdentity.length - 1) {
                             roleHTML+= roleIdentity[j] + ", ";
                         }
+                            //Ukoliko je rola poslednja u listi
                         else
                         {
                             roleHTML += roleIdentity[j];
@@ -60,6 +72,8 @@
 
 
                     }
+
+                    //Dodavanje novog reda
                     tabelaHTML += "<tr><td>" + profesori[i].Ime + "</td><td>" + profesori[i].Prezime + "</td><td>" + roleHTML + "</td><td><a href='/Role/PromeniPravoPristupaProfesora/" + profesori[i].Id + "'>Edit role</a></td></tr>";
 
 
@@ -73,12 +87,13 @@
 
         }
 
-
+        //Metoda popunjava tabelu sa ucenicima
         function VratiUcenike() {
 
 
             var zahtev = $.getJSON("/Role/VratiUcenike");
 
+            //Zaglavlje tabele
             var tabelaHTML = "<tr><th>JMBG</th><th>Ime</th><th>Prezime</th><th>Role</th><th>Opcije</th></tr>";
 
             zahtev.done(function (ucenici) {
@@ -86,18 +101,27 @@
 
                 for (var i = 0; i < ucenici.length; i++) {
 
+                    //Lista rola za datog profesora
                     var roleIdentity = ucenici[i].Role;
+
+                    //Promenljiva za smestanje rola
                     var roleHTML = "";
+
                     for (var j = 0; j < roleIdentity.length; j++) {
+
+                        //Ukoliko rola nije poslednja u listi
                         if (j != roleIdentity.length - 1) {
                             roleHTML += roleIdentity[j] + ", ";
                         }
+                            //Ukoliko je rola poslednja u listi
                         else {
                             roleHTML += roleIdentity[j];
                         }
 
 
                     }
+
+                    //Dodavanje novog reda
                     tabelaHTML += "<tr><td>" + ucenici[i].JMBG + "</td><td>" + ucenici[i].Ime + "</td><td>" + ucenici[i].Prezime + "</td><td>" + roleHTML + "</td><td><a href='/Role/PromeniPravoPristupaUcenika/" + ucenici[i].Id + "'>Edit role</a></td></tr>";
 
 
