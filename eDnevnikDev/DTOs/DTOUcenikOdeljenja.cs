@@ -12,5 +12,6 @@ namespace eDnevnikDev.DTOs
         public string Prezime { get; set; }
         public string Fotografija { get; set; }
         public int? BrojUDnevniku { get; set; }
+        public bool Prisutan { get; set; }
     }
 }

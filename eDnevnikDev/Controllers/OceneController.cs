@@ -13,12 +13,20 @@ namespace eDnevnikDev.Controllers
 {
     public class OceneController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        ApplicationDbContext _context = new ApplicationDbContext();
+        public OceneController()
+        {
+            _context = new ApplicationDbContext();
+        }
+        public OceneController(ApplicationDbContext _context)
+        {
+            this._context = _context;
+        }
 
         // GET: Ocene
         public ActionResult Index()
         {
-            var ocene = db.Ocene.Include(o => o.Cas).Include(o => o.TipOcene).Include(o => o.TipOpisneOcene).Include(o => o.Ucenik);
+            var ocene = _context.Ocene.Include(o => o.Cas).Include(o => o.TipOcene).Include(o => o.TipOpisneOcene).Include(o => o.Ucenik);
             return View(ocene.ToList());
         }
 
@@ -29,7 +37,7 @@ namespace eDnevnikDev.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Ocena ocena = db.Ocene.Find(id);
+            Ocena ocena = _context.Ocene.Find(id);
             if (ocena == null)
             {
                 return HttpNotFound();
@@ -40,10 +48,10 @@ namespace eDnevnikDev.Controllers
         // GET: Ocene/Create
         public ActionResult Create()
         {
-            ViewBag.CasId = new SelectList(db.Casovi, "CasId", "Opis");
-            ViewBag.TipOceneId = new SelectList(db.TipoviOcena, "TipOceneId", "Tip");
-            ViewBag.TipOpisneOceneId = new SelectList(db.TipoviOpisnihOcena, "TipOpisneOceneId", "Tip");
-            ViewBag.UcenikId = new SelectList(db.Ucenici, "UcenikID", "ImeOca");
+            ViewBag.CasId = new SelectList(_context.Casovi, "CasId", "Opis");
+            ViewBag.TipOceneId = new SelectList(_context.TipoviOcena, "TipOceneId", "Tip");
+            ViewBag.TipOpisneOceneId = new SelectList(_context.TipoviOpisnihOcena, "TipOpisneOceneId", "Tip");
+            ViewBag.UcenikId = new SelectList(_context.Ucenici, "UcenikID", "ImeOca");
             return View();
         }
 
@@ -56,15 +64,15 @@ namespace eDnevnikDev.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Ocene.Add(ocena);
-                db.SaveChanges();
+                _context.Ocene.Add(ocena);
+                _context.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.CasId = new SelectList(db.Casovi, "CasId", "Opis", ocena.CasId);
-            ViewBag.TipOceneId = new SelectList(db.TipoviOcena, "TipOceneId", "Tip", ocena.TipOceneId);
-            ViewBag.TipOpisneOceneId = new SelectList(db.TipoviOpisnihOcena, "TipOpisneOceneId", "Tip", ocena.TipOpisneOceneId);
-            ViewBag.UcenikId = new SelectList(db.Ucenici, "UcenikID", "ImeOca", ocena.UcenikId);
+            ViewBag.CasId = new SelectList(_context.Casovi, "CasId", "Opis", ocena.CasId);
+            ViewBag.TipOceneId = new SelectList(_context.TipoviOcena, "TipOceneId", "Tip", ocena.TipOceneId);
+            ViewBag.TipOpisneOceneId = new SelectList(_context.TipoviOpisnihOcena, "TipOpisneOceneId", "Tip", ocena.TipOpisneOceneId);
+            ViewBag.UcenikId = new SelectList(_context.Ucenici, "UcenikID", "ImeOca", ocena.UcenikId);
             return View(ocena);
         }
 
@@ -75,15 +83,15 @@ namespace eDnevnikDev.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Ocena ocena = db.Ocene.Find(id);
+            Ocena ocena = _context.Ocene.Find(id);
             if (ocena == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.CasId = new SelectList(db.Casovi, "CasId", "Opis", ocena.CasId);
-            ViewBag.TipOceneId = new SelectList(db.TipoviOcena, "TipOceneId", "Tip", ocena.TipOceneId);
-            ViewBag.TipOpisneOceneId = new SelectList(db.TipoviOpisnihOcena, "TipOpisneOceneId", "Tip", ocena.TipOpisneOceneId);
-            ViewBag.UcenikId = new SelectList(db.Ucenici, "UcenikID", "ImeOca", ocena.UcenikId);
+            ViewBag.CasId = new SelectList(_context.Casovi, "CasId", "Opis", ocena.CasId);
+            ViewBag.TipOceneId = new SelectList(_context.TipoviOcena, "TipOceneId", "Tip", ocena.TipOceneId);
+            ViewBag.TipOpisneOceneId = new SelectList(_context.TipoviOpisnihOcena, "TipOpisneOceneId", "Tip", ocena.TipOpisneOceneId);
+            ViewBag.UcenikId = new SelectList(_context.Ucenici, "UcenikID", "ImeOca", ocena.UcenikId);
             return View(ocena);
         }
 
@@ -96,14 +104,14 @@ namespace eDnevnikDev.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(ocena).State = EntityState.Modified;
-                db.SaveChanges();
+                _context.Entry(ocena).State = EntityState.Modified;
+                _context.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.CasId = new SelectList(db.Casovi, "CasId", "Opis", ocena.CasId);
-            ViewBag.TipOceneId = new SelectList(db.TipoviOcena, "TipOceneId", "Tip", ocena.TipOceneId);
-            ViewBag.TipOpisneOceneId = new SelectList(db.TipoviOpisnihOcena, "TipOpisneOceneId", "Tip", ocena.TipOpisneOceneId);
-            ViewBag.UcenikId = new SelectList(db.Ucenici, "UcenikID", "ImeOca", ocena.UcenikId);
+            ViewBag.CasId = new SelectList(_context.Casovi, "CasId", "Opis", ocena.CasId);
+            ViewBag.TipOceneId = new SelectList(_context.TipoviOcena, "TipOceneId", "Tip", ocena.TipOceneId);
+            ViewBag.TipOpisneOceneId = new SelectList(_context.TipoviOpisnihOcena, "TipOpisneOceneId", "Tip", ocena.TipOpisneOceneId);
+            ViewBag.UcenikId = new SelectList(_context.Ucenici, "UcenikID", "ImeOca", ocena.UcenikId);
             return View(ocena);
         }
 
@@ -114,7 +122,7 @@ namespace eDnevnikDev.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Ocena ocena = db.Ocene.Find(id);
+            Ocena ocena = _context.Ocene.Find(id);
             if (ocena == null)
             {
                 return HttpNotFound();
@@ -127,9 +135,9 @@ namespace eDnevnikDev.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Ocena ocena = db.Ocene.Find(id);
-            db.Ocene.Remove(ocena);
-            db.SaveChanges();
+            Ocena ocena = _context.Ocene.Find(id);
+            _context.Ocene.Remove(ocena);
+            _context.SaveChanges();
             return RedirectToAction("Index");
         }
 
@@ -137,17 +145,28 @@ namespace eDnevnikDev.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                _context.Dispose();
             }
             base.Dispose(disposing);
         }
-
+        /// <summary>
+        /// Vraca listu predmete koje profesor predaje, da bi profesor mogao da vidi ocene, da ih upise ili izmeni.
+        /// </summary>
+        /// <returns>Listu predmeta</returns>
         public ActionResult Predmeti()
         {
-            var prof = db.Profesori.Single(p => p.UserProfesorId == User.Identity.GetUserId());
-            IQueryable<Predmet> predmeti = db.Predmeti.Where(p => p.Profesori.Contains(prof));
+            string user = User.Identity.GetUserId();
+            var predmeti = _context.Profesori
+                .Single(p => p.UserProfesorId == user)
+                .Predmeti
+                .Select(x=>x)
+                .ToList();
 
-            return View(predmeti.ToList());
+            //"5ae56739-e0d7-4ac7-9d7c-1966f869e0c0"
+            //"profesor"
+            // == User.Identity.GetUserId()
+            return View(predmeti);
         }
+        
     }
 }

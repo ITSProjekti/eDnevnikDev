@@ -45,48 +45,48 @@ namespace eDnevnikDev.Controllers.Tests
         }
 
         //TO BE DONE
-        [TestMethod]
-        public void UceniciController_Dodaj()
-        {
-            var gradovi = new List<Grad>
-            {
-                new Grad { Id = 1, Naziv = "Beograd" }, new Grad { Id = 2, Naziv = "Nis" }, new Grad { Id = 3, Naziv = "Kragujevac" }, new Grad { Id = 4, Naziv = "Subotica" }, new Grad { Id = 5, Naziv = "Novi Sad" }
-            }.AsQueryable();
-            var smerovi = new List<Smer>
-            {
-                ?
-            }.AsQueryable();
+        //[TestMethod]
+        //public void UceniciController_Dodaj()
+        //{
+        //    var gradovi = new List<Grad>
+        //    {
+        //        new Grad { Id = 1, Naziv = "Beograd" }, new Grad { Id = 2, Naziv = "Nis" }, new Grad { Id = 3, Naziv = "Kragujevac" }, new Grad { Id = 4, Naziv = "Subotica" }, new Grad { Id = 5, Naziv = "Novi Sad" }
+        //    }.AsQueryable();
+        //    var smerovi = new List<Smer>
+        //    {
+        //        ?
+        //}.AsQueryable();
 
 
-            var mockSetGradovi = new Mock<DbSet<Grad>>();
-            mockSetGradovi.As<IQueryable<Grad>>().Setup(m => m.Provider).Returns(gradovi.Provider);
-            mockSetGradovi.As<IQueryable<Grad>>().Setup(m => m.Expression).Returns(gradovi.Expression);
-            mockSetGradovi.As<IQueryable<Grad>>().Setup(m => m.ElementType).Returns(gradovi.ElementType);
-            mockSetGradovi.As<IQueryable<Grad>>().Setup(m => m.GetEnumerator()).Returns(gradovi.GetEnumerator());
+        //    var mockSetGradovi = new Mock<DbSet<Grad>>();
+        //    mockSetGradovi.As<IQueryable<Grad>>().Setup(m => m.Provider).Returns(gradovi.Provider);
+        //    mockSetGradovi.As<IQueryable<Grad>>().Setup(m => m.Expression).Returns(gradovi.Expression);
+        //    mockSetGradovi.As<IQueryable<Grad>>().Setup(m => m.ElementType).Returns(gradovi.ElementType);
+        //    mockSetGradovi.As<IQueryable<Grad>>().Setup(m => m.GetEnumerator()).Returns(gradovi.GetEnumerator());
 
-            var mockSetSmerovi = new Mock<DbSet<Smer>>();
-            mockSetSmerovi.As<IQueryable<Smer>>().Setup(m => m.Provider).Returns(smerovi.Provider);
-            mockSetSmerovi.As<IQueryable<Smer>>().Setup(m => m.Expression).Returns(smerovi.Expression);
-            mockSetSmerovi.As<IQueryable<Smer>>().Setup(m => m.ElementType).Returns(smerovi.ElementType);
-            mockSetSmerovi.As<IQueryable<Smer>>().Setup(m => m.GetEnumerator()).Returns(smerovi.GetEnumerator());
+        //    var mockSetSmerovi = new Mock<DbSet<Smer>>();
+        //    mockSetSmerovi.As<IQueryable<Smer>>().Setup(m => m.Provider).Returns(smerovi.Provider);
+        //    mockSetSmerovi.As<IQueryable<Smer>>().Setup(m => m.Expression).Returns(smerovi.Expression);
+        //    mockSetSmerovi.As<IQueryable<Smer>>().Setup(m => m.ElementType).Returns(smerovi.ElementType);
+        //    mockSetSmerovi.As<IQueryable<Smer>>().Setup(m => m.GetEnumerator()).Returns(smerovi.GetEnumerator());
 
-            mockSetSmerovi.Setup(m => m.Include(It.IsAny<String>())).Returns(mockSetSmerovi.Object);
+        //    mockSetSmerovi.Setup(m => m.Include(It.IsAny<String>())).Returns(mockSetSmerovi.Object);
 
-            var mockContext = new Mock<ApplicationDbContext>();
-            mockContext.Setup(c => c.Gradovi).Returns(mockSetGradovi.Object);
-            mockContext.Setup(c => c.Smerovi).Returns(mockSetSmerovi.Object);
+        //    var mockContext = new Mock<ApplicationDbContext>();
+        //    mockContext.Setup(c => c.Gradovi).Returns(mockSetGradovi.Object);
+        //    mockContext.Setup(c => c.Smerovi).Returns(mockSetSmerovi.Object);
 
-            var kontroler = new UceniciController(mockContext.Object);
+        //    var kontroler = new UceniciController(mockContext.Object);
 
-            var result = kontroler.Dodaj() as ViewResult;
-            var model = result.Model as UcenikViewModel;
-            // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(5, model.Gradovi.Count());
-            Assert.AreEqual(2, model.Smerovi.Count());
-            Assert.AreEqual("Dodaj", result.ViewName);
+        //    var result = kontroler.Dodaj() as ViewResult;
+        //    var model = result.Model as UcenikViewModel;
+        //    // Assert
+        //    Assert.IsNotNull(result);
+        //    Assert.AreEqual(5, model.Gradovi.Count());
+        //    Assert.AreEqual(2, model.Smerovi.Count());
+        //    Assert.AreEqual("Dodaj", result.ViewName);
 
-        }
+        //}
 
         //TO BE DONE
         [TestMethod]

@@ -672,7 +672,7 @@ a.bg-danger:hover {
     font-weight:700;
 }
 
-#evidencijabutton {
+.evidencijabutton {
     border: none;
     outline: 0;
     display: inline-block;

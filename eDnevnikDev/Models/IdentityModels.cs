@@ -39,7 +39,7 @@ namespace eDnevnikDev.Models
         public virtual DbSet<Ocena> Ocene { get; set; }
         public virtual DbSet<TipOcene> TipoviOcena { get; set; }
         public virtual DbSet<TipOpisneOcene> TipoviOpisnihOcena { get; set; }
-
+        public virtual DbSet<Status> Statusi { get; set; }
 
         public ApplicationDbContext()
             : base("eDnevnik", throwIfV1Schema: false)

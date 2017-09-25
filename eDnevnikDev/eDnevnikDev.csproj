@@ -416,6 +416,7 @@
     <Compile Include="Models\Ucenik.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModel\EvidencijaUcenikaViewModel.cs" />
     <Compile Include="ViewModel\ProfesorViewModel.cs" />
     <Compile Include="ViewModel\UcenikViewModel.cs" />
   </ItemGroup>
