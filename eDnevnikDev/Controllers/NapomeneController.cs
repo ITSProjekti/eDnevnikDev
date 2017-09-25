@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using eDnevnikDev.Models;
 using eDnevnikDev.DTOs;
+using System.Data.Entity.Migrations;
 
 namespace eDnevnikDev.Controllers
 {
@@ -53,13 +54,15 @@ namespace eDnevnikDev.Controllers
         public ActionResult Create(DTONapomena dtoNapomena)
         {
             Napomena napomena = new Napomena();
-            napomena.Opis = dtoNapomena.Opis;
-            napomena.UcenikId = dtoNapomena.UcenikId;
-            napomena.ProfesorId = dtoNapomena.ProfesorId;
-            napomena.CasId = dtoNapomena.CasId;
+            
 
             if (ModelState.IsValid)
             {
+                napomena.Opis = dtoNapomena.Opis;
+                napomena.UcenikId = dtoNapomena.UcenikId;
+                napomena.ProfesorId = dtoNapomena.ProfesorId;
+                napomena.CasId = dtoNapomena.CasId;
+
                 _context.Napomene.Add(napomena);
                 _context.SaveChanges();
                 return RedirectToAction("Index");
@@ -93,19 +96,25 @@ namespace eDnevnikDev.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "NapomenaId,Opis,UcenikId,ProfesorId,CasId")] Napomena napomena)
+        public void Edit(DTONapomena dtoNapomena)
         {
-            if (ModelState.IsValid)
+            if(dtoNapomena!=null)
             {
-                _context.Entry(napomena).State = EntityState.Modified;
+                var napomena = new Napomena
+                {
+                    NapomenaId = dtoNapomena.NapomenaId,
+                    Opis = dtoNapomena.Opis,
+                    UcenikId = dtoNapomena.UcenikId,
+                    ProfesorId = dtoNapomena.ProfesorId,
+                    CasId = dtoNapomena.CasId
+                };
+
+                _context.Napomene.AddOrUpdate(napomena);
                 _context.SaveChanges();
-                return RedirectToAction("Index");
             }
-            ViewBag.CasId = new SelectList(_context.Casovi, "CasId", "Opis", napomena.CasId);
-            ViewBag.ProfesorId = new SelectList(_context.Profesori, "ProfesorID", "Ime", napomena.ProfesorId);
-            ViewBag.UcenikId = new SelectList(_context.Ucenici, "UcenikID", "ImeOca", napomena.UcenikId);
-            return View(napomena);
+        
+
+
         }
 
         // GET: Napomene/Delete/5
@@ -145,12 +154,19 @@ namespace eDnevnikDev.Controllers
 
         public JsonResult VratiNapomenu(int ucenikId, int casId)
         {
-            _context.Configuration.ProxyCreationEnabled = false;
             var napomena = _context.Napomene
                 .Where(n => n.UcenikId == ucenikId)
                 .SingleOrDefault(n => n.CasId == casId);
 
-            return Json(napomena, JsonRequestBehavior.AllowGet);
+            DTONapomena dtoNapomena = new DTONapomena {
+                NapomenaId = napomena.NapomenaId,
+                Opis = napomena.Opis,
+                ProfesorId = napomena.ProfesorId,
+                UcenikId = napomena.UcenikId,
+                CasId=napomena.CasId
+            };
+
+            return Json(dtoNapomena, JsonRequestBehavior.AllowGet);
         }
     }
 }
