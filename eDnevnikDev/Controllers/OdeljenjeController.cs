@@ -111,7 +111,10 @@ namespace eDnevnikDev.Controllers
         /// <returns></returns>
         public JsonResult OdeljenjeUcenici(int razred, int oznakaOdeljenja, int status)
         {
-          
+            var datum = DateTime.Today;
+            var casovi = _context.Casovi.
+                Where(x => x.Datum == datum);
+
             //Pronalazi odeljenje.
             var odeljenje = _context.Odeljenja
                 .Include("Status")
@@ -136,12 +139,38 @@ namespace eDnevnikDev.Controllers
                 //Ako je status kreirano, sortiraju se ucenici po broju u dnevniku.
                 else
                 {
-                    podaci.Ucenici = odeljenje.Ucenici
-                        .OrderBy(u => u.BrojUDnevniku)
-                        .Select(u => new DTOUcenikOdeljenja { ID = u.UcenikID, Ime = u.Ime, Prezime = u.Prezime, Fotografija = u.Fotografija, BrojUDnevniku = u.BrojUDnevniku })
-                        .ToList();
+                    var uc = new List<DTOUcenikOdeljenja>();
+                    if (casovi.Count() > 0)
+                    {
+                        int a = casovi.Max(x => x.RedniBrojCasa);
+                        var cas = casovi.FirstOrDefault(x => x.RedniBrojCasa == a);
+
+                        foreach (var item in odeljenje.Ucenici)
+                        {
+                            var odsutan = item.Odsustva.Where(x => x.CasId == cas.CasId).SingleOrDefault(x => x.UcenikId == item.UcenikID);
+
+                            if (odsutan == null)
+                            {
+                                uc.Add(new DTOUcenikOdeljenja { ID = item.UcenikID, Ime = item.Ime, Prezime = item.Prezime, Fotografija = item.Fotografija, BrojUDnevniku = item.BrojUDnevniku, Prisutan = true });
+                            }
+                            else
+                            {
+                                uc.Add(new DTOUcenikOdeljenja { ID = item.UcenikID, Ime = item.Ime, Prezime = item.Prezime, Fotografija = item.Fotografija, BrojUDnevniku = item.BrojUDnevniku, Prisutan = false });
+                            }
+                        }
+
+                        podaci.Ucenici = uc.OrderBy(x => x.BrojUDnevniku).ToList();
+
+                    }
+                    else
+                    {
+                        podaci.Ucenici = odeljenje.Ucenici
+                            .OrderBy(u => u.BrojUDnevniku)
+                            .Select(u => new DTOUcenikOdeljenja { ID = u.UcenikID, Ime = u.Ime, Prezime = u.Prezime, Fotografija = u.Fotografija, BrojUDnevniku = u.BrojUDnevniku, Prisutan = true })
+                            .ToList();
+                    }
+
                 }
-                              
             }
             return Json(podaci, JsonRequestBehavior.AllowGet);
 
@@ -260,8 +289,63 @@ namespace eDnevnikDev.Controllers
             _context.SaveChanges();
             return 0;
         }
+        /// <summary>
+        /// Upisuje cas i odsutne ucenike u bazu.
+        /// </summary>
+        /// <param name="odsutni">Lista sa ID-evima od odsutnih ucenika</param>
+        /// <returns></returns>
+        public JsonResult UpisiOdsutne(int[] odsutni)
+        {
+            //Hardcode -> drugi story resava ovaj deo
+            var datum = DateTime.Today;
+            var casId = 7;
+            var opis = "Cas 2";
+            var profesor = 1;
+            var predmet = 1;
+            var odeljenje = 4;
+            var polugodiste = 1;
+            var tromesecje = 1;
+            var redniBrojPredmete = 3;
+            var redniBrojCasa = 2;
 
-      
+            Cas cas = new Cas() {CasId = casId, Datum = datum, Opis = opis, ProfesorId = profesor,
+                PredmetId = predmet, OdeljenjeId = odeljenje, Polugodiste = polugodiste,
+                Tromesecje = tromesecje, RedniBrojPredmeta = redniBrojPredmete, RedniBrojCasa = redniBrojCasa };
+
+            _context.Casovi.Add(cas);
+            _context.SaveChanges();
+
+            foreach (var odsutan in odsutni)
+            {
+                Odsustvo o = new Odsustvo();
+                o.CasId = casId;
+                o.UcenikId = odsutan;
+
+                _context.Odsustva.Add(o);
+                _context.SaveChanges();
+            }
+
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Vraca redni broj casa koji je sledeci po redu da se odrzi.
+        /// </summary>
+        /// <param name="odeljenje">odeljenje koje se dobija iz combobox-a.</param>
+        /// <param name="razred">Razred koji se dobija iz combobox-a.</param>
+        /// <returns></returns>
+        public JsonResult RedniBrojCasa(int odeljenje, int razred)
+        {
+            var datum = DateTime.Today;
+            var izabranoOdeljenje = _context.Odeljenja.Where(x => x.OznakaID == odeljenje).Single(x => x.Razred == razred);
+            var casovi = _context.Casovi.
+                Where(x => x.Datum == datum && x.OdeljenjeId == izabranoOdeljenje.Id);
+            // vraca najveci redni broj casa, zato sto je taj poslednji odrzan
+            int a = casovi.Max(x => x.RedniBrojCasa);
+
+            // a+1 -> povecava redni broj casa, zato sto je to sledeci cas koji treba da se odrzi
+            return Json(a+1, JsonRequestBehavior.AllowGet);
+        }
 
     }
 }
