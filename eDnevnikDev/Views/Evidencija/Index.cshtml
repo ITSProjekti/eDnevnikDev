@@ -103,7 +103,7 @@
 
             //return   "<div class='col-md-3'><div class='ucenik-kartica'><img src='" + fotografija + "' class='ucenik-slika' style='width:140px;height:176px;' /><div class='ucenik-ime'>" + ime + " " + prezime + " </div></div></div>";
             return '<div class="col-sm-6 col-md-3 ">'
-                        +'<div class="evidencijaKartica">'
+                        +'<div class="evidencijaKartica" id="'+id+'div">'
                             +'<div id="circle">'
                                 +'<img src=' + fotografija + ' alt="evidencijaucenik" style="width:100%" id="img_pregled" />'
                             +'</div>'
@@ -112,7 +112,7 @@
                                 + '<p class="evidencijatitle">' + brojudnevniku + '</p>'
 
                                 +'<div id="pbutton">'
-                                    +'<a id="evidencijabutton" onclick="klik()"><span id="glyph" class="glyphicon glyphicon-ok"></span></a>'
+                                    + '<a id="' + id + 'button" class="evidencijabutton" value="' + id + '" onclick="klik(' + id + ')"><span id="' + id + 'glyph" class="glyphicon glyphicon-ok"></span></a>'
                                 + '</div>'
 
                                 + '<div id="buttonPopUpNapomena">'
