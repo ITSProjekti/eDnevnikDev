@@ -1,0 +1,56 @@
+﻿@model eDnevnikDev.Models.Napomena
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Napomena</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Cas.Opis)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cas.Opis)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Profesor.Ime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Profesor.Ime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Ucenik.ImeOca)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Ucenik.ImeOca)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Opis)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Opis)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

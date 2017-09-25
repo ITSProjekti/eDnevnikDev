@@ -1,0 +1,74 @@
+﻿@model eDnevnikDev.Models.Ocena
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Ocena</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Cas.Opis)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cas.Opis)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TipOcene.Tip)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TipOcene.Tip)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TipOpisneOcene.Tip)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TipOpisneOcene.Tip)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Ucenik.ImeOca)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Ucenik.ImeOca)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Oznaka)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Oznaka)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Plus)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Plus)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Napomena)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Napomena)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.OcenaId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

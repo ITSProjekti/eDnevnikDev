@@ -1,37 +1,63 @@
-﻿@model Profesor 
+﻿@model Profesor
 @using System.Globalization
+@using Microsoft.AspNet.Identity
 @{
     ViewBag.Title = "Index";
 }
 
 <h2>Evidencija</h2>
-
-<h3>Datum: @DateTime.Now.ToString("dddd dd.MM.yyy", CultureInfo.CreateSpecificCulture("sr-Latn-CS"))</h3>
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="row">
-                <div class="col-md-6">
-                    <label for="razred">Razred</label>
-                    <select id="razred" class="form-control">
-                        <option value="1">Prvi</option>
-                        <option value="2">Drugi</option>
-                        <option value="3">Treći</option>
-                        <option value="4">Četvrti</option>
-                    </select>
-                </div>
-                <div class="col-md-6">
-                    <label for="odeljenja">Odeljenje</label>
-                    <select id="odeljenja" class="form-control"></select>
-                </div>
-        </div>
+<div class="row">
+    <div class="col-md-5">
+        <h3>Datum: @DateTime.Now.ToString("dddd dd.MM.yyy", CultureInfo.CreateSpecificCulture("sr-Latn-CS"))</h3>
     </div>
-        </div>
+
+
+    <div class="col-md-5">
+        <label for="rbCas">Cas</label>
+    </div>
+
+
+    <div class="col-md-5">
+        <select id="rbCas" class="form-control" onload="RedniBrojCasa()" disabled="disabled">
+            <option value="0">Pretcas</option>
+            <option value="1" selected>1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+        </select>
+        </div></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <label for="razred">Razred</label>
+                            <select id="razred" class="form-control">
+                                <option value="1">Prvi</option>
+                                <option value="2">Drugi</option>
+                                <option value="3">Treći</option>
+                                <option value="4">Četvrti</option>
+                            </select>
+                        </div>
+                        <div class="col-md-5">
+                            <label for="odeljenja">Odeljenje</label>
+                            <select id="odeljenja" class="form-control"></select>
+                        </div><br />
+                        <div class="col-md-2">
+                            <button class="btn btn-success" value="Submit" onclick="UpisiOdsutne()">Potvrdi odsutne</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <p id="p1"></p>
             <div id="poruka">  </div>
             <div class="row" id="ucenici">
 
-            </div>            
+    </div>
 
             <div class="modal fade" id="potvrda" role="dialog">
                 <div class="modal-dialog">
@@ -49,112 +75,318 @@
                         </div>
                     </div>
                 </div>
-            </div>  
+            </div>
 
-</div>
-@section Scripts
+        </div>
+        @section Scripts
 {
 
-    <script>
-        function Odeljenja() {
-            var razred = $("#razred").val();
-            var zahtev = $.getJSON("/Odeljenje/OdeljenjeTrajanje?godina="+razred);
+            <script>
+                function Odeljenja() {
+                    var razred = $("#razred").val();
+                    var zahtev = $.getJSON("/Odeljenje/OdeljenjeTrajanje?godina=" + razred);
 
 
-            zahtev.done(function (odeljenja) {
+                    zahtev.done(function (odeljenja) {
 
-                for (var odeljenje in odeljenja) {
-                    $("#odeljenja").append("<option value='" + odeljenja[odeljenje].Oznaka + "'>" + odeljenja[odeljenje].Oznaka + "</option>");
+                        for (var odeljenje in odeljenja) {
+                            $("#odeljenja").append("<option value='" + odeljenja[odeljenje].Oznaka + "'>" + odeljenja[odeljenje].Oznaka + "</option>");
+                        }
+                    });
+                    zahtev.fail(function (gr) { $("#p1").html(gr.statusText); });
+                }
+
+                function GenerisiKarticuUcenika(id, ime, prezime, fotografija, brojudnevniku, prisutan) {
+                    if (fotografija == null)
+                        fotografija = "http://via.placeholder.com/140x140";
+                    else
+                        fotografija = "/slike/" + fotografija;
+
+            return '<div class="col-sm-6 col-md-3 ">'
+                        +'<div class="evidencijaKartica" id="'+id+'div">'
+                            +'<div id="circle">'
+                                +'<img src=' + fotografija + ' alt="evidencijaucenik" style="width:100%" id="img_pregled" />'
+                            +'</div>'
+                            +'<div class="container_pregled_ucenika">' 
+                                +'<h4>'+ ime +' '+ prezime +'</h4>'
+                                + '<p class="evidencijatitle">' + brojudnevniku + '</p>'
+
+                                +'<div id="pbutton">'
+                                    + '<a id="' + id + 'button" class="evidencijabutton" value="' + id + '" onclick="klik(' + id + ')"><span id="' + id + 'glyph" class="glyphicon glyphicon-ok"></span></a>'
+                                + '</div>'
+
+                                + '<div id="buttonPopUpNapomena">'
+                                    + '<a id="evidencijabutton" onclick="showPopUpNapomena()"><span id="glyph" class="glyphicon glyphicon-ok"></span></a>'
+                                + '</div>'
+
+                                + '<div id="popUpNapomena" class="table-responsive" style="display:none">'
+                                    + '<div id="textareadiv">'
+                                        + '<textarea id="tekstNapomene" cols="80" rows="10" type="text" name="tekstNapomene" style="resize:none"></textarea>'
+                                        + '<input type="hidden" id='+id+' value='+id+'  onclick="VratiID('+id+')"/>'
+                                        + '<input type="hidden" id="napomenaId" />'
+                                + '</div>'
+                                + '</div>'
+                            + '</div>'
+                        + '</div>'
+                    + '</div>';
+        }
+
+        function klik() {
+            $('.evidencijaKartica').toggleClass("borderevidencijacolor");
+            $('#evidencijabutton').toggleClass("buttonevidencijacolor");
+            $('#glyph').toggleClass('glyphicon-ok glyphicon-remove');
+        }
+
+
+        var ID
+
+        function VratiID(id) {
+            ID = id;
+        }
+
+        function showPopUpNapomena() {
+
+            $("#popUpNapomena").dialog({
+
+                height: 400,
+                width: 500,
+                modal: true,
+                open: function () {
+                    
+                    var ucenikId = ID;
+                    console.log(ucenikId);
+                    var casId = $("#casId").val();
+                    var text;
+                    var napomena;
+                    var postoji = false;
+                    var napId;
+
+                    var prom = $.ajax({
+                        type: "POST",
+                        url: "/Napomene/VratiNapomenu?ucenikId=" + 23+ "&casId=" + 1,
+                        contentType: "application/json",
+                        async: false,
+
+                        success:
+                            function (data) {
+                                napomena = data.Opis;
+                                if(data!=null)
+                                {
+                                    postoji = true;
+                                    napId = data.NapomenaId;
+                                }
+                            }
+                    })
+
+                    $(this).find("#napomenaId").val(napId);
+                    $(this).find("#tekstNapomene").val(napomena);
+                },
+                buttons: {
+                    "Sačuvaj": function () {
+
+                        if (true)
+                        {
+
+                            var dtoNapomena = {
+                                NapomenaId: $(this).find("#napomenaId").val(),
+                                Opis: $(this).find("#tekstNapomene").val(),
+                                UcenikId: $(this).find("#ucenikId").val(),
+                                ProfesorId: $("#profesorId").val(),
+                                CasId: $("#casId").val()
+                            };
+
+                            var zahtev = $.ajax({
+                                type: "POST",
+                                data: JSON.stringify(dtoNapomena),
+                                datatype:"text",
+                                url: "/Napomene/Edit",
+                                contentType: "application/json"
+                            }).done(function () {
+                                alert("Uspešno sačuvano!");
+                            });
+
+
+                            zahtev.fail(function (rez) {
+                                $("#p1").text("greska: " + rez);
+                            });
+
+                            $(this).dialog("close");
+                        }
+                        else
+                        {
+                            var dtoNapomena = {
+                                Opis: $(this).find("#tekstNapomene").val(),
+                                UcenikId: $("#ucenikId").val(),
+                                ProfesorId: $("#profesorId").val(),
+                                CasId: $("#casId").val()
+                            };
+
+                            var zahtev = $.ajax({
+                                type: "POST",
+                                data: JSON.stringify(dtoNapomena),
+                                datatype:"text",
+                                url: "/Napomene/Create",
+                                contentType: "application/json"
+                            }).done(function () {
+                                alert("Uspešno sačuvano!");
+                            });
+
+
+                            zahtev.fail(function (rez) {
+                                $("#p1").text("greska: " + rez);
+                            });
+
+                            $(this).dialog("close");
+                        }
+
+                    },
+                    "Otkaži": function () {
+                        $(this).dialog("close");
+                    }
                 }
             });
-            zahtev.fail(function (gr) { $("#p1").html(gr.statusText); });
-        }
 
-        function GenerisiKarticuUcenika(id,ime,prezime,fotografija,brojudnevniku)
-        {
-            if (fotografija == null)
-                fotografija = "http://www.bu.edu/com/files/2016/12/Rohan-Panjiar-e1482180912553.jpg";
-            else
-                fotografija = "/slike/" + fotografija;
 
-            //return   "<div class='col-md-3'><div class='ucenik-kartica'><img src='" + fotografija + "' class='ucenik-slika' style='width:140px;height:176px;' /><div class='ucenik-ime'>" + ime + " " + prezime + " </div></div></div>";
-            return '<div class="col-sm-6 col-md-3 "><div class="thumbnail"><div id="circle"><img src=' + fotografija + ' alt="evidencijaucenik" style="width:100%" id="img_pregled" /></div><div class="container_pregled_ucenika"><h4 align="center">Miodrag Radivojevic</h4><p class="evidencijatitle" align="center">15.</p>  <p><div class="btn-group btn-group-justified" role="group" aria-label="..."><div class="btn-group" role="group"><button type="button" class="btn btn-default">Ocene</button></div><div class="btn-group" role="group"><button type="button" class="btn btn-default">Napomene</button></div></div></p> <div id="pbutton"><a id="evidencijabutton" onclick="klik()"><span id="glyph" class="glyphicon glyphicon-ok"></span></a></div></div></div></div>';
         }
+  
 
-        
-        function klik() {
-                $('.evidencijaKartica').toggleClass("borderevidencijacolor");
-                $('#evidencijabutton').toggleClass("buttonevidencijacolor");
-                $('#glyph').toggleClass('glyphicon-ok glyphicon-remove');
-     
-        }
         function klikUcenikKartica(elem) {
             var klasa = $(elem).attr("class").split(' ')[1];
+                    //return   "<div class='col-md-3'><div class='ucenik-kartica'><img src='" + fotografija + "' class='ucenik-slika' style='width:140px;height:176px;' /><div class='ucenik-ime'>" + ime + " " + prezime + " </div></div></div>";
 
-            if (klasa == 'karticaUcenik-prisutan') {
-                $(elem).removeClass('karticaUcenik-prisutan')
-                $(elem).addClass('karticaUcenik-odsutan')
+                    return '<div class="col-sm-6 col-md-3 "><div class="evidencijaKartica" id="' + id + 'div"><div id="circle"><input type="hidden" value=' + id + ' id="primarni"><img src=' + fotografija + ' alt="evidencijaucenik" style="width:100%" id="img_pregled" /></div><div class="container_pregled_ucenika"><h4>' + ime + '</h4><p class="evidencijatitle">' + brojudnevniku + '.</p><div id="pbutton"><a id="' + id + 'button" class="evidencijabutton" value="' + id + '" onclick="klik(' + id + ')"><span id="' + id + 'glyph" class="glyphicon glyphicon-ok"></span></a></div></div></div></div>';
 
-                $('.evidencijaKartica').toggleClass("borderevidencijacolor");
-                $('#evidencijabutton').toggleClass("buttonevidencijacolor");
-            }
-            else {
-                $(elem).removeClass('karticaUcenik-odsutan')
-                $(elem).addClass('karticaUcenik-prisutan')
-                 $('.evidencijaKartica').toggleClass("borderevidencijacolor");
-            $('#evidencijabutton').toggleClass("buttonevidencijacolor");
-            }
-        }
-
-        function Ucenici() {
-            var razred = $("#razred").val();
-            var odeljenje = $("#odeljenja").val();
-
-            if (odeljenje == undefined)
-                odeljenje = 1;
-
-            var zahtev = $.getJSON("/Odeljenje/OdeljenjeUcenici?razred=" + razred + "&oznakaOdeljenja=" + odeljenje + '&status=3');
-
-            zahtev.done(function (podaci) {
-
-                if (podaci.Ucenici == null)
-                {
-                    $("#ucenici").append('<div class="alert alert-warning" role="alert"><strong>Upozorenje!</strong> Nema učenika u izabranom odeljenju </div>');
-                    return;
                 }
 
-                for (var ucenik in podaci.Ucenici) {
-                    $("#ucenici").append(GenerisiKarticuUcenika(podaci.Ucenici[ucenik].ID, podaci.Ucenici[ucenik].Ime, podaci.Ucenici[ucenik].Prezime, podaci.Ucenici[ucenik].Fotografija, podaci.Ucenici[ucenik].BrojUDnevniku));
+                // id od korisnika je koriscen u kombinaciji sa div-om, button-om i glyph-om
+                //kako bi svaki imao poseban id(zbog vise ucenika)
+                // primer za id od diva kod ucenika koji ima id=5 je 5div
+
+                function klik(id) {
+                    $('#' + id + 'div').toggleClass("borderevidencijacolor");
+                    $("#" + id + 'button').toggleClass("buttonevidencijacolor");
+                    $('#' + id + 'glyph').toggleClass('glyphicon-ok glyphicon-remove');
+                    var element = document.getElementById("primarni");
+
+                }
+                function klikUcenikKartica(elem) {
+                    var klasa = $(elem).attr("class").split(' ')[1];
+
+                    if (klasa == 'karticaUcenik-prisutan') {
+                        $(elem).removeClass('karticaUcenik-prisutan')
+                        $(elem).addClass('karticaUcenik-odsutan')
+
+                        $('.evidencijaKartica').toggleClass("borderevidencijacolor");
+                        $('#evidencijabutton').toggleClass("buttonevidencijacolor");
+                    }
+                    else {
+
+                        $(elem).removeClass('karticaUcenik-odsutan')
+                        $(elem).addClass('karticaUcenik-prisutan')
+                        $('.evidencijaKartica').toggleClass("borderevidencijacolor");
+                        $('#evidencijabutton').toggleClass("buttonevidencijacolor");
+                    }
+                }
+
+                function Ucenici() {
+                    var razred = $("#razred").val();
+                    var odeljenje = $("#odeljenja").val();
+
+                    if (odeljenje == undefined)
+                        odeljenje = 1;
+
+                    var zahtev = $.getJSON("/Odeljenje/OdeljenjeUcenici?razred=" + razred + "&oznakaOdeljenja=" + odeljenje + '&status=3');
+
+                    zahtev.done(function (podaci) {
+
+                        if (podaci.Ucenici == null) {
+                            $("#ucenici").append('<div class="alert alert-warning" role="alert"><strong>Upozorenje!</strong> Nema učenika u izabranom odeljenju </div>');
+                            return;
+                        }
+
+                        for (var ucenik in podaci.Ucenici) {
+                            $("#ucenici").append(GenerisiKarticuUcenika(podaci.Ucenici[ucenik].ID, podaci.Ucenici[ucenik].Ime, podaci.Ucenici[ucenik].Prezime, podaci.Ucenici[ucenik].Fotografija, podaci.Ucenici[ucenik].BrojUDnevniku, podaci.Ucenici[ucenik].Prisutan));
+
+                            //poziva dogadjaj klik ukoliko ucenik nije prisutan kako bi u prikazu
+                            // prisustvo ucenika bilo crveno(x) 
+                            if (!podaci.Ucenici[ucenik].Prisutan) {
+                                klik(podaci.Ucenici[ucenik].ID);
+                            }
+                        }
+
+
+                    });
+                    zahtev.fail(function (gr) { $("#p1").html(gr.statusText); });
+                }
+
+                function UpisiOdsutne() {
+                    
+                    var lista = [];
+                  
+                    //ucenicima koji su odsutni se stavlja klasa "buttonevidencijacolor" na button
+                    // prolazimo kroz listu tih buttona i uzimamo njihov atribut "value" u koji je smesten id od ucenika
+                    // niz tih id-eva smestamo u listu
+                    $(".buttonevidencijacolor").each(function (index) {
+                        var id = $(this).attr('value');
+                        lista.push(id);
+                    });
+
+
+                    var zahtev = $.ajax({
+                        type: "POST",
+                        data: JSON.stringify(lista),
+                        //datatype:"text",
+                        url: "/Odeljenje/UpisiOdsutne" ,
+                        contentType: "application/json"
+                    }).done(function () {
+                        
+                    });
+                }
+
+                
+
+                $(function () {
+                    
+                    $("#razred").change(function () {
+                        $("#odeljenja").html("");
+                        $('#odeljenja').change();  //Okidanje dogadjaja za promenu drop down-a za izbor odeljenja prilikom promene razreda.
+                        Odeljenja();
+                    }).change();
+
+
+                    $('#odeljenja').change(function () {
+                        $("#ucenici").html("");
+                        $("#dugme").html("");
+                        Ucenici();
+                        RedniBrojCasa();
+                    }).change();
+
+
+                });
+
+                //sluzi da postavi combobox na vrednost casa koji trenutno treba da se odrzi
+                // primer: ako je prethodni cas koji je odrzan bio 2. po redu, u combobox-u se prikazuje broj 3
+                function RedniBrojCasa() {
+                    var razred = $("#razred").val();
+                    var odeljenje = $("#odeljenja").val();
+                    if (odeljenje == undefined)
+                        odeljenje = 1;
+
+                    var zahtev = $.getJSON("/Odeljenje/RedniBrojCasa?odeljenje=" + odeljenje + "&razred=" + razred);
+
+                    $.ajax({
+                        method: "GET",
+                        url: "/Odeljenje/RedniBrojCasa?odeljenje=" + odeljenje + "&razred=" + razred,
+                        success: function (data) {
+                            $("#rbCas").val(data);
+                            console.log(data);
+                        }
+                    });
+
+
                 }
 
 
-            });
-            zahtev.fail(function (gr) { $("#p1").html(gr.statusText); });
+            </script>
+
         }
-
-      
-
-        $(function () {
-            $("#razred").change(function () {
-                $("#odeljenja").html("");
-                $('#odeljenja').change();  //Okidanje dogadjaja za promenu drop down-a za izbor odeljenja prilikom promene razreda.
-                Odeljenja();
-            }).change();
-
-
-            $('#odeljenja').change(function () {
-                $("#ucenici").html("");
-                $("#dugme").html("");
-                Ucenici();
-            }).change();
-
-            
-
-        });
-
-
-
-
-    </script>
-
-}

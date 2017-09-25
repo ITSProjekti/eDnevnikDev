@@ -29,10 +29,6 @@ namespace eDnevnikDev.Models
         public int Id { get; set; }
 
 
-
-
-
-
         [Required(ErrorMessage = "Polje za oznaku je obavezno")]
         public int OznakaID { get; set; }
 

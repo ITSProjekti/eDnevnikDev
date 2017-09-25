@@ -21,7 +21,7 @@ namespace eDnevnikDev.Controllers
         /// </summary>
         /// <returns>Spisak ucenika u odredjenom odeljenju</returns>
         public ActionResult Index()
-        {            
+        {
             return View();
         }
     }
