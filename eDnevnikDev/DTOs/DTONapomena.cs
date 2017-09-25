@@ -7,6 +7,7 @@ namespace eDnevnikDev.DTOs
 {
     public class DTONapomena
     {
+        public int NapomenaId { get; set; }
         public string Opis { get; set; }
 
         public int UcenikId { get; set; }

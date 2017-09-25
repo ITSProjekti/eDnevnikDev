@@ -15,12 +15,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using eDnevnikDev.Tests.helpers;
 
-
-    
-        
-    
-
-
 namespace eDnevnikDev.Tests.Controllers
 {
     [TestClass]
@@ -426,11 +420,87 @@ namespace eDnevnikDev.Tests.Controllers
             Assert.AreEqual<int>(jsonArray.First.Count(), 2);
 
         }
-
+        //DONE
         [TestMethod]
         public void OdeljenjeController_OdeljenjeTrajanje()
         {
-           
+            int razred =4 ;
+
+
+            var oznake = new List<Oznaka>()
+            {
+                new Oznaka() {OznakaId=1 },
+                new Oznaka() {OznakaId=2 },
+                new Oznaka() {OznakaId=3 },
+                new Oznaka() {OznakaId=4 },
+                new Oznaka() {OznakaId=5 },
+                new Oznaka() {OznakaId=6 },
+                new Oznaka() {OznakaId=7 },
+            }.AsQueryable();
+
+            var oznake1 = new List<Oznaka>()
+            {
+                new Oznaka() {OznakaId=1 },
+                new Oznaka() {OznakaId=2 },
+                new Oznaka() {OznakaId=3 },
+                new Oznaka() {OznakaId=4 },
+                new Oznaka() {OznakaId=5 },
+                new Oznaka() {OznakaId=6 }
+            }.AsQueryable();
+
+            var smerovi = new List<Smer>()
+            {
+                new Smer() {SmerID=1, NazivSmera="Veterinarski tehnicar", Trajanje=4, Oznake=oznake1.ToList() },
+                new Smer() {SmerID=2, NazivSmera="Poljoprivredni tehnicar", Trajanje=4, Oznake=oznake1.ToList() },
+                new Smer() {SmerID=3, NazivSmera="Mesar", Trajanje=3, Oznake=oznake.ToList() }
+            }.AsQueryable();
+
+
+            var mockContext = new Mock<ApplicationDbContext>();
+
+            var mockSetOznaka = new Mock<DbSet<Oznaka>>();
+            mockSetOznaka.As<IQueryable<Oznaka>>().Setup(m => m.Provider).Returns(oznake.Provider);
+            mockSetOznaka.As<IQueryable<Oznaka>>().Setup(m => m.Expression).Returns(oznake.Expression);
+            mockSetOznaka.As<IQueryable<Oznaka>>().Setup(m => m.ElementType).Returns(oznake.ElementType);
+            mockSetOznaka.As<IQueryable<Oznaka>>().Setup(m => m.GetEnumerator()).Returns(oznake.GetEnumerator());
+
+            foreach (var item in oznake)
+                mockSetOznaka.Setup(p => p.Add(item));
+
+            mockContext.Setup(p => p.Oznake).Returns(mockSetOznaka.Object);
+
+            var mockSetSmer = new Mock<DbSet<Smer>>();
+            mockSetSmer.As<IQueryable<Smer>>().Setup(m => m.Provider).Returns(smerovi.Provider);
+            mockSetSmer.As<IQueryable<Smer>>().Setup(m => m.Expression).Returns(smerovi.Expression);
+            mockSetSmer.As<IQueryable<Smer>>().Setup(m => m.ElementType).Returns(smerovi.ElementType);
+            mockSetSmer.As<IQueryable<Smer>>().Setup(m => m.GetEnumerator()).Returns(smerovi.GetEnumerator());
+
+            foreach (var item in smerovi)
+                mockSetSmer.Setup(p => p.Add(item));
+
+            mockContext.Setup(p => p.Smerovi).Returns(mockSetSmer.Object);
+
+            var odeljenjeController = new OdeljenjeController(mockContext.Object);
+            var rezultat = odeljenjeController.OdeljenjeTrajanje(razred) as JsonResult;
+
+            //Assert
+            Assert.IsNotNull(rezultat);
+            Assert.IsTrue(rezultat.JsonRequestBehavior == JsonRequestBehavior.AllowGet);
+
+            string jsonString = JsonConvert.SerializeObject(rezultat.Data);
+            System.Diagnostics.Debug.WriteLine(jsonString);
+
+            var jsonArray= JArray.Parse(Helper.checkJsonJArray(jsonString));
+
+            foreach (JObject item in jsonArray)
+            {
+                string oznaka = item["Oznaka"].ToString();
+
+                Oznaka temp = oznake.FirstOrDefault(o => o.OznakaId == int.Parse(oznaka));
+                Assert.AreEqual<string>(oznaka, temp.OznakaId.ToString());
+            }
+
+            Assert.AreEqual<int>(jsonArray.Count(), 6);
         }
     }
 
