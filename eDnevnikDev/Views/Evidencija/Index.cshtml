@@ -1,4 +1,4 @@
-﻿@model Profesor 
+﻿@model Profesor
 @using System.Globalization
 @{
     ViewBag.Title = "Index";
@@ -24,32 +24,32 @@
                     <label for="odeljenja">Odeljenje</label>
                     <select id="odeljenja" class="form-control"></select>
                 </div>
+            </div>
+        </div>
+    </div>  
+    <p id="p1"></p>
+    <div id="poruka">  </div>
+    <div class="row" id="ucenici">
+
+    </div>
+
+    <div class="modal fade" id="potvrda" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Da li ste sigurni da želite da kreirate odeljenje?</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Posle kreiranja odeljenja kreirano odeljenje ćete moći da pregledate u delu <strong>Pregled kreiranih</strong></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-dismiss="modal" onclick="dugmeClickKreiraj()">Potvrdi</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Zatvori</button>
+                </div>
+            </div>
         </div>
     </div>
-        </div>
-            <p id="p1"></p>
-            <div id="poruka">  </div>
-            <div class="row" id="ucenici">
-
-            </div>            
-
-            <div class="modal fade" id="potvrda" role="dialog">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">Da li ste sigurni da želite da kreirate odeljenje?</h4>
-                        </div>
-                        <div class="modal-body">
-                            <p>Posle kreiranja odeljenja kreirano odeljenje ćete moći da pregledate u delu <strong>Pregled kreiranih</strong></p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="dugmeClickKreiraj()">Potvrdi</button>
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Zatvori</button>
-                        </div>
-                    </div>
-                </div>
-            </div>  
 
 </div>
 @section Scripts
@@ -58,7 +58,7 @@
     <script>
         function Odeljenja() {
             var razred = $("#razred").val();
-            var zahtev = $.getJSON("/Odeljenje/OdeljenjeTrajanje?godina="+razred);
+            var zahtev = $.getJSON("/Odeljenje/OdeljenjeTrajanje?godina=" + razred);
 
 
             zahtev.done(function (odeljenja) {
@@ -70,23 +70,62 @@
             zahtev.fail(function (gr) { $("#p1").html(gr.statusText); });
         }
 
-        function GenerisiKarticuUcenika(id,ime,prezime,fotografija,brojudnevniku)
-        {
+        function GenerisiKarticuUcenika(id, ime, prezime, fotografija, brojudnevniku) {
             if (fotografija == null)
                 fotografija = "http://www.bu.edu/com/files/2016/12/Rohan-Panjiar-e1482180912553.jpg";
             else
                 fotografija = "/slike/" + fotografija;
 
             //return   "<div class='col-md-3'><div class='ucenik-kartica'><img src='" + fotografija + "' class='ucenik-slika' style='width:140px;height:176px;' /><div class='ucenik-ime'>" + ime + " " + prezime + " </div></div></div>";
-            return '<div class="col-sm-6 col-md-3 "><div class="thumbnail"><div id="circle"><img src=' + fotografija + ' alt="evidencijaucenik" style="width:100%" id="img_pregled" /></div><div class="container_pregled_ucenika"><h4 align="center">Miodrag Radivojevic</h4><p class="evidencijatitle" align="center">15.</p>  <p><div class="btn-group btn-group-justified" role="group" aria-label="..."><div class="btn-group" role="group"><button type="button" class="btn btn-default">Ocene</button></div><div class="btn-group" role="group"><button type="button" class="btn btn-default">Napomene</button></div></div></p> <div id="pbutton"><a id="evidencijabutton" onclick="klik()"><span id="glyph" class="glyphicon glyphicon-ok"></span></a></div></div></div></div>';
+            return '<div class="col-sm-6 col-md-3 ">'
+                        + '<div class="evidencijaKartica">'
+                            + '<div id="circle">'
+                                + '<img src=' + fotografija + ' alt="evidencijaucenik" style="width:100%" id="img_pregled" />'
+                            + '</div>'
+                            + '<div class="container_pregled_ucenika">'
+                                + '<h4>' + ime + ' ' + prezime + '</h4>'
+                                + '<p class="evidencijatitle">' + brojudnevniku + '</p>'
+
+                                + '<div id="pbutton">'
+                                    + '<a id="evidencijabutton" onclick="klik()"><span id="glyph" class="glyphicon glyphicon-ok"></span></a>'
+                                + '</div>'
+
+                                + '<div id="buttonPopUpNapomena">'
+                                    + '<a id="evidencijabutton" onclick="showPopUpNapomena()"><span id="glyph" class="glyphicon glyphicon-ok"></span></a>'
+                                + '</div>'
+
+                                + '<div id="buttonPopUpOcene">'
+                                + '<a id="evidencijabutton" onclick="showPopUpOcene()"><span id="glyph" class="glyphicon glyphicon-ok"></span></a>'
+                                + '</div>'
+
+                                + '<div id="popUpOcene" class="table-responsive" style="display:none">'
+                                    + '<div id="textareadivocene">'
+                                        + '<form id="formaOcene" name="formaOcene">'
+                                        + '<h4>Prvo polugodiste</h4>'
+                                        + '<input id="prvoPolugodiste" type="text" name="prvoPolugodiste" style="resize:none" readonly>'
+                                        + '<input id="zakljucnaOcenaPrvo" size="3" type="text" name="zakljucnaOcenaPrvo" style="resize:none" readonly><br>'
+                                        + '<h4>Drugo polugodiste</h4>'
+                                        + '<input id="drugoPolugodiste" type="text" name="drugoPolugodiste" style="resize:none" readonly>'
+                                        + '<input id="zakljucnaOcenaDrugo" size="3" type="text" name="zakljucnaOcenaDrugo" style="resize:none" readonly>'
+                                        +'</form>'
+                                + '</div>'
+
+                                + '<div id="popUpNapomena" class="table-responsive" style="display:none">'
+                                    + '<div id="textareadiv">'
+                                        + '<textarea id="tekstNapomene" cols="80" rows="10" type="text" name="tekstNapomene" style="resize:none"></textarea>'
+                                + '</div>'
+                                + '</div>'
+                            + '</div>'
+                        + '</div>'
+                    + '</div>';
         }
 
-        
+
         function klik() {
-                $('.evidencijaKartica').toggleClass("borderevidencijacolor");
-                $('#evidencijabutton').toggleClass("buttonevidencijacolor");
-                $('#glyph').toggleClass('glyphicon-ok glyphicon-remove');
-     
+            $('.evidencijaKartica').toggleClass("borderevidencijacolor");
+            $('#evidencijabutton').toggleClass("buttonevidencijacolor");
+            $('#glyph').toggleClass('glyphicon-ok glyphicon-remove');
+
         }
         function klikUcenikKartica(elem) {
             var klasa = $(elem).attr("class").split(' ')[1];
@@ -101,8 +140,8 @@
             else {
                 $(elem).removeClass('karticaUcenik-odsutan')
                 $(elem).addClass('karticaUcenik-prisutan')
-                 $('.evidencijaKartica').toggleClass("borderevidencijacolor");
-            $('#evidencijabutton').toggleClass("buttonevidencijacolor");
+                $('.evidencijaKartica').toggleClass("borderevidencijacolor");
+                $('#evidencijabutton').toggleClass("buttonevidencijacolor");
             }
         }
 
@@ -117,8 +156,7 @@
 
             zahtev.done(function (podaci) {
 
-                if (podaci.Ucenici == null)
-                {
+                if (podaci.Ucenici == null) {
                     $("#ucenici").append('<div class="alert alert-warning" role="alert"><strong>Upozorenje!</strong> Nema učenika u izabranom odeljenju </div>');
                     return;
                 }
@@ -132,7 +170,7 @@
             zahtev.fail(function (gr) { $("#p1").html(gr.statusText); });
         }
 
-      
+
 
         $(function () {
             $("#razred").change(function () {
@@ -148,9 +186,132 @@
                 Ucenici();
             }).change();
 
-            
+
 
         });
+
+
+        function showPopUpOcene() {
+
+            $("#popUpOcene").dialog({
+
+                height: 400,
+                width: 500,
+                modal: true,
+                open: function () {
+
+                    //var temp;
+                    //var zahtev = function testAjax() {
+                    var ucenikId = 18;
+                    var casId = 6;
+                    var profesorId = 2;
+                    var text;
+                    var proba;
+
+                    var prom = $.ajax({
+                        type: "POST",
+                        url: "/Ocene/vratiOcene?casId=" + casId+"&&profesorId="+profesorId+"&&ucenikId="+ucenikId,
+                        contentType: "application/json",
+                        async: false,
+
+                        success:
+
+                            function (data) {
+                                $('#formaOcene').trigger("reset");
+                                $.each(data, function (index) {
+                                    if (data[index].polugodiste == 1)
+                                    {
+                                        if (data[index].oznaka != null)
+                                            if (data[index].tipOceneId == 4)
+                                                $('#zakljucnaOcenaPrvo').val(data[index].oznaka);
+                                            else
+                                                $('#prvoPolugodiste').val(function () {
+                                                    return this.value + ", " + data[index].oznaka
+                                                });
+                                        if (data[index].plus != null)
+                                            $('#prvoPolugodiste').val(function () {
+                                                return this.value + ", " + data[index].plus
+                                            });
+                                        if (data[index].tipOpisneOcene != null)
+                                            $('#prvoPolugodiste').val(function () {
+                                                return this.value + ", " + data[index].tipOpisneOcene
+                                            });
+                                    }
+                                    if (data[index].polugodiste == 2) {
+                                        if (data[index].oznaka != null)
+                                            if (data[index].tipOceneId == 4)
+                                                $('#zakljucnaOcenaDrugo').val(data[index].oznaka);
+                                            else
+                                                $('#drugoPolugodiste').val(function () {
+                                                    return this.value + ", " + data[index].oznaka
+                                                });
+                                        if (data[index].plus != null)
+                                            $('#drugoPolugodiste').val(function () {
+                                                return this.value + ", " + data[index].plus
+                                            });
+                                        if (data[index].tipOpisneOcene != null)
+                                            $('#drugoPolugodiste').val(function () {
+                                                return this.value + ", " + data[index].tipOpisneOcene
+                                            });
+                                    }
+                                    
+
+                                })
+                            }
+                    })
+                    
+
+               
+
+                    
+                    
+
+                
+
+                },
+                buttons: {
+                    "Sačuvaj": function () {
+                        //var tekstNapomene = document.getElementById("tekstNapomene").value;
+                        //var tekstNapomene = $("#tekstNapomene", opener.document).val();
+                        //var tekstNapomene=$("input:text").val();
+                        //var tekstNapomene = $("#popUpNapomena").find("#tekstNapomene").val();
+
+                        var tekstNapomene = $(this).find("#tekstNapomene").val();
+
+                        var dtoNapomena = {
+                            Opis: tekstNapomene,
+                            UcenikId: 23,
+                            ProfesorId: 1,
+                            CasId: 1
+                        };
+
+
+                        var zahtev = $.ajax({
+                            type: "POST",
+                            data: JSON.stringify(dtoNapomena),
+                            //datatype:"text",
+                            url: "/Napomene/Create",
+                            contentType: "application/json"
+                        }).done(function () {
+                            alert("Uspešno sačuvano!");
+                        });
+
+
+                        zahtev.fail(function (rez) {
+                            $("#p1").text("greska: " + rez);
+                        });
+
+                        $(this).dialog("close");
+
+                    },
+                    "Otkaži": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+
+        }
 
 
 

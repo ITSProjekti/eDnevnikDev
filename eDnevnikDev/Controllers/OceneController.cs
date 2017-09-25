@@ -13,6 +13,16 @@ namespace eDnevnikDev.Controllers
     public class OceneController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        
+        public OceneController()
+        {
+            db = new ApplicationDbContext();
+        }
+
+        public OceneController(ApplicationDbContext _context)
+        {
+            db = _context;
+        }
 
         // GET: Ocene
         public ActionResult Index()
@@ -155,7 +165,7 @@ namespace eDnevnikDev.Controllers
         {
             //Vracanje id odeljenja koje trenutno profesor drzi cas.
             var odeljenjeId = db.Ucenici
-                .Where(x => x.UcenikID == ucenikId&&x.OdeljenjeId==db.Casovi.Where(y=>y.CasId==casId).Select(y=>y.OdeljenjeId).FirstOrDefault())
+                .Where(x => x.UcenikID == ucenikId && x.OdeljenjeId == db.Casovi.Where(y => y.CasId == casId).Select(y => y.OdeljenjeId).FirstOrDefault())
                 .Select(x => x.OdeljenjeId)
                 .FirstOrDefault();
 
@@ -163,7 +173,7 @@ namespace eDnevnikDev.Controllers
             var ocene = db.Ocene
             .Where(x => x.Cas.ProfesorId == profesorId)
             .Where(x => x.Cas.OdeljenjeId == odeljenjeId)
-            .Select(x => new DTOs.DTOVratiOcene() { ocenaId = x.OcenaId, oznaka = x.Oznaka, plus = x.Plus, tipOceneId=x.TipOpisneOceneId, tipOcene = x.TipOcene.Tip,tipOpisneOceneId=x.TipOpisneOceneId,tipOpisneOcene=x.TipOpisneOcene.Tip, napomena = x.Napomena, polugodiste = x.Cas.Polugodiste, tromesecje = x.Cas.Tromesecje })
+            .Select(x => new DTOs.DTOVratiOcene() { ocenaId = x.OcenaId, oznaka = x.Oznaka, plus = x.Plus, tipOceneId = x.TipOceneId, tipOcene = x.TipOcene.Tip, tipOpisneOceneId = x.TipOpisneOceneId, tipOpisneOcene = x.TipOpisneOcene.Tip, napomena = x.Napomena, polugodiste = x.Cas.Polugodiste, tromesecje = x.Cas.Tromesecje })
             .ToList();
             return Json(ocene, JsonRequestBehavior.AllowGet);
         }
