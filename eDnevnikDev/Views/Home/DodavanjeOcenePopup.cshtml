@@ -1,0 +1,237 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!-- Dodato za switch -->
+   
+
+</head>
+<body>
+
+
+    <!-- Modal -->
+
+    <!-- Trigger the modal with a button -->
+    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Ocene</h4>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        @* POCETAK BODY *@
+
+                        <div class="container" style="align-content:center;max-height:100%;max-width:100%;">
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">
+                                    <h4 style="text-align:center;margin-bottom:3px;">Polugodiste 1</h4>
+                                    <hr style="margin-top:3px;margin-bottom:3px;" />
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">
+                                    <div style="display: flex;">
+                                        <div style="flex: 10;">
+                                            @*foreach petlja za listanje ocena*@
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">1</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">2</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">3</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">4</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">5</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">1</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">2</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">3</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">4</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">5</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">1</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">2</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">3</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">4</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">5</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">1</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">2</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">3</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">4</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">5</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">1</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">2</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">3</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">4</button>
+                                        </div>
+                                        <div style="flex: 2;position: relative;">
+                                            <button type="button" class="btn btn-info" style="width:100%;margin:2px;font-size:200%;">+</button>
+                                            <button type="button" class="btn btn-secondary" style="width:100%;margin:2px;font-size:200%;color:red;position: absolute;bottom: 0;">4</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">
+                                            <hr style="margin-top:3px;margin-bottom:3px;" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="row-fluid">
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">
+                                                @*foreach petlja za listanje pluseva i minusa*@
+                                                <button type="button" class="btn btn-danger" style="margin:2px;height:35px;width:35px;" data-toggle="tooltip" data-placement="top" title="Hooray!">-</button>
+                                                <button type="button" class="btn btn-danger" style="margin:2px;height:35px;width:35px;" title="26.08.2017">-</button>
+                                                <button type="button" class="btn btn-success" style="margin:2px;height:35px;width:35px;" title="26.08.2017">+</button>
+                                                <button type="button" class="btn btn-danger" style="margin:2px;height:35px;width:35px;" title="26.08.2017">-</button>
+                                                <button type="button" class="btn btn-danger" style="margin:2px;height:35px;width:35px;" title="26.08.2017">-</button>
+                                                <button type="button" class="btn btn-success" style="margin:2px;height:35px;width:35px;" title="26.08.2017">+</button>
+                                                <button type="button" class="btn btn-danger" style="margin:2px;height:35px;width:35px;" title="26.08.2017">-</button>
+                                                <button type="button" class="btn btn-danger" style="margin:2px;height:35px;width:35px;" title="26.08.2017">-</button>
+                                                <button type="button" class="btn btn-success" style="margin:2px;height:35px;width:35px;" title="26.08.2017">+</button>
+                                                <button type="button" class="btn btn-danger" style="margin:2px;height:35px;width:35px;" title="26.08.2017">-</button>
+                                                <button type="button" class="btn btn-danger" style="margin:2px;height:35px;width:35px;" title="26.08.2017">-</button>
+                                                <button type="button" class="btn btn-success" style="margin:2px;height:35px;width:35px;" title="26.08.2017">+</button>
+                                                <button type="button" class="btn btn-danger" style="margin:2px;height:35px;width:35px;" title="26.08.2017">-</button>
+                                                <button type="button" class="btn btn-danger" style="margin:2px;height:35px;width:35px;" title="26.08.2017">-</button>
+                                                <button type="button" class="btn btn-success" style="margin:2px;height:35px;width:35px;" title="26.08.2017">+</button>
+                                                <button type="button" class="btn btn-danger" style="margin:2px;height:35px;width:35px;" title="26.08.2017">-</button>
+                                                <button type="button" class="btn btn-danger" style="margin:2px;height:35px;width:35px;" title="26.08.2017">-</button>
+                                                <button type="button" class="btn btn-success" style="margin:2px;height:35px;width:35px;" title="26.08.2017">+</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">
+
+                                            <hr style="margin-top:3px;margin-bottom:3px;" />
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                        @*  POLOVINA  *@
+
+                        <div class="container" style="align-content:center;max-height:100%;max-width:100%;">
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">
+                                    <h4 style="text-align:center;margin-bottom:3px;">Polugodiste 2</h4>
+                                    <hr style="margin-top:3px;margin-bottom:3px;" />
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">
+                                    <div style="display: flex;">
+                                        <div style="flex: 10;">
+                                            @*foreach petlja za listanje ocena*@
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">1</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">2</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">3</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">4</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">5</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">1</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">2</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">3</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">4</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">5</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">1</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">2</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">3</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">4</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">5</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">1</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">2</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">3</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">4</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">5</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">1</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">2</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">3</button>
+                                            <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">4</button>
+
+                                        </div>
+                                        <div style="flex: 2;position: relative;">
+                                            @*button za dodavanje nove ocene*@
+                                            <button type="button" class="btn btn-info" style="width:100%;margin:2px;font-size:200%;">+</button>
+                                            @*zakljucna ocena*@
+                                            <button type="button" class="btn btn-secondary" style="width:100%;margin:2px;font-size:200%;color:red;position: absolute;bottom: 0;">4</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">
+                                            <hr style="margin-top:3px;margin-bottom:3px;" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="row-fluid">
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">
+                                                @*foreach petlja za listanje pluseva i minusa*@
+                                                <button type="button" class="btn btn-danger" style="margin:2px;height:35px;width:35px;" title="26.08.2017">-</button>
+                                                <button type="button" class="btn btn-danger" style="margin:2px;height:35px;width:35px;" title="26.08.2017">-</button>
+                                                <button type="button" class="btn btn-success" style="margin:2px;height:35px;width:35px;" title="26.08.2017">+</button>
+                                                <button type="button" class="btn btn-danger" style="margin:2px;height:35px;width:35px;" title="26.08.2017">-</button>
+                                                <button type="button" class="btn btn-danger" style="margin:2px;height:35px;width:35px;" title="26.08.2017">-</button>
+                                                <button type="button" class="btn btn-success" style="margin:2px;height:35px;width:35px;" title="26.08.2017">+</button>
+                                                <button type="button" class="btn btn-danger" style="margin:2px;height:35px;width:35px;" title="26.08.2017">-</button>
+                                                <button type="button" class="btn btn-danger" style="margin:2px;height:35px;width:35px;" title="26.08.2017">-</button>
+                                                <button type="button" class="btn btn-success" style="margin:2px;height:35px;width:35px;" title="26.08.2017">+</button>
+                                                <button type="button" class="btn btn-danger" style="margin:2px;height:35px;width:35px;" title="26.08.2017">-</button>
+                                                <button type="button" class="btn btn-danger" style="margin:2px;height:35px;width:35px;" title="26.08.2017">-</button>
+                                                <button type="button" class="btn btn-success" style="margin:2px;height:35px;width:35px;" title="26.08.2017">+</button>
+                                                <button type="button" class="btn btn-danger" style="margin:2px;height:35px;width:35px;" title="26.08.2017">-</button>
+                                                <button type="button" class="btn btn-danger" style="margin:2px;height:35px;width:35px;" title="26.08.2017">-</button>
+                                                <button type="button" class="btn btn-success" style="margin:2px;height:35px;width:35px;" title="26.08.2017">+</button>
+                                                <button type="button" class="btn btn-danger" style="margin:2px;height:35px;width:35px;" title="26.08.2017">-</button>
+                                                <button type="button" class="btn btn-danger" style="margin:2px;height:35px;width:35px;" title="26.08.2017">-</button>
+                                                <button type="button" class="btn btn-success" style="margin:2px;height:35px;width:35px;" title="26.08.2017">+</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">
+
+                                            <hr style="margin-top:3px;margin-bottom:3px;" />
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+
+                        @* KRAJ BODY *@
+                    </div>
+                 </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- Modal END -->
+</body>
+</html>

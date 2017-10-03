@@ -8,7 +8,7 @@ namespace eDnevnikDev.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index()
+        public ActionResult DodavanjeOcenePopup()
         {
             return View();
         }
@@ -24,6 +24,18 @@ namespace eDnevnikDev.Controllers
         {
             ViewBag.Message = "Your contact page.";
 
+            return View();
+        }
+
+        public ActionResult US84()
+        {
+            ViewBag.Message = "Story 84";
+            return View();
+        }
+
+        public ActionResult US74()
+        {
+            ViewBag.Message = "Story 74";
             return View();
         }
     }

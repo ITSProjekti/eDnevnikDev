@@ -1,0 +1,31 @@
+﻿
+@{
+    ViewBag.Title = "US84";
+}
+
+<h2>US84</h2>
+
+<div class="btn-group" id="status" data-toggle="buttons">
+    <label id="label1" class="btn btn-default btn-on btn-sm active">
+        <input value="1" name="multifeatured_module[module_id][status]" checked="checked" type="radio">Brojcana</label>
+    <label class="btn btn-default btn-off btn-sm ">
+        <input value="0" name="multifeatured_module[module_id][status]" type="radio">Tekstualna
+    </label>
+</div>
+
+
+<script>
+
+    active = "btn btn-default btn-on btn-sm active";
+    tekst = "Brojcana";
+    alert("className= " + document.getElementById('label1').className);
+    alert("textContent= " + document.getElementById('label1').textContent);
+
+
+    if (document.getElementById('label1').className == "btn btn-default btn-on btn-sm active" && document.getElementById('label1').textContent == "Brojcana")
+    {
+        alert("radi")
+    }
+</script>
+
+

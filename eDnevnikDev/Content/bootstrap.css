@@ -5451,99 +5451,100 @@ button.close {
   position: absolute;
   z-index: 1070;
   display: block;
-  font-size: 12px;
-  line-height: 1.4;
-  visibility: visible;
-  filter: alpha(opacity=0);
+  font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  letter-spacing: normal;
+  line-break: auto;
+  line-height: 1.5;
+  text-align: left;
+  text-align: start;
+  text-decoration: none;
+  text-shadow: none;
+  text-transform: none;
+  white-space: normal;
+  word-break: normal;
+  word-spacing: normal;
+  font-size: 0.875rem;
+  word-wrap: break-word;
   opacity: 0;
 }
-.tooltip.in {
-  filter: alpha(opacity=90);
-  opacity: .9;
+
+.tooltip.show {
+  opacity: 0.9;
 }
-.tooltip.top {
+
+.tooltip.tooltip-top, .tooltip.bs-tether-element-attached-bottom {
   padding: 5px 0;
   margin-top: -3px;
 }
-.tooltip.right {
+
+.tooltip.tooltip-top .tooltip-inner::before, .tooltip.bs-tether-element-attached-bottom .tooltip-inner::before {
+  bottom: 0;
+  left: 50%;
+  margin-left: -5px;
+  content: "";
+  border-width: 5px 5px 0;
+  border-top-color: #000;
+}
+
+.tooltip.tooltip-right, .tooltip.bs-tether-element-attached-left {
   padding: 0 5px;
   margin-left: 3px;
 }
-.tooltip.bottom {
+
+.tooltip.tooltip-right .tooltip-inner::before, .tooltip.bs-tether-element-attached-left .tooltip-inner::before {
+  top: 50%;
+  left: 0;
+  margin-top: -5px;
+  content: "";
+  border-width: 5px 5px 5px 0;
+  border-right-color: #000;
+}
+
+.tooltip.tooltip-bottom, .tooltip.bs-tether-element-attached-top {
   padding: 5px 0;
   margin-top: 3px;
 }
-.tooltip.left {
+
+.tooltip.tooltip-bottom .tooltip-inner::before, .tooltip.bs-tether-element-attached-top .tooltip-inner::before {
+  top: 0;
+  left: 50%;
+  margin-left: -5px;
+  content: "";
+  border-width: 0 5px 5px;
+  border-bottom-color: #000;
+}
+
+.tooltip.tooltip-left, .tooltip.bs-tether-element-attached-right {
   padding: 0 5px;
   margin-left: -3px;
 }
+
+.tooltip.tooltip-left .tooltip-inner::before, .tooltip.bs-tether-element-attached-right .tooltip-inner::before {
+  top: 50%;
+  right: 0;
+  margin-top: -5px;
+  content: "";
+  border-width: 5px 0 5px 5px;
+  border-left-color: #000;
+}
+
 .tooltip-inner {
   max-width: 200px;
   padding: 3px 8px;
   color: #fff;
   text-align: center;
-  text-decoration: none;
   background-color: #000;
-  border-radius: 4px;
+  border-radius: 0.25rem;
 }
-.tooltip-arrow {
+
+.tooltip-inner::before {
   position: absolute;
   width: 0;
   height: 0;
   border-color: transparent;
   border-style: solid;
-}
-.tooltip.top .tooltip-arrow {
-  bottom: 0;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px 5px 0;
-  border-top-color: #000;
-}
-.tooltip.top-left .tooltip-arrow {
-  bottom: 0;
-  left: 5px;
-  border-width: 5px 5px 0;
-  border-top-color: #000;
-}
-.tooltip.top-right .tooltip-arrow {
-  right: 5px;
-  bottom: 0;
-  border-width: 5px 5px 0;
-  border-top-color: #000;
-}
-.tooltip.right .tooltip-arrow {
-  top: 50%;
-  left: 0;
-  margin-top: -5px;
-  border-width: 5px 5px 5px 0;
-  border-right-color: #000;
-}
-.tooltip.left .tooltip-arrow {
-  top: 50%;
-  right: 0;
-  margin-top: -5px;
-  border-width: 5px 0 5px 5px;
-  border-left-color: #000;
-}
-.tooltip.bottom .tooltip-arrow {
-  top: 0;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 0 5px 5px;
-  border-bottom-color: #000;
-}
-.tooltip.bottom-left .tooltip-arrow {
-  top: 0;
-  left: 5px;
-  border-width: 0 5px 5px;
-  border-bottom-color: #000;
-}
-.tooltip.bottom-right .tooltip-arrow {
-  top: 0;
-  right: 5px;
-  border-width: 0 5px 5px;
-  border-bottom-color: #000;
 }
 .popover {
   position: absolute;
