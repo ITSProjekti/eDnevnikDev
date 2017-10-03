@@ -786,7 +786,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\DodavanjeOcenePopup.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
@@ -832,6 +832,8 @@
     <Content Include="Views\Napomene\Details.cshtml" />
     <Content Include="Views\Napomene\Edit.cshtml" />
     <Content Include="Views\Napomene\Index.cshtml" />
+    <Content Include="Views\Home\US84.cshtml" />
+    <Content Include="Views\Home\US74.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
