@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -12,6 +13,7 @@ namespace eDnevnikDev.Models
         {
             Profesori = new HashSet<Profesor>();
             Casovi = new HashSet<Cas>();
+            Odeljenja = new HashSet<Odeljenje>();
         }
 
         /// <summary>
@@ -36,6 +38,23 @@ namespace eDnevnikDev.Models
         public string NazivPredmeta { get; set; }
 
         /// <summary>
+        /// Gets or sets the tip ocene predmeta.
+        /// </summary>
+        /// <value>
+        /// The tip ocene predmeta.
+        /// </value>
+        public virtual TipOcenePredmeta TipOcenePredmeta { get; set; }
+
+        /// <summary>
+        /// Gets or sets the tip ocene predmeta identifier.
+        /// </summary>
+        /// <value>
+        /// The tip ocene predmeta identifier.
+        /// </value>
+        [ForeignKey("TipOcenePredmeta")]
+        public int TipOcenePredmetaId { get; set; }
+
+        /// <summary>
         ///  Služi za čuvanje profesora koji predaju ovaj predmet
         /// </summary>
         /// <value>
@@ -43,9 +62,15 @@ namespace eDnevnikDev.Models
         /// </value>
         public virtual ICollection<Profesor> Profesori { get; set; }
 
+        /// <summary>
+        /// Gets or sets the casovi.
+        /// </summary>
+        /// <value>
+        /// The casovi.
+        /// </value>
         public virtual ICollection<Cas> Casovi { get; set; }
 
-
+        public virtual ICollection<Odeljenje> Odeljenja { get; set; }
 
     }
 }

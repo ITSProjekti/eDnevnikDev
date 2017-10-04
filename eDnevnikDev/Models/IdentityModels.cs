@@ -18,9 +18,6 @@ namespace eDnevnikDev.Models
             // Add custom user claims here
             return userIdentity;
         }
-
-
-
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -40,6 +37,7 @@ namespace eDnevnikDev.Models
         public virtual DbSet<TipOpisneOcene> TipoviOpisnihOcena { get; set; }
         public virtual DbSet<Status> Statusi{ get; set; }
         public virtual DbSet<Oznaka> Oznake { get; set; }
+        public virtual DbSet<TipOcenePredmeta> TipoviOcenaPredmeta { get; set; }
 
 
         public ApplicationDbContext()

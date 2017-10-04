@@ -107,7 +107,7 @@
                             +'<div id="circle">'
                                 +'<img src=' + fotografija + ' alt="evidencijaucenik" style="width:100%" id="img_pregled" />'
                             +'</div>'
-                            +'<div class="container_pregled_ucenika">' 
+                            +'<div class="container_pregled_ucenika">'
                                 +'<h4>'+ ime +' '+ prezime +'</h4>'
                                 + '<p class="evidencijatitle">' + brojudnevniku + '</p>'
 
@@ -131,18 +131,18 @@
                     + '</div>';
         }
 
-        function klik() {
-            $('.evidencijaKartica').toggleClass("borderevidencijacolor");
-            $('#evidencijabutton').toggleClass("buttonevidencijacolor");
-            $('#glyph').toggleClass('glyphicon-ok glyphicon-remove');
-        }
+        //function klik() {
+        //    $('.evidencijaKartica').toggleClass("borderevidencijacolor");
+        //    $('#evidencijabutton').toggleClass("buttonevidencijacolor");
+        //    $('#glyph').toggleClass('glyphicon-ok glyphicon-remove');
+        //}
 
 
-        var ID
+        //var ID
 
-        function VratiID(id) {
-            ID = id;
-        }
+        //function VratiID(id) {
+        //    ID = id;
+        //}
 
         function showPopUpNapomena() {
 
@@ -152,7 +152,7 @@
                 width: 500,
                 modal: true,
                 open: function () {
-                    
+
                     var ucenikId = ID;
                     console.log(ucenikId);
                     var casId = $("#casId").val();
@@ -248,7 +248,7 @@
 
 
         }
-  
+
 
         function klikUcenikKartica(elem) {
             var klasa = $(elem).attr("class").split(' ')[1];
@@ -308,7 +308,7 @@
                             $("#ucenici").append(GenerisiKarticuUcenika(podaci.Ucenici[ucenik].ID, podaci.Ucenici[ucenik].Ime, podaci.Ucenici[ucenik].Prezime, podaci.Ucenici[ucenik].Fotografija, podaci.Ucenici[ucenik].BrojUDnevniku, podaci.Ucenici[ucenik].Prisutan));
 
                             //poziva dogadjaj klik ukoliko ucenik nije prisutan kako bi u prikazu
-                            // prisustvo ucenika bilo crveno(x) 
+                            // prisustvo ucenika bilo crveno(x)
                             if (!podaci.Ucenici[ucenik].Prisutan) {
                                 klik(podaci.Ucenici[ucenik].ID);
                             }
@@ -320,9 +320,9 @@
                 }
 
                 function UpisiOdsutne() {
-                    
+
                     var lista = [];
-                  
+
                     //ucenicima koji su odsutni se stavlja klasa "buttonevidencijacolor" na button
                     // prolazimo kroz listu tih buttona i uzimamo njihov atribut "value" u koji je smesten id od ucenika
                     // niz tih id-eva smestamo u listu
@@ -339,14 +339,14 @@
                         url: "/Odeljenje/UpisiOdsutne" ,
                         contentType: "application/json"
                     }).done(function () {
-                        
+
                     });
                 }
 
-                
+
 
                 $(function () {
-                    
+
                     $("#razred").change(function () {
                         $("#odeljenja").html("");
                         $('#odeljenja').change();  //Okidanje dogadjaja za promenu drop down-a za izbor odeljenja prilikom promene razreda.

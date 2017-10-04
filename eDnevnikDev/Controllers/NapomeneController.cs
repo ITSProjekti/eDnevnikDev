@@ -112,8 +112,6 @@ namespace eDnevnikDev.Controllers
                 _context.Napomene.AddOrUpdate(napomena);
                 _context.SaveChanges();
             }
-        
-
 
         }
 
