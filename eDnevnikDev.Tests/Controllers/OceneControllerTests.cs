@@ -11,7 +11,8 @@ using Moq;
 using System.Web.Mvc;
 using System.Security.Principal;
 using System.Web;
-//using System.Security.Claims;
+using Microsoft.AspNet.Identity;
+using System.Security.Claims;
 
 namespace eDnevnikDev.Controllers.Tests
 {
@@ -51,80 +52,64 @@ namespace eDnevnikDev.Controllers.Tests
                 }
             }.AsQueryable();
 
-            //// create mock principal
-            //var mocks = new MockRepository(MockBehavior.Default);
-            //Mock<IPrincipal> mockPrincipal = mocks.Create<IPrincipal>();
-            //mockPrincipal.SetupGet(p => p.Identity.Name).Returns("profesorHashID");
-            //mockPrincipal.Setup(p => p.IsInRole("User")).Returns(true);
-            //mockPrincipal.Setup(p => p.IsInRole("Profesor")).Returns(true);
-            //mockPrincipal.Setup(p => p.IsInRole("Admin")).Returns(true);
-
-            //var context = new Mock<HttpContextBase>();
-            //var mockIdentity = new Mock<IIdentity>();
-            //context.SetupGet(x => x.User.Identity).Returns(mockIdentity.Object);
-            //mockIdentity.Setup(x => x.Name).Returns("test_name");
-
-            //var mock = new Mock<ControllerContext>();
-            //var _controller = new OceneController
-            //{
-            //    ControllerContext = A.Fake<ControllerContext>()
-            //};
+            var mockContext = new Mock<ApplicationDbContext>();
 
 
-
-            //var mockIdentity2 = new Mock<IIdentity>()
+            var username = "profesorHashID";
 
             var fakeHttpContext = new Mock<HttpContextBase>();
+            var controllerContext = new Mock<ControllerContext>();
+
             var fakeIdentity = new GenericIdentity("User");
             var principal = new GenericPrincipal(fakeIdentity, null);
-
-            fakeHttpContext.Setup(t => t.User).Returns(principal);
-            var controllerContext = new Mock<ControllerContext>();
+            
             controllerContext.Setup(t => t.HttpContext).Returns(fakeHttpContext.Object);
+            controllerContext.SetupGet(x => x.HttpContext.User).Returns(principal);
+            controllerContext.SetupGet(p => p.HttpContext.Request.IsAuthenticated).Returns(true);
 
-            var _requestController = new OceneController();
+            var mockIdentity = new Mock<IIdentity>();
+            fakeHttpContext.SetupGet(x => x.User.Identity).Returns(mockIdentity.Object);
+            fakeIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, username));
+            var _requestController = new OceneController(mockContext.Object);
+
+            _requestController.ControllerContext = controllerContext.Object;
+
+
+
+
+
+            var mockSetProfesor = new Mock<DbSet<Profesor>>();
+            mockSetProfesor.As<IQueryable<Profesor>>().Setup(m => m.Provider).Returns(profesori.Provider);
+            mockSetProfesor.As<IQueryable<Profesor>>().Setup(m => m.Expression).Returns(profesori.Expression);
+            mockSetProfesor.As<IQueryable<Profesor>>().Setup(m => m.ElementType).Returns(profesori.ElementType);
+            mockSetProfesor.As<IQueryable<Profesor>>().Setup(m => m.GetEnumerator()).Returns(profesori.GetEnumerator());
+            mockContext.Setup(p => p.Profesori).Returns(mockSetProfesor.Object);
+
+
+
+
+            var mockSetPredmeti = new Mock<DbSet<Predmet>>();
+            mockSetPredmeti.As<IQueryable<Predmet>>().Setup(m => m.Provider).Returns(predmeti.Provider);
+            mockSetPredmeti.As<IQueryable<Predmet>>().Setup(m => m.Expression).Returns(predmeti.Expression);
+            mockSetPredmeti.As<IQueryable<Predmet>>().Setup(m => m.ElementType).Returns(predmeti.ElementType);
+            mockSetPredmeti.As<IQueryable<Predmet>>().Setup(m => m.GetEnumerator()).Returns(predmeti.GetEnumerator());
+
+            mockContext.Setup(p => p.Predmeti).Returns(mockSetPredmeti.Object);
+
+
 
             //Set your controller ControllerContext with fake context
-            _requestController.ControllerContext = controllerContext.Object;
+
             _requestController.Predmeti();
 
+            var result = _requestController.Predmeti() as ViewResult;
+            var model = result.Model as List<Predmet>;
 
-
-        //    var mockContext = new Mock<ApplicationDbContext>();
-
-       
-
-
-        //    var mockSetProfesor = new Mock<DbSet<Profesor>>();
-        //    mockSetProfesor.As<IQueryable<Profesor>>().Setup(m => m.Provider).Returns(profesori.Provider);
-        //    mockSetProfesor.As<IQueryable<Profesor>>().Setup(m => m.Expression).Returns(profesori.Expression);
-        //    mockSetProfesor.As<IQueryable<Profesor>>().Setup(m => m.ElementType).Returns(profesori.ElementType);
-        //    mockSetProfesor.As<IQueryable<Profesor>>().Setup(m => m.GetEnumerator()).Returns(profesori.GetEnumerator());
-        //    mockContext.Setup(p => p.Profesori).Returns(mockSetProfesor.Object);
-            
-            
-
-
-        //    var mockSetPredmeti = new Mock<DbSet<Predmet>>();
-        //    mockSetPredmeti.As<IQueryable<Predmet>>().Setup(m => m.Provider).Returns(predmeti.Provider);
-        //    mockSetPredmeti.As<IQueryable<Predmet>>().Setup(m => m.Expression).Returns(predmeti.Expression);
-        //    mockSetPredmeti.As<IQueryable<Predmet>>().Setup(m => m.ElementType).Returns(predmeti.ElementType);
-        //    mockSetPredmeti.As<IQueryable<Predmet>>().Setup(m => m.GetEnumerator()).Returns(predmeti.GetEnumerator());
-
-        //    mockContext.Setup(p => p.Predmeti).Returns(mockSetPredmeti.Object);
-
-
-
-        //    var service = new OceneController(mockContext.Object);
-            
-        //    var result = service.Predmeti() as ViewResult;
-        //    var model = result.Model as List<Predmet>;
-
-        //    //Assert.IsNotNull(result);
-        //    //Assert.IsNotNull(model.Count);
-        //    Assert.AreEqual(2, model.Count);
-        //    Assert.AreEqual(predmeti.First(), model.First());
-        //}
+            Assert.IsNotNull(result);
+            Assert.IsNotNull(model.Count);
+            Assert.AreEqual(2, model.Count);
+            Assert.AreEqual(predmeti.First(), model.First());
+        }
 
         ////TO BE DONE
         //[Ignore]
@@ -160,7 +145,6 @@ namespace eDnevnikDev.Controllers.Tests
         //    var model = result.Model as List<Predmet>;
 
         //    Assert.AreEqual(0, model.Count);
-        }
+    }
         
     }
-}
