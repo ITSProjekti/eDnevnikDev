@@ -84,6 +84,7 @@ namespace eDnevnikDev.Controllers.Tests
             mockSetProfesor.As<IQueryable<Profesor>>().Setup(m => m.ElementType).Returns(profesori.ElementType);
             mockSetProfesor.As<IQueryable<Profesor>>().Setup(m => m.GetEnumerator()).Returns(profesori.GetEnumerator());
             mockContext.Setup(p => p.Profesori).Returns(mockSetProfesor.Object);
+            
 
 
 
@@ -110,41 +111,6 @@ namespace eDnevnikDev.Controllers.Tests
             Assert.AreEqual(2, model.Count);
             Assert.AreEqual(predmeti.First(), model.First());
         }
-
-        ////TO BE DONE
-        //[Ignore]
-        //[TestMethod]
-        //public void PredmetiTest_ProfesorNemaPredmet()
-        //{
-        //    var profesori = new List<Profesor>(){
-        //        new Profesor
-        //        {
-        //            ProfesorID = 1,
-        //        Ime = "Marko",
-        //        Prezime = "Markovic",
-        //        Telefon = "064333333",
-        //        Adresa = "Neka Adresa",
-        //        Vanredan = true,
-        //        RazredniStaresina = true,
-        //        UserProfesorId = "profesor"
-        //        }
-        //    }.AsQueryable();
-
-        //    var mockContext = new Mock<ApplicationDbContext>();
-
-        //    var mockSetProfesor = new Mock<DbSet<Profesor>>();
-        //    mockSetProfesor.As<IQueryable<Profesor>>().Setup(m => m.Provider).Returns(profesori.Provider);
-        //    mockSetProfesor.As<IQueryable<Profesor>>().Setup(m => m.Expression).Returns(profesori.Expression);
-        //    mockSetProfesor.As<IQueryable<Profesor>>().Setup(m => m.ElementType).Returns(profesori.ElementType);
-        //    mockSetProfesor.As<IQueryable<Profesor>>().Setup(m => m.GetEnumerator()).Returns(profesori.GetEnumerator());
-        //    mockContext.Setup(p => p.Profesori).Returns(mockSetProfesor.Object);
-
-        //    var service = new OceneController(mockContext.Object);
-
-        //    var result = service.Predmeti() as ViewResult;
-        //    var model = result.Model as List<Predmet>;
-
-        //    Assert.AreEqual(0, model.Count);
     }
         
     }
