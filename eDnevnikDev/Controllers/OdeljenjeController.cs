@@ -337,9 +337,18 @@ namespace eDnevnikDev.Controllers
         public JsonResult RedniBrojCasa(int odeljenje, int razred)
         {
             var datum = DateTime.Today;
-            var izabranoOdeljenje = _context.Odeljenja.Where(x => x.OznakaID == odeljenje && x.StatusID == 3).Single(x => x.Razred == razred);
-            var casovi = _context.Casovi.
+            IQueryable<Cas> casovi = _context.Casovi;
+            try
+            {
+                var izabranoOdeljenje = _context.Odeljenja.Where(x => x.OznakaID == odeljenje && x.StatusID == 3).Single(x => x.Razred == razred);
+                casovi = _context.Casovi.
                 Where(x => x.Datum == datum && x.OdeljenjeId == izabranoOdeljenje.Id);
+            }
+            catch (Exception)
+            {
+                return Json("", JsonRequestBehavior.AllowGet);
+            }
+            
             // vraca najveci redni broj casa, zato sto je taj poslednji odrzan
             int maxCas;
             try

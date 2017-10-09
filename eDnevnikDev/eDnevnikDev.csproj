@@ -228,6 +228,7 @@
     <Compile Include="DTOs\DTONapomena.cs" />
     <Compile Include="DTOs\DTOOdeljenje.cs" />
     <Compile Include="DTOs\DTOOdeljenjeSaUcenicima.cs" />
+    <Compile Include="DTOs\DTOPredmetCas.cs" />
     <Compile Include="DTOs\DTOProfesor.cs" />
     <Compile Include="DTOs\DTORola.cs" />
     <Compile Include="DTOs\DTOUcenik.cs" />
@@ -439,6 +440,7 @@
     <Compile Include="ViewModel\ProfesorViewModel.cs" />
     <Compile Include="ViewModel\UcenikRoleViewModel.cs" />
     <Compile Include="ViewModel\UcenikViewModel.cs" />
+    <Compile Include="ViewModel\UpisCasaViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\blueimp-gallery.css" />
