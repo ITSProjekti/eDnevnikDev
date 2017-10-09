@@ -16,7 +16,15 @@ namespace eDnevnikDev.Controllers
 {
     public class NapomeneController : Controller
     {
-        private ApplicationDbContext _context = new ApplicationDbContext();
+     
+
+        ApplicationDbContext _context;
+
+        public NapomeneController()
+        {
+            _context = new ApplicationDbContext();
+
+        }
 
         public NapomeneController(ApplicationDbContext _context)
         {
