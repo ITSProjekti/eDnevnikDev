@@ -5,11 +5,17 @@
     ViewBag.Title = "Index";
 }
 
+
 <h2>Evidencija</h2>
 <div class="row">
     <div class="col-md-5">
         <h3>Datum: @DateTime.Now.ToString("dddd dd.MM.yyy", CultureInfo.CreateSpecificCulture("sr-Latn-CS"))</h3>
     </div>
+
+    <input type="hidden" id="casId" value="7" />
+    <input type="hidden" id="profesorId" value="3" />
+    <input type="hidden" id="odeljenjeId" value="9" />
+
 
 
     <div class="col-md-5">
@@ -29,107 +35,229 @@
             <option value="7">7</option>
             <option value="8">8</option>
         </select>
-        </div></div>
-        <div class="container">
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
             <div class="row">
-                <div class="col-md-12">
-                    <div class="row">
-                        <div class="col-md-5">
-                            <label for="razred">Razred</label>
-                            <select id="razred" class="form-control">
-                                <option value="1">Prvi</option>
-                                <option value="2">Drugi</option>
-                                <option value="3">Treći</option>
-                                <option value="4">Četvrti</option>
-                            </select>
-                        </div>
-                        <div class="col-md-5">
-                            <label for="odeljenja">Odeljenje</label>
-                            <select id="odeljenja" class="form-control"></select>
-                        </div><br />
-                        <div class="col-md-2">
-                            <button class="btn btn-success" value="Submit" onclick="UpisiOdsutne()">Potvrdi odsutne</button>
-                        </div>
-                    </div>
+                <div class="col-md-5">
+                    <label for="razred">Razred</label>
+                    <select id="razred" class="form-control">
+                        <option value="1">Prvi</option>
+                        <option value="2">Drugi</option>
+                        <option value="3">Treći</option>
+                        <option value="4">Četvrti</option>
+                    </select>
+                </div>
+                <div class="col-md-5">
+                    <label for="odeljenja">Odeljenje</label>
+                    <select id="odeljenja" class="form-control"></select>
+                </div><br />
+                <div class="col-md-2">
+                    <button class="btn btn-success" value="Submit" onclick="UpisiOdsutne()">Potvrdi odsutne</button>
                 </div>
             </div>
-            <p id="p1"></p>
-            <div id="poruka">  </div>
-            <div class="row" id="ucenici">
+        </div>
+    </div>
+    <p id="p1"></p>
+    <div id="poruka">  </div>
+    <div class="row" id="ucenici">
 
     </div>
 
-            <div class="modal fade" id="potvrda" role="dialog">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">Da li ste sigurni da želite da kreirate odeljenje?</h4>
-                        </div>
-                        <div class="modal-body">
-                            <p>Posle kreiranja odeljenja kreirano odeljenje ćete moći da pregledate u delu <strong>Pregled kreiranih</strong></p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="dugmeClickKreiraj()">Potvrdi</button>
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Zatvori</button>
-                        </div>
-                    </div>
+    <div class="modal fade" id="potvrda" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Da li ste sigurni da želite da kreirate odeljenje?</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Posle kreiranja odeljenja kreirano odeljenje ćete moći da pregledate u delu <strong>Pregled kreiranih</strong></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-dismiss="modal" onclick="dugmeClickKreiraj()">Potvrdi</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Zatvori</button>
                 </div>
             </div>
-
         </div>
-        @section Scripts
+    </div>
+
+</div>
+@section Scripts
 {
 
-            <script>
-                function Odeljenja() {
-                    var razred = $("#razred").val();
-                    var zahtev = $.getJSON("/Odeljenje/OdeljenjeTrajanje?godina=" + razred);
+    <script>
+        function Odeljenja() {
+            var razred = $("#razred").val();
+            var zahtev = $.getJSON("/Odeljenje/OdeljenjeTrajanje?godina=" + razred);
 
 
-                    zahtev.done(function (odeljenja) {
+            zahtev.done(function (odeljenja) {
 
-                        for (var odeljenje in odeljenja) {
-                            $("#odeljenja").append("<option value='" + odeljenja[odeljenje].Oznaka + "'>" + odeljenja[odeljenje].Oznaka + "</option>");
-                        }
-                    });
-                    zahtev.fail(function (gr) { $("#p1").html(gr.statusText); });
+                for (var odeljenje in odeljenja) {
+                    $("#odeljenja").append("<option value='" + odeljenja[odeljenje].Oznaka + "'>" + odeljenja[odeljenje].Oznaka + "</option>");
                 }
+            });
+            zahtev.fail(function (gr) { $("#p1").html(gr.statusText); });
+        }
 
-                function GenerisiKarticuUcenika(id, ime, prezime, fotografija, brojudnevniku, prisutan) {
-                    if (fotografija == null)
-                        fotografija = "http://via.placeholder.com/140x140";
-                    else
-                        fotografija = "/slike/" + fotografija;
+        function GenerisiKarticuUcenika(id, ime, prezime, fotografija, brojudnevniku, prisutan) {
+            if (fotografija == null)
+                fotografija = "http://via.placeholder.com/140x140";
+            else
+                fotografija = "/slike/" + fotografija;
 
             return '<div class="col-sm-6 col-md-3 ">'
-                        +'<div class="evidencijaKartica" id="'+id+'div">'
-                            +'<div id="circle">'
-                                +'<img src=' + fotografija + ' alt="evidencijaucenik" style="width:100%" id="img_pregled" />'
-                            +'</div>'
-                            +'<div class="container_pregled_ucenika">' 
-                                +'<h4>'+ ime +' '+ prezime +'</h4>'
+                        + '<div class="evidencijaKartica" id="' + id + 'div">'
+                            + '<div id="circle">'
+                                + '<img src=' + fotografija + ' alt="evidencijaucenik" style="width:100%" id="img_pregled" />'
+                            + '</div>'
+                            + '<div class="container_pregled_ucenika">'
+                                + '<h4>' + ime + ' ' + prezime + '</h4>'
                                 + '<p class="evidencijatitle">' + brojudnevniku + '</p>'
 
-                                +'<div id="pbutton">'
+                                + '<div id="pbutton">'
                                     + '<a id="' + id + 'button" class="evidencijabutton" value="' + id + '" onclick="klik(' + id + ')"><span id="' + id + 'glyph" class="glyphicon glyphicon-ok"></span></a>'
                                 + '</div>'
 
                                 + '<div id="buttonPopUpNapomena">'
-                                    + '<a id="evidencijabutton" onclick="showPopUpNapomena()"><span id="glyph" class="glyphicon glyphicon-ok"></span></a>'
+                                    + '<a id="evidencijabutton" onclick="showPopUpNapomena(' + id + ')"><span id="glyph" class="glyphicon glyphicon-ok"></span></a>'
+                                + '</div>'
+
+                                + '<div id="buttonPopUpOcene">'
+                                + '<a id="evidencijabutton" onclick="showPopUpOcene(' + id + ')"><span id="glyph" class="glyphicon glyphicon-ok"></span></a>'
                                 + '</div>'
 
                                 + '<div id="popUpNapomena" class="table-responsive" style="display:none">'
                                     + '<div id="textareadiv">'
-                                        + '<textarea id="tekstNapomene" cols="80" rows="10" type="text" name="tekstNapomene" style="resize:none"></textarea>'
-                                        + '<input type="hidden" id='+id+' value='+id+'  onclick="VratiID('+id+')"/>'
+                                        + '<form id = "__AjaxAntiForgeryForm">'
+                                           + '@Html.AntiForgeryToken()'
+                                           + '<textarea id="tekstNapomene" cols="80" rows="10" type="text" name="tekstNapomene" style="resize:none"></textarea>'
+                                        +'</form>'
                                         + '<input type="hidden" id="napomenaId" />'
                                 + '</div>'
                                 + '</div>'
-                            + '</div>'
-                        + '</div>'
-                    + '</div>';
+                                + '<div id='+id+' class="modal-content" style="display:none">'
+                                        + '<form id = "__AjaxAntiForgeryFormOcene">'
+                                           + '@Html.AntiForgeryToken()'
+                                               //POCETAK BODY  
+                                           +' <div class="container">'
+                                                +'<div class="panel-group">'
+                                                  +'<div class="panel panel-default">'
+                                                    +'<div class="panel-heading">'
+                                                      +' <h4 class="panel-title">'
+                                                        +'<a data-toggle="collapse" href="#collapse1">Matematika</a>'
+                                                      +'</h4>'
+                                                    +'</div>'
+                                           +'<div id="collapse1" class="panel-collapse collapse">'
+                                             +'<div class="panel-body">'
+                                               +'<div>'
+                                                  //POCETAK BODY 
+                                                 +'<div class="container" style="align-content:center;max-height:100%;max-width:100%;margin-top:0px;">'
+                                                   +'<div class="row">'
+                                                     +'<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">'
+                                                       +'<h4 style="text-align:center;margin-bottom:3px;">Polugodiste 1</h4>'
+                                                         +'<hr style="margin-top:3px;margin-bottom:3px;" />'
+                                                      +'</div>'
+                                                    +'</div>'
+                                                  +'<div class="row">'
+                                                   +'<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">'
+                                                     +'<div style="display: flex;">'
+                                                       +'<div style="flex: 10;">'
+                                                          //foreach petlja za listanje ocena
+                                                         +'<button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">1</button>'
+                                                       +'</div>'
+                                                       +'<div style="flex: 2;position: relative;">'
+                                                        +'<button type="button" class="btn btn-info" style="width:100%;margin:2px;font-size:200%;">+</button>'
+                                                        +'<button type="button" class="btn btn-secondary" style="width:100%;margin:2px;font-size:200%;color:red;position: absolute;bottom: 0;">4</button>'
+                                                       +'</div>'
+                                                      +'</div>'
+                                                      +'<div class="row">'
+                                                       +'<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">'
+                                                        +'<hr style="margin-top:3px;margin-bottom:3px;" />'
+                                                       +'</div>'
+                                                      +'</div>'
+                                                      +'<div class="row">'
+                                                       +'<div class="row-fluid">'
+                                                         +'<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">'
+                                                           //foreach petlja za listanje pluseva i minusa
+                                                          +'<button type="button" class="btn btn-danger" style="margin:2px;height:35px;width:35px;" title="26.08.2017">-</button>'
+                                                          +'<button type="button" class="btn btn-success" style="margin:2px;height:35px;width:35px;" title="26.08.2017">+</button>'
+                                                         +'</div>'
+                                                        +'</div>'
+                                                       +'</div>'
+                                                       +'<div class="row">'
+                                                        +'<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">'
+                                                         +'<hr style="margin-top:3px;margin-bottom:3px;" />'
+                                                        +'</div>'
+                                                       +'</div>'
+                                                      +'</div>'
+                                                     +'</div>'
+                                                    +'</div>'
+                                                      //POLOVINA  
+                                                    +'<div class="container" style="align-content:center;max-height:100%;max-width:100%;margin-top:0px;">'
+                                                     +'<div class="row">'
+                                                      +'<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">'
+                                                       +'<h4 style="text-align:center;margin-bottom:3px;">Polugodiste 2</h4>'
+                                                       +'<hr style="margin-top:3px;margin-bottom:3px;" />'
+                                                      +'</div>'
+                                                     +'</div>'
+                                                     +'<div class="row">'
+                                                      +'<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">'
+                                                       +'<div style="display: flex;">'
+                                                        +'<div style="flex: 10;">'
+                                                          //foreach petlja za listanje ocena
+                                                          +'<button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">1</button>'
+                                                           +'</div>'
+                                                           +'<div style="flex: 2;position: relative;">'
+                                                              //button za dodavanje nove ocene
+                                                             +'<button type="button" class="btn btn-info" style="width:100%;margin:2px;font-size:200%;">+</button>'
+                                                                //zakljucna ocena
+                                                             +'<button type="button" class="btn btn-secondary" style="width:100%;margin:2px;font-size:200%;color:red;position: absolute;bottom: 0;">4</button>'
+                                                            +'</div>'
+                                                           +'</div>'
+                                                           +'<div class="row">'
+                                                            +'<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">'
+                                                             +'<hr style="margin-top:3px;margin-bottom:3px;" />'
+                                                            +'</div>'
+                                                           +'</div>'
+                                                           +'<div class="row">'
+                                                            +'<div class="row-fluid">'
+                                                             +'<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">'
+                                                               //foreach petlja za listanje pluseva i minusa
+                                                              +'<button type="button" class="btn btn-danger" style="margin:2px;height:35px;width:35px;" title="26.08.2017">-</button>'
+                                                              +'<button type="button" class="btn btn-success" style="margin:2px;height:35px;width:35px;" title="26.08.2017">+</button>'
+                                                             +'</div>'
+                                                            +'</div>'
+                                                           +'</div>'
+                                                          +'<div class="row">'
+                                                           +'<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">'
+                                                            +'<hr style="margin-top:3px;margin-bottom:3px;" />'
+                                                           +'</div>'
+                                                          +'</div>'
+                                                         +'</div>'
+                                                        +'</div>'
+                                                       +'</div>'
+                                                       //KRAJ BODY 
+                                                      +'</div>'
+                                                     +'</div>'
+                                                    +'<div class="panel-footer">Panel Footer</div>'
+                                                   +'</div>'
+                                                  +'</div>'
+                                                 +'</div>'
+                                                + '</div>'
+                                             //KRAJ BODY 
+                                             + '</form>'
+                         
+                                         + '</div>'
+                                       + '</div>'
+                                     + '</div>'
+                                   + '</div>';
         }
+
+
 
         function klik() {
             $('.evidencijaKartica').toggleClass("borderevidencijacolor");
@@ -138,13 +266,65 @@
         }
 
 
-        var ID
 
-        function VratiID(id) {
-            ID = id;
+        //**Aca pocetak**//
+        function showPopUpOcene(ucenikId) {
+
+            $("#" + ucenikId).dialog({
+
+                height: 600,
+                width: 1000,
+                modal: true,
+                open: function () {
+                
+                    var odeljenjeId = $("#odeljenjeId").val();
+                    var profesorId = $("#profesorId").val();
+
+                    var predmetiHTML = "";
+       
+
+                   // Poziva se metoda "VratiPredmete()" u kontroleru "Evidencija"
+                    //$.ajax({
+                    //    type: "POST",
+                    //    url: "/Evidencija/VratiPredmenete?odeljenjeId=" + odeljenjeId + "&profesorId=" + profesorId,
+                    //    contentType: "application/json",
+                    //    datatype: "json",
+                    //    async: false,
+                    //    success:
+                    //        function (predmeti) {
+
+                    //               for (var i = 0; i < predmeti.length; i++) {
+                    //                   predmetiHTML += predmeti[i].NazivPredmeta;
+                    //               }
+                    //        }
+                    //});
+
+                   // $(this).find("#p1").append(predmetiHTML);
+                 
+               },
+
+                buttons: {
+                    "Sačuvajdd": function () {
+
+                   
+
+                    },
+
+                    "Zatvori": function () {
+
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+
         }
 
-        function showPopUpNapomena() {
+
+
+
+        //funkcija koja služi za prikaz popup-a za unos napomene
+        function showPopUpNapomena(ucenikId) {
 
             $("#popUpNapomena").dialog({
 
@@ -153,94 +333,72 @@
                 modal: true,
                 open: function () {
                     
-                    var ucenikId = ID;
-                    console.log(ucenikId);
                     var casId = $("#casId").val();
-                    var text;
-                    var napomena;
-                    var postoji = false;
-                    var napId;
+                    var napomenaId = 0;
+                    var opis;
 
-                    var prom = $.ajax({
+                    //Poziva se metoda "VratiNapomenu()" u kontroleru "Napomene"
+                    $.ajax({
                         type: "POST",
-                        url: "/Napomene/VratiNapomenu?ucenikId=" + 23+ "&casId=" + 1,
+                        url: "/Napomene/VratiNapomenu?ucenikId=" + ucenikId + "&casId=" + casId,
                         contentType: "application/json",
+                        datatype: "json",
                         async: false,
-
                         success:
-                            function (data) {
-                                napomena = data.Opis;
-                                if(data!=null)
-                                {
-                                    postoji = true;
-                                    napId = data.NapomenaId;
-                                }
+                            function (napomena) {
+
+                                opis = napomena.Opis;
+                                napomenaId = napomena.NapomenaId;
                             }
-                    })
+                    });
 
-                    $(this).find("#napomenaId").val(napId);
-                    $(this).find("#tekstNapomene").val(napomena);
+                    $(this).find("#napomenaId").val(napomenaId);
+                    $(this).find("#tekstNapomene").val(opis);
                 },
-                buttons: {
-                    "Sačuvaj": function () {
 
-                        if (true)
-                        {
+                buttons: {
+                    //Dugme koje služi za unos ili ažuriranje napomene u bazi 
+                    //(u zavisnosti da li već postoji u bazi)
+                    "Sačuvaj": function () {
 
                             var dtoNapomena = {
                                 NapomenaId: $(this).find("#napomenaId").val(),
                                 Opis: $(this).find("#tekstNapomene").val(),
-                                UcenikId: $(this).find("#ucenikId").val(),
                                 ProfesorId: $("#profesorId").val(),
-                                CasId: $("#casId").val()
-                            };
+                                CasId: $("#casId").val(),
+                                UcenikId: ucenikId
 
-                            var zahtev = $.ajax({
+                            };
+                            
+                            //Preuzimanje AntiForgeryToken-a sa forme
+                            var form = $('#__AjaxAntiForgeryForm');
+                            var token = $('input[name="__RequestVerificationToken"]', form).val();
+
+                            var headers = {};
+                            headers["__RequestVerificationToken"] = token;
+
+                            //Poziva se metoda "DodajIliIzmeniNapomenu()" u kontroleru "Napomene"
+                            $.ajax({
                                 type: "POST",
+                                headers: headers,
                                 data: JSON.stringify(dtoNapomena),
-                                datatype:"text",
-                                url: "/Napomene/Edit",
+                                url: "/Napomene/DodajIliIzmeniNapomenu",
+                                datatype: "json",
                                 contentType: "application/json"
                             }).done(function () {
                                 alert("Uspešno sačuvano!");
                             });
 
-
-                            zahtev.fail(function (rez) {
-                                $("#p1").text("greska: " + rez);
-                            });
-
+                            $(this).find("#tekstNapomene").val("");
+                            $(this).find("#napomenaId").val(0);
                             $(this).dialog("close");
-                        }
-                        else
-                        {
-                            var dtoNapomena = {
-                                Opis: $(this).find("#tekstNapomene").val(),
-                                UcenikId: $("#ucenikId").val(),
-                                ProfesorId: $("#profesorId").val(),
-                                CasId: $("#casId").val()
-                            };
-
-                            var zahtev = $.ajax({
-                                type: "POST",
-                                data: JSON.stringify(dtoNapomena),
-                                datatype:"text",
-                                url: "/Napomene/Create",
-                                contentType: "application/json"
-                            }).done(function () {
-                                alert("Uspešno sačuvano!");
-                            });
-
-
-                            zahtev.fail(function (rez) {
-                                $("#p1").text("greska: " + rez);
-                            });
-
-                            $(this).dialog("close");
-                        }
 
                     },
+
+                    //Dugme služi da se popup za unos napomene zatvori. 
                     "Otkaži": function () {
+                        $(this).find("#tekstNapomene").val("");
+                        $(this).find("#napomenaId").val(0);
                         $(this).dialog("close");
                     }
                 }
@@ -248,145 +406,146 @@
 
 
         }
-  
+
+        //**Aca kraj**//
+
+
 
         function klikUcenikKartica(elem) {
             var klasa = $(elem).attr("class").split(' ')[1];
-                    //return   "<div class='col-md-3'><div class='ucenik-kartica'><img src='" + fotografija + "' class='ucenik-slika' style='width:140px;height:176px;' /><div class='ucenik-ime'>" + ime + " " + prezime + " </div></div></div>";
+            //return   "<div class='col-md-3'><div class='ucenik-kartica'><img src='" + fotografija + "' class='ucenik-slika' style='width:140px;height:176px;' /><div class='ucenik-ime'>" + ime + " " + prezime + " </div></div></div>";
 
-                    return '<div class="col-sm-6 col-md-3 "><div class="evidencijaKartica" id="' + id + 'div"><div id="circle"><input type="hidden" value=' + id + ' id="primarni"><img src=' + fotografija + ' alt="evidencijaucenik" style="width:100%" id="img_pregled" /></div><div class="container_pregled_ucenika"><h4>' + ime + '</h4><p class="evidencijatitle">' + brojudnevniku + '.</p><div id="pbutton"><a id="' + id + 'button" class="evidencijabutton" value="' + id + '" onclick="klik(' + id + ')"><span id="' + id + 'glyph" class="glyphicon glyphicon-ok"></span></a></div></div></div></div>';
-
-                }
-
-                // id od korisnika je koriscen u kombinaciji sa div-om, button-om i glyph-om
-                //kako bi svaki imao poseban id(zbog vise ucenika)
-                // primer za id od diva kod ucenika koji ima id=5 je 5div
-
-                function klik(id) {
-                    $('#' + id + 'div').toggleClass("borderevidencijacolor");
-                    $("#" + id + 'button').toggleClass("buttonevidencijacolor");
-                    $('#' + id + 'glyph').toggleClass('glyphicon-ok glyphicon-remove');
-                    var element = document.getElementById("primarni");
-
-                }
-                function klikUcenikKartica(elem) {
-                    var klasa = $(elem).attr("class").split(' ')[1];
-
-                    if (klasa == 'karticaUcenik-prisutan') {
-                        $(elem).removeClass('karticaUcenik-prisutan')
-                        $(elem).addClass('karticaUcenik-odsutan')
-
-                        $('.evidencijaKartica').toggleClass("borderevidencijacolor");
-                        $('#evidencijabutton').toggleClass("buttonevidencijacolor");
-                    }
-                    else {
-
-                        $(elem).removeClass('karticaUcenik-odsutan')
-                        $(elem).addClass('karticaUcenik-prisutan')
-                        $('.evidencijaKartica').toggleClass("borderevidencijacolor");
-                        $('#evidencijabutton').toggleClass("buttonevidencijacolor");
-                    }
-                }
-
-                function Ucenici() {
-                    var razred = $("#razred").val();
-                    var odeljenje = $("#odeljenja").val();
-
-                    if (odeljenje == undefined)
-                        odeljenje = 1;
-
-                    var zahtev = $.getJSON("/Odeljenje/OdeljenjeUcenici?razred=" + razred + "&oznakaOdeljenja=" + odeljenje + '&status=3');
-
-                    zahtev.done(function (podaci) {
-
-                        if (podaci.Ucenici == null) {
-                            $("#ucenici").append('<div class="alert alert-warning" role="alert"><strong>Upozorenje!</strong> Nema učenika u izabranom odeljenju </div>');
-                            return;
-                        }
-
-                        for (var ucenik in podaci.Ucenici) {
-                            $("#ucenici").append(GenerisiKarticuUcenika(podaci.Ucenici[ucenik].ID, podaci.Ucenici[ucenik].Ime, podaci.Ucenici[ucenik].Prezime, podaci.Ucenici[ucenik].Fotografija, podaci.Ucenici[ucenik].BrojUDnevniku, podaci.Ucenici[ucenik].Prisutan));
-
-                            //poziva dogadjaj klik ukoliko ucenik nije prisutan kako bi u prikazu
-                            // prisustvo ucenika bilo crveno(x) 
-                            if (!podaci.Ucenici[ucenik].Prisutan) {
-                                klik(podaci.Ucenici[ucenik].ID);
-                            }
-                        }
-
-
-                    });
-                    zahtev.fail(function (gr) { $("#p1").html(gr.statusText); });
-                }
-
-                function UpisiOdsutne() {
-                    
-                    var lista = [];
-                  
-                    //ucenicima koji su odsutni se stavlja klasa "buttonevidencijacolor" na button
-                    // prolazimo kroz listu tih buttona i uzimamo njihov atribut "value" u koji je smesten id od ucenika
-                    // niz tih id-eva smestamo u listu
-                    $(".buttonevidencijacolor").each(function (index) {
-                        var id = $(this).attr('value');
-                        lista.push(id);
-                    });
-
-
-                    var zahtev = $.ajax({
-                        type: "POST",
-                        data: JSON.stringify(lista),
-                        //datatype:"text",
-                        url: "/Odeljenje/UpisiOdsutne" ,
-                        contentType: "application/json"
-                    }).done(function () {
-                        
-                    });
-                }
-
-                
-
-                $(function () {
-                    
-                    $("#razred").change(function () {
-                        $("#odeljenja").html("");
-                        $('#odeljenja').change();  //Okidanje dogadjaja za promenu drop down-a za izbor odeljenja prilikom promene razreda.
-                        Odeljenja();
-                    }).change();
-
-
-                    $('#odeljenja').change(function () {
-                        $("#ucenici").html("");
-                        $("#dugme").html("");
-                        Ucenici();
-                        RedniBrojCasa();
-                    }).change();
-
-
-                });
-
-                //sluzi da postavi combobox na vrednost casa koji trenutno treba da se odrzi
-                // primer: ako je prethodni cas koji je odrzan bio 2. po redu, u combobox-u se prikazuje broj 3
-                function RedniBrojCasa() {
-                    var razred = $("#razred").val();
-                    var odeljenje = $("#odeljenja").val();
-                    if (odeljenje == undefined)
-                        odeljenje = 1;
-
-                    var zahtev = $.getJSON("/Odeljenje/RedniBrojCasa?odeljenje=" + odeljenje + "&razred=" + razred);
-
-                    $.ajax({
-                        method: "GET",
-                        url: "/Odeljenje/RedniBrojCasa?odeljenje=" + odeljenje + "&razred=" + razred,
-                        success: function (data) {
-                            $("#rbCas").val(data);
-                            console.log(data);
-                        }
-                    });
-
-
-                }
-
-
-            </script>
+            return '<div class="col-sm-6 col-md-3 "><div class="evidencijaKartica" id="' + id + 'div"><div id="circle"><input type="hidden" value=' + id + ' id="primarni"><img src=' + fotografija + ' alt="evidencijaucenik" style="width:100%" id="img_pregled" /></div><div class="container_pregled_ucenika"><h4>' + ime + '</h4><p class="evidencijatitle">' + brojudnevniku + '.</p><div id="pbutton"><a id="' + id + 'button" class="evidencijabutton" value="' + id + '" onclick="klik(' + id + ')"><span id="' + id + 'glyph" class="glyphicon glyphicon-ok"></span></a></div></div></div></div>';
 
         }
+
+        // id od korisnika je koriscen u kombinaciji sa div-om, button-om i glyph-om
+        //kako bi svaki imao poseban id(zbog vise ucenika)
+        // primer za id od diva kod ucenika koji ima id=5 je 5div
+
+        function klik(id) {
+            $('#' + id + 'div').toggleClass("borderevidencijacolor");
+            $("#" + id + 'button').toggleClass("buttonevidencijacolor");
+            $('#' + id + 'glyph').toggleClass('glyphicon-ok glyphicon-remove');
+            var element = document.getElementById("primarni");
+
+        }
+        function klikUcenikKartica(elem) {
+            var klasa = $(elem).attr("class").split(' ')[1];
+
+            if (klasa == 'karticaUcenik-prisutan') {
+                $(elem).removeClass('karticaUcenik-prisutan')
+                $(elem).addClass('karticaUcenik-odsutan')
+
+                $('.evidencijaKartica').toggleClass("borderevidencijacolor");
+                $('#evidencijabutton').toggleClass("buttonevidencijacolor");
+            }
+            else {
+
+                $(elem).removeClass('karticaUcenik-odsutan')
+                $(elem).addClass('karticaUcenik-prisutan')
+                $('.evidencijaKartica').toggleClass("borderevidencijacolor");
+                $('#evidencijabutton').toggleClass("buttonevidencijacolor");
+            }
+        }
+
+        function Ucenici() {
+            var razred = $("#razred").val();
+            var odeljenje = $("#odeljenja").val();
+
+            if (odeljenje == undefined)
+                odeljenje = 1;
+
+            var zahtev = $.getJSON("/Odeljenje/OdeljenjeUcenici?razred=" + razred + "&oznakaOdeljenja=" + odeljenje + '&status=3');
+
+            zahtev.done(function (podaci) {
+
+                if (podaci.Ucenici == null) {
+                    $("#ucenici").append('<div class="alert alert-warning" role="alert"><strong>Upozorenje!</strong> Nema učenika u izabranom odeljenju </div>');
+                    return;
+                }
+
+                for (var ucenik in podaci.Ucenici) {
+                    $("#ucenici").append(GenerisiKarticuUcenika(podaci.Ucenici[ucenik].ID, podaci.Ucenici[ucenik].Ime, podaci.Ucenici[ucenik].Prezime, podaci.Ucenici[ucenik].Fotografija, podaci.Ucenici[ucenik].BrojUDnevniku, podaci.Ucenici[ucenik].Prisutan));
+
+                    //poziva dogadjaj klik ukoliko ucenik nije prisutan kako bi u prikazu
+                    // prisustvo ucenika bilo crveno(x)
+                    if (!podaci.Ucenici[ucenik].Prisutan) {
+                        klik(podaci.Ucenici[ucenik].ID);
+                    }
+                }
+
+
+            });
+            zahtev.fail(function (gr) { $("#p1").html(gr.statusText); });
+        }
+
+        function UpisiOdsutne() {
+
+            var lista = [];
+
+            //ucenicima koji su odsutni se stavlja klasa "buttonevidencijacolor" na button
+            // prolazimo kroz listu tih buttona i uzimamo njihov atribut "value" u koji je smesten id od ucenika
+            // niz tih id-eva smestamo u listu
+            $(".buttonevidencijacolor").each(function (index) {
+                var id = $(this).attr('value');
+                lista.push(id);
+            });
+
+
+            var zahtev = $.ajax({
+                type: "POST",
+                data: JSON.stringify(lista),
+                //datatype:"text",
+                url: "/Odeljenje/UpisiOdsutne",
+                contentType: "application/json"
+            }).done(function () {
+
+            });
+        }
+
+        $(function () {
+
+            $("#razred").change(function () {
+                $("#odeljenja").html("");
+                $('#odeljenja').change();  //Okidanje dogadjaja za promenu drop down-a za izbor odeljenja prilikom promene razreda.
+                Odeljenja();
+            }).change();
+
+
+            $('#odeljenja').change(function () {
+                $("#ucenici").html("");
+                $("#dugme").html("");
+                Ucenici();
+               // RedniBrojCasa();
+            }).change();
+
+
+        });
+
+        //sluzi da postavi combobox na vrednost casa koji trenutno treba da se odrzi
+        // primer: ako je prethodni cas koji je odrzan bio 2. po redu, u combobox-u se prikazuje broj 3
+        function RedniBrojCasa() {
+            var razred = $("#razred").val();
+            var odeljenje = $("#odeljenja").val();
+            if (odeljenje == undefined)
+                odeljenje = 1;
+
+            var zahtev = $.getJSON("/Odeljenje/RedniBrojCasa?odeljenje=" + odeljenje + "&razred=" + razred);
+
+            $.ajax({
+                method: "GET",
+                url: "/Odeljenje/RedniBrojCasa?odeljenje=" + odeljenje + "&razred=" + razred,
+                success: function (data) {
+                    $("#rbCas").val(data);
+                    console.log(data);
+                }
+            });
+
+
+        }
+
+
+    </script>
+
+}

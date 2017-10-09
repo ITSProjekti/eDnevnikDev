@@ -11,6 +11,7 @@ using eDnevnikDev.ViewModel;
 using System.Net;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using eDnevnikDev.Helpers;
 
 namespace eDnevnikDev.Controllers
 {
@@ -208,7 +209,8 @@ namespace eDnevnikDev.Controllers
         }
 
 
-
+        [HttpPost]
+        [ValidateHeaderAntiForgeryToken]
         public async Task DodajRolu(DTORola dtoRola)
         {
 
@@ -217,7 +219,8 @@ namespace eDnevnikDev.Controllers
             await userManager.AddToRoleAsync(dtoRola.KorisnikID, dtoRola.Rola);
         }
 
-
+        [HttpPost]
+        [ValidateHeaderAntiForgeryToken]
         public async Task ObrisiRolu(DTORola dtoRola)
         {
 

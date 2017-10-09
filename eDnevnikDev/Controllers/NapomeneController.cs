@@ -30,10 +30,10 @@ namespace eDnevnikDev.Controllers
         /// <param name="dtoNapomena"></param>
         /// <returns></returns>
         [HttpPost]
-//[ValidateHeaderAntiForgeryToken]
+        [ValidateHeaderAntiForgeryToken]
         public void DodajIliIzmeniNapomenu(DTONapomena dtoNapomena)
         {
-            if (dtoNapomena != null)
+            if(dtoNapomena!=null)
             {
                 var napomena = new Napomena
                 {
