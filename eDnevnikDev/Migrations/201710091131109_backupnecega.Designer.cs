@@ -7,13 +7,13 @@ namespace eDnevnikDev.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class TipOcenePredmeta : IMigrationMetadata
+    public sealed partial class backupnecega : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(TipOcenePredmeta));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(backupnecega));
         
         string IMigrationMetadata.Id
         {
-            get { return "201709291143438_TipOcenePredmeta"; }
+            get { return "201710091131109_backupnecega"; }
         }
         
         string IMigrationMetadata.Source

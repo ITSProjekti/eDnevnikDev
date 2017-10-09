@@ -81,7 +81,7 @@ namespace eDnevnikDev.Models
         /// <value>
         /// The predmeti.
         /// </value>
-        public virtual ICollection<Predmet> Predmeti { get; set; }
+   
 
 
         /// <summary>
