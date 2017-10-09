@@ -19,7 +19,7 @@ namespace eDnevnikDev.Models
         public Odeljenje()
                 {
                     Ucenici = new HashSet<Ucenik>();
-                    Predmeti= new HashSet<Predmet>();
+                    Predmeti = new HashSet<Predmet>();
         }
         /// <summary>
         /// Gets or sets the identifier.
@@ -71,6 +71,8 @@ namespace eDnevnikDev.Models
         /// The casovi.
         /// </value>
         public virtual ICollection<Cas> Casovi { get; set; }
+
+        public virtual ICollection<Predmet> Predmeti { get; set; }
 
 
         /// <summary>

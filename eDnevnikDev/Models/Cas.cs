@@ -20,6 +20,9 @@ namespace eDnevnikDev.Models
         [Required(ErrorMessage ="Unesite datum")]
         public DateTime Datum { get; set; }
 
+        [Required(ErrorMessage = "Unesite naziv časa")]
+        public string Naziv { get; set; }
+
         [Required(ErrorMessage = "Unesite opis časa")]
         public string Opis { get; set; }
 
@@ -32,7 +35,6 @@ namespace eDnevnikDev.Models
 
         [ForeignKey("Predmet")]
         public int PredmetId { get; set; }
-
 
         public virtual Odeljenje Odeljenje { get; set; }
 

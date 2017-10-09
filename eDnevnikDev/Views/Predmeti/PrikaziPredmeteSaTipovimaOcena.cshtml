@@ -1,0 +1,78 @@
+﻿@model eDnevnikDev.ViewModel.PredmetTipOcenePredmetaViewModel
+
+@{
+    ViewBag.Title = "PrikaziPredmeteSaTipovimaOcena";
+}
+
+<h2>PrikaziPredmeteSaTipovimaOcena</h2>
+<form id="__AjaxAntiForgeryForm">
+    @Html.AntiForgeryToken()
+    <table class="table">
+        <tr>
+            <th>
+                Naziv predmeta
+            </th>
+            @foreach (var item in Model.TipoviOcenaPredmeta.ToList())
+            {
+                <th>
+                    @item.Tip
+                </th>
+            }
+
+        </tr>
+
+        @foreach (var item in Model.Predmeti.ToList())
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NazivPredmeta)
+                </td>
+                @foreach (var tip in Model.TipoviOcenaPredmeta.ToList())
+                {
+                    <td>
+                        @if (item.TipOcenePredmeta.Tip == tip.Tip)
+                    {
+                            <input type="radio" onchange="Izmeni(@item.PredmetID, @tip.TipOcenePredmetaId)" class="radioTipOcene" name="radio'+@item.PredmetID+'" id="@item.TipOcenePredmetaId" value="@item.PredmetID" checked />
+                        }
+                        else
+                        {
+                            <input type="radio" onchange="Izmeni(@item.PredmetID, @tip.TipOcenePredmetaId)" class="radioTipOcene" name="radio'+@item.PredmetID+'" id="@item.TipOcenePredmetaId" value="@item.PredmetID" />
+                        }
+                    </td>
+                }
+
+            </tr>
+        }
+    </table>
+</form>
+
+
+@section Scripts
+{
+    
+    <script>
+
+        function Izmeni(predmetId, tipOcenePredmetaId)
+        {
+            var form = $('#__AjaxAntiForgeryForm');
+            var token = $('input[name="__RequestVerificationToken"]', form).val();
+
+            var headers = {};
+            headers["__RequestVerificationToken"] = token;
+
+            //pozivamo metodu "IzmenaTipaOcenaUPredmetu" u kontoleru "Predmeti"
+            var zahtev=$.ajax({
+                type: "POST",
+                headers: headers,
+                url:"/Predmeti/IzmenaTipaOcenaUPredmetu?predmetId=" + predmetId + "&tipOcenePredmetaId=" + tipOcenePredmetaId,
+                success:function(){
+                    alert("Uspešno sačuvano");
+                },
+                fail:function(){
+                    alert("Greska");
+                }
+            });
+        }
+
+    </script>
+}

@@ -214,6 +214,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CasoviController.cs" />
     <Compile Include="Controllers\EvidencijaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -398,13 +399,17 @@
     <Compile Include="Migrations\201709141045270_UpdateModelaCas.Designer.cs">
       <DependentUpon>201709141045270_UpdateModelaCas.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201709291143438_TipOcenePredmeta.cs" />
-    <Compile Include="Migrations\201709291143438_TipOcenePredmeta.Designer.cs">
-      <DependentUpon>201709291143438_TipOcenePredmeta.cs</DependentUpon>
+    <Compile Include="Migrations\201709291054043_tipOcenePredmeta.cs" />
+    <Compile Include="Migrations\201709291054043_tipOcenePredmeta.Designer.cs">
+      <DependentUpon>201709291054043_tipOcenePredmeta.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201709291235389_PredmetiOdeljenja.cs" />
-    <Compile Include="Migrations\201709291235389_PredmetiOdeljenja.Designer.cs">
-      <DependentUpon>201709291235389_PredmetiOdeljenja.cs</DependentUpon>
+    <Compile Include="Migrations\201710040953149_UnosNazivaUCas.cs" />
+    <Compile Include="Migrations\201710040953149_UnosNazivaUCas.Designer.cs">
+      <DependentUpon>201710040953149_UnosNazivaUCas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710041152398_PredmetOdeljenje.cs" />
+    <Compile Include="Migrations\201710041152398_PredmetOdeljenje.Designer.cs">
+      <DependentUpon>201710041152398_PredmetOdeljenje.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -430,11 +435,13 @@
     <Compile Include="Models\Ucenik.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModel\PredmetTipOcenePredmetaViewModel.cs" />
     <Compile Include="ViewModel\ProfesorRoleViewModel.cs" />
     <Compile Include="ViewModel\EvidencijaUcenikaViewModel.cs" />
     <Compile Include="ViewModel\ProfesorViewModel.cs" />
     <Compile Include="ViewModel\UcenikRoleViewModel.cs" />
     <Compile Include="ViewModel\UcenikViewModel.cs" />
+    <Compile Include="ViewModel\UpisCasaViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\blueimp-gallery.css" />
@@ -844,6 +851,8 @@
     <Content Include="Views\Napomene\Details.cshtml" />
     <Content Include="Views\Napomene\Edit.cshtml" />
     <Content Include="Views\Napomene\Index.cshtml" />
+    <Content Include="Views\Predmeti\PrikaziPredmeteSaTipovimaOcena.cshtml" />
+    <Content Include="Views\Casovi\Create.cshtml" />
     <Content Include="Views\Evidencija\Collapse.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -973,6 +982,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201709141045270_UpdateModelaCas.resx">
       <DependentUpon>201709141045270_UpdateModelaCas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709291054043_tipOcenePredmeta.resx">
+      <DependentUpon>201709291054043_tipOcenePredmeta.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710040953149_UnosNazivaUCas.resx">
+      <DependentUpon>201710040953149_UnosNazivaUCas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710041152398_PredmetOdeljenje.resx">
+      <DependentUpon>201710041152398_PredmetOdeljenje.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201709291143438_TipOcenePredmeta.resx">
       <DependentUpon>201709291143438_TipOcenePredmeta.cs</DependentUpon>
