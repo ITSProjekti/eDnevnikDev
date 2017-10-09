@@ -40,6 +40,7 @@ namespace eDnevnikDev.Models
         public virtual DbSet<TipOpisneOcene> TipoviOpisnihOcena { get; set; }
         public virtual DbSet<Status> Statusi{ get; set; }
         public virtual DbSet<Oznaka> Oznake { get; set; }
+        public virtual DbSet<TipOcenePredmeta> TipoviOcenaPredmeta { get; set; }
 
 
         public ApplicationDbContext()

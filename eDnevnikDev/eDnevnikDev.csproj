@@ -224,9 +224,11 @@
     <Compile Include="Controllers\ProfesoriController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\UceniciController.cs" />
+    <Compile Include="DTOs\DTOBrojcanaOcena.cs" />
     <Compile Include="DTOs\DTONapomena.cs" />
     <Compile Include="DTOs\DTOOdeljenje.cs" />
     <Compile Include="DTOs\DTOOdeljenjeSaUcenicima.cs" />
+    <Compile Include="DTOs\DTOPredmet.cs" />
     <Compile Include="DTOs\DTOProfesor.cs" />
     <Compile Include="DTOs\DTORola.cs" />
     <Compile Include="DTOs\DTOUcenik.cs" />
@@ -235,6 +237,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\IdentityHelper.cs" />
+    <Compile Include="Helpers\ValidateHeaderAntiForgeryTokenAttribute.cs" />
     <Compile Include="Migrations\201705231259184_IntialModelUcenik.cs" />
     <Compile Include="Migrations\201705231259184_IntialModelUcenik.Designer.cs">
       <DependentUpon>201705231259184_IntialModelUcenik.cs</DependentUpon>
@@ -395,6 +398,14 @@
     <Compile Include="Migrations\201709141045270_UpdateModelaCas.Designer.cs">
       <DependentUpon>201709141045270_UpdateModelaCas.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201709291143438_TipOcenePredmeta.cs" />
+    <Compile Include="Migrations\201709291143438_TipOcenePredmeta.Designer.cs">
+      <DependentUpon>201709291143438_TipOcenePredmeta.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709291235389_PredmetiOdeljenja.cs" />
+    <Compile Include="Migrations\201709291235389_PredmetiOdeljenja.Designer.cs">
+      <DependentUpon>201709291235389_PredmetiOdeljenja.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ArhivaOdeljenja.cs" />
@@ -414,6 +425,7 @@
     <Compile Include="Models\Smer.cs" />
     <Compile Include="Models\Status.cs" />
     <Compile Include="Models\TipOcene.cs" />
+    <Compile Include="Models\TipOcenePredmeta.cs" />
     <Compile Include="Models\TipOpisneOcene.cs" />
     <Compile Include="Models\Ucenik.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -832,6 +844,7 @@
     <Content Include="Views\Napomene\Details.cshtml" />
     <Content Include="Views\Napomene\Edit.cshtml" />
     <Content Include="Views\Napomene\Index.cshtml" />
+    <Content Include="Views\Evidencija\Collapse.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -960,6 +973,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201709141045270_UpdateModelaCas.resx">
       <DependentUpon>201709141045270_UpdateModelaCas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709291143438_TipOcenePredmeta.resx">
+      <DependentUpon>201709291143438_TipOcenePredmeta.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709291235389_PredmetiOdeljenja.resx">
+      <DependentUpon>201709291235389_PredmetiOdeljenja.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

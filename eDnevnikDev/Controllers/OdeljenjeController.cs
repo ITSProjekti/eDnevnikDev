@@ -338,13 +338,21 @@ namespace eDnevnikDev.Controllers
         {
             var datum = DateTime.Today;
             var izabranoOdeljenje = _context.Odeljenja.Where(x => x.OznakaID == odeljenje).Single(x => x.Razred == razred);
-            var casovi = _context.Casovi.
+            var casovi = _context.Casovi. // Ne povlaci casove pa se javlja greska u x.RedniBrojCasa!!!
                 Where(x => x.Datum == datum && x.OdeljenjeId == izabranoOdeljenje.Id);
             // vraca najveci redni broj casa, zato sto je taj poslednji odrzan
-            int a = casovi.Max(x => x.RedniBrojCasa);
+            int maxCas;
 
+            try
+            {
+                maxCas = casovi.Max(x => x.RedniBrojCasa);
+            }
+            catch
+            {
+                maxCas = 0;
+            }
             // a+1 -> povecava redni broj casa, zato sto je to sledeci cas koji treba da se odrzi
-            return Json(a+1, JsonRequestBehavior.AllowGet);
+            return Json(maxCas + 1, JsonRequestBehavior.AllowGet);
         }
 
     }
