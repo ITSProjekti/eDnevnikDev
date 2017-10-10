@@ -46,7 +46,7 @@ namespace eDnevnikDev.Controllers
             var profesor = _context.Profesori
                 .SingleOrDefault(p => p.UserProfesorId == prof);
 
-            // Kreiranje casa casa sa hardcode-ovanim polugodistem i tromesecjem
+            // Kreiranje casa casa sa hardcode-ovanim polugodistem i txromesecjem
             Cas cas = new Cas();
             cas.Naziv = casViewModel.Naziv;
             cas.Opis = casViewModel.Opis;

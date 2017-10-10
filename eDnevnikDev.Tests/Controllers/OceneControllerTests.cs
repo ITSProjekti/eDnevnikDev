@@ -54,7 +54,6 @@ namespace eDnevnikDev.Controllers.Tests
 
             var mockContext = new Mock<ApplicationDbContext>();
 
-
             var username = "profesorHashID";
 
             var fakeHttpContext = new Mock<HttpContextBase>();
@@ -74,20 +73,12 @@ namespace eDnevnikDev.Controllers.Tests
 
             _requestController.ControllerContext = controllerContext.Object;
 
-
-
-
-
             var mockSetProfesor = new Mock<DbSet<Profesor>>();
             mockSetProfesor.As<IQueryable<Profesor>>().Setup(m => m.Provider).Returns(profesori.Provider);
             mockSetProfesor.As<IQueryable<Profesor>>().Setup(m => m.Expression).Returns(profesori.Expression);
             mockSetProfesor.As<IQueryable<Profesor>>().Setup(m => m.ElementType).Returns(profesori.ElementType);
             mockSetProfesor.As<IQueryable<Profesor>>().Setup(m => m.GetEnumerator()).Returns(profesori.GetEnumerator());
             mockContext.Setup(p => p.Profesori).Returns(mockSetProfesor.Object);
-            
-
-
-
 
             var mockSetPredmeti = new Mock<DbSet<Predmet>>();
             mockSetPredmeti.As<IQueryable<Predmet>>().Setup(m => m.Provider).Returns(predmeti.Provider);
@@ -96,9 +87,6 @@ namespace eDnevnikDev.Controllers.Tests
             mockSetPredmeti.As<IQueryable<Predmet>>().Setup(m => m.GetEnumerator()).Returns(predmeti.GetEnumerator());
 
             mockContext.Setup(p => p.Predmeti).Returns(mockSetPredmeti.Object);
-
-
-
             //Set your controller ControllerContext with fake context
 
             _requestController.Predmeti();

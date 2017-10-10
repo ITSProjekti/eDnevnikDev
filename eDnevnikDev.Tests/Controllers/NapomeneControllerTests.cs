@@ -86,6 +86,11 @@ namespace eDnevnikDev.Tests.Controllers
             var jsonArray = JArray.Parse(Helper.checkJsonJArray(jsonString));
             foreach (JObject item in jsonArray)
             {
+                //var ocene=item.GetValue("")
+                //foreach (var item in collection)
+                //{
+
+                //}
                 var napomenaId = item["NapomenaId"].ToString();
                 var opis = item["Opis"].ToString();
                 var _ucenikId = item["UcenikId"].ToString();
