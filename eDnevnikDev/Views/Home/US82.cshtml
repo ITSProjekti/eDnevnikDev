@@ -1,0 +1,112 @@
+﻿
+@{
+    ViewBag.Title = "US82";
+}
+<h2>US82</h2>
+
+    <div class="container" style="margin:0px;">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">
+         <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px; ">
+                <div style="display: flex;">
+                    <div style="flex: 4;position:relative">
+                        @* Izlistavanje razreda *@
+                        <label align="center">Razred</label>
+                        <select class="form-control" style="float:left;min-width:100%;">
+                            <option>Prvi</option>
+                            <option>Drugi</option>
+                            <option>Treci</option>
+                        </select>
+                    </div>
+                    <div style="flex: 4;position:relative; margin-left:10px; margin-right:10px;">
+                        @* Izlistavanje odeljenja *@
+                        <label align="center">Odeljenje</label>
+                        <select class="form-control" style="float:left;min-width:100%;">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                        </select>
+                    </div>
+                    <div style="flex: 4;position:relative;">
+                        @* Izlistavanje predmeta *@
+                        <label align="center">Predmet</label>
+                        <select class="form-control" style="float:none;min-width:100%;">
+                            <option>Matematika</option>
+                            <option>Fizika</option>
+                            <option>Hemija</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">
+                @* Brejk linija *@
+                <hr style="margin-top:3px;margin-bottom:3px;" />
+            </div>
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">
+                <div style="display: flex;">
+                    <div style="flex: 2;position:relative">
+                    </div>
+                    <div style="flex: 8;position:relative; margin-left:10px; margin-right:10px;">
+                        @* Izlistavanje odeljenja *@
+                        <input type="text" class="form-control" style="float:none;min-width:100%;" placeholder="Naziv" />
+                    </div>
+                    <div style="flex: 2;position:relative;">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">
+                @* Brejk linija *@
+                <hr style="margin-top:3px;margin-bottom:3px;" />
+            </div>
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">
+                <div class="col-sm-12" style="padding:0px;">
+                    @* Opis casa *@
+                    <textarea class="form-control" style="float:none;min-width:100%;" rows="10" placeholder="Tekstualni opis casa"></textarea>
+                </div>
+            </div>
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">
+                @* Brejk linija *@
+                <hr style="margin-top:3px;margin-bottom:3px;" />
+            </div>
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">
+                <div style="display: flex;">
+                    <div style="flex: 2;">
+                        @* Redni broj casa *@
+                        <input type="text" class="form-control" style="float:none;min-width:100%;" placeholder="RBC" />
+                    </div>
+                    <div style="flex: 8;position: relative;">
+
+                    </div>
+                    <div style="flex: 2;position: relative;">
+                        @* Redni broj casa u danu *@
+                        <input type="text" class="form-control" style="float:none;min-width:100%;" placeholder="RBCUD" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">
+                @* Brejk linija *@
+                <hr style="margin-top:3px;margin-bottom:3px;" />
+            </div>
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">
+                <div style="display: flex;">
+                    <div style="flex: 10;">
+                    </div>
+                    <div style="flex: 2;">
+                        <button type="submit" class="form-control" style="float:none;min-width:100%;">Potvrdi</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    
+
+

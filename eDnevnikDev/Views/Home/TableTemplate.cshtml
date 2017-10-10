@@ -1,10 +1,22 @@
 ﻿
 @{
-    ViewBag.Title = "US74";
+    ViewBag.Title = "TableTemplate";
 }
-
 <h2>US74</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    
 
+    <!-- Dodato za switch -->
+
+
+</head>
+<body>
 
     <!-- Modal -->
     <!-- Trigger the modal with a button -->
@@ -27,37 +39,24 @@
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">
                                     <div style="display: flex;">
                                         <div style="flex: 3;">
-                                            <select class="form-control" style="float:left;min-width:100%;">
-                                                <option>Kontrolni</option>
-                                                <option>Pismeni</option>
-                                                <option>Domaci</option>
-                                            </select>
+                                            @* Levi deo *@
                                         </div>
                                         <div style="flex: 6;position: relative;">
+                                            @* Srednji deo *@
                                         </div>
                                         <div style="flex: 3;position: relative;">
-                                            <select class="form-control" style="float:right;min-width:100%;">
-                                                <optgroup label="Ocena">
-                                                    <option>1</option>
-                                                    <option>2</option>
-                                                    <option>3</option>
-                                                    <option>4</option>
-                                                    <option>5</option>
-                                                </optgroup>
-                                                <optgroup label="Znak">
-                                                    <option>+</option>
-                                                    <option>-</option>
-                                                </optgroup>
-
-                                            </select>
+                                            @* Desni deo *@
                                         </div>
                                     </div>
 
                                     <div class="col-sm-12" style="padding-bottom:0px;padding-top:0px;">
+                                        @* Brejk linija *@
                                         <hr style="margin-top:3px;margin-bottom:3px;" />
                                     </div>
+
                                     <div class="col-sm-12" style="padding:0px;">
-                                        <textarea class="form-control" style="float:none;min-width:100%;" rows="10"></textarea>
+                                        @* Full sirina kontrole *@
+                                        
                                     </div>
                                     <div class="col-sm-12" style="padding-bottom:0px;padding-top:0px;">
                                         <hr style="margin-top:3px;margin-bottom:3px;" />
@@ -88,3 +87,5 @@
     </div>
     <!-- Modal END -->
 
+</body>
+</html>

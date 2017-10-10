@@ -834,6 +834,10 @@
     <Content Include="Views\Napomene\Index.cshtml" />
     <Content Include="Views\Home\US84.cshtml" />
     <Content Include="Views\Home\US74.cshtml" />
+    <Content Include="Views\Home\TableTemplate.cshtml" />
+    <Content Include="Views\Home\US82.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\Collapse.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
