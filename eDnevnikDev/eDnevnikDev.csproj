@@ -214,6 +214,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CasoviController.cs" />
     <Compile Include="Controllers\EvidencijaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -224,9 +225,12 @@
     <Compile Include="Controllers\ProfesoriController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\UceniciController.cs" />
+    <Compile Include="DTOs\DTOBrojcanaOcena.cs" />
     <Compile Include="DTOs\DTONapomena.cs" />
     <Compile Include="DTOs\DTOOdeljenje.cs" />
     <Compile Include="DTOs\DTOOdeljenjeSaUcenicima.cs" />
+    <Compile Include="DTOs\DTOPredmet.cs" />
+    <Compile Include="DTOs\DTOPredmetCas.cs" />
     <Compile Include="DTOs\DTOProfesor.cs" />
     <Compile Include="DTOs\DTORola.cs" />
     <Compile Include="DTOs\DTOUcenik.cs" />
@@ -235,6 +239,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\IdentityHelper.cs" />
+    <Compile Include="Helpers\ValidateHeaderAntiForgeryTokenAttribute.cs" />
     <Compile Include="Migrations\201705231259184_IntialModelUcenik.cs" />
     <Compile Include="Migrations\201705231259184_IntialModelUcenik.Designer.cs">
       <DependentUpon>201705231259184_IntialModelUcenik.cs</DependentUpon>
@@ -395,6 +400,18 @@
     <Compile Include="Migrations\201709141045270_UpdateModelaCas.Designer.cs">
       <DependentUpon>201709141045270_UpdateModelaCas.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201709141136453_DodavanjeModela_Ocena_TipOcena_TipOpisneOcene.cs" />
+    <Compile Include="Migrations\201709141136453_DodavanjeModela_Ocena_TipOcena_TipOpisneOcene.Designer.cs">
+      <DependentUpon>201709141136453_DodavanjeModela_Ocena_TipOcena_TipOpisneOcene.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710040953149_UnosNazivaUCas.cs" />
+    <Compile Include="Migrations\201710040953149_UnosNazivaUCas.Designer.cs">
+      <DependentUpon>201710040953149_UnosNazivaUCas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710091131109_backupnecega.cs" />
+    <Compile Include="Migrations\201710091131109_backupnecega.Designer.cs">
+      <DependentUpon>201710091131109_backupnecega.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ArhivaOdeljenja.cs" />
@@ -414,15 +431,18 @@
     <Compile Include="Models\Smer.cs" />
     <Compile Include="Models\Status.cs" />
     <Compile Include="Models\TipOcene.cs" />
+    <Compile Include="Models\TipOcenePredmeta.cs" />
     <Compile Include="Models\TipOpisneOcene.cs" />
     <Compile Include="Models\Ucenik.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModel\PredmetTipOcenePredmetaViewModel.cs" />
     <Compile Include="ViewModel\ProfesorRoleViewModel.cs" />
     <Compile Include="ViewModel\EvidencijaUcenikaViewModel.cs" />
     <Compile Include="ViewModel\ProfesorViewModel.cs" />
     <Compile Include="ViewModel\UcenikRoleViewModel.cs" />
     <Compile Include="ViewModel\UcenikViewModel.cs" />
+    <Compile Include="ViewModel\UpisCasaViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\blueimp-gallery.css" />
@@ -832,6 +852,9 @@
     <Content Include="Views\Napomene\Details.cshtml" />
     <Content Include="Views\Napomene\Edit.cshtml" />
     <Content Include="Views\Napomene\Index.cshtml" />
+    <Content Include="Views\Predmeti\PrikaziPredmeteSaTipovimaOcena.cshtml" />
+    <Content Include="Views\Casovi\Create.cshtml" />
+    <Content Include="Views\Evidencija\Collapse.cshtml" />
     <Content Include="Views\Home\US84.cshtml" />
     <Content Include="Views\Home\US74.cshtml" />
   </ItemGroup>
@@ -962,6 +985,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201709141045270_UpdateModelaCas.resx">
       <DependentUpon>201709141045270_UpdateModelaCas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709141136453_DodavanjeModela_Ocena_TipOcena_TipOpisneOcene.resx">
+      <DependentUpon>201709141136453_DodavanjeModela_Ocena_TipOcena_TipOpisneOcene.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710040953149_UnosNazivaUCas.resx">
+      <DependentUpon>201710040953149_UnosNazivaUCas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710091131109_backupnecega.resx">
+      <DependentUpon>201710091131109_backupnecega.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

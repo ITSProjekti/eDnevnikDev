@@ -11,6 +11,7 @@ using eDnevnikDev.ViewModel;
 using System.Net;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using eDnevnikDev.Helpers;
 
 namespace eDnevnikDev.Controllers
 {
@@ -58,17 +59,14 @@ namespace eDnevnikDev.Controllers
                 var dtoProfesori = new List<DTOProfesor>();
                 foreach (var p in profesori)
                 {
-                    List<string> roleProfesora = new List<string>();
-                    roleProfesora = (List<string>)await UserManager.GetRolesAsync(p.UserProfesorId);
-
                     dtoProfesori.Add(new DTOProfesor
                     {
                         Id = p.UserProfesorId,
                         Ime = p.Ime,
                         Prezime = p.Prezime,
-                        Role = roleProfesora
+                        Role = (List<string>)await UserManager.GetRolesAsync(p.UserProfesorId)
 
-                    });
+                });
 
 
                 }
@@ -94,19 +92,16 @@ namespace eDnevnikDev.Controllers
                 var dtoUcenici = new List<DTOUcenik>();
                 foreach (var u in ucenici)
                 {
-                    List<string> roleUcenika = new List<string>();
-                    roleUcenika= (List<string>)await UserManager.GetRolesAsync(u.UserUcenikId);
-
-
+                 
                     dtoUcenici.Add(new DTOUcenik
                     {
                         Id = u.UserUcenikId,
                         JMBG=u.JMBG,
                         Ime = u.Ime,
                         Prezime = u.Prezime,
-                        Role = roleUcenika
+                        Role = (List<string>)await UserManager.GetRolesAsync(u.UserUcenikId)
 
-                    });
+                });
 
 
                 }
@@ -214,7 +209,8 @@ namespace eDnevnikDev.Controllers
         }
 
 
-
+        [HttpPost]
+        [ValidateHeaderAntiForgeryToken]
         public async Task DodajRolu(DTORola dtoRola)
         {
 
@@ -223,7 +219,8 @@ namespace eDnevnikDev.Controllers
             await userManager.AddToRoleAsync(dtoRola.KorisnikID, dtoRola.Rola);
         }
 
-
+        [HttpPost]
+        [ValidateHeaderAntiForgeryToken]
         public async Task ObrisiRolu(DTORola dtoRola)
         {
 

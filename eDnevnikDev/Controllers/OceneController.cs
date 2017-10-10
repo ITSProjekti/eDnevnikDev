@@ -151,6 +151,7 @@ namespace eDnevnikDev.Controllers
         }
         /// <summary>
         /// Vraca listu predmete koje profesor predaje, da bi profesor mogao da vidi ocene, da ih upise ili izmeni.
+        /// TESTED. TEST_NAME= PredmetiTest_VracaPredmete()
         /// </summary>
         /// <returns>Listu predmeta</returns>
         public ActionResult Predmeti()
@@ -162,9 +163,6 @@ namespace eDnevnikDev.Controllers
                 .Select(x=>x)
                 .ToList();
 
-            //"5ae56739-e0d7-4ac7-9d7c-1966f869e0c0"
-            //"profesor"
-            // == User.Identity.GetUserId()
             return View(predmeti);
         }
         

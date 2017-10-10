@@ -8,43 +8,53 @@
 
 <h4>@Model.Ime @Model.Prezime</h4>
 
-<input type="hidden" id="UserProfesorId"  value="@Model.UserProfesorId"/>
+<input type="hidden" id="UserProfesorId" value="@Model.UserProfesorId" />
 
 <br />
 <br />
 
-@if (Model.RolaProfesor)
-{
-    <input type="checkbox"  checked="checked" value="@RoleNames.ROLE_PROFESOR" id="Profesor" /><strong>@RoleNames.ROLE_PROFESOR</strong>
+<form id="__AjaxAntiForgeryForm">
+    @Html.AntiForgeryToken()
 
-}
-else
-{
-    <input type="checkbox"  value="@RoleNames.ROLE_PROFESOR" id="Profesor" /><strong>@RoleNames.ROLE_PROFESOR</strong>
-}
+    @if (Model.RolaProfesor)
+    {
+        <input type="checkbox" checked="checked" value="@RoleNames.ROLE_PROFESOR" id="Profesor" /><strong>@RoleNames.ROLE_PROFESOR</strong>
 
+    }
+    else
+    {
+        <input type="checkbox" value="@RoleNames.ROLE_PROFESOR" id="Profesor" /><strong>@RoleNames.ROLE_PROFESOR</strong>
+    }
+
+    <br />
+
+    @if (Model.RolaEditor)
+    {
+        <input type="checkbox" checked="checked" value="@RoleNames.ROLE_EDITOR" id="Editor" /><strong>@RoleNames.ROLE_EDITOR</strong>
+
+    }
+    else
+    {
+        <input type="checkbox" value="@RoleNames.ROLE_EDITOR" id="Editor" /><strong>@RoleNames.ROLE_EDITOR</strong>
+
+    }
+</form>
 <br />
-
-@if (Model.RolaEditor)
-{
-    <input type="checkbox" checked="checked" value="@RoleNames.ROLE_EDITOR" id="Editor" /><strong>@RoleNames.ROLE_EDITOR</strong>
-
-}
-else
-{
-    <input type="checkbox" value="@RoleNames.ROLE_EDITOR" id="Editor" /><strong>@RoleNames.ROLE_EDITOR</strong>
-
-}
-
-<br/>
 <br />
 
 <a href="/Role/Index">Nazad na listu</a>
 
 @section Scripts{
     <script>
-
         $(function () {
+
+            var form = $('#__AjaxAntiForgeryForm');
+            var token = $('input[name="__RequestVerificationToken"]', form).val();
+
+            var headers = {};
+            headers["__RequestVerificationToken"] = token;
+
+
             $("#Profesor").change(function () {
 
                 var rola = {
@@ -55,7 +65,7 @@ else
                 var url = "";
 
                 if ($("#Profesor").is(':checked')) {
-      
+
                     url = "/Role/DodajRolu";
 
                 }
@@ -66,14 +76,15 @@ else
 
 
 
-              var zahtev=  $.ajax({
+                var zahtev = $.ajax({
                     type: "POST",
+                    headers: headers,
                     url: url,
                     data: JSON.stringify(rola),
                     dataType: "text",
                     contentType: "application/json"
 
-              });
+                });
 
             });
 
@@ -102,6 +113,7 @@ else
 
                 var zahtev = $.ajax({
                     type: "POST",
+                    headers: headers,
                     url: url,
                     data: JSON.stringify(rola),
                     dataType: "text",
@@ -113,8 +125,8 @@ else
 
 
         });
-        
-       
+
+
 
     </script>
 
