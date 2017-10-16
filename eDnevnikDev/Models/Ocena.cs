@@ -68,7 +68,6 @@ namespace eDnevnikDev.Models
         /// </value>
         public int? TipOpisneOceneId { get; set; }
 
-
         /// <summary>
         /// Gets or sets the napomena.
         /// </summary>

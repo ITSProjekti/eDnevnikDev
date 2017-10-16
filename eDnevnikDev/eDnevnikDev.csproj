@@ -214,6 +214,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CasoviController.cs" />
     <Compile Include="Controllers\EvidencijaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -224,11 +225,13 @@
     <Compile Include="Controllers\ProfesoriController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\UceniciController.cs" />
-    <Compile Include="DTOs\DTOBrojcanaOcena.cs" />
+    <Compile Include="DTOs\DTOOcena.cs" />
     <Compile Include="DTOs\DTONapomena.cs" />
     <Compile Include="DTOs\DTOOdeljenje.cs" />
     <Compile Include="DTOs\DTOOdeljenjeSaUcenicima.cs" />
     <Compile Include="DTOs\DTOPredmet.cs" />
+    <Compile Include="DTOs\DTOPredmetCas.cs" />
+    <Compile Include="DTOs\DTOPredmetID.cs" />
     <Compile Include="DTOs\DTOProfesor.cs" />
     <Compile Include="DTOs\DTORola.cs" />
     <Compile Include="DTOs\DTOUcenik.cs" />
@@ -406,6 +409,10 @@
     <Compile Include="Migrations\201709291235389_PredmetiOdeljenja.Designer.cs">
       <DependentUpon>201709291235389_PredmetiOdeljenja.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201710111229217_AcaCasNaziv.cs" />
+    <Compile Include="Migrations\201710111229217_AcaCasNaziv.Designer.cs">
+      <DependentUpon>201710111229217_AcaCasNaziv.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ArhivaOdeljenja.cs" />
@@ -435,6 +442,8 @@
     <Compile Include="ViewModel\ProfesorViewModel.cs" />
     <Compile Include="ViewModel\UcenikRoleViewModel.cs" />
     <Compile Include="ViewModel\UcenikViewModel.cs" />
+    <Compile Include="ViewModel\CasUceniciViewModel.cs" />
+    <Compile Include="ViewModel\UpisCasaViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\blueimp-gallery.css" />
@@ -828,7 +837,7 @@
     <Content Include="Scripts\jquery-3.1.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.1.1.min.map" />
     <Content Include="Views\Odeljenje\Index.cshtml" />
-    <Content Include="Views\Evidencija\Index.cshtml" />
+    <Content Include="Views\Evidencija\Index1.cshtml" />
     <Content Include="Views\Odeljenje\PregledKreiranih.cshtml" />
     <Content Include="Views\Role\Index.cshtml" />
     <Content Include="Views\Role\PromeniPravoPristupaProfesora.cshtml" />
@@ -845,6 +854,9 @@
     <Content Include="Views\Napomene\Edit.cshtml" />
     <Content Include="Views\Napomene\Index.cshtml" />
     <Content Include="Views\Evidencija\Collapse.cshtml" />
+    <Content Include="Views\Evidencija\Index.cshtml" />
+    <Content Include="Views\Casovi\Create.cshtml" />
+    <Content Include="Views\Casovi\Cas.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -979,6 +991,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201709291235389_PredmetiOdeljenja.resx">
       <DependentUpon>201709291235389_PredmetiOdeljenja.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710111229217_AcaCasNaziv.resx">
+      <DependentUpon>201710111229217_AcaCasNaziv.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

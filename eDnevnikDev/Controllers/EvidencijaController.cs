@@ -13,6 +13,7 @@ using Moq;
 using System.Collections;
 using System.Data.Entity;
 using System.Collections;
+using eDnevnikDev.ViewModel;
 
 namespace eDnevnikDev.Controllers
 {
@@ -31,7 +32,7 @@ namespace eDnevnikDev.Controllers
         /// NOT TESTED
         /// </summary>
         /// <returns>Spisak ucenika u odredjenom odeljenju</returns>
-        public ActionResult Index()
+        public ActionResult Index1()
         {
             // Assembly assem = typeof(Ucenik2).Assembly;
             // Type objType = typeof(Ucenik2);
@@ -68,7 +69,7 @@ namespace eDnevnikDev.Controllers
                 (Mock<>).MakeGenericType(new[] { dbSetType });
             Mock mock = (Mock)Activator.CreateInstance(listType);
 
-          ;
+
 
             //string MockQualifiedName = typeof(DbSet).AssemblyQualifiedName;
             //Type elementTypeDbSet = Type.GetType(UcenikQualifiedName);
@@ -82,7 +83,8 @@ namespace eDnevnikDev.Controllers
             //Type MockType = typeof(Mock<>).MakeGenericType(new[] { elementType });//ggwp
             //var list = Activator.CreateInstance(MockType);
 
-                return View();
+
+           return View();
             
         }
 
@@ -90,6 +92,9 @@ namespace eDnevnikDev.Controllers
         {
             return View();
         }
+
+
+
 
         public JsonResult VratiPredmenete(int? odeljenjeId, int? profesorId)
         {
@@ -117,7 +122,7 @@ namespace eDnevnikDev.Controllers
                         {
                             PredmetId = p.PredmetID,
                             NazivPredmeta = p.NazivPredmeta,
-                            TipOcenePredmetaId = p.TipOcenePredmetaId
+                          //  TipOcenePredmetaId = p.TipOcenePredmetaId
                         });
                     }
 
@@ -136,7 +141,7 @@ namespace eDnevnikDev.Controllers
 
         }
 
-        public JsonResult VratiBrojcaneOcene(int? odeljenjeId, int? profesorId, int? predmetId, int? ucenikId)
+        public JsonResult VratiOcene(int? odeljenjeId, int? profesorId, int? predmetId, int? ucenikId)
         {
 
             if (odeljenjeId != null && profesorId != null && predmetId!=null)
@@ -150,7 +155,7 @@ namespace eDnevnikDev.Controllers
 
                 if(casoviId!=null)
                 {
-                   var DTOocene = new List<DTOBrojcanaOcena>();
+                   var DTOocene = new List<DTOOcena>();
 
                     foreach (var c in casoviId)
                     {
@@ -162,7 +167,7 @@ namespace eDnevnikDev.Controllers
                         {
                             foreach (var o in ocene)
                             {
-                                DTOocene.Add(new DTOBrojcanaOcena
+                                DTOocene.Add(new DTOOcena
                                 {
                                     Ocena = (int)o.Oznaka,
                                     TipOcene = o.TipOcene.Tip,
@@ -179,12 +184,12 @@ namespace eDnevnikDev.Controllers
 
                 }
 
-                return Json(new DTOBrojcanaOcena(), JsonRequestBehavior.AllowGet);
+                return Json(new DTOOcena(), JsonRequestBehavior.AllowGet);
 
              }
 
 
-             return Json(new DTOBrojcanaOcena(), JsonRequestBehavior.AllowGet);
+             return Json(new DTOOcena(), JsonRequestBehavior.AllowGet);
 
         }        
     }
