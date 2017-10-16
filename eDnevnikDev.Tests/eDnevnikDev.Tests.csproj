@@ -115,6 +115,7 @@
     <Compile Include="Controllers\OdeljenjeControllerTest.cs" />
     <Compile Include="Controllers\PredmetiControllerTests.cs" />
     <Compile Include="Controllers\ProfesoriControllerTests.cs" />
+    <Compile Include="Controllers\RoleControllerTests.cs" />
     <Compile Include="Controllers\UceniciControllerTests.cs" />
     <Compile Include="Controllers\EvidencijaControllerTests.cs" />
     <Compile Include="Controllers\NapomeneControllerTests.cs" />
