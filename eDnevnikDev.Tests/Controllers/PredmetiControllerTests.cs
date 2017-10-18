@@ -184,14 +184,12 @@ namespace eDnevnikDev.Controllers.Tests
 
             mockContext.Setup(c => c.TipoviOcenaPredmeta).Returns(mockSetTipOcenePredmeta.Object);
 
-            //_mockUserRepository.Setup(mr => mr.Update(It.IsAny<int>(), It.IsAny<string>()))
-            //       .Returns(true);
+
 
             var kontroler = new PredmetiController(mockContext.Object);
 
             kontroler.IzmenaTipaOcenaUPredmetu(predmetId, tipOcenePredmetaId);
 
-            //mockSetPredmet.Verify(p => p.Add(It.IsAny<Predmet>()), Times.Once());
             mockContext.Verify(p => p.SaveChanges(), Times.Once());
 
         }

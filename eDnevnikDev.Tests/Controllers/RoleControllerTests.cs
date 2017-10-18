@@ -21,6 +21,8 @@ using System.Web;
 using System.Security.Principal;
 using Microsoft.AspNet.Identity;
 using System.Net;
+using System.Data.Entity.Core.Objects;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace eDnevnikDev.Tests.Controllers
 {
@@ -171,7 +173,7 @@ namespace eDnevnikDev.Tests.Controllers
             Assert.AreEqual(jsonArray.Count(), 3);
         }
         [TestMethod]
-        public void PromeniPravoPristupaProfesora()
+        public async Task PromeniPravoPristupaProfesora()
         {
             string id = "22222222";
             var profesori = new List<Profesor>
@@ -198,13 +200,87 @@ namespace eDnevnikDev.Tests.Controllers
             var appUserManager = new Mock<ApplicationUserManager>(userStore.Object);
             appUserManager.Setup(x => x.GetRolesAsync(It.IsAny<string>())).ReturnsAsync(role);
             controler._userManager = appUserManager.Object;
-            var result = controler.VratiUcenike() as Task<JsonResult>;
 
             //Assert
-            var resultNullId = controler.PromeniPravoPristupaProfesora(null);
-            Assert.AreEqual((HttpStatusCodeResult)resultNullId, new HttpStatusCodeResult(HttpStatusCode.BadRequest));
-            //var result = controler.PromeniPravoPristupaProfesora(id);
+            var resultNullId = await controler.PromeniPravoPristupaProfesora(null);
+            Assert.IsInstanceOfType(resultNullId, typeof(HttpStatusCodeResult));
 
+            var result = await controler.PromeniPravoPristupaProfesora(id) as ViewResult;
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(ViewResult));
+            Assert.IsInstanceOfType(result.Model, typeof(ProfesorRoleViewModel));
+
+            var dummyProfesor = profesori.FirstOrDefault(x => x.UserProfesorId== id);
+            Assert.AreEqual((result.Model as ProfesorRoleViewModel).Ime,dummyProfesor.Ime);
+            Assert.AreEqual((result.Model as ProfesorRoleViewModel).Prezime, dummyProfesor.Prezime);
+            Assert.AreEqual((result.Model as ProfesorRoleViewModel).UserProfesorId, dummyProfesor.UserProfesorId);
+            Assert.AreEqual((result.Model as ProfesorRoleViewModel).RolaEditor, false);
+            Assert.AreEqual((result.Model as ProfesorRoleViewModel).RolaProfesor, true);
+        }
+        [TestMethod]
+        public async Task PromeniPravoPristupaUcenika()
+        {
+            string id = "22222222";
+            var ucenici = new List<Ucenik>
+            {
+                new Ucenik {UcenikID = 1,UserUcenikId="11111111", Ime = "Petar", Prezime = "Gajic", Adresa = "Kneza Milosa 12", BrojTelefonaRoditelja = "+381-11/1443467", ImeMajke = "Jovana", ImeOca = "Jovana", JMBG = "1234567891234", MestoPrebivalista = "Blace", MestoRodjenjaId = 1, OdeljenjeId = 1, PrezimeMajke = "Petrovic", PrezimeOca = "Petrovic", Razred = 1, SmerID = 2, Vanredan = false },
+                new Ucenik {UcenikID = 2,UserUcenikId="22222222", Ime = "Marko", Prezime = "Milic", Adresa = "Jurija gagarina 2", BrojTelefonaRoditelja = "+381-11/1223337", ImeMajke = "Jovana", ImeOca = "Jovana", JMBG = "1234567891234", MestoPrebivalista = "Blace", MestoRodjenjaId = 1, OdeljenjeId = 1, PrezimeMajke = "Petrovic", PrezimeOca = "Petrovic", Razred = 1, SmerID = 2, Vanredan = false },
+                new Ucenik {UcenikID = 3,UserUcenikId="33333333", Ime = "Milos", Prezime = "Djokic", Adresa = "Petroviceva 9", BrojTelefonaRoditelja = "+381-11/12555557", ImeMajke = "Jovana", ImeOca = "Jovana", JMBG = "1234567891234", MestoPrebivalista = "Blace", MestoRodjenjaId = 1, OdeljenjeId = 1, PrezimeMajke = "Petrovic", PrezimeOca = "Petrovic", Razred = 1, SmerID = 2, Vanredan = false }
+
+            }.AsQueryable();
+            var role = new List<string>()
+            {
+                "Ucenik",
+                "Editor",
+            } as IList<string>;
+
+            var mockSetUcenik = new Mock<DbSet<Ucenik>>();
+            mockSetUcenik.As<IQueryable<Ucenik>>().Setup(m => m.Provider).Returns(ucenici.Provider);
+            mockSetUcenik.As<IQueryable<Ucenik>>().Setup(m => m.Expression).Returns(ucenici.Expression);
+            mockSetUcenik.As<IQueryable<Ucenik>>().Setup(m => m.ElementType).Returns(ucenici.ElementType);
+            mockSetUcenik.As<IQueryable<Ucenik>>().Setup(m => m.GetEnumerator()).Returns(ucenici.GetEnumerator());
+            mockContext.Setup(x => x.Ucenici).Returns(mockSetUcenik.Object);
+
+            var userStore = new Mock<IUserStore<ApplicationUser>>();
+            var appUserManager = new Mock<ApplicationUserManager>(userStore.Object);
+            appUserManager.Setup(x => x.GetRolesAsync(It.IsAny<string>())).ReturnsAsync(role);
+            controler._userManager = appUserManager.Object;
+
+            //Assert
+            var resultNullId = await controler.PromeniPravoPristupaUcenika(null);
+            Assert.IsInstanceOfType(resultNullId, typeof(HttpStatusCodeResult));
+
+            var result = await controler.PromeniPravoPristupaUcenika(id) as ViewResult;
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(ViewResult));
+            Assert.IsInstanceOfType(result.Model, typeof(UcenikRoleViewModel));
+
+            var dummyUcenik = ucenici.FirstOrDefault(x => x.UserUcenikId == id);
+            Assert.AreEqual((result.Model as UcenikRoleViewModel).Ime, dummyUcenik.Ime);
+            Assert.AreEqual((result.Model as UcenikRoleViewModel).Prezime, dummyUcenik.Prezime);
+            Assert.AreEqual((result.Model as UcenikRoleViewModel).UserUcenikId, dummyUcenik.UserUcenikId);
+            Assert.AreEqual((result.Model as UcenikRoleViewModel).JMBG, dummyUcenik.JMBG);
+            Assert.AreEqual((result.Model as UcenikRoleViewModel).RolaEditor, true);
+            Assert.AreEqual((result.Model as UcenikRoleViewModel).RolaUcenik, true);
+        }
+
+        [TestMethod]
+        public void DodajRolu()
+        {
+            //MOCKUJE USERE IIDENTITY
+            var dto = new DTORola() { KorisnikID = "222222", Rola = "Editor" };
+            var userStore = new Mock<IUserStore<ApplicationUser>>();
+            var appUser = new Mock<UserManager<ApplicationUser>>(userStore.Object);
+            var roles = new Mock<MockableIdentity<IdentityRole>>();
+            roles.Setup(x=>
+            mockContext.Setup(x => x.Roles).Returns(roles.Object);
+            //var appUser = new Mock<UserManager<ApplicationUser>>(userStore.Object);
+
+            //mockContext.Setup(x => x.Users).Returns(appUserManager.Object);
+            //mockContext.Setup(x=>x.
+            controler.DodajRolu(dto);
+            roles.Verify(x => x.AddToRole(It.IsAny<string>(), It.IsAny<string>()),Times.AtLeastOnce());
+            //appUser.Verify(x => x.AddToRole(dto.KorisnikID, dto.Rola), Times.AtLeastOnce());
         }
     }
 }
