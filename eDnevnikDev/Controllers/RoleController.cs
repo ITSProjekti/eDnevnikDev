@@ -211,12 +211,12 @@ namespace eDnevnikDev.Controllers
 
         [HttpPost]
         [ValidateHeaderAntiForgeryToken]
-        public async Task DodajRolu(DTORola dtoRola)
+        public void DodajRolu(DTORola dtoRola)
         {
 
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_context));
 
-            await userManager.AddToRoleAsync(dtoRola.KorisnikID, dtoRola.Rola);
+            userManager.AddToRole(dtoRola.KorisnikID, dtoRola.Rola);
         }
 
         [HttpPost]

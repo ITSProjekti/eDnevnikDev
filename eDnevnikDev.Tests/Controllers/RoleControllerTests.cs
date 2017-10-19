@@ -23,6 +23,7 @@ using Microsoft.AspNet.Identity;
 using System.Net;
 using System.Data.Entity.Core.Objects;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.Security.Claims;
 
 namespace eDnevnikDev.Tests.Controllers
 {
@@ -272,13 +273,28 @@ namespace eDnevnikDev.Tests.Controllers
             var userStore = new Mock<IUserStore<ApplicationUser>>();
             var appUser = new Mock<UserManager<ApplicationUser>>(userStore.Object);
             var roles = new Mock<MockableIdentity<IdentityRole>>();
-            roles.Setup(x=>
+            //roles.Setup(x=>
             mockContext.Setup(x => x.Roles).Returns(roles.Object);
-            //var appUser = new Mock<UserManager<ApplicationUser>>(userStore.Object);
+            var fakeHttpContext = new Mock<HttpContextBase>();
+            var controllerContext = new Mock<ControllerContext>();
+
+            var fakeIdentity = new GenericIdentity("User");
+            var principal = new GenericPrincipal(fakeIdentity, null);
+            var username = "profesorHashID";
+
+            controllerContext.Setup(t => t.HttpContext).Returns(fakeHttpContext.Object);
+            controllerContext.SetupGet(x => x.HttpContext.User).Returns(principal);
+            controllerContext.SetupGet(p => p.HttpContext.Request.IsAuthenticated).Returns(true);
+
+            var mockIdentity = new Mock<IIdentity>();
+            fakeHttpContext.SetupGet(x => x.User.Identity).Returns(mockIdentity.Object);
+            fakeIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, username));
+            var _requestController = new RoleController(mockContext.Object);
+
+            _requestController.ControllerContext = controllerContext.Object;
 
             //mockContext.Setup(x => x.Users).Returns(appUserManager.Object);
-            //mockContext.Setup(x=>x.
-            controler.DodajRolu(dto);
+            _requestController.DodajRolu(dto);
             roles.Verify(x => x.AddToRole(It.IsAny<string>(), It.IsAny<string>()),Times.AtLeastOnce());
             //appUser.Verify(x => x.AddToRole(dto.KorisnikID, dto.Rola), Times.AtLeastOnce());
         }
