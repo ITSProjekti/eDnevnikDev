@@ -42,8 +42,6 @@ namespace eDnevnikDev.Models
         [Display(Name = "Oznaka")]
         public Oznaka Oznaka { get; set; }
 
-
-
         [ForeignKey("Status")]
         public int StatusID { get; set; }
 
@@ -72,16 +70,13 @@ namespace eDnevnikDev.Models
         /// </value>
         public virtual ICollection<Cas> Casovi { get; set; }
 
-        public virtual ICollection<Predmet> Predmeti { get; set; }
-
-
         /// <summary>
-        /// Gets or sets the predmeti. Kolekcija Predmeta
-        /// </summary>\
+        /// Gets or sets the predmeti.
+        /// </summary>
         /// <value>
         /// The predmeti.
         /// </value>
-   
+        public virtual ICollection<Predmet> Predmeti { get; set; }
 
 
         /// <summary>

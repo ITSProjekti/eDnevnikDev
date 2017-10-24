@@ -122,7 +122,7 @@ namespace eDnevnikDev.Controllers
                 _context.Predmeti.AddOrUpdate(predmet);
                 
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 
             }

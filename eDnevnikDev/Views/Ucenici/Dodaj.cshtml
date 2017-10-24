@@ -9,7 +9,7 @@
 
 @using (Html.BeginForm("Sacuvaj", "Ucenici", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
 {
-        <div class="col-md-3 col-sm-5 fff">
+        @*<div class="col-md-3 col-sm-5 fff">
 
                 <a href="#"><img src="http://placehold.it/230x240" id="placeholder" alt=""></a>
 
@@ -18,7 +18,12 @@
                 </label>
                 @Html.ValidationMessageFor(u => u.File)
 
-        </div>
+        </div>*@
+
+        <div class="col-md-3 col-sm-5 fff">
+            <input accept="image/*" type="file" name="upload" id="fotografijaUcenika"/>
+        </div>    
+
         <div class="col-md-7 col-sm-7 col-md-offset-2 ">
             <!--<form class="form-horizontal">-->
             
@@ -214,18 +219,11 @@
                             @*<input type="hidden" value="@odeljenje.Id" id="@("odeljenjeID" + odeljenje.Oznaka)">*@
                         }
                     }
-
-
-                
-                
             </div>
-            
         </div>
 }
     
 <!--       </form> -->
-
-
 
 @section Scripts
 {
@@ -266,10 +264,7 @@
                     $(".odeljenje" + smerId).each(function () {
 
                         html += '<option value="' + $(this).val() + '">' + $(this).val() + '</option>';
-
-
                     });
-
 
                     $("#Oznaka").html(html);
 
@@ -352,8 +347,6 @@
 
         }
 
-
-
         $(function () {
             $("#Ucenik_Razred").change(function () {
                 PostojiKreirano();
@@ -363,18 +356,15 @@
             });
         })
 
-       
-
         //Boz pomozi
-        var loadFile = function (event) {
-            var reader = new FileReader();
-            reader.onload = function () {
-                var output = document.getElementById('placeholder');
-                output.src = reader.result;
-            };
-            reader.readAsDataURL(event.target.files[0]);
-        };
-
+        //var loadFile = function (event) {
+        //    var reader = new FileReader();
+        //    reader.onload = function () {
+        //        var output = document.getElementById('placeholder');
+        //        output.src = reader.result;
+        //    };
+        //    reader.readAsDataURL(event.target.files[0]);
+        //};
 
     </script>
 
