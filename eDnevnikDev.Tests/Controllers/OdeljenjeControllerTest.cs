@@ -503,5 +503,4 @@ namespace eDnevnikDev.Tests.Controllers
             Assert.AreEqual<int>(jsonArray.Count(), 6);
         }
     }
-
 }
