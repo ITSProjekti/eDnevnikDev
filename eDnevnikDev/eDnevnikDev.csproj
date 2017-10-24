@@ -1050,6 +1050,12 @@
     <EmbeddedResource Include="Migrations\201710121123027_SetRedniBrojUUcenikuUString.resx">
       <DependentUpon>201710121123027_SetRedniBrojUUcenikuUString.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710161158564_tipOcenePredmetaAca.resx">
+      <DependentUpon>201710161158564_tipOcenePredmetaAca.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710161208545_PredmetOdeljenjeAca.resx">
+      <DependentUpon>201710161208545_PredmetOdeljenjeAca.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201710171138159_DodataPromenaLozinkeUUcenikuIProfi.resx">
       <DependentUpon>201710171138159_DodataPromenaLozinkeUUcenikuIProfi.cs</DependentUpon>
     </EmbeddedResource>

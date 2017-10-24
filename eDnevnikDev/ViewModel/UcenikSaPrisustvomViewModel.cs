@@ -10,7 +10,7 @@ namespace eDnevnikDev.ViewModel
         public int UcenikID { get; set; }
         public string Ime { get; set; }
         public string Prezime { get; set; }
-        public string Fotografija { get; set; }
+        public byte[] Fotografija { get; set; }
         public int? BrojUDnevniku { get; set; }
         public bool Prisutan { get; set; }
     }

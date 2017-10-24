@@ -7,7 +7,7 @@ namespace eDnevnikDev.Migrations
     {
         public override void Up()
         {
-            AddColumn("dbo.Ucenik", "RedniBroj", c => c.Int(nullable: false));
+            AddColumn("dbo.Ucenik", "RedniBroj", c => c.Int(nullable: true));
         }
         
         public override void Down()
