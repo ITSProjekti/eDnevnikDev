@@ -95,7 +95,7 @@
                             <!--<label for="inputEmail" class="col-lg-2 control-label">Email</label>-->
 
                             @Html.LabelFor(u => u.Ucenik.DatumRodjenja, new { @class = "col-md-3 control-label" })
-                            <div class="col-md-9">
+                            <div class="col-md-9">+
                                 <input type="text" id="datum" class="form-control" name="datum" data-val="true" data-val-required="Polje za datum rođenja je obavezno" readonly>
                                 <input type="hidden" name="Ucenik.DatumRodjenja" id="Ucenik_DatumRodjenja" >
                                 @*@Html.ValidationMessageFor(u => u.Ucenik.DatumRodjenja)*@
