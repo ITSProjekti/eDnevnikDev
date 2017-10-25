@@ -138,13 +138,13 @@ namespace eDnevnikDev.Controllers.Tests
                 new Profesor
                 {
                     ProfesorID = 1,
-                Ime = "Marko",
-                Prezime = "Markovic",
-                Telefon = "064333333",
-                Adresa = "Neka Adresa",
-                Vanredan = true,
-                RazredniStaresina = true,
-                UserProfesorId = "profesor"
+                    Ime = "Marko",
+                    Prezime = "Markovic",
+                    Telefon = "064333333",
+                    Adresa = "Neka Adresa",
+                    Vanredan = true,
+                    RazredniStaresina = true,
+                    UserProfesorId = "profesor"
                 }
             }.AsQueryable();
 
