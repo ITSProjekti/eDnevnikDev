@@ -17,6 +17,17 @@ namespace eDnevnikDev.Controllers
     public class CasoviController : Controller
     {
         private ApplicationDbContext _context = new ApplicationDbContext();
+        public static int[] predmetiID;
+
+        public CasoviController()
+        {
+
+        }
+
+        public CasoviController(ApplicationDbContext db)
+        {
+            _context = db;
+        }
 
         // GET: Casovi/Create
         public ActionResult Create()
@@ -46,7 +57,11 @@ namespace eDnevnikDev.Controllers
             var profesor = _context.Profesori
                 .SingleOrDefault(p => p.UserProfesorId == prof);
 
-            // Kreiranje casa casa sa hardcode-ovanim polugodistem i txromesecjem
+            var listaUcenika = odeljenje.Ucenici
+                .OrderBy(x => x.BrojUDnevniku)
+                .ToList();
+
+            // Kreiranje casa casa sa hardcode-ovanim polugodistem i tromesecjem
             Cas cas = new Cas();
             cas.Naziv = casViewModel.Naziv;
             cas.Opis = casViewModel.Opis;
@@ -59,11 +74,118 @@ namespace eDnevnikDev.Controllers
             cas.ProfesorId = profesor.ProfesorID;
             cas.Datum = DateTime.Today;
 
+
+
+            var profesorPredmeti = _context.Profesori
+                      .SingleOrDefault(p => p.ProfesorID == profesor.ProfesorID)
+                      .Predmeti.Select(x => x);
+
+            var odeljenjePredmeti = _context.Odeljenja
+                                  .SingleOrDefault(o => o.Id == odeljenje.Id)
+                                  .Predmeti.Select(x => x);
+
+
+            //Lista predmeta koje profesor predaje konkretnom odeljenju
+            IEnumerable<Predmet> listaPredmeta = null;
+
+            if (profesorPredmeti != null && odeljenjePredmeti != null)
+            {
+
+                listaPredmeta = profesorPredmeti.Intersect(odeljenjePredmeti);
+            }
+            else
+            {
+                listaPredmeta = new List<Predmet>();
+            }
+
+
+            predmetiID = new int[listaPredmeta.Count()];
+
+            for (int i = 0; i < listaPredmeta.Count(); i++)
+            {
+                predmetiID[i] = listaPredmeta.ElementAt(i).PredmetID;
+            }
+
             if (ModelState.IsValid)
             {
+                
+
+                var ucenici = new List<UcenikSaPrisustvomViewModel>();
+                try
+                {
+                    var casovi = _context.Casovi
+                    .Where(c => c.Datum == DateTime.Today && c.OdeljenjeId == odeljenje.Id);
+
+                    //casovi = casovi.Where()
+
+                    int maxCas = casovi.Max(x => x.RedniBrojCasa);
+
+                    var prethodniCas = casovi.SingleOrDefault(x => x.RedniBrojCasa == maxCas);
+
+                    foreach (var item in odeljenje.Ucenici)
+                    {
+                        var odsutan = item.Odsustva.Where(x => x.CasId == prethodniCas.CasId)
+                            .SingleOrDefault(x => x.UcenikId == item.UcenikID);
+
+                        if (odsutan == null)
+                        {
+                            ucenici.Add(new UcenikSaPrisustvomViewModel
+                            {
+                                BrojUDnevniku = item.BrojUDnevniku,
+                                Fotografija = item.Fotografija,
+                                UcenikID = item.UcenikID,
+                                Ime = item.Ime,
+                                Prezime = item.Prezime,
+                                Prisutan = true
+                            });
+                        }
+                        else
+                        {
+                            ucenici.Add(new UcenikSaPrisustvomViewModel
+                            {
+                                BrojUDnevniku = item.BrojUDnevniku,
+                                Fotografija = item.Fotografija,
+                                UcenikID = item.UcenikID,
+                                Ime = item.Ime,
+                                Prezime = item.Prezime,
+                                Prisutan = false
+                            });
+                        }
+                    }
+                    ucenici.OrderBy(x => x.BrojUDnevniku).ToList();
+                }
+                catch (Exception)
+                {
+                    foreach (var item in odeljenje.Ucenici)
+                    {
+                        ucenici.Add(new UcenikSaPrisustvomViewModel
+                        {
+                            BrojUDnevniku = item.BrojUDnevniku,
+                            Fotografija = item.Fotografija,
+                            UcenikID = item.UcenikID,
+                            Ime = item.Ime,
+                            Prezime = item.Prezime,
+                            Prisutan = true
+                        });
+                    }
+
+                }
+                
+
+                CasUceniciViewModel model = new CasUceniciViewModel()
+                {
+                    Cas = cas,
+                    Ucenici = ucenici,
+                    Predmeti = listaPredmeta,
+                    // PredmetiID = predmetiID
+                };
+
                 _context.Casovi.Add(cas);
                 _context.SaveChanges();
-                return RedirectToAction("Index");
+
+                return View("Cas", model);
+                // return View("Evidencija", model);
+
             }
 
             ViewBag.OdeljenjeId = new SelectList(_context.Odeljenja, "Id", "Id", cas.OdeljenjeId);
@@ -71,6 +193,8 @@ namespace eDnevnikDev.Controllers
             ViewBag.ProfesorId = new SelectList(_context.Profesori, "ProfesorID", "Ime", cas.ProfesorId);
             return View(cas);
         }
+
+
 
         protected override void Dispose(bool disposing)
         {
@@ -130,13 +254,13 @@ namespace eDnevnikDev.Controllers
             try
             {
                 Odeljenje odabranoOdeljenje = _context.Odeljenja.SingleOrDefault(x => x.Razred == razred && x.OznakaID == odeljenje && x.StatusID == 3);
-                
+
                 var predmet = odabranoOdeljenje.Predmeti
                     .SingleOrDefault(x => x.PredmetID == predmetId);
                 int redniBrojPredmeta;
                 try
                 {
-                    redniBrojPredmeta = _context.Casovi
+                     redniBrojPredmeta = _context.Casovi
                     .Where(d => d.Odeljenje.Id == odabranoOdeljenje.Id && d.Predmet.PredmetID == predmetId)
                     .OrderBy(x => x.RedniBrojPredmeta)
                     .Select(r => r.RedniBrojPredmeta)
@@ -146,8 +270,8 @@ namespace eDnevnikDev.Controllers
                 {
                     redniBrojPredmeta = 0;
                 }
-                
-                return Json(redniBrojPredmeta+1, JsonRequestBehavior.AllowGet);
+
+                return Json(redniBrojPredmeta + 1, JsonRequestBehavior.AllowGet);
 
             }
             catch (Exception ex)
@@ -172,12 +296,12 @@ namespace eDnevnikDev.Controllers
                 DateTime datum = DateTime.Today;
 
                 Odeljenje odabranoOdeljenje = _context.Odeljenja.SingleOrDefault(x => x.Razred == razred && x.OznakaID == odeljenje && x.StatusID == 3);
-                
+
                 Cas cas = new Cas();
-                
-                    cas = _context.Casovi.Where(x => x.OdeljenjeId == odabranoOdeljenje.Id && x.Datum == datum)
-                        .SingleOrDefault(x => x.RedniBrojCasa == redniBrojCasa);
-                 if(cas == null)
+
+                cas = _context.Casovi.Where(x => x.OdeljenjeId == odabranoOdeljenje.Id && x.Datum == datum)
+                    .SingleOrDefault(x => x.RedniBrojCasa == redniBrojCasa);
+                if (cas == null)
                 {
                     return Json(1, JsonRequestBehavior.AllowGet);
                 }
@@ -210,13 +334,13 @@ namespace eDnevnikDev.Controllers
 
                 var predmet = odabranoOdeljenje.Predmeti
                     .SingleOrDefault(x => x.PredmetID == predmetId);
-                
-                    var redniBrojPredmeta = _context.Casovi
-                    .Where(d => d.Odeljenje.Id == odabranoOdeljenje.Id && d.Predmet.PredmetID == predmetId)
-                    .OrderBy(x => x.RedniBrojPredmeta)
-                    .SingleOrDefault(x=>x.RedniBrojPredmeta == rbPredmeta);
-                
-                if(redniBrojPredmeta == null)
+
+                var redniBrojPredmeta = _context.Casovi
+                .Where(d => d.Odeljenje.Id == odabranoOdeljenje.Id && d.Predmet.PredmetID == predmetId)
+                .OrderBy(x => x.RedniBrojPredmeta)
+                .SingleOrDefault(x => x.RedniBrojPredmeta == rbPredmeta);
+
+                if (redniBrojPredmeta == null)
                 {
                     return Json(1, JsonRequestBehavior.AllowGet);
                 }
@@ -230,6 +354,98 @@ namespace eDnevnikDev.Controllers
             }
             return Json(-1, JsonRequestBehavior.AllowGet);
         }
+
+
+
+        //Aca Radi
+        public JsonResult VratiOcene(int? odeljenjeId, int? profesorId, int? predmetId, int? ucenikId)
+        {
+
+            if (odeljenjeId != null && profesorId != null && predmetId != null)
+            {
+
+                var casoviId = _context.Casovi
+                            .Where(c => c.ProfesorId == profesorId
+                             && c.OdeljenjeId == odeljenjeId
+                             && c.PredmetId == predmetId)
+                             .Select(c => c.CasId);
+
+                if (casoviId != null)
+                {
+                    var DTOocene = new List<DTOOcena>();
+
+                    foreach (var c in casoviId)
+                    {
+                        var ocene = _context.Ocene
+                                  .Where(o => o.CasId == c && o.UcenikId == ucenikId)
+                                  .Select(o => o);
+
+                        if (ocene != null)
+                        {
+                            foreach (var o in ocene)
+                            {
+                                var dtoOcena = new DTOOcena
+                                {
+                                    Ocena = o.Oznaka,
+                                    Plus = o.Plus,
+                                    TipOcene = o.TipOcene.Tip,
+                                    TipOcenePredmeta = o.Cas.Predmet.TipOcenePredmeta.Tip,
+                                    Komentar = o.Napomena,
+                                    Polugodiste = o.Cas.Polugodiste,
+                                    Tromesecje = o.Cas.Tromesecje
+                                };
+
+                                if (o.TipOpisneOceneId != null)
+                                {
+                                    var tipOpisneOcene = _context.TipoviOpisnihOcena
+                                        .Where(x => x.TipOpisneOceneId == o.TipOpisneOceneId)
+                                        .Select(x => x).ToList();
+
+                                    dtoOcena.TipOpisneOcene = tipOpisneOcene.ElementAt(0).Tip;
+                                }
+
+                                DTOocene.Add(dtoOcena);
+                            }
+
+                        }
+
+
+                    }
+
+                    return Json(DTOocene, JsonRequestBehavior.AllowGet);
+
+                }
+
+                return Json(new DTOOcena(), JsonRequestBehavior.AllowGet);
+
+            }
+
+
+            return Json(new DTOOcena(), JsonRequestBehavior.AllowGet);
+
+        }
+
+
+        public JsonResult VratiPredmeteID()
+        {
+            if (predmetiID != null && predmetiID.Count() > 0)
+            {
+                var dtoPredmetID = new DTOPredmetID
+                {
+                    PredmetiID = predmetiID
+                };
+
+                return Json(dtoPredmetID, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new DTOPredmetID(), JsonRequestBehavior.AllowGet);
+
+        }
+
+
+
+
+
 
     }
 }

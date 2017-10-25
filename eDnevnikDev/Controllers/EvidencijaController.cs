@@ -8,10 +8,7 @@ using System.Data.Entity;
 using eDnevnikDev.DTOs;
 using System.Reflection;
 using System.Web.Compilation;
-using System.Reflection;
 using Moq;
-using System.Collections;
-using System.Data.Entity;
 using System.Collections;
 
 namespace eDnevnikDev.Controllers

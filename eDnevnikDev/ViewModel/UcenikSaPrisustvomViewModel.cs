@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace eDnevnikDev.DTOs
+namespace eDnevnikDev.ViewModel
 {
-    public class DTOUcenikOdeljenja
+    public class UcenikSaPrisustvomViewModel
     {
-        public int ID { get; set; }
+        public int UcenikID { get; set; }
         public string Ime { get; set; }
         public string Prezime { get; set; }
         public byte[] Fotografija { get; set; }

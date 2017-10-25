@@ -69,7 +69,6 @@
 
                     <select id="predmeti" name="PredmetId" class="form-control">
                         
-
                     </select>
                 </div>
             </div>
@@ -99,6 +98,10 @@
         </div>
 }
 @section Scripts{
+
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/moment.js"></script>
+
     <script>
         function Odeljenja() {
             var razred = $("#razred").val();
@@ -122,6 +125,7 @@
 
                 if (predmeti != "") {
                     $("#predmeti").html("");
+                    $("#predmeti").append("<option value='0'>Izaberite predmet</option>");
                     for (var predmet in predmeti) {
                         $("#predmeti").append("<option value='" + predmeti[predmet].PredmetID + "'>" + predmeti[predmet].NazivPredmeta + "</option>");
                     }
@@ -161,8 +165,14 @@
             }).change();
 
             $("#predmeti").change(function () {
-
                 RedniBrojPredmeta();
+                if ($("#predmeti").val() > 0) {
+                    $("#potvrdi").removeAttr("disabled");
+                }
+                else {
+                    $("#potvrdi").attr("disabled", "disabled");
+                }
+
             }).change();
         });
 
@@ -280,7 +290,7 @@
                 }
             });
         }
-
+      
 
     </script>
     }

@@ -17,12 +17,19 @@ namespace eDnevnikDev.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationDbContext _context;
 
         public AccountController()
         {
+            _context = new ApplicationDbContext();
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationDbContext _context)
+        {
+            this._context = _context;
+        }
+
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -34,9 +41,9 @@ namespace eDnevnikDev.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -70,6 +77,14 @@ namespace eDnevnikDev.Controllers
 
         //
         // POST: /Account/Login
+        /// <summary>
+        /// Sluzi da se korisnik uloguje
+        /// Ukoliko korisnik nije nijednom promenio lozinku, redirektuje se na stranu sa formom za promenu iste. 
+        /// Tek nakon te promene moze da se uloguje u aplikaciju
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="returnUrl">The return URL.</param>
+        /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -82,11 +97,40 @@ namespace eDnevnikDev.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, shouldLockout: false);            
+            var result = await SignInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, shouldLockout: false);
+
+            //var user = UserManager.FindById(User.Identity.Name);
+            var user = _context.Users
+                .Single(u => u.UserName == model.Username);
+
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    {
+                        bool promenaLozinke=false;
+                        try
+                        {
+                            promenaLozinke = _context.Profesori
+                                .Single(p => p.UserProfesorId == user.Id)
+                                .PromenaLozinke;
+                        }catch (Exception){}
+
+                        try
+                        {
+                            promenaLozinke = _context.Ucenici
+                                .Single(p => p.UserUcenikId == user.Id)
+                                .PromenaLozinke;
+                        }catch (Exception) { }
+
+                        if (promenaLozinke)
+                        {
+                            return RedirectToLocal(returnUrl);
+                        }
+                        else
+                        {
+                            return RedirectToAction("ChangePassword", "Manage");
+                        }
+                    }
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -96,6 +140,8 @@ namespace eDnevnikDev.Controllers
                     ModelState.AddModelError("", "Invalid login attempt.");
                     return View(model);
             }
+
+
         }
 
         //
@@ -127,7 +173,7 @@ namespace eDnevnikDev.Controllers
             // If a user enters incorrect codes for a specified amount of time then the user account 
             // will be locked out for a specified amount of time. 
             // You can configure the account lockout settings in IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
+            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -162,8 +208,8 @@ namespace eDnevnikDev.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
@@ -429,6 +475,7 @@ namespace eDnevnikDev.Controllers
 
             base.Dispose(disposing);
         }
+
 
         #region Helpers
         // Used for XSRF protection when adding external logins
