@@ -3,17 +3,14 @@
 @using Microsoft.AspNet.Identity
 @{
     ViewBag.Title = "Cas";
-
+   
 }
 
 
-
-
-
-
+<input type="hidden" id="ucenikId" />
+<input type="text" id="t" />
 
 <h2>Evidencija</h2>
-
 <div class="row">
     <div class="col-md-8">
         <h3>Datum: @DateTime.Now.ToString("dddd dd.MM.yyy", CultureInfo.CreateSpecificCulture("sr-Latn-CS"))</h3>
@@ -39,19 +36,9 @@
         }
     </div>
 </div>
-
 <div class="container">
-    <div class="row">
-        <div class="loader"></div>
-    </div>
-</div>
-
-<div class="container">
-
-
     <div class="row">
         <div class="col-md-12">
-
             <div class="row">
                 @foreach (var ucenik in Model.Ucenici)
                 {
@@ -99,7 +86,7 @@
                                 </div>
 
                                 <div>
-                                    <a class="evidencijabutton" onclick="prikaziOcenePopUp(@ucenik.UcenikID)">
+                                    <a class="evidencijabutton" onclick="prikaziOcenePopUp(@ucenik.UcenikID,@Model.Cas.OdeljenjeId, @Model.Cas.ProfesorId)">
                                         <span id="glyph" class="glyphicon glyphicon-book"></span>
                                     </a>
                                 </div>
@@ -123,7 +110,7 @@
                             <div>
                                 @* POCETAK BODY *@
                                 <div class="container">
-
+                   
 
 
                                     @foreach (var predmet in Model.Predmeti)
@@ -144,10 +131,11 @@
                                                                 <div class="row">
                                                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">
                                                                         <h4 style="text-align:center;margin-bottom:3px;">Polugodiste 1</h4>
-                                                                        <button type="button" class="btn btn-info" style="width:100%;margin:2px;font-size:200%;" onclick='UnosOcenePopUp("@predmet.TipOcenePredmeta.Tip",@Model.Cas.CasId)'>+</button>
                                                                         <hr style="margin-top:3px;margin-bottom:3px;" />
                                                                     </div>
+
                                                                 </div>
+
                                                                 <div class="row">
                                                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">
                                                                         <div style="display: flex;">
@@ -155,11 +143,15 @@
                                                                                 string oceneIPolugodisteID = "oceneIPolugodisteID" + predmet.PredmetID;
                                                                             }
                                                                             <div id="@oceneIPolugodisteID" style="flex: 10;">
+                                                                                @*foreach petlja za listanje ocena*@
+                                                                                @*<button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">1</button>*@
                                                                             </div>
                                                                             @{
                                                                                 string zakljucnaOcenaIPolugodisteID = "zakljucnaOcenaIPolugodisteID" + predmet.PredmetID;
                                                                             }
                                                                             <div id="@zakljucnaOcenaIPolugodisteID" style="flex: 2;position: relative;">
+                                                                                <button type="button" class="btn btn-info" style="width:100%;margin:2px;font-size:200%;">+</button>
+                                                                                @*<button type="button" class="btn btn-secondary" style="width:100%;margin:2px;font-size:200%;color:red;position: absolute;bottom: 0;">5</button>*@
                                                                             </div>
                                                                         </div>
 
@@ -175,6 +167,9 @@
                                                                                     string plusMinusIPolugodisteID = "plusMinusIPolugodisteID" + predmet.PredmetID;
                                                                                 }
                                                                                 <div id="@plusMinusIPolugodisteID" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">
+                                                                                    @*foreach petlja za listanje pluseva i minusa*@
+                                                                                    @*<button type="button" class="btn btn-danger" style="margin:2px;height:35px;width:35px;" title="26.08.2017">-</button>
+                                                                                        <button type="button" class="btn btn-success" style="margin:2px;height:35px;width:35px;" title="26.08.2017">+</button>*@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -203,17 +198,18 @@
                                                                 <div class="row">
                                                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">
                                                                         <div style="display: flex;">
-                                                                            @{
-                                                                                string oceneIIPolugodisteID = "oceneIIPolugodisteID" + predmet.PredmetID;
-                                                                            }
-                                                                            <div id="@oceneIIPolugodisteID" style="flex: 10;">
+                                                                            <div style="flex: 10;">
+                                                                                @*foreach petlja za listanje ocena*@
+                                                                                <button type="button" class="btn btn-secondary" style="margin:2px;width:53px;height:53px;font-size:200%">1</button>
                                                                             </div>
-                                                                            @{
-                                                                                string zakljucnaOcenaIIPolugodisteID = "zakljucnaOcenaIIPolugodisteID" + predmet.PredmetID;
-                                                                            }
-                                                                            <div id="@zakljucnaOcenaIIPolugodisteID" style="flex: 2;position: relative;">
+                                                                            <div style="flex: 2;position: relative;">
+                                                                                @*button za dodavanje nove ocene*@
+                                                                                <button type="button" class="btn btn-info" style="width:100%;margin:2px;font-size:200%;">+</button>
+                                                                                @*zakljucna ocena*@
+                                                                                <button type="button" class="btn btn-secondary" style="width:100%;margin:2px;font-size:200%;color:red;position: absolute;bottom: 0;">4</button>
                                                                             </div>
                                                                         </div>
+
                                                                         <div class="row">
                                                                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">
                                                                                 <hr style="margin-top:3px;margin-bottom:3px;" />
@@ -222,10 +218,10 @@
 
                                                                         <div class="row">
                                                                             <div class="row-fluid">
-                                                                                @{
-                                                                                    string plusMinusIIPolugodisteID = "plusMinusIIPolugodisteID" + predmet.PredmetID;
-                                                                                }
-                                                                                <div id="@plusMinusIIPolugodisteID" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">
+                                                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">
+                                                                                    @*foreach petlja za listanje pluseva i minusa*@
+                                                                                    <button type="button" class="btn btn-danger" style="margin:2px;height:35px;width:35px;" title="26.08.2017">-</button>
+                                                                                    <button type="button" class="btn btn-success" style="margin:2px;height:35px;width:35px;" title="26.08.2017">+</button>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -252,7 +248,7 @@
                                             </div>
                                         </div>
                                                                                     }
-
+                                                                                    
                                 </div>
 
 
@@ -268,48 +264,6 @@
                 </div>
             </div>
             <!-- Modal END -->
-            <!-- Unos ocene -->
-            <div id="unosOceneModal" class="modal fade" role="dialog">
-                <div class="modal-dialog modal-lg">
-
-                    <!-- Modal content-->
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">Unos ocene</h4>
-                        </div>
-                        <div class="modal-body">
-                            <div>
-                                <div class="container">
-                                    <form id="__AjaxAntiForgeryFormUnosOcene">
-                                        @Html.AntiForgeryToken()
-                                        <div class="col-md-12" id="UnosOceneDiv">
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="col-md-8"></div>
-                                            <div class="col-md-4">
-                                                <br>
-                                                <br>
-                                                <input type="button" class="btn btn-success" value="Unesi ocenu" onclick="UnosOcene()" />
-                                                <br>
-                                                <br>
-                                            </div>
-                                            <br>
-                                            <br>
-                                            <br>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
 
 
 
@@ -320,7 +274,6 @@
             {
 
     <script>
-
         function Odeljenja() {
             var razred = $("#razred").val();
             var zahtev = $.getJSON("/Odeljenje/OdeljenjeTrajanje?godina=" + razred);
@@ -347,10 +300,11 @@
 
         //**Aca pocetak**//
 
-        //Globalna promenljiva za skladistenje predmeta
-        var predmetiID = [];
+        function prikaziOcenePopUp(ucenikId, odeljenjeId, profesorId) {
+            $("#myModal").modal();
 
-        function VratiPredmeteID() {
+            var predmetiID = [];;
+
             $.ajax({
                 type: "POST",
                 url: "/Casovi/VratiPredmeteID",
@@ -360,377 +314,106 @@
                 success:
                         function (predmet) {
                             for (var i = 0; i < predmet.PredmetiID.length; i++) {
-                                predmetiID[i] = predmet.PredmetiID[i];
+                                predmetiID[i]= predmet.PredmetiID[i];
                             }
                         }
             });
-        }
 
-
-
-        //Globalna promenljiva za skladistenje predmeta
-        var oceneZaPredmete = [];
-
-        function VratiOcene() {
-            $.ajax({
-                type: "POST",
-                url: "/Casovi/VratiOcene",
-                contentType: "application/json",
-                datatype: "json",
-                async: false,
-                complete: function () {
-                    $('.loader').css('animation', 'initial').css({ transform: 'scale(2)', opacity: '0', transition: 'all 1s' });
-                },
-                success:
-                        function (data) {
-                            for (var i = 0; i < data.length; i++) {
-                                oceneZaPredmete[i] = data[i];
-
-                            }
-                        }
-            });
-        }
-
-
-        function PonistiOcene() {
             for (var k = 0; k < predmetiID.length; k++) {
-                $("#zakljucnaOcenaIPolugodisteID" + predmetiID[k]).html("");
-                $("#oceneIPolugodisteID" + predmetiID[k]).html("");
-                $("#plusMinusIPolugodisteID" + predmetiID[k]).html("");
-                $("#zakljucnaOcenaIIPolugodisteID" + predmetiID[k]).html("");
-                $("#oceneIIPolugodisteID" + predmetiID[k]).html("");
-                $("#plusMinusIIPolugodisteID" + predmetiID[k]).html("");
-
+                $("#zakljucnaOcenaIPolugodisteID"+ predmetiID[k]).html("");
+                $("#oceneIPolugodisteID"+ predmetiID[k]).html("");
+                $("#plusMinusIPolugodisteID"+predmetiID[k]).html("");
+    
             }
-        }
-
-        $(function () {
-
-            VratiPredmeteID();
-            VratiOcene();
-            VratiTipBrojcaneOcene();
-            VratiTipOpisneOcene();
-
-        });
-
-
-        //Globalna promenljiva za cuvanje ucenika
-        var ID = 0;
-
-        function prikaziOcenePopUp(ucenikId) {
-
-            ID = ucenikId;
-            PonistiOcene();
-            $("#myModal").modal();
 
             for (var i = 0; i < predmetiID.length; i++) {
-
-                var ocene = [];
-                var brojac = 0;
-                for (var k = 0; k < oceneZaPredmete.length; k++) {
-
-                    if (oceneZaPredmete[k].PredmetId == predmetiID[i] && oceneZaPredmete[k].UcenikId == ucenikId) {
-                        ocene[brojac] = oceneZaPredmete[k];
-                        brojac++;
-                    }
-                }
-
-                for (var j = 0; j < ocene.length; j++) {
-                    if (ocene[j].Polugodiste == 1) {
-                        if (ocene[j].TipOcenePredmeta == "Brojcana") {
-                            if (ocene[j].TipOcene == "Zakljucna") {
-
-                                $("#zakljucnaOcenaIPolugodisteID" + predmetiID[i]).append("<button type='button' class='btn btn-secondary' style='width:100%;margin:2px;font-size:200%;color:red;position: absolute;bottom: 0;'>" + ocene[j].Ocena + "</button>")
-                            }
-                            else {
-                                if (ocene[j].Ocena != null && ocene[j].Plus == null) {
-
-                                    $("#oceneIPolugodisteID" + predmetiID[i]).append("<button type='button' class='btn btn-secondary' style='margin:2px;width:53px;height:53px;font-size:200%'>" + ocene[j].Ocena + "</button>")
-
-                                }
-                                else if (ocene[j].Plus != null && ocene[j].Ocena == null) {
-                                    if (ocene[j].Plus == true) {
-                                        $("#plusMinusIPolugodisteID" + predmetiID[i]).append("<button type='button'class='btn btn-danger' style='margin:2px;height:35px;width:35px;'>+</button>")
-
-                                    }
-                                    else if (ocene[j].Plus == false) {
-                                        $("#plusMinusIPolugodisteID" + predmetiID[i]).append("<button type='button'class='btn btn-danger' style='margin:2px;height:35px;width:35px;'>-</button>")
-
-                                    }
-                                }
-
-                            }
-                        }
-                        else if (ocene[j].TipOcenePredmeta == "Opisna" && ocene[j].TipOcene == "Zakljucna") {
-                            $("#zakljucnaOcenaIPolugodisteID" + predmetiID[i]).append("<button type='button' class='btn btn-secondary' style='width:100%;margin:2px;font-size:200%;color:red;position: absolute;bottom: 0;'>" + ocene[j].TipOpisneOcene + "</button>")
-                        }
-                    }
-                    else if (ocene[j].Polugodiste == 2) {
-                        if (ocene[j].TipOcenePredmeta == "Brojcana") {
-                            if (ocene[j].TipOcene == "Zakljucna") {
-
-                                $("#zakljucnaOcenaIIPolugodisteID" + predmetiID[i]).append("<button type='button' class='btn btn-secondary' style='width:100%;margin:2px;font-size:200%;color:red;position: absolute;bottom: 0;'>" + ocene[j].Ocena + "</button>")
-                            }
-                            else {
-                                if (ocene[j].Ocena != null && ocene[j].Plus == null) {
-
-                                    $("#oceneIIPolugodisteID" + predmetiID[i]).append("<button type='button' class='btn btn-secondary' style='margin:2px;width:53px;height:53px;font-size:200%'>" + ocene[j].Ocena + "</button>")
-
-                                }
-                                else if (ocene[j].Plus != null && ocene[j].Ocena == null) {
-                                    if (ocene[j].Plus == true) {
-                                        $("#plusMinusIIPolugodisteID" + predmetiID[i]).append("<button type='button'class='btn btn-danger' style='margin:2px;height:35px;width:35px;'>+</button>")
-
-                                    }
-                                    else if (ocene[j].Plus == false) {
-                                        $("#plusMinusIIPolugodisteID" + predmetiID[i]).append("<button type='button'class='btn btn-danger' style='margin:2px;height:35px;width:35px;'>-</button>")
-
-                                    }
-                                }
-
-                            }
-                        }
-                        else if (ocene[j].TipOcenePredmeta == "Opisna" && ocene[j].TipOcene == "Zakljucna") {
-                            $("#zakljucnaOcenaIIPolugodisteID" + predmetiID[i]).append("<button type='button' class='btn btn-secondary' style='width:100%;margin:2px;font-size:200%;color:red;position: absolute;bottom: 0;'>" + ocene[j].TipOpisneOcene + "</button>")
-                        }
-                    }
-                }
-            }
-        }
-
-
-        var TipBrojcaneOcene = [];
-
-        function VratiTipBrojcaneOcene()
-        {
-            $.ajax({
-                type: "POST",
-                url: "/Casovi/VratiTipOcene",
-                contentType: "application/json",
-                datatype: "json",
-                success:
-                        function (tipOcene) {
-                            for (var i = 0; i < tipOcene.length; i++) {
-                                TipBrojcaneOcene[i]=tipOcene[i];
-                            }
-                        }
-            });
-        }
-
-
-        var TipOpisneOcene = [];
-
-        function VratiTipOpisneOcene()
-        {
-            $.ajax({
-                type: "POST",
-                url: "/Casovi/VratiTipOpisneOcene",
-                contentType: "application/json",
-                datatype: "json",
-                success:
-                        function (tipOpisneOcene) {
-                            for (var i = 0; i < tipOpisneOcene.length; i++) {
-                                TipOpisneOcene[i]=tipOpisneOcene[i];
-                            }
-                        }
-            });
-        }
-
-
-
-        //Globalne promenljive za cuvanje ocene, casa
-        var ocena;
-        var cas;
-
-        function UnosOcenePopUp(tipOcenePredmeta, casId) {
-
-            $('#myModal').modal('hide');
-            $("#unosOceneModal").modal();
-            $("#UnosOceneDiv").html("");
-
-            ocena = tipOcenePredmeta;
-            cas = casId;
-
-
-            if (tipOcenePredmeta == "Brojcana") {
-
-                var htmlUnosOceneDiv="";
-
-                htmlUnosOceneDiv="<div class='col-md-4'>";
-                htmlUnosOceneDiv += "<select class='form-control' id='TipOcene' onchange='PopuniOcene()'>";
-                htmlUnosOceneDiv += "<option value='0'>Izaberite</option>";
-
-                for (var i = 0; i < TipBrojcaneOcene.length; i++) {
-                    htmlUnosOceneDiv+="<option value=" + TipBrojcaneOcene[i].TipOceneId + ">" + TipBrojcaneOcene[i].Tip + "</option>";
-                }
-
-                htmlUnosOceneDiv+="</select>";
-                htmlUnosOceneDiv+="</div>";
-                htmlUnosOceneDiv+="<div class='col-md-4' id='divOcene'>";
-                htmlUnosOceneDiv+="<select class='form-control' disabled='disabled' id='Ocena'></select>";
-                htmlUnosOceneDiv+="</div>";
-                htmlUnosOceneDiv+="<div class='col-md-4'>";
-                htmlUnosOceneDiv+="<textarea id='OpisOcene' class='form-control'></textarea>";
-                htmlUnosOceneDiv += "</div>";
-
-                $("#UnosOceneDiv").append(htmlUnosOceneDiv);
-
-            }
-            else if (tipOcenePredmeta == "Opisna") {
-
-                var htmlUnosOceneDiv = "";
-
-                htmlUnosOceneDiv = "<div class='col-md-4'>";
-                htmlUnosOceneDiv += "<select class='form-control' id='TipOpisneOcene'>";
-                htmlUnosOceneDiv += "<option value='0'>Izaberite</option>";
-
-                for (var i = 0; i < TipOpisneOcene.length; i++) {
-                    htmlUnosOceneDiv += "<option value=" + TipOpisneOcene[i].TipOpisneOceneId + ">" + TipOpisneOcene[i].Tip + "</option>";
-                }
-
-                htmlUnosOceneDiv += "</select>";
-                htmlUnosOceneDiv += "</div>";
-                htmlUnosOceneDiv += "<div class='col-md-4'>";
-                htmlUnosOceneDiv += "<textarea id='OpisOcene' class='form-control'></textarea>";
-                htmlUnosOceneDiv += "</div>";
-
-                $("#UnosOceneDiv").append(htmlUnosOceneDiv);
-
-            }
-
-
-
-        }
-
-        function PopuniOcene() {
-            var tipOcene = $("#TipOcene option:selected").text();
-
-            if (tipOcene == "Kontrolni" || tipOcene == "Pismeni" || tipOcene == "Usmeni" || tipOcene == "Zakljucna") {
-                $("#divOcene").html("");
-
-                var htmlSelectOcene = "";
-
-                htmlSelectOcene = "<select class='form-control' id='Ocena'>";
-                htmlSelectOcene += "<option value='0'>Izaberite</option>";
-                htmlSelectOcene += "<option value='1'>1</option>";
-                htmlSelectOcene += "<option value='2'>2</option>";
-                htmlSelectOcene += "<option value='3'>3</option>";
-                htmlSelectOcene += "<option value='4'>4</option>";
-                htmlSelectOcene += "<option value='5'>5</option>";
-                htmlSelectOcene += "</select>";
-
-                $("#divOcene").append(htmlSelectOcene);
-
-
-            }
-            else if (tipOcene == "Domaci") {
-
-                $("#divOcene").html("");
-
-                var htmlSelectOcene = "";
-
-                htmlSelectOcene = "<select class='form-control' id='Ocena'>";
-                htmlSelectOcene += "<option value='0'>Izaberite</option>";
-                htmlSelectOcene += "<option value='true'>Plus</option>";
-                htmlSelectOcene += "<option value='false'>Minus</option>";
-                htmlSelectOcene += "</select>";
-
-                $("#divOcene").append(htmlSelectOcene);
-            }
-            else if ($("#TipOcene").val() == 0) {
-
-                $("#divOcene").html("");
-
-                var htmlSelectOcene = "";
-
-                htmlSelectOcene = "<select class='form-control' disabled='disabled' id='Ocena'></select>";
-
-                $("#divOcene").append(htmlSelectOcene);
-
-            }
-        }
-
-       
-
-        function UnosOcene()
-        {
-            if(ocena=="Brojcana")
-            {
-                var oznaka = $("#Ocena").val();
-
-                var dtoOcenaUnos=null;
-                var tipOcene = $("#TipOcene").val();
-                var tipOpisneOcene = $("#TipOpisneOcene").val();
-
-                if (oznaka != 0 && tipOcene!=0)
-                {
-                    var tipOceneTxt = $("#TipOcene option:selected").text();
-
-                    if (ocena == "Brojcana" && (tipOceneTxt == "Kontrolni" || tipOceneTxt == "Pismeni" || tipOceneTxt == "Usmeni" || tipOceneTxt == "Zakljucna") && (oznaka == 1 || oznaka == 2 || oznaka == 3 || oznaka == 4 || oznaka == 5))
-                    {
-
-                        dtoOcenaUnos = {
-                            Oznaka:oznaka,
-                            UcenikId:ID,
-                            CasId:cas,
-                            TipOceneId: $("#TipOcene").val(),
-                            Napomena: $("#OpisOcene").val()
-
-                        };
-
-
-                    }
-                    else if (ocena == "Brojcana" && (oznaka == "true" || oznaka == "false") && (tipOceneTxt == "Domaci"))
-                    {
-
-                        dtoOcenaUnos = {
-                            Plus: oznaka,
-                            UcenikId: ID,
-                            CasId: cas,
-                            TipOceneId: $("#TipOcene").val(),
-                            Napomena: $("#OpisOcene").val()
-
-                        };
-                    }
-                }
-            }
-            else if (ocena == "Opisna" && tipOpisneOcene != 0)
-            {
-                dtoOcenaUnos = {
-                    UcenikId: ID,
-                    CasId: cas,
-                    TipOceneId:4,
-                    TipOpisneOceneId: $("#TipOpisneOcene").val(),
-                    Napomena: $("#OpisOcene").val()
-
-                };
-            }
-
-            //Preuzimanje AntiForgeryToken-a sa forme
-            var form = $('#__AjaxAntiForgeryFormUnosOcene');
-            var token = $('input[name="__RequestVerificationToken"]', form).val();
-
-            var headers = {};
-            headers["__RequestVerificationToken"] = token;
-
-            if (dtoOcenaUnos != null)
-            {
-
                 $.ajax({
                     type: "POST",
-                    headers: headers,
-                    data: JSON.stringify(dtoOcenaUnos),
-                    url: "/Casovi/DodajOcenu",
+                    url: "/Casovi/VratiOcene?odeljenjeId=" + odeljenjeId + "&profesorId=" + profesorId + "&predmetId=" + predmetiID[i] + "&ucenikId=" + ucenikId,
+                    contentType: "application/json",
                     datatype: "json",
-                    contentType: "application/json"
-                }).done(function () {
-                    alert("Uspešno sačuvano!");
+                    async: false,
+                    success:
+                            function (ocene) {
+
+                                for (var j = 0; j < ocene.length; j++) {
+                                    if (ocene[i].Polugodiste = 1)
+                                    {
+                                        if (ocene[j].TipOcenePredmeta == "Brojcana")
+                                        {
+                                            if(ocene[j].TipOcene=="Zakljucna")
+                                            {
+
+                                                $("#zakljucnaOcenaIPolugodisteID"+ predmetiID[i]).append("<button type='button' class='btn btn-secondary' style='width:100%;margin:2px;font-size:200%;color:red;position: absolute;bottom: 0;'>" + ocene[j].Ocena + "</button>")
+                                            }
+                                            else
+                                            {
+                                                if(ocene[j].Ocena!=null && ocene[j].Plus==null)
+                                                {
+
+                                                    $("#oceneIPolugodisteID"+ predmetiID[i]).append("<button type='button' class='btn btn-secondary' style='margin:2px;width:53px;height:53px;font-size:200%'>" + ocene[j].Ocena + "</button>")
+
+                                                }
+                                                else if(ocene[j].Plus!=null && ocene[j].Ocena==null)
+                                                {
+                                                    if(ocene[j].Plus==true)
+                                                    {
+                                                        $("#plusMinusIPolugodisteID"+predmetiID[i]).append("<button type='button'class='btn btn-danger' style='margin:2px;height:35px;width:35px;'>+</button>")
+
+                                                    }
+                                                    else if(ocene[j].Plus==false)
+                                                    {
+                                                        $("#plusMinusIPolugodisteID"+predmetiID[i]).append("<button type='button'class='btn btn-danger' style='margin:2px;height:35px;width:35px;'>-</button>")
+
+                                                    }
+                                                }
+
+                                            }
+                                        }
+                                        else if (ocene[j].TipOcenePredmeta == "Opisna" && ocene[j].TipOcene=="Zakljucna")
+                                        {
+                                            $("#zakljucnaOcenaIPolugodisteID"+ predmetiID[i]).append("<button type='button' class='btn btn-secondary' style='width:100%;margin:2px;font-size:200%;color:red;position: absolute;bottom: 0;'>" + ocene[j].TipOpisneOcene+ "</button>")
+                                        }
+                                    }
+                                    else if (ocene[i].Polugodiste = 2)
+                                    {
+
+                                    }
+                                }
+                            }
                 });
+
             }
 
+            //oceneIPolugodisteID=
 
 
         }
+
+
+
+        //function vratiOcene(ucenikId, odeljenjeId, profesorId, predmetId) {
+
+        //    var ocene = [];;
+
+
+        //    var zahtev = $.getJSON("/Casovi/VratiOcene?odeljenjeId=" + odeljenjeId + "&profesorId=" + profesorId + "&predmetId=" + predmetId + "&ucenikId=" + ucenikId);
+
+        //    zahtev.done(function (ocene) {
+        //        for (var i = 0; i < ocene.length; i++) {
+        //            if (ocene[i].TipOcenePredmeta == "Brojcana")
+        //            {
+        //                $("#oceneIPolugodiste").append("<button type='button' class='btn btn-secondary' style='margin:2px;width:53px;height:53px;font-size:200%'>" + ocene[i].Ocena + "</button>")
+
+        //            }
+        //        }
+
+        //        ocene=ocene;
+        //    });
+
+        //    return ocene
+        //}
+
 
         function showPopUpOcene(ucenikId) {
 

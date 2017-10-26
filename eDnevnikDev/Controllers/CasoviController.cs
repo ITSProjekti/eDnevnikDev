@@ -17,7 +17,12 @@ namespace eDnevnikDev.Controllers
     public class CasoviController : Controller
     {
         private ApplicationDbContext _context = new ApplicationDbContext();
-        public static int[] predmetiID;
+
+        private static int[] predmetiID;
+        private static int? profesorId;
+        private static int? odeljenjeId;
+
+
         // GET: Casovi/Create
         public ActionResult Create()
         {
@@ -31,7 +36,7 @@ namespace eDnevnikDev.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         /// <summary>
-        /// Kontoler služi za kreiranje časa
+        /// Kontoler služi za kreiranje casa
         /// </summary>
         /// <param name="cas">The cas.</param>
         /// <returns></returns>
@@ -43,6 +48,7 @@ namespace eDnevnikDev.Controllers
                 .SingleOrDefault(x => x.Razred == casViewModel.Razred && x.OznakaID == casViewModel.Odeljenje && x.StatusID == 3);
 
             string prof = User.Identity.GetUserId();
+
             var profesor = _context.Profesori
                 .SingleOrDefault(p => p.UserProfesorId == prof);
 
@@ -63,31 +69,43 @@ namespace eDnevnikDev.Controllers
             cas.ProfesorId = profesor.ProfesorID;
             cas.Datum = DateTime.Today;
 
+            //Setovanje static promenljivih
+            profesorId = cas.ProfesorId;
+            odeljenjeId = cas.OdeljenjeId;
 
+            //U slucaju da je potrebno vratiti sve predmete koje profesor predaje odeljenju
+            //var profesorPredmeti = _context.Profesori
+            //          .SingleOrDefault(p => p.ProfesorID == profesor.ProfesorID)
+            //          .Predmeti.Select(x => x);
 
-            var profesorPredmeti = _context.Profesori
-                      .SingleOrDefault(p => p.ProfesorID == profesor.ProfesorID)
-                      .Predmeti.Select(x => x);
-
-            var odeljenjePredmeti = _context.Odeljenja
-                                  .SingleOrDefault(o => o.Id == odeljenje.Id)
-                                  .Predmeti.Select(x => x);
+            //var odeljenjePredmeti = _context.Odeljenja
+            //                      .SingleOrDefault(o => o.Id == odeljenje.Id)
+            //                      .Predmeti.Select(x => x);
 
 
             //Lista predmeta koje profesor predaje konkretnom odeljenju
-            IEnumerable<Predmet> listaPredmeta = null;
+            //IEnumerable<Predmet> listaPredmeta = null;
 
-            if (profesorPredmeti != null && odeljenjePredmeti != null)
+            //if (profesorPredmeti != null && odeljenjePredmeti != null)
+            //{
+
+            //    listaPredmeta = profesorPredmeti.Intersect(odeljenjePredmeti);
+            //}
+            //else
+            //{
+            //    listaPredmeta = new List<Predmet>();
+            //}
+
+            //Vracanje predmeta koji je upisan na casu
+            var predmet = _context.Predmeti.SingleOrDefault(p => p.PredmetID == cas.PredmetId);
+
+            List<Predmet> listaPredmeta = new List<Predmet>();
+
+            if(predmet!=null)
             {
-
-                listaPredmeta = profesorPredmeti.Intersect(odeljenjePredmeti);
+                listaPredmeta.Add(predmet);
             }
-            else
-            {
-                listaPredmeta = new List<Predmet>();
-            }
-
-
+        
             predmetiID = new int[listaPredmeta.Count()];
 
             for (int i = 0; i < listaPredmeta.Count(); i++)
@@ -104,8 +122,8 @@ namespace eDnevnikDev.Controllers
                 {
                     Cas = cas,
                     Ucenici = listaUcenika,
-                    Predmeti = listaPredmeta,
-                    // PredmetiID = predmetiID
+                    Predmeti = listaPredmeta
+
                 };
 
                 return View("Cas", model);
@@ -131,10 +149,10 @@ namespace eDnevnikDev.Controllers
         }
 
         /// <summary>
-        /// Kontroler vraća listu predmeta
+        /// Kontroler vraca listu predmeta
         /// Prvo kupi sve predmete koje ulogovan profesor predaje u školi
-        /// Zatim kupi sve predmete koje određeno odeljenje ima
-        /// Vrši se presek te dve liste i vraćaju se predmeti koje profesor može da predaje odeljenju
+        /// Zatim kupi sve predmete koje odredeno odeljenje ima
+        /// Vrši se presek te dve liste i vracaju se predmeti koje profesor može da predaje odeljenju
         /// samo ako to odeljenje ima taj predmet u rasporedu i ako taj profesor predaje taj predmet u školi
         /// </summary>
         /// <param name="razred">The razred.</param>
@@ -283,42 +301,67 @@ namespace eDnevnikDev.Controllers
 
 
         //Aca Radi
-        public JsonResult VratiOcene(int? odeljenjeId, int? profesorId, int? predmetId, int? ucenikId)
+        public JsonResult VratiOcene()
         {
 
-            if (odeljenjeId != null && profesorId != null && predmetId != null)
+            if (odeljenjeId != null && profesorId != null && predmetiID != null)
             {
+                List<int> nizCasoviID=new List<int>();
 
-                var casoviId = _context.Casovi
+                foreach (var predmetID in predmetiID)
+                {
+                    var casoviID = _context.Casovi
                             .Where(c => c.ProfesorId == profesorId
                              && c.OdeljenjeId == odeljenjeId
-                             && c.PredmetId == predmetId)
+                             && c.PredmetId == predmetID)
                              .Select(c => c.CasId);
 
-                if (casoviId != null)
+                    foreach (var casID in casoviID)
+                    {
+                        nizCasoviID.Add(casID);
+                    }
+                }
+
+                
+
+                if (nizCasoviID != null)
                 {
                     var DTOocene = new List<DTOOcena>();
 
-                    foreach (var c in casoviId)
+                    foreach (var c in nizCasoviID)
                     {
                         var ocene = _context.Ocene
-                                  .Where(o => o.CasId == c && o.UcenikId == ucenikId)
+                                  .Where(o => o.CasId == c)
                                   .Select(o => o);
 
                         if (ocene != null)
                         {
                             foreach (var o in ocene)
                             {
-                                DTOocene.Add(new DTOOcena
+                                var dtoOcena = new DTOOcena
                                 {
+                                    OcenaId=o.OcenaId,
                                     Ocena = o.Oznaka,
                                     Plus = o.Plus,
                                     TipOcene = o.TipOcene.Tip,
                                     TipOcenePredmeta = o.Cas.Predmet.TipOcenePredmeta.Tip,
                                     Komentar = o.Napomena,
                                     Polugodiste = o.Cas.Polugodiste,
-                                    Tromesecje = o.Cas.Tromesecje
-                                });
+                                    Tromesecje = o.Cas.Tromesecje,
+                                    UcenikId=o.UcenikId,
+                                    PredmetId=o.Cas.PredmetId
+                                };
+
+                                if (o.TipOpisneOceneId != null)
+                                {
+                                    var tipOpisneOcene = _context.TipoviOpisnihOcena
+                                        .Where(x => x.TipOpisneOceneId == o.TipOpisneOceneId)
+                                        .Select(x => x).ToList();
+
+                                    dtoOcena.TipOpisneOcene = tipOpisneOcene.ElementAt(0).Tip;
+                                }
+
+                                DTOocene.Add(dtoOcena);
                             }
 
                         }
@@ -326,7 +369,7 @@ namespace eDnevnikDev.Controllers
 
                     }
 
-                    return Json(DTOocene, JsonRequestBehavior.AllowGet);
+                    return Json(DTOocene.OrderBy(o=>o.OcenaId), JsonRequestBehavior.AllowGet);
 
                 }
 
@@ -356,8 +399,75 @@ namespace eDnevnikDev.Controllers
 
         }
 
+        public JsonResult VratiTipOcene()
+        {
+            var tipoviOcena = _context.TipoviOcena;
+
+            if(tipoviOcena!=null)
+            {
+                List<DTOTipOcene> dtoTipoviOcena = new List<DTOTipOcene>();
+
+                foreach (var tipOcene in tipoviOcena)
+                {
+                    dtoTipoviOcena.Add(new DTOTipOcene
+                    {
+                        TipOceneId = tipOcene.TipOceneId,
+                        Tip = tipOcene.Tip
+                    });
+                }
+
+                return Json(dtoTipoviOcena, JsonRequestBehavior.AllowGet);
+            }
+
+                return Json(new DTOTipOcene(), JsonRequestBehavior.AllowGet);
+        }
 
 
+        public JsonResult VratiTipOpisneOcene()
+        {
+            var tipoviOpisnihOcena = _context.TipoviOpisnihOcena;
+
+            if (tipoviOpisnihOcena != null)
+            {
+                List<DTOTipOpisneOcene> dtoTipoviOpisnihOcena = new List<DTOTipOpisneOcene>();
+
+                foreach (var tipOpisneOcene in tipoviOpisnihOcena)
+                {
+                    dtoTipoviOpisnihOcena.Add(new DTOTipOpisneOcene
+                    {
+                        TipOpisneOceneId = tipOpisneOcene.TipOpisneOceneId,
+                        Tip = tipOpisneOcene.Tip
+                    });
+                }
+
+                return Json(dtoTipoviOpisnihOcena, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new DTOTipOpisneOcene(), JsonRequestBehavior.AllowGet);
+        }
+
+
+        [HttpPost]
+        [ValidateHeaderAntiForgeryToken]
+        public void DodajOcenu(DTOOcenaUnos dtoOcenaUnos)
+        {
+            if (dtoOcenaUnos != null)
+            {
+                var ocena = new Ocena
+                {
+                  Oznaka=dtoOcenaUnos.Oznaka,
+                  Plus=dtoOcenaUnos.Plus,
+                  UcenikId=dtoOcenaUnos.UcenikId,
+                  CasId=dtoOcenaUnos.CasId,
+                  TipOceneId=dtoOcenaUnos.TipOceneId,
+                  TipOpisneOceneId=dtoOcenaUnos.TipOpisneOceneId,
+                  Napomena=dtoOcenaUnos.Napomena
+                };
+
+                _context.Ocene.Add(ocena);
+                _context.SaveChanges();
+            }
+        }
 
 
 

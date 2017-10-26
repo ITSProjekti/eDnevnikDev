@@ -227,6 +227,7 @@
     <Compile Include="Controllers\UceniciController.cs" />
     <Compile Include="DTOs\DTOOcena.cs" />
     <Compile Include="DTOs\DTONapomena.cs" />
+    <Compile Include="DTOs\DTOOcenaUnos.cs" />
     <Compile Include="DTOs\DTOOdeljenje.cs" />
     <Compile Include="DTOs\DTOOdeljenjeSaUcenicima.cs" />
     <Compile Include="DTOs\DTOPredmet.cs" />
@@ -234,6 +235,8 @@
     <Compile Include="DTOs\DTOPredmetID.cs" />
     <Compile Include="DTOs\DTOProfesor.cs" />
     <Compile Include="DTOs\DTORola.cs" />
+    <Compile Include="DTOs\DTOTipOcene.cs" />
+    <Compile Include="DTOs\DTOTipOpisneOcene.cs" />
     <Compile Include="DTOs\DTOUcenik.cs" />
     <Compile Include="DTOs\DTOUcenikOdeljenja.cs" />
     <Compile Include="Global.asax.cs">
@@ -617,6 +620,7 @@
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\images\logo3.png" />
     <Content Include="Content\jquery.dataTables.min.css" />
+    <Content Include="Content\loadingScreenStyle.css" />
     <Content Include="Content\styles.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
@@ -782,6 +786,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\loadingScreenStyle.js" />
     <Content Include="Scripts\lumino.glyphs.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
@@ -857,6 +862,7 @@
     <Content Include="Views\Evidencija\Index.cshtml" />
     <Content Include="Views\Casovi\Create.cshtml" />
     <Content Include="Views\Casovi\Cas.cshtml" />
+    <Content Include="Views\Casovi\Cas - Copy.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

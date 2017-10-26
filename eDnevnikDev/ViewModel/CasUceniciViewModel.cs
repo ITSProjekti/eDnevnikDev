@@ -21,7 +21,7 @@ namespace eDnevnikDev.ViewModel
         public Cas Cas { get; set; }
 
         public List<Ucenik> Ucenici { get; set; }
-        public IEnumerable<Predmet> Predmeti { get; set; }
+        public List<Predmet> Predmeti { get; set; }
 
 
     }
