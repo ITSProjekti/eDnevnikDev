@@ -404,13 +404,45 @@
     <Compile Include="Migrations\201709141045270_UpdateModelaCas.Designer.cs">
       <DependentUpon>201709141045270_UpdateModelaCas.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201709291143438_TipOcenePredmeta.cs" />
-    <Compile Include="Migrations\201709291143438_TipOcenePredmeta.Designer.cs">
-      <DependentUpon>201709291143438_TipOcenePredmeta.cs</DependentUpon>
+    <Compile Include="Migrations\201709141136453_DodavanjeModela_Ocena_TipOcena_TipOpisneOcene.cs" />
+    <Compile Include="Migrations\201709141136453_DodavanjeModela_Ocena_TipOcena_TipOpisneOcene.Designer.cs">
+      <DependentUpon>201709141136453_DodavanjeModela_Ocena_TipOcena_TipOpisneOcene.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201709291235389_PredmetiOdeljenja.cs" />
-    <Compile Include="Migrations\201709291235389_PredmetiOdeljenja.Designer.cs">
-      <DependentUpon>201709291235389_PredmetiOdeljenja.cs</DependentUpon>
+    <Compile Include="Migrations\201710040953149_UnosNazivaUCas.cs" />
+    <Compile Include="Migrations\201710040953149_UnosNazivaUCas.Designer.cs">
+      <DependentUpon>201710040953149_UnosNazivaUCas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710091131109_backupnecega.cs" />
+    <Compile Include="Migrations\201710091131109_backupnecega.Designer.cs">
+      <DependentUpon>201710091131109_backupnecega.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710101203417_RedniBrojUProfesoru.cs" />
+    <Compile Include="Migrations\201710101203417_RedniBrojUProfesoru.Designer.cs">
+      <DependentUpon>201710101203417_RedniBrojUProfesoru.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710111222118_RedniBrojUcenika.cs" />
+    <Compile Include="Migrations\201710111222118_RedniBrojUcenika.Designer.cs">
+      <DependentUpon>201710111222118_RedniBrojUcenika.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710111306145_GodinaUpisaUUceniku.cs" />
+    <Compile Include="Migrations\201710111306145_GodinaUpisaUUceniku.Designer.cs">
+      <DependentUpon>201710111306145_GodinaUpisaUUceniku.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710111328050_BrisanjeGodineUpisaUUceniku.cs" />
+    <Compile Include="Migrations\201710111328050_BrisanjeGodineUpisaUUceniku.Designer.cs">
+      <DependentUpon>201710111328050_BrisanjeGodineUpisaUUceniku.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710121123027_SetRedniBrojUUcenikuUString.cs" />
+    <Compile Include="Migrations\201710121123027_SetRedniBrojUUcenikuUString.Designer.cs">
+      <DependentUpon>201710121123027_SetRedniBrojUUcenikuUString.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710171138159_DodataPromenaLozinkeUUcenikuIProfi.cs" />
+    <Compile Include="Migrations\201710171138159_DodataPromenaLozinkeUUcenikuIProfi.Designer.cs">
+      <DependentUpon>201710171138159_DodataPromenaLozinkeUUcenikuIProfi.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710181227266_SetovanjeFotografijeUcenikaUByte.cs" />
+    <Compile Include="Migrations\201710181227266_SetovanjeFotografijeUcenikaUByte.Designer.cs">
+      <DependentUpon>201710181227266_SetovanjeFotografijeUcenikaUByte.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\201710111229217_AcaCasNaziv.cs" />
     <Compile Include="Migrations\201710111229217_AcaCasNaziv.Designer.cs">
@@ -445,6 +477,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModel\KreirajOdeljenjeViewModel.cs" />
+    <Compile Include="ViewModel\PredmetTipOcenePredmetaViewModel.cs" />
     <Compile Include="ViewModel\ProfesorRoleViewModel.cs" />
     <Compile Include="ViewModel\EvidencijaUcenikaViewModel.cs" />
     <Compile Include="ViewModel\ProfesorViewModel.cs" />
@@ -863,12 +896,15 @@
     <Content Include="Views\Napomene\Details.cshtml" />
     <Content Include="Views\Napomene\Edit.cshtml" />
     <Content Include="Views\Napomene\Index.cshtml" />
+    <Content Include="Views\Predmeti\PrikaziPredmeteSaTipovimaOcena.cshtml" />
+    <Content Include="Views\Casovi\Create.cshtml" />
     <Content Include="Views\Evidencija\Collapse.cshtml" />
     <Content Include="Views\Evidencija\Index.cshtml" />
     <Content Include="Views\Casovi\Create.cshtml" />
     <Content Include="Views\Casovi\Cas.cshtml" />
     <Content Include="Views\Casovi\Cas - Copy.cshtml" />
     <Content Include="Views\Odeljenje\KreirajOdeljenje.cshtml" />
+    <Content Include="Views\Shared\_LayoutChangePassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -998,11 +1034,35 @@
     <EmbeddedResource Include="Migrations\201709141045270_UpdateModelaCas.resx">
       <DependentUpon>201709141045270_UpdateModelaCas.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201709291143438_TipOcenePredmeta.resx">
-      <DependentUpon>201709291143438_TipOcenePredmeta.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201709141136453_DodavanjeModela_Ocena_TipOcena_TipOpisneOcene.resx">
+      <DependentUpon>201709141136453_DodavanjeModela_Ocena_TipOcena_TipOpisneOcene.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201709291235389_PredmetiOdeljenja.resx">
-      <DependentUpon>201709291235389_PredmetiOdeljenja.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201710040953149_UnosNazivaUCas.resx">
+      <DependentUpon>201710040953149_UnosNazivaUCas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710091131109_backupnecega.resx">
+      <DependentUpon>201710091131109_backupnecega.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710101203417_RedniBrojUProfesoru.resx">
+      <DependentUpon>201710101203417_RedniBrojUProfesoru.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710111222118_RedniBrojUcenika.resx">
+      <DependentUpon>201710111222118_RedniBrojUcenika.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710111306145_GodinaUpisaUUceniku.resx">
+      <DependentUpon>201710111306145_GodinaUpisaUUceniku.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710111328050_BrisanjeGodineUpisaUUceniku.resx">
+      <DependentUpon>201710111328050_BrisanjeGodineUpisaUUceniku.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710121123027_SetRedniBrojUUcenikuUString.resx">
+      <DependentUpon>201710121123027_SetRedniBrojUUcenikuUString.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710171138159_DodataPromenaLozinkeUUcenikuIProfi.resx">
+      <DependentUpon>201710171138159_DodataPromenaLozinkeUUcenikuIProfi.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710181227266_SetovanjeFotografijeUcenikaUByte.resx">
+      <DependentUpon>201710181227266_SetovanjeFotografijeUcenikaUByte.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201710111229217_AcaCasNaziv.resx">
       <DependentUpon>201710111229217_AcaCasNaziv.cs</DependentUpon>

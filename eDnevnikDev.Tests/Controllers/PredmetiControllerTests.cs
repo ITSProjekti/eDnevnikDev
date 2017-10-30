@@ -11,6 +11,7 @@ using System.Data.Entity;
 using System.Web.Mvc;
 using System.Web;
 using System.Linq.Expressions;
+using eDnevnikDev.ViewModel;
 
 namespace eDnevnikDev.Controllers.Tests
 {
@@ -78,11 +79,121 @@ namespace eDnevnikDev.Controllers.Tests
             services.SacuvajPredmet(predmet);
 
             mockSet.Verify(p => p.Add(It.IsAny<Predmet>()), Times.Once());
-              mockContext.Verify(p => p.SaveChanges(), Times.Once());
-          
-
-
+            mockContext.Verify(p => p.SaveChanges(), Times.Once());
         }
 
+       
+        // DONE
+        [TestMethod()]
+        public void PrikaziPredmeteSaTipovimaOcena()
+        {
+            var tipoviOcenaPredmeta = new List<TipOcenePredmeta>()
+            {
+                new TipOcenePredmeta() {TipOcenePredmetaId=1, Tip="Numericka"},
+                new TipOcenePredmeta() {TipOcenePredmetaId=2, Tip="Opisna" }
+            }.AsQueryable();
+
+            var predmeti = new List<Predmet>()
+            {
+                new Predmet() {PredmetID=1, NazivPredmeta="Matematika", TipOcenePredmetaId=1, TipOcenePredmeta=tipoviOcenaPredmeta.SingleOrDefault(x=>x.TipOcenePredmetaId==1) },
+                new Predmet() {PredmetID=2, NazivPredmeta="Srpski jezik", TipOcenePredmetaId=1, TipOcenePredmeta=tipoviOcenaPredmeta.SingleOrDefault(x=>x.TipOcenePredmetaId==1) },
+                new Predmet() {PredmetID=3, NazivPredmeta="Programiranje", TipOcenePredmetaId=1, TipOcenePredmeta=tipoviOcenaPredmeta.SingleOrDefault(x=>x.TipOcenePredmetaId==1) },
+                new Predmet() {PredmetID=4, NazivPredmeta="Veronauka", TipOcenePredmetaId=2, TipOcenePredmeta=tipoviOcenaPredmeta.SingleOrDefault(x=>x.TipOcenePredmetaId==2)}
+            }.AsQueryable();
+            
+
+            var mockSetPredmet = new Mock<DbSet<Predmet>>();
+            mockSetPredmet.As<IQueryable<Predmet>>().Setup(m => m.Provider).Returns(predmeti.Provider);
+            mockSetPredmet.As<IQueryable<Predmet>>().Setup(m => m.Expression).Returns(predmeti.Expression);
+            mockSetPredmet.As<IQueryable<Predmet>>().Setup(m => m.ElementType).Returns(predmeti.ElementType);
+            mockSetPredmet.As<IQueryable<Predmet>>().Setup(m => m.GetEnumerator()).Returns(predmeti.GetEnumerator());
+
+            var mockSetTipOcenePredmeta = new Mock<DbSet<TipOcenePredmeta>>();
+            mockSetTipOcenePredmeta.As<IQueryable<TipOcenePredmeta>>().Setup(m => m.Provider).Returns(tipoviOcenaPredmeta.Provider);
+            mockSetTipOcenePredmeta.As<IQueryable<TipOcenePredmeta>>().Setup(m => m.Expression).Returns(tipoviOcenaPredmeta.Expression);
+            mockSetTipOcenePredmeta.As<IQueryable<TipOcenePredmeta>>().Setup(m => m.ElementType).Returns(tipoviOcenaPredmeta.ElementType);
+            mockSetTipOcenePredmeta.As<IQueryable<TipOcenePredmeta>>().Setup(m => m.GetEnumerator()).Returns(tipoviOcenaPredmeta.GetEnumerator());
+
+            var mockContext = new Mock<ApplicationDbContext>();
+
+            foreach (var item in predmeti)
+                mockSetPredmet.Setup(p => p.Add(item));
+            
+            mockContext.Setup(c => c.Predmeti).Returns(mockSetPredmet.Object);
+
+            foreach (var item in tipoviOcenaPredmeta)
+                mockSetTipOcenePredmeta.Setup(p => p.Add(item));
+
+            mockContext.Setup(c => c.TipoviOcenaPredmeta).Returns(mockSetTipOcenePredmeta.Object);
+
+
+            var kontroler = new PredmetiController(mockContext.Object);
+
+            var result = kontroler.PrikaziPredmeteSaTipovimaOcena() as ViewResult;
+            var model = result.Model as PredmetTipOcenePredmetaViewModel;
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(predmeti.FirstOrDefault(), model.Predmeti.FirstOrDefault());
+            Assert.AreEqual(tipoviOcenaPredmeta.FirstOrDefault(), model.TipoviOcenaPredmeta.FirstOrDefault());
+        }
+
+        /// TO BE DONE
+        [TestMethod()]
+        public void IzmenaTipaOcenaUPredmetu()
+        {
+            var predmetId = 1;
+            var tipOcenePredmetaId = 1;
+
+            var tipoviOcenaPredmeta = new List<TipOcenePredmeta>()
+            {
+                new TipOcenePredmeta() {TipOcenePredmetaId=1, Tip="Numericka"},
+                new TipOcenePredmeta() {TipOcenePredmetaId=2, Tip="Opisna" }
+            }.AsQueryable();
+
+            var predmeti = new List<Predmet>()
+            {
+                new Predmet() {PredmetID=1, NazivPredmeta="Matematika", TipOcenePredmetaId=1, TipOcenePredmeta=tipoviOcenaPredmeta.SingleOrDefault(x=>x.TipOcenePredmetaId==1) },
+                new Predmet() {PredmetID=2, NazivPredmeta="Srpski jezik", TipOcenePredmetaId=1, TipOcenePredmeta=tipoviOcenaPredmeta.SingleOrDefault(x=>x.TipOcenePredmetaId==1) },
+                new Predmet() {PredmetID=3, NazivPredmeta="Programiranje", TipOcenePredmetaId=1, TipOcenePredmeta=tipoviOcenaPredmeta.SingleOrDefault(x=>x.TipOcenePredmetaId==1) },
+                new Predmet() {PredmetID=4, NazivPredmeta="Veronauka", TipOcenePredmetaId=2, TipOcenePredmeta=tipoviOcenaPredmeta.SingleOrDefault(x=>x.TipOcenePredmetaId==2)}
+            }.AsQueryable();
+
+
+            var mockSetPredmet = new Mock<DbSet<Predmet>>();
+            mockSetPredmet.As<IQueryable<Predmet>>().Setup(m => m.Provider).Returns(predmeti.Provider);
+            mockSetPredmet.As<IQueryable<Predmet>>().Setup(m => m.Expression).Returns(predmeti.Expression);
+            mockSetPredmet.As<IQueryable<Predmet>>().Setup(m => m.ElementType).Returns(predmeti.ElementType);
+            mockSetPredmet.As<IQueryable<Predmet>>().Setup(m => m.GetEnumerator()).Returns(predmeti.GetEnumerator());
+
+            var mockSetTipOcenePredmeta = new Mock<DbSet<TipOcenePredmeta>>();
+            mockSetTipOcenePredmeta.As<IQueryable<TipOcenePredmeta>>().Setup(m => m.Provider).Returns(tipoviOcenaPredmeta.Provider);
+            mockSetTipOcenePredmeta.As<IQueryable<TipOcenePredmeta>>().Setup(m => m.Expression).Returns(tipoviOcenaPredmeta.Expression);
+            mockSetTipOcenePredmeta.As<IQueryable<TipOcenePredmeta>>().Setup(m => m.ElementType).Returns(tipoviOcenaPredmeta.ElementType);
+            mockSetTipOcenePredmeta.As<IQueryable<TipOcenePredmeta>>().Setup(m => m.GetEnumerator()).Returns(tipoviOcenaPredmeta.GetEnumerator());
+
+            var mockContext = new Mock<ApplicationDbContext>();
+
+            foreach (var item in predmeti)
+                mockSetPredmet.Setup(p => p.Add(item));
+
+            mockContext.Setup(c => c.Predmeti).Returns(mockSetPredmet.Object);
+
+            foreach (var item in tipoviOcenaPredmeta)
+                mockSetTipOcenePredmeta.Setup(p => p.Add(item));
+
+            mockContext.Setup(c => c.TipoviOcenaPredmeta).Returns(mockSetTipOcenePredmeta.Object);
+
+            //_mockUserRepository.Setup(mr => mr.Update(It.IsAny<int>(), It.IsAny<string>()))
+            //       .Returns(true);
+
+            var kontroler = new PredmetiController(mockContext.Object);
+
+            kontroler.IzmenaTipaOcenaUPredmetu(predmetId, tipOcenePredmetaId);
+
+            //mockSetPredmet.Verify(p => p.Add(It.IsAny<Predmet>()), Times.Once());
+            mockContext.Verify(p => p.SaveChanges(), Times.Once());
+
+        }
     }
 }

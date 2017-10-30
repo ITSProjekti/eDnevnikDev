@@ -87,8 +87,10 @@ namespace eDnevnikDev.Models
         [Display(Name = "Razredni Starešina")]
         public bool RazredniStaresina { get; set; }
 
-        
 
+        public int RedniBroj { get; set; }
+
+        public bool PromenaLozinke { get; set; }
 
 
         /// <summary>
@@ -120,11 +122,6 @@ namespace eDnevnikDev.Models
         public virtual ICollection<Napomena> Napomene { get; set; }
 
         public virtual ICollection<Cas> Casovi { get; set; }
-
-       
-
-
-
 
     }
 }

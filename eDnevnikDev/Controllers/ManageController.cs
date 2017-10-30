@@ -15,15 +15,18 @@ namespace eDnevnikDev.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationDbContext _context;
 
         public ManageController()
         {
+            _context = new ApplicationDbContext();
         }
 
-        public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
+        public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, ApplicationDbContext _context)
         {
             UserManager = userManager;
             SignInManager = signInManager;
+            this._context = _context;
         }
 
         public ApplicationSignInManager SignInManager
@@ -222,6 +225,14 @@ namespace eDnevnikDev.Controllers
 
         //
         // POST: /Manage/ChangePassword
+        /// <summary>
+        /// Metoda sluzi za promenu lozinke
+        /// Ukoliko korisnik nijednom nije promenio lozinku, nece moci da se uloguje dok to ne uradi
+        /// Kada to uradi prvi put dodaje mu se rola i setuje se da mu je promenaLozinke=true i nakon toga
+        /// ce moci da se loguje normalno bez redirekcije na promenu lozinke
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model)
@@ -230,14 +241,54 @@ namespace eDnevnikDev.Controllers
             {
                 return View(model);
             }
+            //menja se lozinka korisnika
             var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
             if (result.Succeeded)
             {
                 var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+
                 if (user != null)
                 {
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 }
+
+                try
+                {
+                    //proveravamo da li se ulogovan user nalazi u tabeli profesor
+                    var profesor = _context.Profesori
+                        .Single(p => p.UserProfesorId == user.Id);
+
+                    //proveravamo da li je ikad promenio lozinku sto je obavezno kada se loguje prvi put
+                    if(!profesor.PromenaLozinke)
+                    {
+                        //ukoliko nije dodajemo mu tada rolu i setujemo da je promenaLozinke true
+                        await UserManager.AddToRoleAsync(user.Id, "Profesor");
+
+                        profesor.PromenaLozinke = true;
+                        _context.SaveChanges();
+                    }
+                }
+                catch (Exception) { }
+
+                try
+                {
+                    //proveravamo da li se ulogovan user nalazi u tabeli ucenik
+                    var ucenik = _context.Ucenici
+                        .Single(u => u.UserUcenikId == user.Id);
+
+                    //proveravamo da li je ikad promenio lozinku sto je obavezno kada se loguje prvi put
+                    if (!ucenik.PromenaLozinke)
+                    {
+                        //ukoliko nije dodajemo mu tada rolu i setujemo da je promenaLozinke true
+                        await UserManager.AddToRoleAsync(user.Id, "Ucenik");
+
+                        ucenik.PromenaLozinke = true;
+                        _context.SaveChanges();
+                    }
+                }
+                catch (Exception) { }
+
+
                 return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
             }
             AddErrors(result);

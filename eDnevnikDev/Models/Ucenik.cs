@@ -167,6 +167,10 @@ namespace eDnevnikDev.Models
         /// </value>
         public bool Vanredan { get; set; }
 
+        public string RedniBroj { get; set; }
+
+        public bool PromenaLozinke { get; set; }
+
 
         /// <summary>
         /// Navigacioni property, referencira smer u tabeli Smer
@@ -224,7 +228,7 @@ namespace eDnevnikDev.Models
         public string JedinstveniBroj { get; set; }
 
 
-        public string Fotografija { get; set; }
+        public byte[] Fotografija { get; set; }
 
         public int? BrojUDnevniku { get; set; }
 
@@ -291,6 +295,5 @@ namespace eDnevnikDev.Models
 
             JedinstveniBroj = broj.ToString();
         }
-
     }
 }

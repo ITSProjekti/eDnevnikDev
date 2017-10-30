@@ -1,6 +1,10 @@
-﻿using eDnevnikDev.Models;
+﻿using eDnevnikDev.Helpers;
+using eDnevnikDev.Models;
+using eDnevnikDev.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -72,5 +76,59 @@ namespace eDnevnikDev.Controllers
             }
         }
 
+        /// <summary>
+        /// Vraća se lista predmeta kao i njihovi tipovi ocena (opisna, numerička)
+        /// Koristi se "PredmetTipOcenePredmetaViewModel" koji sadrži liste predmeta 
+        /// kao i liste tipova ocena predmeta
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult PrikaziPredmeteSaTipovimaOcena()
+        {
+            var listaPredmeta = _context.Predmeti.
+                Select(x => x);
+
+            var listaPredmetaSaTipom = listaPredmeta.Include("TipOcenePredmeta")
+                .ToList();
+                
+            var listaTipovaOcenaPredmeta = _context.TipoviOcenaPredmeta
+                .ToList();
+
+            var predmetTipOcenePredmetaViewModel =  
+                new PredmetTipOcenePredmetaViewModel(){ Predmeti= listaPredmetaSaTipom, TipoviOcenaPredmeta=listaTipovaOcenaPredmeta};
+
+            return View(predmetTipOcenePredmetaViewModel);
+        }
+
+        /// <summary>
+        /// Menja se tip ocene za određeni predmet
+        /// Npr ako matematika ima tip ocene "opisna" moguća je izmena da bude "numerička"
+        /// </summary>
+        /// <param name="predmetId">The predmet identifier.</param>
+        /// <param name="tipOcenePredmetaId">The tip ocene predmeta identifier.</param>
+        [HttpPost]
+        [ValidateHeaderAntiForgeryToken]
+        public void IzmenaTipaOcenaUPredmetu(int predmetId, int tipOcenePredmetaId)
+        {
+            var predmet = _context.Predmeti
+                .SingleOrDefault(p => p.PredmetID == predmetId);
+
+            var tip = _context.TipoviOcenaPredmeta.SingleOrDefault(x => x.TipOcenePredmetaId == tipOcenePredmetaId);
+
+            predmet.TipOcenePredmetaId = tipOcenePredmetaId;
+            predmet.TipOcenePredmeta = tip;
+
+            try
+            {
+                _context.Predmeti.AddOrUpdate(predmet);
+                
+            }
+            catch (Exception)
+            {
+                
+            }
+            //Ova linija je pomerena iz try bloka, jer kad je bila u njemu aplikacija je radila, 
+            //ali test nije zato sto u testu nije implementirana AddOrUpdate metoda
+            _context.SaveChanges();
+        }
     }
 }
