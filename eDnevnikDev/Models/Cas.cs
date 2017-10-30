@@ -58,8 +58,7 @@ namespace eDnevnikDev.Models
         [Required]
         public int RedniBrojPredmeta { get; set; }
 
-        [Required]
-        public string Naziv { get; set; }
+        
 
         public virtual ICollection<Napomena> Napomene { get; set; }
         public virtual ICollection<Odsustvo> Odsustva { get; set; }

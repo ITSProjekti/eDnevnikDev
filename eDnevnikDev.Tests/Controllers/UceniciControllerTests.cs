@@ -159,7 +159,7 @@ namespace eDnevnikDev.Controllers.Tests
             mockContext.Setup(p => p.Ucenici).Returns(mockSet.Object);
 
             var services = new UceniciController(mockContext.Object);
-            services.Sacuvaj(ucenik);
+            //services.Sacuvaj(ucenik);
 
             mockSet.Verify(p => p.Add(It.IsAny<Ucenik>()), Times.Once());
             mockContext.Verify(p => p.SaveChanges(), Times.Once());
