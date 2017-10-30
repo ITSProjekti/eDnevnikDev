@@ -416,6 +416,10 @@
     <Compile Include="Migrations\201710111229217_AcaCasNaziv.Designer.cs">
       <DependentUpon>201710111229217_AcaCasNaziv.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201710271026506_PostavljanjeOdeljenjaIdNaNullableVrednostUUceniku.cs" />
+    <Compile Include="Migrations\201710271026506_PostavljanjeOdeljenjaIdNaNullableVrednostUUceniku.Designer.cs">
+      <DependentUpon>201710271026506_PostavljanjeOdeljenjaIdNaNullableVrednostUUceniku.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ArhivaOdeljenja.cs" />
@@ -440,6 +444,7 @@
     <Compile Include="Models\Ucenik.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModel\KreirajOdeljenjeViewModel.cs" />
     <Compile Include="ViewModel\ProfesorRoleViewModel.cs" />
     <Compile Include="ViewModel\EvidencijaUcenikaViewModel.cs" />
     <Compile Include="ViewModel\ProfesorViewModel.cs" />
@@ -863,6 +868,7 @@
     <Content Include="Views\Casovi\Create.cshtml" />
     <Content Include="Views\Casovi\Cas.cshtml" />
     <Content Include="Views\Casovi\Cas - Copy.cshtml" />
+    <Content Include="Views\Odeljenje\KreirajOdeljenje.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1000,6 +1006,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201710111229217_AcaCasNaziv.resx">
       <DependentUpon>201710111229217_AcaCasNaziv.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710271026506_PostavljanjeOdeljenjaIdNaNullableVrednostUUceniku.resx">
+      <DependentUpon>201710271026506_PostavljanjeOdeljenjaIdNaNullableVrednostUUceniku.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

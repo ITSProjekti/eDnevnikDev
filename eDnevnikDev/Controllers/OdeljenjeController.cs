@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using eDnevnikDev.DTOs;
+using eDnevnikDev.ViewModel;
 
 namespace eDnevnikDev.Controllers
 {
@@ -61,12 +62,12 @@ namespace eDnevnikDev.Controllers
             //Koristi se DTOOdeljnje, iako je Razred visak. Ne menja stvari na frontendu.
             var pov = new List<DTOOdeljenje>();
 
-            foreach(var lista in kolekcijaOznaka)
+            foreach (var lista in kolekcijaOznaka)
             {
-                foreach(var oznaka in lista)
+                foreach (var oznaka in lista)
                 {
-                   if( !pov.Any( o => o.Oznaka == oznaka.OznakaId))
-                        pov.Add(new DTOOdeljenje {Oznaka = oznaka.OznakaId }); 
+                    if (!pov.Any(o => o.Oznaka == oznaka.OznakaId))
+                        pov.Add(new DTOOdeljenje { Oznaka = oznaka.OznakaId });
                 }
             }
             //Sortiranje.
@@ -89,7 +90,7 @@ namespace eDnevnikDev.Controllers
             var pov = _context.Odeljenja.SingleOrDefault(o => o.OznakaID == oznaka && o.Razred == godina && o.StatusID == status);
 
             //Ukoliko je pronadjeno odeljenje vraca se sledeca skolska godina
-            if(pov != null)
+            if (pov != null)
                 return Json(new { PocetakSkolskeGodine = pov.PocetakSkolskeGodine }, JsonRequestBehavior.AllowGet);
 
 
@@ -120,7 +121,7 @@ namespace eDnevnikDev.Controllers
                 .Include("Status")
                 .SingleOrDefault(o => o.StatusID == status && o.Razred == razred && o.OznakaID == oznakaOdeljenja);
 
-            
+
             var podaci = new DTOOdeljenjeSaUcenicima();
 
             if (odeljenje != null)
@@ -207,7 +208,7 @@ namespace eDnevnikDev.Controllers
             var pom = _context.Odeljenja.Include("Oznaka").SingleOrDefault(o => o.Id == odeljenje.Id);
 
             //Ukoliko je 4. razred ucenici se ne premestaju nigde,ili ukoliko je odljenje na trecoj godini na trogodisnjem smeru.
-            if (odeljenje.Razred == 4 || pom.Oznaka.Smerovi.Any(x => x.Trajanje == 3 && odeljenje.Razred == 3)) 
+            if (odeljenje.Razred == 4 || pom.Oznaka.Smerovi.Any(x => x.Trajanje == 3 && odeljenje.Razred == 3))
                 return 0;
 
             //objekat u kom se cuva odeljenje iste oznake za sledecu godinu,u koje treba ucenici automatksi da se premeste.
@@ -220,7 +221,7 @@ namespace eDnevnikDev.Controllers
                 sledecaGodinaOdeljenjeUToku = new Odeljenje()
                 {
                     OznakaID = odeljenje.OznakaID,
-                    Razred = odeljenje.Razred+1,
+                    Razred = odeljenje.Razred + 1,
                     PocetakSkolskeGodine = Odeljenje.SledecaSkolskaGodina(odeljenje.Razred + 1, odeljenje.OznakaID, _context),
                     StatusID = 2,
                     KrajSkolskeGodine = Odeljenje.SledecaSkolskaGodina(odeljenje.Razred + 1, odeljenje.OznakaID, _context) + 1
@@ -252,15 +253,15 @@ namespace eDnevnikDev.Controllers
             var tekuceKreiranoOdeljenje = _context.Odeljenja.SingleOrDefault(o => o.OznakaID == OdeljenjeZaKreiranje.Oznaka && o.Razred == OdeljenjeZaKreiranje.Razred && o.StatusID == 3); //Status 3 je Kreirano
 
             //Ukoliko postoji,to odeljenje se arhivira i ucenici iz njega se premestaju u sledecu godinu status odeljenja u toku.
-            if(tekuceKreiranoOdeljenje != null)
+            if (tekuceKreiranoOdeljenje != null)
             {
                 ArhivirajOdeljenje(tekuceKreiranoOdeljenje);
                 PremestiUSledecuGodinu(tekuceKreiranoOdeljenje);
             }
-            
+
             //Tekuce odeljenje koje trenutno ima status u toku a treba se kreira.
             var odeljenjeZaPromenuStatusa = _context.Odeljenja.SingleOrDefault(o => o.OznakaID == OdeljenjeZaKreiranje.Oznaka && o.Razred == OdeljenjeZaKreiranje.Razred && o.StatusID == 2); //Status 2 je U toku
-            
+
             //Ukoliko je null doslo je do nepoklapanja interfejsa na frontendu i podataka u bazi. 
             if (odeljenjeZaPromenuStatusa == null)
                 return -1;
@@ -308,9 +309,19 @@ namespace eDnevnikDev.Controllers
             var redniBrojPredmete = 3;
             var redniBrojCasa = 2;
 
-            Cas cas = new Cas() {CasId = casId, Datum = datum, Opis = opis, ProfesorId = profesor,
-                PredmetId = predmet, OdeljenjeId = odeljenje, Polugodiste = polugodiste,
-                Tromesecje = tromesecje, RedniBrojPredmeta = redniBrojPredmete, RedniBrojCasa = redniBrojCasa };
+            Cas cas = new Cas()
+            {
+                CasId = casId,
+                Datum = datum,
+                Opis = opis,
+                ProfesorId = profesor,
+                PredmetId = predmet,
+                OdeljenjeId = odeljenje,
+                Polugodiste = polugodiste,
+                Tromesecje = tromesecje,
+                RedniBrojPredmeta = redniBrojPredmete,
+                RedniBrojCasa = redniBrojCasa
+            };
 
             _context.Casovi.Add(cas);
             _context.SaveChanges();
@@ -351,7 +362,7 @@ namespace eDnevnikDev.Controllers
 
                 maxCas = 0;
             }
-            
+
 
             try
             {
@@ -363,6 +374,98 @@ namespace eDnevnikDev.Controllers
             }
             // a+1 -> povecava redni broj casa, zato sto je to sledeci cas koji treba da se odrzi
             return Json(maxCas + 1, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult KreirajOdeljenje()
+        {
+
+            var model = new KreirajOdeljenjeViewModel();
+
+            var nerasporedjeniUcenici = _context.Ucenici
+                                      .Where(u => u.OdeljenjeId == null)
+                                      .Select(u => u)
+                                      .ToList();
+
+            if (nerasporedjeniUcenici != null)
+            {
+                model.ListaNerasporedjenihUcenika = nerasporedjeniUcenici;
+            }
+            else
+            {
+                model.ListaNerasporedjenihUcenika = new List<Ucenik>();
+            }
+
+
+            IQueryable<Odeljenje> odeljenja = _context.Odeljenja
+                                                      .Where(o => o.StatusID == 2 || o.StatusID == 3)
+                                                      .Select(o => o);
+
+            if (odeljenja != null)
+            {
+                var prvaGodina = odeljenja.Where(o => o.Razred == 1)
+                                     .Select(o => o)
+                                     .ToList();
+
+                if (prvaGodina != null)
+                {
+                    model.PrvaGodina = prvaGodina;
+                }
+                else
+                {
+                    model.PrvaGodina = new List<Odeljenje>();
+                }
+
+
+                var drugaGodina = odeljenja.Where(o => o.Razred == 2)
+                                          .Select(o => o)
+                                          .ToList();
+
+                if (drugaGodina != null)
+                {
+                    model.DrugaGodina = drugaGodina;
+                }
+                else
+                {
+                    model.DrugaGodina = new List<Odeljenje>();
+                }
+
+                var trecaGodina = odeljenja.Where(o => o.Razred == 3)
+                                          .Select(o => o)
+                                          .ToList();
+
+                if (trecaGodina != null)
+                {
+                    model.TrecaGodina = trecaGodina;
+                }
+                else
+                {
+                    model.TrecaGodina = new List<Odeljenje>();
+                }
+
+                var cetvrtaGodina = odeljenja.Where(o => o.Razred == 4)
+                                          .Select(o => o)
+                                          .ToList();
+
+                if (cetvrtaGodina != null)
+                {
+                    model.CetvrtaGodina = cetvrtaGodina;
+                }
+                else
+                {
+                    model.CetvrtaGodina = new List<Odeljenje>();
+                }
+
+            }
+            else
+            {
+                model.PrvaGodina = new List<Odeljenje>();
+                model.DrugaGodina = new List<Odeljenje>();
+                model.TrecaGodina = new List<Odeljenje>();
+                model.CetvrtaGodina = new List<Odeljenje>();
+
+            }
+
+            return View(model);
         }
 
     }
