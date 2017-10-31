@@ -21,6 +21,10 @@ namespace eDnevnikDev.Controllers
         {
             _context = new ApplicationDbContext();
         }
+        public EvidencijaController(ApplicationDbContext Context)
+        {
+            _context = Context;
+        }
         public class Ucenik2 { }
 
         // GET: Evidencija

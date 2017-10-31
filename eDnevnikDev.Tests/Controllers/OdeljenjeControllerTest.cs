@@ -18,7 +18,7 @@ using eDnevnikDev.Tests.helpers;
 namespace eDnevnikDev.Tests.Controllers
 {
     [TestClass]
-   public class OdeljenjeControllerTest
+    public class OdeljenjeControllerTest
     {
         //DONE
         [TestMethod]
@@ -304,7 +304,7 @@ namespace eDnevnikDev.Tests.Controllers
             }.AsQueryable();
 
             var odsustva = new List<Odsustvo>(){
-                
+
                 new Odsustvo
                 {
                     OdsustvoId = 2,
@@ -414,7 +414,7 @@ namespace eDnevnikDev.Tests.Controllers
                     {
                         Assert.AreEqual<string>(prisutan, "false");
                     }
-                    
+
                 }
             }
             Assert.AreEqual<int>(jsonArray.First.Count(), 2);
@@ -424,7 +424,7 @@ namespace eDnevnikDev.Tests.Controllers
         [TestMethod]
         public void OdeljenjeController_OdeljenjeTrajanje()
         {
-            int razred =4 ;
+            int razred = 4;
 
 
             var oznake = new List<Oznaka>()
@@ -490,7 +490,7 @@ namespace eDnevnikDev.Tests.Controllers
             string jsonString = JsonConvert.SerializeObject(rezultat.Data);
             System.Diagnostics.Debug.WriteLine(jsonString);
 
-            var jsonArray= JArray.Parse(Helper.checkJsonJArray(jsonString));
+            var jsonArray = JArray.Parse(Helper.checkJsonJArray(jsonString));
 
             foreach (JObject item in jsonArray)
             {
@@ -503,4 +503,5 @@ namespace eDnevnikDev.Tests.Controllers
             Assert.AreEqual<int>(jsonArray.Count(), 6);
         }
     }
+
 }

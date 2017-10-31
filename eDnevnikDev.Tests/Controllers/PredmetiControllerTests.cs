@@ -67,7 +67,7 @@ namespace eDnevnikDev.Controllers.Tests
         [TestMethod()]
         public void PredmetiController_SacuvajPredmet()
         {
-            var predmet = new Predmet();
+            var predmet = new Predmet() { NazivPredmeta = "Predmet 1", PredmetID = 1};
             predmet.NazivPredmeta = "Matematika";
 
             var mockSet = new Mock<DbSet<Predmet>>();
@@ -82,7 +82,7 @@ namespace eDnevnikDev.Controllers.Tests
             mockContext.Verify(p => p.SaveChanges(), Times.Once());
         }
 
-       
+
         // DONE
         [TestMethod()]
         public void PrikaziPredmeteSaTipovimaOcena()
@@ -100,7 +100,7 @@ namespace eDnevnikDev.Controllers.Tests
                 new Predmet() {PredmetID=3, NazivPredmeta="Programiranje", TipOcenePredmetaId=1, TipOcenePredmeta=tipoviOcenaPredmeta.SingleOrDefault(x=>x.TipOcenePredmetaId==1) },
                 new Predmet() {PredmetID=4, NazivPredmeta="Veronauka", TipOcenePredmetaId=2, TipOcenePredmeta=tipoviOcenaPredmeta.SingleOrDefault(x=>x.TipOcenePredmetaId==2)}
             }.AsQueryable();
-            
+
 
             var mockSetPredmet = new Mock<DbSet<Predmet>>();
             mockSetPredmet.As<IQueryable<Predmet>>().Setup(m => m.Provider).Returns(predmeti.Provider);
@@ -118,7 +118,7 @@ namespace eDnevnikDev.Controllers.Tests
 
             foreach (var item in predmeti)
                 mockSetPredmet.Setup(p => p.Add(item));
-            
+
             mockContext.Setup(c => c.Predmeti).Returns(mockSetPredmet.Object);
 
             foreach (var item in tipoviOcenaPredmeta)
@@ -184,14 +184,12 @@ namespace eDnevnikDev.Controllers.Tests
 
             mockContext.Setup(c => c.TipoviOcenaPredmeta).Returns(mockSetTipOcenePredmeta.Object);
 
-            //_mockUserRepository.Setup(mr => mr.Update(It.IsAny<int>(), It.IsAny<string>()))
-            //       .Returns(true);
+
 
             var kontroler = new PredmetiController(mockContext.Object);
 
             kontroler.IzmenaTipaOcenaUPredmetu(predmetId, tipOcenePredmetaId);
 
-            //mockSetPredmet.Verify(p => p.Add(It.IsAny<Predmet>()), Times.Once());
             mockContext.Verify(p => p.SaveChanges(), Times.Once());
 
         }
