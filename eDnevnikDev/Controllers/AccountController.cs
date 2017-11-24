@@ -99,32 +99,54 @@ namespace eDnevnikDev.Controllers
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             var result = await SignInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, shouldLockout: false);
 
-            //var user = UserManager.FindById(User.Identity.Name);
-            var user = _context.Users
-                .Single(u => u.UserName == model.Username);
-
             switch (result)
             {
                 case SignInStatus.Success:
                     {
-                        bool promenaLozinke=false;
+                        var user = _context.Users.SingleOrDefault(u => u.UserName == model.Username);
+
+                        bool promenaLozinke = false;
                         try
                         {
                             promenaLozinke = _context.Profesori
                                 .Single(p => p.UserProfesorId == user.Id)
                                 .PromenaLozinke;
-                        }catch (Exception){}
+                        }
+                        catch (Exception) { }
 
                         try
                         {
                             promenaLozinke = _context.Ucenici
                                 .Single(p => p.UserUcenikId == user.Id)
                                 .PromenaLozinke;
-                        }catch (Exception) { }
+                        }
+                        catch (Exception) { }
 
-                        if (promenaLozinke)
+                        if (!promenaLozinke)
                         {
-                            return RedirectToLocal(returnUrl);
+                            var pravaPristupa = UserManager.GetRoles(user.Id);
+
+                            foreach (var pravoPristupa in pravaPristupa)
+                            {
+                                if(pravoPristupa== "Administrator")
+                                {
+                                    DateTime datum = DateTime.Now.Date;
+                                    int dan = Convert.ToInt32(datum.Day.ToString());
+                                    int mesec = Convert.ToInt32(datum.Month.ToString());
+                                    int godina = Convert.ToInt32(datum.Year.ToString());
+
+                                    var skolskaGodina = _context.SkolskaGodine.Max(s => s.PocetakSkolskeGodine.Year);
+
+                                    if (mesec >= 8 && dan >= 10 && godina!=skolskaGodina)
+                                    {
+                                        return RedirectToAction("RokZaKreiranjeSkolskeGodine", "UpisSkolskeGodine");
+                                    }
+
+                                    return RedirectToAction("IndexAdmin", "Home");
+                                }
+                            }
+
+                                return RedirectToLocal(returnUrl);
                         }
                         else
                         {

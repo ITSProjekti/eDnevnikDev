@@ -1,0 +1,372 @@
+﻿@model AdminIndexViewModel
+@{
+    ViewBag.Title = "IndexAdmin";
+}
+
+<h2>Admin panel</h2>
+
+
+<form>
+    <div class="container">
+        <div class="col-md-6">
+            <div class="well">
+                <h4>Statistika ucenika po uspehu</h4>
+                <hr />
+                <div class="col-md-12" style="margin-bottom:10px">
+
+                    <div class="col-md-4">
+                        <label>Upis</label>
+                        <select class="form-control">
+                            <option>2014/2015</option>
+                            <option>2015/2016</option>
+                            <option>2016/2017</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Godina</label>
+                        <select class="form-control">
+                            <option>Sve</option>
+                            <option>I godina</option>
+                            <option>II godina</option>
+                            <option>III godina</option>
+                            <option>IV godina</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Odeljenje</label>
+                        <select class="form-control">
+                            <option>Sva</option>
+                            <option>I</option>
+                            <option>II</option>
+                            <option>III</option>
+                            <option>IV</option>
+                            <option>V</option>
+                            <option>VI</option>
+                        </select>
+                    </div>
+
+                </div>
+                <label>Sa odlicnim uspehom&nbsp;</label><label id="test1l"></label>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-success" id="test1" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                        <span>421</span>
+                    </div>
+                </div>
+                <label>Sa vrlo dobrim uspehom&nbsp;</label><label id="test2l"></label>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-info" id="test2" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                        <span>240</span>
+                    </div>
+                </div>
+                <label>Sa dobrim uspehom&nbsp;</label><label id="test3l"></label>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-warning" id="test3" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                        <span>297</span>
+                    </div>
+                </div>
+                <label>Sa dovoljnim uspehom&nbsp;</label><label id="test4l"></label>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-danger" id="test4" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                        <span>89</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+@*
+        <div class="col-md-6">
+            <div class="well">
+                <h4>Statistika nedovoljnih ucenika</h4>
+                <hr />
+                <div class="col-md-12" style="margin-bottom:10px">
+
+                    <div class="col-md-4">
+                        <label>Upis</label>
+                        <select class="form-control">
+                            <option>2014/2015</option>
+                            <option>2015/2016</option>
+                            <option>2016/2017</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Godina</label>
+                        <select class="form-control">
+                            <option>Sve</option>
+                            <option>I godina</option>
+                            <option>II godina</option>
+                            <option>III godina</option>
+                            <option>IV godina</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Odeljenje</label>
+                        <select class="form-control">
+                            <option>Sva</option>
+                            <option>I</option>
+                            <option>II</option>
+                            <option>III</option>
+                            <option>IV</option>
+                            <option>V</option>
+                            <option>VI</option>
+                        </select>
+                    </div>
+
+                </div>
+                <label>Sa jednom jedinicom&nbsp;</label>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 31%">
+                        <span>21</span>
+                    </div>
+                </div>
+                <label>Sa dve jedinice&nbsp;</label>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 55%">
+                        <span>55</span>
+                    </div>
+                </div>
+                <label>Sa tri jedinice&nbsp;</label>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 9%">
+                        <span>9</span>
+                    </div>
+                </div>
+                <label>Sa cetiri ili više jedinica&nbsp;</label>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 5%">
+                        <span>5</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <div class="col-md-6">
+        <div class="well">
+            <h4>Izveštaj o izostancima</h4>
+            <hr />
+            <div class="col-md-12" style="margin-bottom:10px">
+
+                <div class="col-md-6">
+                    <label>Upis</label>
+                    <select class="form-control">
+                        <option>2014/2015</option>
+                        <option>2015/2016</option>
+                        <option>2016/2017</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label>Godina</label>
+                    <select class="form-control">
+                        <option>Sve</option>
+                        <option>I godina</option>
+                        <option>II godina</option>
+                        <option>III godina</option>
+                        <option>IV godina</option>
+                    </select>
+                </div>
+            </div>
+
+            <label>I odeljenje&nbsp;</label>
+            <div class="progress">
+                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 31%">
+                    <span>31</span>
+                </div>
+                <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 69%">
+                    <span>69</span>
+                </div>
+            </div>
+            <label>II odeljenje&nbsp;</label>
+            <div class="progress">
+                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 88%">
+                    <span>88</span>
+                </div>
+                <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 12%">
+                    <span>12</span>
+                </div>
+            </div>
+            <label>III odeljenje&nbsp;</label>
+            <div class="progress">
+                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 61%">
+                    <span>61</span>
+                </div>
+                <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 39%">
+                    <span>39</span>
+                </div>
+            </div>
+            <label>IV odeljenje&nbsp;</label>
+            <div class="progress">
+                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 97%">
+                    <span>97</span>
+                </div>
+                <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 3%">
+                    <span>3</span>
+                </div>
+            </div>
+            <label>V odeljenje&nbsp;</label>
+            <div class="progress">
+                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 15%">
+                    <span>15</span>
+                </div>
+                <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 85%">
+                    <span>85</span>
+                </div>
+            </div>
+            <label>VI odeljenje&nbsp;</label>
+            <div class="progress">
+                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 56%">
+                    <span>56</span>
+                </div>
+                <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 44%">
+                    <span>44</span>
+                </div>
+            </div>
+            <label>VII odeljenje&nbsp;</label>
+            <div class="progress">
+                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 90%">
+                    <span>90</span>
+                </div>
+                <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 10%">
+                    <span>10</span>
+                </div>
+            </div>
+
+
+        </div>
+    </div>*@
+
+        <div class="col-md-6">
+            <div class="well">
+                <h4>Izveštaj o polovima ucenika</h4>
+                <hr />
+                @*<div class="col-md-12" style="margin-bottom:10px">
+
+                    <div class="col-md-6">
+                        <label>Upis</label>
+                        <select class="form-control">
+                            <option>Sve</option>
+                            <option>2014/2015</option>
+                            <option>2015/2016</option>
+                            <option>2016/2017</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Godina</label>
+                        <select class="form-control">
+                            <option>Sve</option>
+                            <option>I godina</option>
+                            <option>II godina</option>
+                            <option>III godina</option>
+                            <option>IV godina</option>
+                        </select>
+                    </div>
+                </div>*@
+
+                <label>Svi učenici&nbsp;<span id="ukupnoUcenika"></span> - <span style="color:#5bc0de">Muško (@Model.Decaci)</span> | <span style="color:#d9534f">Žensko (@Model.Devojcice)</span> </label>
+                <div class="progress">
+
+                    <div class="progress-bar progress-bar-info" id="musko" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                        <span id="procenatMusko">0</span>
+                    </div>
+                    <div class="progress-bar progress-bar-danger" id="zensko" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                        <span id="procenatZensko">0</span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="well well-md col-md-12">
+                <div>
+                    <h4>Izveštaj o polugodištima</h4>
+                    <hr />
+                    <div class="col-md-12">
+                        <h4 align="center">Prvo polugodište</h4>
+
+                        <div class="col-sm-6">
+                            <label>Početak</label>
+                            <input class="form-control" value="@Model.PocetakPrvogPolugodista" />
+                        </div>
+                        <div class="col-sm-6">
+                            <label>Kraj</label>
+                            <input class="form-control" value="@Model.KrajPrvogPolugodista" />
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <h4 align="center">Drugo polugodište</h4>
+
+                        <div class="col-sm-6">
+                            <label>Početak</label>
+                            <input class="form-control" value="@Model.PocetakDrugogPolugodista" />
+                        </div>
+                        <div class="col-sm-6">
+                            <label>Kraj</label>
+                            <input class="form-control" value="@Model.KrajDrugogPolugodista" />
+                        </div>
+                    </div>
+                    
+                    
+                    
+                </div>
+                
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+</form>
+
+
+
+@section Scripts{
+    <script>
+        $(function () {
+            // Izracunavanje i prikaz muskih i zenskih osoba u celoj bazi
+            var musko = @Model.Decaci;
+            var zensko = @Model.Devojcice;
+            var ukupno = musko + zensko;
+            var procenatmusko = (musko/ukupno)*100;
+            var procenatzensko = (zensko/ukupno)*100;
+            var uks = procenatmusko+procenatzensko;
+            document.getElementById("ukupnoUcenika").innerHTML = "(" + ukupno + ")";
+            document.getElementById("musko").style.width = procenatmusko + "%";
+            document.getElementById("procenatMusko").innerHTML = Math.round(procenatmusko) + "%";
+            document.getElementById("zensko").style.width = procenatzensko + "%";
+            document.getElementById("procenatZensko").innerHTML = Math.round(procenatzensko) + "%";
+
+            // Test za prikaz progressa sa animacijom o uspehu ucenika
+
+            var odlicni = 412;
+            var vrlodobri = 240;
+            var dobri = 297;
+            var dovoljni = 89;
+            var ukupnouspeh = odlicni + vrlodobri + dobri + dovoljni;
+            
+
+
+
+            document.getElementById("test1l").innerHTML = "(" + Math.round((odlicni/ukupnouspeh)*100) + "%" + ")";
+            document.getElementById("test2l").innerHTML = "(" + Math.round((vrlodobri/ukupnouspeh)*100) + "%" + ")";
+            document.getElementById("test3l").innerHTML = "(" + Math.round((dobri/ukupnouspeh)*100) + "%" + ")";
+            document.getElementById("test4l").innerHTML = "(" + Math.round((dovoljni/ukupnouspeh)*100) + "%" + ")";
+            document.getElementById("test1").style.width = (odlicni/ukupnouspeh)*100 + "%" ;
+            document.getElementById("test2").style.width = (vrlodobri/ukupnouspeh)*100 + "%";
+            document.getElementById("test3").style.width = (dobri/ukupnouspeh)*100 + "%";
+            document.getElementById("test4").style.width = (dovoljni/ukupnouspeh)*100 + "%";
+
+
+        })
+    </script>
+}
+
+
+

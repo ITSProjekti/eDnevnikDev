@@ -50,6 +50,11 @@ namespace eDnevnikDev.Models
         public int PocetakSkolskeGodine { get; set; }
         public int KrajSkolskeGodine { get; set; }
 
+        [ForeignKey("SkolskaGodina")]
+        public int? SkolskaGodinaId { get; set; }
+
+        public SkolskaGodina SkolskaGodina { get; set; }
+
         public int Razred { get; set; }
 
 
@@ -77,8 +82,7 @@ namespace eDnevnikDev.Models
         /// The predmeti.
         /// </value>
         public virtual ICollection<Predmet> Predmeti { get; set; }
-
-
+        
         /// <summary>
         /// Metoda vraca godinu jednu posle maksimalne godine nadjene u tabeli odeljenje na osnovu razreda i oznake odeljenja.
         /// </summary>
@@ -92,7 +96,9 @@ namespace eDnevnikDev.Models
 
             //Ukoliko ne nadje,znaci da ne postoji ni jedno odeljenje.Jos.
             if (odeljenja.Any())
-                return odeljenja.Max(o => o.KrajSkolskeGodine);
+                // Skolska godina je sada foreign key, i zbog te izmene ovaj deo treba da se menja
+                //return odeljenja.Max(o => o.KrajSkolskeGodine);
+                throw new NotImplementedException();
             else
                 return DateTime.Now.Year;
         }

@@ -1,0 +1,405 @@
+﻿@model UpisTromesecjaStringViewModel
+@{
+    ViewBag.Title = "Upis školske godine";
+
+    string rok = "";
+    if (Model.RokZaKreiranjeSkolskeGodine)
+    {
+        rok = "Potrebno je da kreirate školsku godinu da biste nastavili sa radom";
+        Layout = "~/Views/Shared/_LayoutChangePassword.cshtml";
+    }
+
+
+
+}
+
+<h2>@rok</h2>
+<br />
+
+
+
+
+@if (Model.Poruka != "uspesno")
+{
+    <p id="poruka0" hidden="hidden">@Model.Poruka</p>
+
+}
+@if (Model.Poruka == "uspesno")
+{
+    <p id="poruka1" hidden="hidden">Uspesno je upisana godina!</p>
+
+}
+
+
+
+<form  method="post" id="formazasubmit" >
+    @Html.AntiForgeryToken()
+
+    <div class="col-md-6">
+        <label for="datum">Početak prvog tromesečja:</label>
+        <input type="text" onclick="provera()" id="tromesecje1o" name="PrvoPocetak" class="form-control" data-val="true" data-val-required="Polje je obavezno" readonly>
+        <span class="field-validation-valid" data-valmsg-for="datum" data-valmsg-replace="true"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label for="datum">Kraj prvog tromesečja:</label>
+        <input type="text" onclick="provera()" id="tromesecje1d" name="PrvoKraj" class="form-control" data-val="true" data-val-required="Polje je obavezno" readonly>
+        <span class="field-validation-valid" data-valmsg-for="datum" data-valmsg-replace="true"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label for="datum">Početak drugog tromesečja:</label>
+        <input type="text" onclick="provera()" id="tromesecje2o" name="DrugoPocetak" class="form-control" data-val="true" data-val-required="Polje je obavezno" readonly>
+        <span class="field-validation-valid" data-valmsg-for="datum" data-valmsg-replace="true"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label for="datum">Kraj drugog tromesečja:</label>
+        <input type="text" onclick="provera()" id="tromesecje2d" name="DrugoKraj" class="form-control" data-val="true" data-val-required="Polje je obavezno" readonly>
+        <span class="field-validation-valid" data-valmsg-for="datum" data-valmsg-replace="true"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label for="datum">Početak trećeg tromesečja:</label>
+        <input type="text" onclick="provera()" id="tromesecje3o" name="TrecePocetak" class="form-control" data-val="true" data-val-required="Polje je obavezno" readonly>
+        <span class="field-validation-valid" data-valmsg-for="datum" data-valmsg-replace="true"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label for="datum">Kraj trećeg tromesečja:</label>
+        <input type="text" onclick="provera()" id="tromesecje3d" name="TreceKraj" class="form-control" data-val="true" data-val-required="Polje je obavezno" readonly>
+        <span class="field-validation-valid" data-valmsg-for="datum" data-valmsg-replace="true"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label for="datum">Početak četvrtog tromesečja:</label>
+        <input type="text" onclick="provera()" id="tromesecje4o" name="CetvrtoPocetak" class="form-control" data-val="true" data-val-required="Polje je obavezno" readonly>
+        <span class="field-validation-valid" data-valmsg-for="datum" data-valmsg-replace="true"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label for="datum">Kraj četvrtog tromesečja:</label>
+        <input type="text" onclick="provera()" id="tromesecje4d" name="CetvrtoKraj" class="form-control" data-val="true" data-val-required="Polje je obavezno" readonly>
+        <span class="field-validation-valid" data-valmsg-for="datum" data-valmsg-replace="true"></span>
+    </div>
+
+    <div class="col-md-6">
+        <input value="Upiši godinu" onclick="potvrdi()" class="btn btn-primary">
+        <input type="submit" id="submit" hidden="hidden"/>
+    </div>
+
+    <input onclick="puni()" value="Popuni polja" type="button" />
+
+
+
+</form>
+
+
+@section Scripts
+{
+    
+
+    @Scripts.Render("~/bundles/jqueryval")
+    
+    <script>
+        // funkcija za popunjavanje svih polja
+        function puni(){
+            $("#tromesecje1o").val("1.1.2017");
+            $("#tromesecje1d").val("2.1.2017");
+            $("#tromesecje2o").val("3.1.2017");
+            $("#tromesecje2d").val("4.1.2017");
+            $("#tromesecje3o").val("5.1.2017");
+            $("#tromesecje3d").val("6.1.2017");
+            $("#tromesecje4o").val("7.1.2017");
+            $("#tromesecje4d").val("8.1.2017");
+        }
+    </script>
+    
+    <script>
+        // Provera da li je godina upisana ili ne i ispis poruke pri ucitavanju stranice
+        // ukoliko je poruka vracena na samu stranicu, odnosno ukoliko postoji paragraf sa idjem poruke
+        var p0 = document.getElementById("poruka0");
+        var p1 = document.getElementById("poruka1");
+        (function () {
+
+            if (p1)
+            {
+               swal(
+              'Bravo',
+              "Uspesno je upisana godina!",
+              'success'
+            );
+            }
+            if (p0.innerHTML != "")
+            {
+                swal(
+                  'Ups...',
+                  document.getElementById("poruka0").innerHTML,
+                  'error'
+                );
+            }
+        })();
+    </script>
+
+
+
+    <script>
+        // submit preko sweetalert2, potvrdjuje klikom na nevidljivo dugme koje je za submit
+        // zato sto submit forme preko id nije moguc (zbog sweetalert bug-a?)
+        function potvrdi() {
+            swal({
+                title: 'Da li ste sigurni da želite da upišete godinu',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Da',
+                cancelButtonText: 'Odustani'
+            }).then(function (result) {
+                if (result) {
+                    document.getElementById("submit").click()
+                }
+            })
+        }
+    </script>
+
+
+    <script>
+
+        {
+            // provera da li su sva polja popunjena redom, ukoliko nisu radi fokus na zadnje nepopunjeno polje
+            function provera() {
+
+                if ($("#tromesecje1o").val() == "") {
+                    $("#tromesecje1o").focus();
+                }
+                else {
+                    if ($("#tromesecje1d").val() == "") {
+
+                        $("#tromesecje1d").focus();
+                    }
+                    else {
+                        if ($("#tromesecje2o").val() == "") {
+
+                            $("#tromesecje2o").focus();
+                        }
+                        else {
+                            if ($("#tromesecje2d").val() == "") {
+
+                                $("#tromesecje2d").focus();
+                            }
+                            else {
+                                if ($("#tromesecje3o").val() == "") {
+
+                                    $("#tromesecje3o").focus();
+                                }
+                                else {
+                                    if ($("#tromesecje3d").val() == "") {
+
+                                        $("#tromesecje3d").focus();
+                                    }
+                                    else {
+                                        if ($("#tromesecje4o").val() == "") {
+
+                                            $("#tromesecje4o").focus();
+                                        }
+                                        else {
+                                            if ($("#tromesecje4d").val() == "") {
+
+                                                $("#tromesecje4d").focus();
+                                            }
+                                            else {
+                                                $("#submit").focus();
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+            {
+                // Promeni kursor na svim datepick poljima na pointer - da ne bude znak zabrane
+                $("#tromesecje1o").css('cursor', 'pointer');
+                $("#tromesecje1d").css('cursor', 'pointer');
+                $("#tromesecje2o").css('cursor', 'pointer');
+                $("#tromesecje2d").css('cursor', 'pointer');
+                $("#tromesecje3o").css('cursor', 'pointer');
+                $("#tromesecje3d").css('cursor', 'pointer');
+                $("#tromesecje4o").css('cursor', 'pointer');
+                $("#tromesecje4d").css('cursor', 'pointer');
+            
+                // funckije za postavljanje minimalnog datuma na sledeci datepicker i formatiranje samih datepicker-a
+                $("#tromesecje1o").datepicker({
+                    constrainInput: true,
+                    dateFormat: "dd.mm.yy.",
+                    dayNamesMin: ["Ned", "Pon", "Uto", "Sre", "Cet", "Pet", "Sub"],
+                    monthNamesShort: ["Jan", "Feb", "Mart", "April", "Maj", "Jun", "Jul", "Avgust", "Sept", "Okt", "Nov", "Dec"],
+                    altFormat: "yy-mm-dd",
+                    changeMonth: true,
+                    changeYear: true,
+                    minDate: 0,
+                    onSelect: function (date) {
+                        var date2 = $('#tromesecje1o').datepicker('getDate');
+                        date2.setDate(date2.getDate() + 1);
+                        //sets minDate to dt1 date + 1
+                        $('#tromesecje1d').datepicker('option', 'minDate', date2);
+
+                    }
+                });
+                $("#tromesecje1d").datepicker({
+                    constrainInput: true,
+                    dateFormat: "dd.mm.yy.",
+                    dayNamesMin: ["Ned", "Pon", "Uto", "Sre", "Cet", "Pet", "Sub"],
+                    monthNamesShort: ["Jan", "Feb", "Mart", "April", "Maj", "Jun", "Jul", "Avgust", "Sept", "Okt", "Nov", "Dec"],
+                    altFormat: "yy-mm-dd",
+                    changeMonth: true,
+                    changeYear: true,
+                    onSelect: function (date) {
+                        if (document.getElementById('tromesecje1o').value === '') {
+                            alert('Morate izabrati datum pocetka prvog tromesecja');
+                            document.getElementById('tromesecje1d').value = '';
+                        }
+                        else {
+                            var date2 = $('#tromesecje1d').datepicker('getDate');
+                            date2.setDate(date2.getDate() + 1);
+                            $('#tromesecje2o').datepicker('option', 'minDate', date2);
+
+
+                        }
+
+                    }
+                });
+                $("#tromesecje2o").datepicker({
+                    constrainInput: true,
+                    dateFormat: "dd.mm.yy.",
+                    dayNamesMin: ["Ned", "Pon", "Uto", "Sre", "Cet", "Pet", "Sub"],
+                    monthNamesShort: ["Jan", "Feb", "Mart", "April", "Maj", "Jun", "Jul", "Avgust", "Sept", "Okt", "Nov", "Dec"],
+                    altFormat: "yy-mm-dd",
+                    changeMonth: true,
+                    changeYear: true,
+                    onSelect: function (date) {
+                        if (document.getElementById('tromesecje1d').value === '') {
+                            alert('Morate izabrati datum kraja prvog tromesecja');
+                            document.getElementById('tromesecje2o').value = '';
+                        }
+                        else {
+                            var date2 = $('#tromesecje2o').datepicker('getDate');
+                            date2.setDate(date2.getDate() + 1);
+                            $('#tromesecje2d').datepicker('option', 'minDate', date2);
+                        }
+
+                    }
+                });
+                $("#tromesecje2d").datepicker({
+                    constrainInput: true,
+                    dateFormat: "dd.mm.yy.",
+                    dayNamesMin: ["Ned", "Pon", "Uto", "Sre", "Cet", "Pet", "Sub"],
+                    monthNamesShort: ["Jan", "Feb", "Mart", "April", "Maj", "Jun", "Jul", "Avgust", "Sept", "Okt", "Nov", "Dec"],
+                    altFormat: "yy-mm-dd",
+                    changeMonth: true,
+                    changeYear: true,
+                    onSelect: function (date) {
+                        if (document.getElementById('tromesecje2o').value === '') {
+                            alert('Morate izabrati datum pocetka drugog tromesecja');
+                            document.getElementById('tromesecje2d').value = '';
+                        }
+                        else {
+                            var date2 = $('#tromesecje2d').datepicker('getDate');
+                            date2.setDate(date2.getDate() + 1);
+                            $('#tromesecje3o').datepicker('option', 'minDate', date2);
+                        }
+                    }
+                });
+                $("#tromesecje3o").datepicker({
+                    constrainInput: true,
+                    dateFormat: "dd.mm.yy.",
+                    dayNamesMin: ["Ned", "Pon", "Uto", "Sre", "Cet", "Pet", "Sub"],
+                    monthNamesShort: ["Jan", "Feb", "Mart", "April", "Maj", "Jun", "Jul", "Avgust", "Sept", "Okt", "Nov", "Dec"],
+                    altFormat: "yy-mm-dd",
+                    changeMonth: true,
+                    changeYear: true,
+                    onSelect: function (dateStr) {
+                        if (document.getElementById('tromesecje2d').value === '') {
+                            alert('Morate izabrati datum kraj drugog tromesecja');
+                            document.getElementById('tromesecje3o').value = '';
+                        }
+                        else {
+                            var date2 = $('#tromesecje3o').datepicker('getDate');
+                            date2.setDate(date2.getDate() + 1);
+                            $('#tromesecje3d').datepicker('option', 'minDate', date2);
+                        }
+                    }
+                });
+                $("#tromesecje3d").datepicker({
+                    constrainInput: true,
+                    dateFormat: "dd.mm.yy.",
+                    dayNamesMin: ["Ned", "Pon", "Uto", "Sre", "Cet", "Pet", "Sub"],
+                    monthNamesShort: ["Jan", "Feb", "Mart", "April", "Maj", "Jun", "Jul", "Avgust", "Sept", "Okt", "Nov", "Dec"],
+                    altFormat: "yy-mm-dd",
+                    changeMonth: true,
+                    changeYear: true,
+                    onSelect: function (dateStr) {
+                        if (document.getElementById('tromesecje3o').value === '') {
+                            alert('Morate izabrati datum pocetka treceg tromesecja');
+                            document.getElementById('tromesecje3d').value = '';
+                        }
+                        else {
+                            var date2 = $('#tromesecje3d').datepicker('getDate');
+                            date2.setDate(date2.getDate() + 1);
+                            $('#tromesecje4o').datepicker('option', 'minDate', date2);
+                        }
+                    }
+                });
+                $("#tromesecje4o").datepicker({
+                    constrainInput: true,
+                    dateFormat: "dd.mm.yy.",
+                    dayNamesMin: ["Ned", "Pon", "Uto", "Sre", "Cet", "Pet", "Sub"],
+                    monthNamesShort: ["Jan", "Feb", "Mart", "April", "Maj", "Jun", "Jul", "Avgust", "Sept", "Okt", "Nov", "Dec"],
+                    altFormat: "yy-mm-dd",
+                    changeMonth: true,
+                    changeYear: true,
+                    onSelect: function (dateStr) {
+                        if (document.getElementById('tromesecje3d').value === '') {
+                            alert('Morate izabrati datum kraja treceg tromesecja');
+                            document.getElementById('tromesecje4o').value = '';
+                        }
+                        else {
+                            var date2 = $('#tromesecje4o').datepicker('getDate');
+                            date2.setDate(date2.getDate() + 1);
+                            $('#tromesecje4d').datepicker('option', 'minDate', date2);
+                        }
+                    }
+                });
+                $("#tromesecje4d").datepicker({
+                    constrainInput: true,
+                    dateFormat: "dd.mm.yy.",
+                    dayNamesMin: ["Ned", "Pon", "Uto", "Sre", "Cet", "Pet", "Sub"],
+                    monthNamesShort: ["Jan", "Feb", "Mart", "April", "Maj", "Jun", "Jul", "Avgust", "Sept", "Okt", "Nov", "Dec"],
+                    altFormat: "yy-mm-dd",
+                    changeMonth: true,
+                    changeYear: true,
+                    onSelect: function (dateStr) {
+
+                        if (document.getElementById('tromesecje4o').value === '') {
+                            alert('Morate izabrati datum pocetka cetvrtog tromesecja');
+                            document.getElementById('tromesecje4d').value = '';
+
+                        }
+                        else {
+                            document.getElementById('submit').disabled = false;
+                        }
+
+                    }
+                });
+            }
+
+        }
+
+    </script>
+
+}
+
+

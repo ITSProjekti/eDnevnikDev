@@ -297,7 +297,6 @@ namespace eDnevnikDev.Controllers
         /// <returns></returns>
         public JsonResult UpisiOdsutne(int[] odsutni)
         {
-            //Hardcode -> drugi story resava ovaj deo
             var datum = DateTime.Today;
             var casId = 7;
             var opis = "Cas 2";

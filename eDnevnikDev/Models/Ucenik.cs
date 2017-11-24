@@ -223,6 +223,10 @@ namespace eDnevnikDev.Models
         [Display(Name = "Datum rođenja")]
         public DateTime DatumRodjenja { get; set; }
 
+        [ForeignKey("StatusUcenika")]
+        public int? StatusUcenikaId { get; set; }
+
+        public StatusUcenika StatusUcenika { get; set; }
 
         //TO BE DONE
         public string JedinstveniBroj { get; set; }
@@ -291,7 +295,7 @@ namespace eDnevnikDev.Models
 
             broj.Append(Razred);
             broj.Append(Odeljenje.OznakaID.ToString().Length == 1 ? '0' + Odeljenje.OznakaID.ToString() : Odeljenje.OznakaID.ToString());
-            broj.Append(Odeljenje.PocetakSkolskeGodine % 100);
+            broj.Append(Odeljenje.SkolskaGodina.PocetakSkolskeGodine.Year % 100);
 
             JedinstveniBroj = broj.ToString();
         }

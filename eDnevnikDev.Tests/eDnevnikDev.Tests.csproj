@@ -111,6 +111,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\CasoviCotrollerTests.cs" />
     <Compile Include="Controllers\OceneControllerTests.cs" />
     <Compile Include="Controllers\OdeljenjeControllerTest.cs" />
     <Compile Include="Controllers\PredmetiControllerTests.cs" />
@@ -118,6 +119,7 @@
     <Compile Include="Controllers\UceniciControllerTests.cs" />
     <Compile Include="Controllers\EvidencijaControllerTests.cs" />
     <Compile Include="Controllers\NapomeneControllerTests.cs" />
+    <Compile Include="Controllers\UpisSkolskeGodineControllerTests.cs" />
     <Compile Include="Helpers\Helper.cs" />
     <Compile Include="Helpers\MockableDbSet.cs" />
     <Compile Include="Helpers\MockBase.cs" />

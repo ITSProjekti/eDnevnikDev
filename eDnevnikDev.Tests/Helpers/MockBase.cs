@@ -32,5 +32,11 @@ namespace eDnevnikDev.Tests.Helpers
 
         }
 
+        //public Mock<DbSet<T>> () where T:class
+        //{
+
+        //    return mockSet;
+        //}
+
     }
 }
