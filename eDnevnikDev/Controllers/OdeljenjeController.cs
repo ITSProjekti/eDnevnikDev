@@ -6,6 +6,11 @@ using System.Web;
 using System.Web.Mvc;
 using eDnevnikDev.DTOs;
 using eDnevnikDev.ViewModel;
+using System.Data.Entity.Migrations;
+using System.Web.Script.Serialization;
+using System.Net.Http;
+using System.Text;
+using Newtonsoft.Json;
 
 namespace eDnevnikDev.Controllers
 {
@@ -246,50 +251,50 @@ namespace eDnevnikDev.Controllers
         /// </summary>
         /// <param name="OdeljenjeZaKreiranje"></param>
         /// <returns></returns>
-        [HttpPost]
-        public int KreirajOdeljenje(DTOOdeljenje OdeljenjeZaKreiranje)
-        {
-            //Objekat vec kreiranog odeljenja.
-            var tekuceKreiranoOdeljenje = _context.Odeljenja.SingleOrDefault(o => o.OznakaID == OdeljenjeZaKreiranje.Oznaka && o.Razred == OdeljenjeZaKreiranje.Razred && o.StatusID == 3); //Status 3 je Kreirano
+        //[HttpPost]
+        //public int KreirajOdeljenje(DTOOdeljenje OdeljenjeZaKreiranje)
+        //{
+        //    //Objekat vec kreiranog odeljenja.
+        //    var tekuceKreiranoOdeljenje = _context.Odeljenja.SingleOrDefault(o => o.OznakaID == OdeljenjeZaKreiranje.Oznaka && o.Razred == OdeljenjeZaKreiranje.Razred && o.StatusID == 3); //Status 3 je Kreirano
 
-            //Ukoliko postoji,to odeljenje se arhivira i ucenici iz njega se premestaju u sledecu godinu status odeljenja u toku.
-            if (tekuceKreiranoOdeljenje != null)
-            {
-                ArhivirajOdeljenje(tekuceKreiranoOdeljenje);
-                PremestiUSledecuGodinu(tekuceKreiranoOdeljenje);
-            }
+        //    //Ukoliko postoji,to odeljenje se arhivira i ucenici iz njega se premestaju u sledecu godinu status odeljenja u toku.
+        //    if (tekuceKreiranoOdeljenje != null)
+        //    {
+        //        ArhivirajOdeljenje(tekuceKreiranoOdeljenje);
+        //        PremestiUSledecuGodinu(tekuceKreiranoOdeljenje);
+        //    }
 
-            //Tekuce odeljenje koje trenutno ima status u toku a treba se kreira.
-            var odeljenjeZaPromenuStatusa = _context.Odeljenja.SingleOrDefault(o => o.OznakaID == OdeljenjeZaKreiranje.Oznaka && o.Razred == OdeljenjeZaKreiranje.Razred && o.StatusID == 2); //Status 2 je U toku
+        //    //Tekuce odeljenje koje trenutno ima status u toku a treba se kreira.
+        //    var odeljenjeZaPromenuStatusa = _context.Odeljenja.SingleOrDefault(o => o.OznakaID == OdeljenjeZaKreiranje.Oznaka && o.Razred == OdeljenjeZaKreiranje.Razred && o.StatusID == 2); //Status 2 je U toku
 
-            //Ukoliko je null doslo je do nepoklapanja interfejsa na frontendu i podataka u bazi. 
-            if (odeljenjeZaPromenuStatusa == null)
-                return -1;
+        //    //Ukoliko je null doslo je do nepoklapanja interfejsa na frontendu i podataka u bazi. 
+        //    if (odeljenjeZaPromenuStatusa == null)
+        //        return -1;
 
-            //Svi ucenici koji su bili u odeljenju u toku se dodaju u listu,sortirani po
-            //Prezime, Ime, Ime oca
-            var ucenici = _context.Ucenici
-                .Where(u => u.OdeljenjeId == odeljenjeZaPromenuStatusa.Id)
-                .OrderBy(u => u.Prezime)
-                .ThenBy(u => u.Ime)
-                .ThenBy(u => u.ImeOca)
-                .ToList();
+        //    //Svi ucenici koji su bili u odeljenju u toku se dodaju u listu,sortirani po
+        //    //Prezime, Ime, Ime oca
+        //    var ucenici = _context.Ucenici
+        //        .Where(u => u.OdeljenjeId == odeljenjeZaPromenuStatusa.Id)
+        //        .OrderBy(u => u.Prezime)
+        //        .ThenBy(u => u.Ime)
+        //        .ThenBy(u => u.ImeOca)
+        //        .ToList();
 
-            //Brojac radi dodavanja broja u dnevniku, i generisanja jedinstvenog broja.
-            ///<see cref="Ucenik.GenerisiJedinstveniBroj"/>
-            int brojac = 1;
+        //    //Brojac radi dodavanja broja u dnevniku, i generisanja jedinstvenog broja.
+        //    ///<see cref="Ucenik.GenerisiJedinstveniBroj"/>
+        //    int brojac = 1;
 
-            foreach (Ucenik ucenik in ucenici)
-            {
-                ucenik.BrojUDnevniku = brojac++;
-                ucenik.GenerisiJedinstveniBroj();
-            }
+        //    foreach (Ucenik ucenik in ucenici)
+        //    {
+        //        ucenik.BrojUDnevniku = brojac++;
+        //        ucenik.GenerisiJedinstveniBroj();
+        //    }
 
-            //Promena statusa odeljenja na "Kreirano".
-            odeljenjeZaPromenuStatusa.StatusID = 3; //StatudID 3 je Kreirano
-            _context.SaveChanges();
-            return 0;
-        }
+        //    //Promena statusa odeljenja na "Kreirano".
+        //    odeljenjeZaPromenuStatusa.StatusID = 3; //StatudID 3 je Kreirano
+        //    _context.SaveChanges();
+        //    return 0;
+        //}
         /// <summary>
         /// Upisuje cas i odsutne ucenike u bazu.
         /// </summary>
@@ -376,96 +381,436 @@ namespace eDnevnikDev.Controllers
             return Json(maxCas + 1, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// <see cref="NerasporedjenUcenikViewModel"/>
+        /// <see cref="KreirajOdeljenjeViewModel"/>
+        /// </summary>
+        /// <returns>KreirajOdeljenje View</returns>
         public ActionResult KreirajOdeljenje()
         {
 
-            var model = new KreirajOdeljenjeViewModel();
-
-            var nerasporedjeniUcenici = _context.Ucenici
-                                      .Where(u => u.OdeljenjeId == null)
-                                      .Select(u => u)
-                                      .ToList();
-
-            if (nerasporedjeniUcenici != null)
+            var model = new KreirajOdeljenjeViewModel
             {
-                model.ListaNerasporedjenihUcenika = nerasporedjeniUcenici;
-            }
-            else
-            {
-                model.ListaNerasporedjenihUcenika = new List<Ucenik>();
-            }
+                ListaNerasporedjenihUcenika = _context.Ucenici.Where(u => u.OdeljenjeId == null)
+                                                      .Select(u => new NerasporedjenUcenikViewModel
+                                                      {
+                                                          UcenikId = u.UcenikID,
+                                                          Ime = u.Ime,
+                                                          Prezime = u.Prezime,
+                                                          JMBG = u.JMBG,
+                                                          Smer = u.Smer.NazivSmera
+                                                      })
+                                                      .ToList()
 
-
-            IQueryable<Odeljenje> odeljenja = _context.Odeljenja
-                                                      .Where(o => o.StatusID == 2 || o.StatusID == 3)
-                                                      .Select(o => o);
-
-            if (odeljenja != null)
-            {
-                var prvaGodina = odeljenja.Where(o => o.Razred == 1)
-                                     .Select(o => o)
-                                     .ToList();
-
-                if (prvaGodina != null)
-                {
-                    model.PrvaGodina = prvaGodina;
-                }
-                else
-                {
-                    model.PrvaGodina = new List<Odeljenje>();
-                }
-
-
-                var drugaGodina = odeljenja.Where(o => o.Razred == 2)
-                                          .Select(o => o)
-                                          .ToList();
-
-                if (drugaGodina != null)
-                {
-                    model.DrugaGodina = drugaGodina;
-                }
-                else
-                {
-                    model.DrugaGodina = new List<Odeljenje>();
-                }
-
-                var trecaGodina = odeljenja.Where(o => o.Razred == 3)
-                                          .Select(o => o)
-                                          .ToList();
-
-                if (trecaGodina != null)
-                {
-                    model.TrecaGodina = trecaGodina;
-                }
-                else
-                {
-                    model.TrecaGodina = new List<Odeljenje>();
-                }
-
-                var cetvrtaGodina = odeljenja.Where(o => o.Razred == 4)
-                                          .Select(o => o)
-                                          .ToList();
-
-                if (cetvrtaGodina != null)
-                {
-                    model.CetvrtaGodina = cetvrtaGodina;
-                }
-                else
-                {
-                    model.CetvrtaGodina = new List<Odeljenje>();
-                }
-
-            }
-            else
-            {
-                model.PrvaGodina = new List<Odeljenje>();
-                model.DrugaGodina = new List<Odeljenje>();
-                model.TrecaGodina = new List<Odeljenje>();
-                model.CetvrtaGodina = new List<Odeljenje>();
-
-            }
+            };
 
             return View(model);
+        }
+
+        /// <summary>
+        /// Vraca redni broj casa koji je sledeci po redu da se odrzi.
+        /// <see cref=" DTORasporedjenUcenik"/>
+        /// </summary>
+        /// <param name="razred">razred koji se dobija iz combobox-a.</param>
+        /// <param name="oznaka">oznaka kodeljenja koja se dobija iz combobox-a.</param>
+        /// <returns></returns>
+        public JsonResult VratiUcenikeZaOdeljenje(int? razred, int? oznaka)
+        {
+            if (razred != null && oznaka != null)
+            {
+                //ID odeljenja koje se pronalazi na osnovu razreda i oznake i koje nije arhivirano
+                int? odeljenjeId = _context.Odeljenja.Where(o => o.Razred == razred && o.OznakaID == oznaka && o.StatusID != 1)//StatusID 1 je arhivirano odeljenje
+                                                     .Select(o => o.Id)
+                                                     .SingleOrDefault();
+
+
+
+                if (odeljenjeId != null && odeljenjeId > 0)
+                {
+
+                    //Lista ucenika koji su upisani u konkretno odeljenje
+                    List<DTORasporedjenUcenik> listaRasporedjenihUcenika = _context.Ucenici
+                                      .Where(u => u.OdeljenjeId == odeljenjeId)
+                                      .Select(u => new DTORasporedjenUcenik
+                                      {
+                                          UcenikId = u.UcenikID,
+                                          JMBG = u.JMBG,
+                                          Ime = u.Ime,
+                                          Prezime = u.Prezime,
+                                          OdeljenjeId = (int)u.OdeljenjeId,
+                                          Smer = u.Smer.NazivSmera
+                                      }).ToList();
+
+
+                    if (listaRasporedjenihUcenika.Count() > 0)
+                    {
+                        //Ukoliko ima ucenika u odeljenju vraca se lista ucenika
+                        return Json(listaRasporedjenihUcenika, JsonRequestBehavior.AllowGet);
+                    }
+
+                    //Vracanje prazne liste, ukoliko nema ucenika u odeljenju
+                    return Json(new List<DTORasporedjenUcenik>(), JsonRequestBehavior.AllowGet);
+                }
+
+                //Vracanje prazne liste, ukoliko je doslo do greske
+                return Json(new List<DTORasporedjenUcenik>(), JsonRequestBehavior.AllowGet);
+
+            }
+            //Vracanje prazne liste, ukoliko je doslo do greske
+            return Json(new List<DTORasporedjenUcenik>(), JsonRequestBehavior.AllowGet);
+
+        }
+
+        /// <summary>
+        /// Metoda dodeljuje uceniku odeljenje
+        /// </summary>
+        /// <param name="ucenikId"></param>
+        /// <param name="razred"></param>
+        /// <param name="oznaka"></param>
+        /// <returns></returns>
+        public void DodajUcenikaUOdeljenje(int ucenikId, int razred, int oznaka)
+        {
+            DateTime pocetakSkolskeGodine = Convert.ToDateTime("11/13/2017");
+            DateTime krajSkolskeGodine = Convert.ToDateTime("6/20/2018");
+            DateTime trenutniDatum = DateTime.Now.Date;
+
+            int status = 0;
+
+            //Ako nije pocela skolska godina status je 2
+            if (trenutniDatum < pocetakSkolskeGodine)
+            {
+                status = 2;//Status 2 oznacava da je upis ucenika u toku
+            }
+            //Ako je pocela skolska godina status je 3
+            else if (trenutniDatum >= pocetakSkolskeGodine && trenutniDatum <= krajSkolskeGodine)
+            {
+                status = 3;//Status 3 oznacava vanredan upis ucenika u odeljenje i tom prilikom ucenik dolazi na kraj dnevnika
+            }
+
+
+            var ucenik = _context.Ucenici.Where(u => u.UcenikID == ucenikId)
+                                         .SingleOrDefault();
+
+            if (ucenik != null)
+            {
+                //Dodeljuje se odeljenje sa statusom koji je izabran na formi.
+                var odeljenje = _context.Odeljenja
+                    .Include("Status")
+                    .SingleOrDefault(o => o.OznakaID == oznaka && o.Razred == razred && o.StatusID == status);
+
+                //Ukoliko odeljenje nije ni kreirano u bazi bez obzira na status,kreira se.
+                if (odeljenje == null)
+                {
+                    odeljenje = new Odeljenje()
+                    {
+                        OznakaID = oznaka,
+                        Razred = razred,
+                        PocetakSkolskeGodine = Odeljenje.SledecaSkolskaGodina(razred, oznaka, _context),
+                        StatusID = 2,
+                        KrajSkolskeGodine = Odeljenje.SledecaSkolskaGodina(razred, oznaka, _context) + 1
+                    };
+
+                    _context.Odeljenja.Add(odeljenje);
+                    _context.SaveChanges();
+                }
+
+                else if (odeljenje.StatusID == 3)   //Status 3 = kreirano.
+                {
+                    var poslednjiBrojUDnevniku = odeljenje.Ucenici.Max(u => u.BrojUDnevniku);
+
+                    ucenik.BrojUDnevniku = poslednjiBrojUDnevniku + 1; //Ucenik se dodaje na kraj dnevnika.
+
+                    ucenik.Odeljenje = odeljenje;
+
+                    ucenik.GenerisiJedinstveniBroj();
+
+                }
+
+                ucenik.OdeljenjeId = odeljenje.Id;
+                _context.Ucenici.AddOrUpdate(ucenik);
+                _context.SaveChanges();
+            }
+
+            if (status == 3)
+            {
+                /*Metoda se pozvia da proveri da li postoji odeljenje 
+                  kojem nije promenjen status iz "Upis u toku" u "Kreirano odeljenje",
+                  do ovoga moze doci ukoliko je neko odeljenje prvi put kreirano nakon 
+                  pocetka skolske.
+                */
+                PromeniStatusOdeljenjima();
+            }
+        }
+
+        /// <summary>
+        /// Metoda uklanja uceniku odeljenje
+        /// </summary>
+        /// <param name="ucenikId"></param>
+        /// <returns></returns>
+        public void IzbaciUcenikaIzOdeljenja(int ucenikId)
+        {
+            var ucenik = _context.Ucenici.Where(u => u.UcenikID == ucenikId)
+                                         .SingleOrDefault();
+
+            if (ucenik != null)
+            {
+                //Posto se ucenik izbacuje iz odeljenja, sledece vrednosti se postavljaju na NULL vrednost
+                ucenik.OdeljenjeId = null;
+                ucenik.JedinstveniBroj = null;
+                ucenik.BrojUDnevniku = null;
+
+                _context.Ucenici.AddOrUpdate(ucenik);
+                _context.SaveChanges();
+            }
+        }
+
+        /// <summary>
+        /// Metoda vrsi raspodelu ucenika u odeljenja
+        /// <see cref="KreirajOdeljenjeViewModel"/>
+        /// <see cref="NerasporedjenUcenikViewModel"/>
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns>Vraca KreirajOdeljenje View</returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult KreirajOdeljenje(KreirajOdeljenjeViewModel model)
+        {
+           //Ovaj deo koda ce se izvrsiti ukoliko dodje do greske prilikom prenosa parametara sa forme
+            if (model.ListaRasporedjenihUcenika == null && model.Razred == 0 && model.Odeljenje == 0)
+            {
+                var viewModelGreska = new KreirajOdeljenjeViewModel
+                {
+                    ListaNerasporedjenihUcenika = _context.Ucenici.Where(u => u.OdeljenjeId == null)
+                                             .Select(u => new NerasporedjenUcenikViewModel
+                                             {
+                                                 UcenikId = u.UcenikID,
+                                                 Ime = u.Ime,
+                                                 Prezime = u.Prezime,
+                                                 JMBG = u.JMBG,
+                                                 Smer = u.Smer.NazivSmera
+                                             })
+                                             .ToList(),
+
+                    //Postavlja se vrednost "true" jer je doslo do greske i prekinuto izvrsavanje metode
+                    NisuDodatiUceniciUOdeljenje = true
+
+                };
+
+                return View(viewModelGreska);
+
+            }
+
+            //Ovaj deo koda ce se izvrsiti kada se prosledi lista ucenika koji su rasporedjeni u odeljenje na formi
+            if (model.ListaRasporedjenihUcenika != null && model.Razred > 0 && model.Odeljenje > 0)
+            {
+                //Provera da li postoji odeljenje
+                var odeljenje = _context.Odeljenja.Where(o => o.Razred == model.Razred && o.OznakaID == model.Odeljenje && o.StatusID != 1)
+                                                     .SingleOrDefault();
+
+
+                List<Ucenik> listaUcenika = null;
+
+                if (odeljenje != null)
+                {
+                    //Lista ucenika koji su vec upisani u odeljenje
+                    listaUcenika = _context.Ucenici.Where(u => u.OdeljenjeId == odeljenje.Id)
+                                                   .Select(u => u)
+                                                   .ToList();
+                }
+
+                //Lista u koju se smestaju ID-evi ucenika koji su vec upisani u odeljenje
+                List<int> listaRasporedjenihUcenikaBazaID = new List<int>();
+
+                if (listaUcenika != null)
+                {
+                    foreach (var ucenik in listaUcenika)
+                    {
+                        if (ucenik.OdeljenjeId != null)
+                        {
+                            listaRasporedjenihUcenikaBazaID.Add(ucenik.UcenikID);
+                        }
+                    }
+                }
+
+                //Lista u koji se smestaju ID-evi ucenika koji su prosledjeni sa forme
+                List<int> listaRasporedjenihUcenikaFormaID = new List<int>();
+
+                foreach (var ucenik in model.ListaRasporedjenihUcenika)
+                {
+                    listaRasporedjenihUcenikaFormaID.Add(ucenik.UcenikId);
+                }
+
+                //Lista ucenika koji treba da se dodaju u odeljenje
+                IEnumerable<int> listaUcenikaZaDodavanjeID = listaRasporedjenihUcenikaFormaID.Except(listaRasporedjenihUcenikaBazaID);
+
+
+                if (listaUcenikaZaDodavanjeID != null && listaUcenikaZaDodavanjeID.Count() > 0)
+                {
+                    foreach (var id in listaUcenikaZaDodavanjeID)
+                    {
+                        DodajUcenikaUOdeljenje(id, model.Razred, model.Odeljenje);//Poziv metode za dodavanje ucenika u odeljenje
+                    }
+                }
+
+                //Lista ucenika koji treba da se izbace iz odeljenja
+                IEnumerable<int> listaUcenikaZaBrisanjeID = listaRasporedjenihUcenikaBazaID.Except(listaRasporedjenihUcenikaFormaID);
+
+                if (listaUcenikaZaBrisanjeID != null && listaUcenikaZaBrisanjeID.Count() > 0)
+                {
+                    foreach (var id in listaUcenikaZaBrisanjeID)
+                    {
+                        IzbaciUcenikaIzOdeljenja(id);//Poziv metode za izbacivanje ucenika iz odeljenja
+
+                    }
+                }
+            }
+            //Ovaj deo koda ce se izvrsiti ukoliko se prosledi prazna lista ucenika sa forme
+            //Prosledjuje se odeljenje i svi ucenici iz odeljenja ce biti izbaceni
+            else if (model.ListaRasporedjenihUcenika == null && model.Razred > 0 && model.Odeljenje > 0)
+            {
+                //Provera postojanja odeljenja
+                var odeljenje = _context.Odeljenja.Where(o => o.Razred == model.Razred && o.OznakaID == model.Odeljenje && o.StatusID != 1)
+                                                     .SingleOrDefault();
+
+                //Lista ucenika koji idu u prosledjeno odeljenje
+                List<Ucenik> listaUcenika = null;
+
+                if (odeljenje != null)
+                {
+
+                    listaUcenika = _context.Ucenici.Where(u => u.OdeljenjeId == odeljenje.Id)
+                                                   .Select(u => u)
+                                                   .ToList();
+                }
+
+                //Lista u koju se smestaju ID-evi ucenika koji su  upisani u odeljenje i koji treba da se izbace iz odeljenja
+                List<int> listaUcenikaZaBrisanjeBazaID = new List<int>();
+
+                if (listaUcenika != null)
+                {
+                    foreach (var ucenik in listaUcenika)
+                    {
+                        if (ucenik.OdeljenjeId != null)
+                        {
+                            listaUcenikaZaBrisanjeBazaID.Add(ucenik.UcenikID);
+                        }
+                    }
+                }
+
+
+                if (listaUcenikaZaBrisanjeBazaID != null && listaUcenikaZaBrisanjeBazaID.Count() > 0)
+                {
+                    foreach (var id in listaUcenikaZaBrisanjeBazaID)
+                    {
+                        IzbaciUcenikaIzOdeljenja(id);//Poziv metode za izbacivanje ucenika iz odeljenja
+
+                    }
+                }
+            }
+
+            //View model koji vraca preostale nerasporedjene ucenike, odeljenje i potvrdu da su ucenici uspesno smesteni u odeljenje
+            var viewModel = new KreirajOdeljenjeViewModel
+            {
+                ListaNerasporedjenihUcenika = _context.Ucenici.Where(u => u.OdeljenjeId == null)
+                                           .Select(u => new NerasporedjenUcenikViewModel
+                                           {
+                                               UcenikId = u.UcenikID,
+                                               Ime = u.Ime,
+                                               Prezime = u.Prezime,
+                                               JMBG = u.JMBG,
+                                               Smer = u.Smer.NazivSmera
+                                           })
+                                           .ToList(),
+
+                //Potvrda da su ucenici smesteni u odeljenje
+                DodatiUceniciUOdeljenje = true,
+                Razred = model.Razred,
+                Odeljenje = model.Odeljenje
+
+            };
+
+            return View(viewModel);
+        }
+
+
+        /// <summary>
+        /// Metoda vrsi arhiviranje odeljenja.
+        /// Metoda se poziva automatski kada je kraj skolske godine.
+        /// </summary>
+        /// <returns></returns>
+        public void ArhivirajKreiranaOdeljenja()
+        {
+            //Odeljenja za arhiviranje
+            var odeljenja = _context.Odeljenja.Where(o => o.StatusID == 3) //Status 3 je Kreirano
+                                              .Select(o => o)
+                                              .ToList();
+
+            if (odeljenja != null && odeljenja.Count() > 0)
+            {
+                foreach (var odeljenje in odeljenja)
+                {
+                    //Objekat vec kreiranog odeljenja.
+                    var tekuceKreiranoOdeljenje = _context.Odeljenja.SingleOrDefault(o => o.Id == odeljenje.Id);
+
+                    //Ukoliko postoji,to odeljenje se arhivira i ucenici iz njega se premestaju u sledecu godinu status odeljenja u toku.
+                    if (tekuceKreiranoOdeljenje != null)
+                    {
+                        ArhivirajOdeljenje(tekuceKreiranoOdeljenje);
+                        PremestiUSledecuGodinu(tekuceKreiranoOdeljenje);
+                    }
+                }
+            }
+        }
+
+
+
+
+        /// <summary>
+        /// Metoda vrsi promenu statusa odeljenja.
+        /// Metoda se poziva automatski kada je pocetak skolske godine.
+        /// </summary>
+        /// <returns></returns>
+        public void PromeniStatusOdeljenjima()
+        {
+            //Odeljenja za promenu statusa
+            var odeljenja = _context.Odeljenja.Where(o => o.StatusID == 2) //Status 2 je U toku
+                                              .Select(o => o)
+                                              .ToList();
+
+            if (odeljenja != null && odeljenja.Count() > 0)
+            {
+                foreach (var odeljenje in odeljenja)
+                {
+                    //Tekuce odeljenje koje trenutno ima status u toku a treba se kreira.
+                    var odeljenjeZaPromenuStatusa = _context.Odeljenja.SingleOrDefault(o => o.Id == odeljenje.Id);
+
+                    if (odeljenjeZaPromenuStatusa != null)
+                    {
+                        //Svi ucenici koji su bili u odeljenju u toku se dodaju u listu,sortirani po
+                        //Prezime, Ime, Ime oca
+                        var ucenici = _context.Ucenici
+                            .Where(u => u.OdeljenjeId == odeljenjeZaPromenuStatusa.Id)
+                            .OrderBy(u => u.Prezime)
+                            .ThenBy(u => u.Ime)
+                            .ThenBy(u => u.ImeOca)
+                            .ToList();
+
+                        //Brojac radi dodavanja broja u dnevniku, i generisanja jedinstvenog broja.
+                        ///<see cref="Ucenik.GenerisiJedinstveniBroj"/>
+                        int brojac = 1;
+
+                        foreach (Ucenik ucenik in ucenici)
+                        {
+                            ucenik.BrojUDnevniku = brojac++;
+                            ucenik.GenerisiJedinstveniBroj();
+                        }
+
+                        //Promena statusa odeljenja na "Kreirano".
+                        odeljenjeZaPromenuStatusa.StatusID = 3; //StatudID 3 je Kreirano
+                        _context.SaveChanges();
+                    }
+                }
+            }
         }
 
     }

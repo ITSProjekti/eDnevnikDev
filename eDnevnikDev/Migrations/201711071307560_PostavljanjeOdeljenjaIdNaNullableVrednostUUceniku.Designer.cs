@@ -13,7 +13,7 @@ namespace eDnevnikDev.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201710271026506_PostavljanjeOdeljenjaIdNaNullableVrednostUUceniku"; }
+            get { return "201711071307560_PostavljanjeOdeljenjaIdNaNullableVrednostUUceniku"; }
         }
         
         string IMigrationMetadata.Source
