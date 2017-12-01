@@ -1,118 +1,524 @@
-﻿@using eDnevnikDev.ViewModel
-@model KreirajOdeljenjeViewModel
+﻿@model KreirajOdeljenjeViewModel
 @{
     ViewBag.Title = "Kreiranje odeljenja";
 }
-
-<div class="col-md-12 col-xs-12 ">
-    <select id="odeljenje" class="form-control">
-        <optgroup label="I godina">
-            <option value="0">Izaberite</option>
-            @foreach (var odeljenje in Model.PrvaGodina)
-            {
-                <option value="@odeljenje.Id">I-@odeljenje.OznakaID</option>
-            }
-        </optgroup>
-        <optgroup label="II godina">
-            @foreach (var odeljenje in Model.DrugaGodina)
-            {
-                <option value="@odeljenje.Id">II- @odeljenje.OznakaID</option>
-            }
-        </optgroup>
-        <optgroup label="III godina">
-            @foreach (var odeljenje in Model.TrecaGodina)
-            {
-                <option value="@odeljenje.Id">III- @odeljenje.OznakaID</option>
-            }
-        </optgroup>
-        <optgroup label="IV godina">
-            @foreach (var odeljenje in Model.CetvrtaGodina)
-            {
-                <option value="@odeljenje.Id">IV- @odeljenje.OznakaID</option>
-            }
-        </optgroup>
-
-    </select>
-</div>
-
-
-<div class="container">
-    <div class="container">
-        <div class="col-md-5">
-
-            <table class="table table-striped table-hover" id="nerasporedjenjiUcenici">
+@using (Html.BeginForm("KreirajOdeljenje", "Odeljenje", FormMethod.Post, new { @id = "forma" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="col-md-12 col-xs-12 ">
+        <br />
+        <br />
+        <center>
+            <label for="Razred">Razred</label>
+            <select id="Razred" name="Razred" class="form-control" onchange="PopuniOdeljenjaZaRazred()">
+                <option selected="selected" value="0">Izaberite</option>
+                <option value="1">I</option>
+                <option value="2">II</option>
+                <option value="3">III</option>
+                <option value="4">IV</option>
+            </select>
+            <label>Odeljenje</label>
+            <select id="Odeljenje" name="Odeljenje" class="form-control" onchange="VratiUcenikeZaOdeljenje()"></select>
+        </center>
+    </div>
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <div class="row">
+        <div class="col-md-6">
+            <table class="table table-striped table-hover display" id="nerasporedjenjiUcenici">
                 <thead>
                     <tr>
-                        <th>JMBG</th>
-                        <th>Ime</th>
                         <th>Prezime</th>
+                        <th>Ime</th>
+                        <th>JMBG</th>
+                        <th>Smer</th>
+                        <th></th>
                     </tr>
                 </thead>
-                <tbody>
-                    @for (int i = 0; i < Model.ListaNerasporedjenihUcenika.Count; i++)
-                      {
-                        <tr>
-                            <td>
-                                @Html.EditorFor(u => u.ListaNerasporedjenihUcenika[i].JMBG)
-                            </td>
-                            <td>
-                                @Html.EditorFor(u => u.ListaNerasporedjenihUcenika[i].Ime)
-                            </td>
-                            <td>
-                                @Html.EditorFor(u => u.ListaNerasporedjenihUcenika[i].Prezime)
-                            </td>
-                        </tr>
-                    }
-                </tbody>
             </table>
         </div>
 
-        <div class="col-md-2">
-
-        </div>
-
-        <div class="col-md-5">
+        <div class="col-md-6">
 
             <table class="table table-striped table-hover" id="rasporedjeniUcenici">
                 <thead>
                     <tr>
-                        <th>JMBG</th>
-                        <th>Ime</th>
                         <th>Prezime</th>
+                        <th>Ime</th>
+                        <th>JMBG</th>
+                        <th>Smer</th>
+                        <th></th>
                     </tr>
                 </thead>
-                <tbody>
-                    @*@foreach (var ucenik in Model.ListaNerasporedjenihUcenika)
-                        {
-                            <tr>
-                                <td>@ucenik.JMBG</td>
-                                <td>@ucenik.Ime</td>
-                                <td>@ucenik.Prezime</td>
-                            </tr>
-                        }*@
-                </tbody>
             </table>
         </div>
     </div>
-</div>
+
+    <input type="button" class="btn btn-default" value="Create" onclick="SubmitForme()" />
+
+    <br />
+
+}
+
+
 
 @section Scripts
 {
     <script>
+
+        //Niz nerasporedjenih ucenika u JSON-u
+        var nerasporedjeniUceniciJSON= [];
+        //Niz nerasporedjenih ucenika
+        var nerasporedjeniUcenici = [];
+        //Niz rasporedjenih ucenika
+        var rasporedjeniUcenici = [];
+
         $(function () {
+
+            nerasporedjeniUceniciJSON= @Html.Raw(Json.Encode(@Model.ListaNerasporedjenihUcenika));
+
+            //Preuzimanje podataka iz modela koji se salje nakon smestanja ili izbacivanja ucenika iz odeljenja
+            var razred=@Html.Raw(Json.Encode(@Model.Razred));
+            var odeljenje=@Html.Raw(Json.Encode(@Model.Odeljenje));
+            var dodatiUceniciUOdeljenje=@Html.Raw(Json.Encode(@Model.DodatiUceniciUOdeljenje));
+            var nisuDodatiUceniciUOdeljenje=@Html.Raw(Json.Encode(@Model.NisuDodatiUceniciUOdeljenje));
+
+            //Deo koji se izvrsava ako su ucenici uspesno rasporedjeni
+            if(dodatiUceniciUOdeljenje)
+            {
+                $('#Razred').val(razred).prop('selected', true);
+                InicijalizujNerasporedjeneUcenike();
+                IspisiNerasporedjeneUcenikeUTabelu();
+                PopuniOdeljenjeZaKreiranRazred(razred, odeljenje);
+                VratiUcenikeZaKreiranoOdeljenje(razred, odeljenje);
+                alert("Uspesno ste izvrsili raspodelu ucenika");
+
+            }
+            //Deo koji se izvrsava ako su ucenici nisi uspesno rasporedjeni
+            else if(nisuDodatiUceniciUOdeljenje)
+            {
+                $('#rasporedjeniUcenici').DataTable({
+                    "scrollY": "400px",
+                    "scrollCollapse": true,
+                    "paging": false,
+                    scroller: true,
+                    deferRender: true,
+                    "language": {
+                        "url": "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Serbian.json"
+                    }
+                });
+
+                $('#Razred').val('0').prop('selected', true);
+                $("#Odeljenje").attr("disabled", true);
+                InicijalizujNerasporedjeneUcenike();
+                IspisiNerasporedjeneUcenikeUTabelu();
+
+                alert("Doslo je do greske, pokusajte ponovo");
+            }
+            //Deo koji se izvrsava prvi put pri pokretanju stranice 
+            else
+            {
+                $('#rasporedjeniUcenici').DataTable({
+                    "scrollY": "400px",
+                    "scrollCollapse": true,
+                    "paging": false,
+                    scroller: true,
+                    deferRender: true,
+                    "language": {
+                        "url": "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Serbian.json"
+                    }
+                });
+
+                $('#Razred').val('0').prop('selected', true);
+                $("#Odeljenje").attr("disabled", true);
+                InicijalizujNerasporedjeneUcenike();
+                IspisiNerasporedjeneUcenikeUTabelu();
+            }
+        });
+
+        //Funkcija za submit forme koja vrsi validaciju
+        function SubmitForme()
+        {
+            if($('#Razred').val()>0 && $("#Odeljenje").val()>0)
+            {
+                $("#forma").submit();
+            }
+            else
+            {
+                alert("Morate izabrati razred i odeljenje");
+
+            }
+
+        }
+
+        //Funkcija za brisanje elemenata iz niza
+        function IzbrisiElementeIzNiza(nizUcenika) {
+            while (nizUcenika.length > 0) {
+                nizUcenika.pop();
+            }
+        }
+
+        //Funkcija za inicijalizaciju niza nerasporedjenih ucenika
+        function InicijalizujNerasporedjeneUcenike() {
+
+            IzbrisiElementeIzNiza(nerasporedjeniUcenici);
+
+            for (var j = 0; j < nerasporedjeniUceniciJSON.length; j++) {
+
+                nerasporedjeniUcenici[j] = nerasporedjeniUceniciJSON[j];
+            }
+        }
+
+
+
+        //Funkcija koja popunjava combobox sa odeljenjima u odnosu na selektovani razred
+        function PopuniOdeljenjaZaRazred() {
+            $("#Odeljenje").attr("disabled", false);
+            $("#Odeljenje").html("");
+            $("#Odeljenje").append("<option value='0'>Izaberite</option>");
+            InicijalizujNerasporedjeneUcenike();
+            IspisiNerasporedjeneUcenikeUTabelu();
+            IzbrisiElementeIzNiza(rasporedjeniUcenici);
+            $("#rasporedjeniUcenici").DataTable().clear().draw();
+            var razred = $("#Razred").val();
+            if (razred > 0) {
+
+                var razredOption = "";
+
+                if (razred == 1) {
+                    razredOption = "I-";
+                }
+                else if (razred == 2) {
+                    razredOption = "II-";
+                }
+                else if (razred == 3) {
+                    razredOption = "III-";
+                }
+                else if (razred == 4) {
+                    razredOption = "IV-";
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Odeljenje/OdeljenjeTrajanje?godina=" + razred,
+                    contentType: "application/json",
+                    datatype: "json",
+                    success:
+                            function (odeljenja) {
+                                for (var i = 0; i < odeljenja.length; i++) {
+                                    $("#Odeljenje").append("<option value='" + odeljenja[i].Oznaka + "'>" + razredOption + odeljenja[i].Oznaka + "</option>");
+                                }
+                            }
+                });
+            }
+            else {
+                $("#Odeljenje").html("");
+                $("#Odeljenje").attr("disabled", true);
+
+            }
+
+        }
+
+        //Funkcija koja popunjava combobox sa odeljenjima kada je izvrsena raspodela ucenika
+        function PopuniOdeljenjeZaKreiranRazred(razred, odeljenje) {
+            $("#Odeljenje").html("");
+
+
+            if (razred > 0 && odeljenje>0) {
+
+                var razredOption = "";
+
+                if (razred == 1) {
+                    razredOption = "I-";
+                }
+                else if (razred == 2) {
+                    razredOption = "II-";
+                }
+                else if (razred == 3) {
+                    razredOption = "III-";
+                }
+                else if (razred == 4) {
+                    razredOption = "IV-";
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Odeljenje/OdeljenjeTrajanje?godina=" + razred,
+                    contentType: "application/json",
+                    datatype: "json",
+                    async: false,
+                    success:
+                            function (odeljenja) {
+                                for (var i = 0; i < odeljenja.length; i++) {
+                                    if(odeljenja[i].Oznaka==odeljenje)
+                                    {
+                                        $("#Odeljenje").append("<option selected='selected' value='" + odeljenja[i].Oznaka + "'>" + razredOption + odeljenja[i].Oznaka + "</option>");
+                                    }
+                                    else
+                                    {
+                                        $("#Odeljenje").append("<option value='" + odeljenja[i].Oznaka + "'>" + razredOption + odeljenja[i].Oznaka + "</option>");
+                                    }
+                                }
+                            }
+                });
+            }
+            else {
+                $("#Odeljenje").html("");
+                $("#Odeljenje").attr("disabled", true);
+
+            }
+
+        }
+
+        //Funkcija za ispis nerasporedjenih ucenika u tabelu
+        function IspisiNerasporedjeneUcenikeUTabelu() {
+
+            $("#nerasporedjenjiUcenici").DataTable().clear().draw();
+
+            var nerasporedjeniUceniciTabela = [];
+
+            for (var k = 0; k < nerasporedjeniUcenici.length; k++) {
+
+                var nerasporedjeniUcenikJMBG = "<input id='ListaNerasporedjenihUcenika_" + k + "__JMBG' name='ListaNerasporedjenihUcenika[" + k + "].JMBG' type='hidden' value='" + nerasporedjeniUcenici[k].JMBG + "' />" + nerasporedjeniUcenici[k].JMBG + "";
+                var nerasporedjeniUcenikIme = "<input id='ListaNerasporedjenihUcenika_" + k + "__Ime' name='ListaNerasporedjenihUcenika[" + k + "].Ime' type='hidden' value='" + nerasporedjeniUcenici[k].Ime + "' />" + nerasporedjeniUcenici[k].Ime + "";
+                var nerasporedjeniUcenikPrezime = "<input id='ListaNerasporedjenihUcenika_" + k + "__Prezime' name='ListaNerasporedjenihUcenika[" + k + "].Prezime' type='hidden' value='" + nerasporedjeniUcenici[k].Prezime + "' />" + nerasporedjeniUcenici[k].Prezime + "";
+                var nerasporedjeniUcenikSmer = "<input id='ListaNerasporedjenihUcenika_" + k + "__Smer' name='ListaNerasporedjenihUcenika[" + k + "].Smer' type='hidden' value='" + nerasporedjeniUcenici[k].Smer + "' />" + nerasporedjeniUcenici[k].Smer + "";
+                var nerasporedjeniUcenikButton = "<button type='button' onclick='DodajUcenika(" + nerasporedjeniUcenici[k].UcenikId + ")'>Dodaj</button>";
+                nerasporedjeniUcenikButton += "<input id='ListaNerasporedjenihUcenika_" + k + "__UcenikId' name='ListaNerasporedjenihUcenika[" + k + "].UcenikId' type='hidden' value='" + nerasporedjeniUcenici[k].UcenikId + "' />";
+
+                nerasporedjeniUceniciTabela.push([nerasporedjeniUcenikPrezime, nerasporedjeniUcenikIme, nerasporedjeniUcenikJMBG, nerasporedjeniUcenikSmer, nerasporedjeniUcenikButton]);
+            }
+
+            $('#nerasporedjenjiUcenici').DataTable().destroy();
+
             $('#nerasporedjenjiUcenici').DataTable({
+                data: nerasporedjeniUceniciTabela,
+                deferRender: true,
+                scrollY: 400,
+                scrollCollapse: true,
+                scroller: true,
+                paging: true,
                 "language": {
                     "url": "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Serbian.json"
                 }
             });
+        }
+
+        //Funkcija za ispis rasporedjenih ucenika u tabelu
+        function IspisiRasporedjeneUcenikeUTabelu() {
+
+            $("#rasporedjeniUcenici").DataTable().clear().draw();
+
+            var  rasporedjeniUceniciTabela = [];
+
+            for (var k = 0; k < rasporedjeniUcenici.length; k++) {
+
+                var JMBG = "<input id='ListaRasporedjenihUcenika_" + k + "__JMBG' name='ListaRasporedjenihUcenika[" + k + "].JMBG' type='hidden' value='" + rasporedjeniUcenici[k].JMBG + "' />" + rasporedjeniUcenici[k].JMBG + "";
+                var ime = "<input id='ListaRasporedjenihUcenika_" + k + "__Ime' name='ListaRasporedjenihUcenika[" + k + "].Ime' type='hidden' value='" + rasporedjeniUcenici[k].Ime + "' />" + rasporedjeniUcenici[k].Ime + "";
+                var prezime = "<input id='ListaRasporedjenihUcenika_" + k + "__Prezime' name='ListaRasporedjenihUcenika[" + k + "].Prezime' type='hidden' value='" + rasporedjeniUcenici[k].Prezime + "' />" + rasporedjeniUcenici[k].Prezime + "";
+                var smer = "<input id='ListaRasporedjenihUcenika_" + k + "__Smer' name='ListaRasporedjenihUcenika[" + k + "].Smer' type='hidden' value='" + rasporedjeniUcenici[k].Smer + "' />" + rasporedjeniUcenici[k].Smer + "";
+                var button = "<button type='button' onclick='IzbaciUcenika(" + rasporedjeniUcenici[k].UcenikId + ")'>Izbaci</button>";
+                button += "<input id='ListaRasporedjenihUcenika_" + k + "__UcenikId' name='ListaRasporedjenihUcenika[" + k + "].UcenikId' type='hidden' value='" + rasporedjeniUcenici[k].UcenikId + "' />";
+
+                rasporedjeniUceniciTabela.push([prezime, ime, JMBG, smer, button]);
+            }
+
+            $('#rasporedjeniUcenici').DataTable().destroy();
 
             $('#rasporedjeniUcenici').DataTable({
+                data: rasporedjeniUceniciTabela,
+                deferRender: true,
+                scrollY: 400,
+                scrollCollapse: true,
+                scroller: true,
+                paging: false,
+                "pageLength": 50,
+
                 "language": {
                     "url": "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Serbian.json"
                 }
             });
+        }
 
-        });
+
+
+        //Funkcija koja vraca ucenike za odeljenje koje je selektovano u combobox-u i popunjjava tabelu
+        function VratiUcenikeZaOdeljenje() {
+            InicijalizujNerasporedjeneUcenike();
+            IspisiNerasporedjeneUcenikeUTabelu();
+            IzbrisiElementeIzNiza(rasporedjeniUcenici);
+            $("#rasporedjeniUcenici").DataTable().clear().draw();
+            var razred = $("#Razred").val();
+            var oznakaOdeljenja = $("#Odeljenje").val();
+            if (razred > 0 && oznakaOdeljenja > 0) {
+
+                var  rasporedjeniUceniciTabela = [];
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Odeljenje/VratiUcenikeZaOdeljenje?razred=" + razred + "&oznaka=" + oznakaOdeljenja + "",
+                    contentType: "application/json",
+                    datatype: "json",
+                    async: false,
+                    success:
+                            function (ucenici) {
+                                for (var i = 0; i < ucenici.length; i++) {
+
+                                    var JMBG = "<input id='ListaRasporedjenihUcenika_" + i + "__JMBG' name='ListaRasporedjenihUcenika[" + i + "].JMBG' type='hidden' value='" + ucenici[i].JMBG + "' />" + ucenici[i].JMBG + "";
+                                    var ime = "<input id='ListaRasporedjenihUcenika_" + i + "__Ime' name='ListaRasporedjenihUcenika[" + i + "].Ime' type='hidden' value='" + ucenici[i].Ime + "' />" + ucenici[i].Ime + "";
+                                    var prezime = "<input id='ListaRasporedjenihUcenika_" + i + "__Prezime' name='ListaRasporedjenihUcenika[" + i + "].Prezime' type='hidden' value='" + ucenici[i].Prezime + "' />" + ucenici[i].Prezime + "";
+                                    var smer = "<input id='ListaRasporedjenihUcenika_" + i + "__Smer' name='ListaRasporedjenihUcenika[" + i + "].Smer' type='hidden' value='" + ucenici[i].Smer + "' />" + ucenici[i].Smer + "";
+                                    var button = "<button type='button' onclick='IzbaciUcenika(" + ucenici[i].UcenikId + ")'>Izbaci</button>";
+                                    button += "<input id='ListaRasporedjenihUcenika_" + i + "__UcenikId' name='ListaRasporedjenihUcenika[" + i + "].UcenikId' type='hidden' value='" + ucenici[i].UcenikId + "' />";
+
+                                    rasporedjeniUceniciTabela.push([prezime, ime, JMBG, smer, button]);
+                                    rasporedjeniUcenici[i] = ucenici[i];
+                                }
+                            }
+                });
+
+
+                $('#rasporedjeniUcenici').DataTable().destroy();
+
+                $('#rasporedjeniUcenici').DataTable({
+                    data: rasporedjeniUceniciTabela,
+                    deferRender: true,
+                    scrollY: 400,
+                    scrollCollapse: true,
+                    scroller: true,
+                    paging: false,
+
+                    "language": {
+                        "url": "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Serbian.json"
+                    }
+                });
+            }
+
+        }
+
+        //Funkcija koja vraca ucenike za odeljenje nakon sto je izvrsena raspodela ucenika i popunjava tabelu
+        function VratiUcenikeZaKreiranoOdeljenje(razred, oznakaOdeljenja) {
+
+            IzbrisiElementeIzNiza(rasporedjeniUcenici);
+
+            if (razred > 0 && oznakaOdeljenja > 0) {
+
+                var  rasporedjeniUceniciTabela = [];
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Odeljenje/VratiUcenikeZaOdeljenje?razred=" + razred + "&oznaka=" + oznakaOdeljenja + "",
+                    contentType: "application/json",
+                    datatype: "json",
+                    async: false,
+                    success:
+                            function (ucenici) {
+                                for (var i = 0; i < ucenici.length; i++) {
+
+                                    var JMBG = "<input id='ListaRasporedjenihUcenika_" + i + "__JMBG' name='ListaRasporedjenihUcenika[" + i + "].JMBG' type='hidden' value='" + ucenici[i].JMBG + "' />" + ucenici[i].JMBG + "";
+                                    var ime = "<input id='ListaRasporedjenihUcenika_" + i + "__Ime' name='ListaRasporedjenihUcenika[" + i + "].Ime' type='hidden' value='" + ucenici[i].Ime + "' />" + ucenici[i].Ime + "";
+                                    var prezime = "<input id='ListaRasporedjenihUcenika_" + i + "__Prezime' name='ListaRasporedjenihUcenika[" + i + "].Prezime' type='hidden' value='" + ucenici[i].Prezime + "' />" + ucenici[i].Prezime + "";
+                                    var smer = "<input id='ListaRasporedjenihUcenika_" + i + "__Smer' name='ListaRasporedjenihUcenika[" + i + "].Smer' type='hidden' value='" + ucenici[i].Smer + "' />" + ucenici[i].Smer + "";
+                                    var button = "<button type='button' onclick='IzbaciUcenika(" + ucenici[i].UcenikId + ")'>Izbaci</button>";
+                                    button += "<input id='ListaRasporedjenihUcenika_" + i + "__UcenikId' name='ListaRasporedjenihUcenika[" + i + "].UcenikId' type='hidden' value='" + ucenici[i].UcenikId + "' />";
+
+                                    rasporedjeniUceniciTabela.push([prezime, ime, JMBG, smer, button]);
+                                    rasporedjeniUcenici[i] = ucenici[i];
+                                }
+                            }
+                });
+
+
+                $('#rasporedjeniUcenici').DataTable().destroy();
+
+                $('#rasporedjeniUcenici').DataTable({
+                    data: rasporedjeniUceniciTabela,
+                    deferRender: true,
+                    scrollY: 400,
+                    scrollCollapse: true,
+                    scroller: true,
+                    paging: false,
+
+                    "language": {
+                        "url": "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Serbian.json"
+                    }
+                });
+            }
+
+        }
+
+        //Funkcija koja premesta selektovanog ucenika iz tabele nerasporedjennih ucenika u tabelu rasporedjenih ucenika
+        function DodajUcenika(id) {
+            
+            if ($("#Razred").val() > 0 && $("#Odeljenje").val() > 0) {
+                for (var i = 0; i < nerasporedjeniUcenici.length; i++) {
+                    if (nerasporedjeniUcenici[i].UcenikId == id) {
+                        var index = rasporedjeniUcenici.length;
+                        rasporedjeniUcenici[index] = nerasporedjeniUcenici[i];
+                        nerasporedjeniUcenici.splice(i, 1);
+
+                        var JMBG = "<input id='ListaRasporedjenihUcenika_" + index + "__JMBG' name='ListaRasporedjenihUcenika[" + index + "].JMBG' type='hidden' value='" + rasporedjeniUcenici[index].JMBG + "' />" + rasporedjeniUcenici[index].JMBG + "";
+                        var ime = "<input id='ListaRasporedjenihUcenika_" + index + "__Ime' name='ListaRasporedjenihUcenika[" + index + "].Ime' type='hidden' value='" + rasporedjeniUcenici[index].Ime + "' />" + rasporedjeniUcenici[index].Ime + "";
+                        var prezime = "<input id='ListaRasporedjenihUcenika_" + index + "__Prezime' name='ListaRasporedjenihUcenika[" + index + "].Prezime' type='hidden' value='" + rasporedjeniUcenici[index].Prezime + "' />" + rasporedjeniUcenici[index].Prezime + "";
+                        var smer = "<input id='ListaRasporedjenihUcenika_" + index + "__Smer' name='ListaRasporedjenihUcenika[" + index + "].Smer' type='hidden' value='" + rasporedjeniUcenici[index].Smer + "' />" + rasporedjeniUcenici[index].Smer + "";
+                        var button = "<button type='button' onclick='IzbaciUcenika(" + rasporedjeniUcenici[index].UcenikId + ")'>Izbaci</button>";
+                        button += "<input id='ListaRasporedjenihUcenika_" + index + "__UcenikId' name='ListaRasporedjenihUcenika[" + index + "].UcenikId' type='hidden' value='" + rasporedjeniUcenici[index].UcenikId + "' />";
+                        var table = $('#rasporedjeniUcenici').DataTable();
+                        
+                        var row = table.row.add([prezime, ime, JMBG, smer, button]);
+                        
+                        table.row(row).draw();
+                        $("#ListaRasporedjenihUcenika_"+ index + "__JMBG").parent().closest('td').css('background-color', 'lightgreen');
+                        $("#ListaRasporedjenihUcenika_"+ index + "__Ime").parent().closest('td').css('background-color', 'lightgreen');
+                        $("#ListaRasporedjenihUcenika_"+ index + "__Prezime").parent().closest('td').css('background-color', 'lightgreen');
+                        $("#ListaRasporedjenihUcenika_"+ index + "__Smer").parent().closest('td').css('background-color', 'lightgreen');
+                        $("#ListaRasporedjenihUcenika_"+ index + "__UcenikId").parent().closest('td').css('background-color', 'lightgreen');
+                        
+                    }
+                }
+
+                IspisiNerasporedjeneUcenikeUTabelu();
+            }
+            else {
+                alert("Morate izabrati odeljenje!!!!!!!!!!!!!");
+            }
+        }
+
+
+        //Funkcija koja premesta selektovanog ucenika iz tabele rasporedjenih ucenika u tabelu nerasporedjennih ucenika
+        function IzbaciUcenika(id) {
+
+            for (var i = 0; i < rasporedjeniUcenici.length; i++) {
+                if (rasporedjeniUcenici[i].UcenikId == id) {
+                    var index = nerasporedjeniUcenici.length;
+                    nerasporedjeniUcenici[index] = rasporedjeniUcenici[i];
+                    rasporedjeniUcenici.splice(i, 1);
+                    var nerasporedjeniUcenikJMBG = "<input id='ListaNerasporedjenihUcenika_" + index + "__JMBG' name='ListaNerasporedjenihUcenika[" + index + "].JMBG' type='hidden' value='" + nerasporedjeniUcenici[index].JMBG + "' />" + nerasporedjeniUcenici[index].JMBG + "";
+                    var nerasporedjeniUcenikIme = "<input id='ListaNerasporedjenihUcenika_" + index + "__Ime' name='ListaNerasporedjenihUcenika[" + index + "].Ime' type='hidden' value='" + nerasporedjeniUcenici[index].Ime + "' />" + nerasporedjeniUcenici[index].Ime + "";
+                    var nerasporedjeniUcenikPrezime = "<input id='ListaNerasporedjenihUcenika_" + index + "__Prezime' name='ListaNerasporedjenihUcenika[" + index + "].Prezime' type='hidden' value='" + nerasporedjeniUcenici[index].Prezime + "' />" + nerasporedjeniUcenici[index].Prezime + "";
+                    var nerasporedjeniUcenikSmer = "<input id='ListaNerasporedjenihUcenika_" + index + "__Smer' name='ListaNerasporedjenihUcenika[" + index + "].Smer' type='hidden' value='" + nerasporedjeniUcenici[index].Smer + "' />" + nerasporedjeniUcenici[index].Smer + "";
+                    var nerasporedjeniUcenikButton = "<button type='button' onclick='DodajUcenika(" + nerasporedjeniUcenici[index].UcenikId + ")'>Dodaj</button>";
+                    nerasporedjeniUcenikButton += "<input id='ListaNerasporedjenihUcenika_" + index + "__UcenikId' name='ListaNerasporedjenihUcenika[" + index + "].UcenikId' type='hidden' value='" + nerasporedjeniUcenici[index].UcenikId + "' />";
+
+                    $("#nerasporedjenjiUcenici").DataTable().row.add([
+                      nerasporedjeniUcenikPrezime, nerasporedjeniUcenikIme, nerasporedjeniUcenikJMBG, nerasporedjeniUcenikSmer, nerasporedjeniUcenikButton
+                    ]).draw();
+                }
+            }
+
+            IspisiRasporedjeneUcenikeUTabelu();
+            
+        }
+
+
 
 
     </script>

@@ -52,6 +52,14 @@
       <HintPath>..\packages\Castle.Core.4.1.0\lib\net45\Castle.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Common.Logging, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Logging.3.3.1\lib\net40\Common.Logging.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Common.Logging.Core, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Logging.Core.3.3.1\lib\net40\Common.Logging.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.0.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.0.7\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
       <Private>True</Private>
@@ -127,6 +135,10 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Quartz, Version=2.6.1.0, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Quartz.2.6.1\lib\net40\Quartz.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -225,6 +237,7 @@
     <Compile Include="Controllers\ProfesoriController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\UceniciController.cs" />
+    <Compile Include="DTOs\DTONerasporedjenUcenik.cs" />
     <Compile Include="Controllers\UpisSkolskeGodineController.cs" />
     <Compile Include="DTOs\DTOOcena.cs" />
     <Compile Include="DTOs\DTONapomena.cs" />
@@ -235,6 +248,7 @@
     <Compile Include="DTOs\DTOPredmetCas.cs" />
     <Compile Include="DTOs\DTOPredmetID.cs" />
     <Compile Include="DTOs\DTOProfesor.cs" />
+    <Compile Include="DTOs\DTORasporedjenUcenik.cs" />
     <Compile Include="DTOs\DTORola.cs" />
     <Compile Include="DTOs\DTOTipOcene.cs" />
     <Compile Include="DTOs\DTOTipOpisneOcene.cs" />
@@ -244,6 +258,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\IdentityHelper.cs" />
+    <Compile Include="Helpers\JobScheduler.cs" />
+    <Compile Include="Helpers\PromeniStatusJob.cs" />
     <Compile Include="Helpers\KonverizjaDatuma.cs" />
     <Compile Include="Helpers\ValidateHeaderAntiForgeryTokenAttribute.cs" />
     <Compile Include="Migrations\201710301416098_InitialSprint4.cs" />
@@ -305,9 +321,11 @@
     <Compile Include="ViewModel\AdminIndexViewModel.cs" />
     <Compile Include="ViewModel\KreirajOdeljenjeViewModel.cs" />
     <Compile Include="ViewModel\PredmetTipOcenePredmetaViewModel.cs" />
+    <Compile Include="ViewModel\NerasporedjenUcenikViewModel.cs" />
     <Compile Include="ViewModel\ProfesorRoleViewModel.cs" />
     <Compile Include="ViewModel\EvidencijaUcenikaViewModel.cs" />
     <Compile Include="ViewModel\ProfesorViewModel.cs" />
+    <Compile Include="ViewModel\RasporedjenUcenikViewModel.cs" />
     <Compile Include="ViewModel\UcenikRoleViewModel.cs" />
     <Compile Include="ViewModel\UcenikSaPrisustvomViewModel.cs" />
     <Compile Include="ViewModel\UcenikViewModel.cs" />
@@ -560,6 +578,9 @@
     <Content Include="Content\DataTables\css\semanticui.scss" />
     <Content Include="Content\DataTables\css\mixins.scss" />
     <Content Include="Content\DataTables\css\common.scss" />
+    <None Include="job_scheduling_data_2_0.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\chart-data.js" />

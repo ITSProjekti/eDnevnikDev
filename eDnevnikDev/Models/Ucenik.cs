@@ -207,7 +207,6 @@ namespace eDnevnikDev.Models
         /// </value>
         [ForeignKey("Odeljenje")]
         [Display(Name = "Odeljenje")]
-        [Required(ErrorMessage = "Polje za odeljenje je obavezno")]
         public int? OdeljenjeId { get; set; }
 
         /// <summary>
