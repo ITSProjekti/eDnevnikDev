@@ -8,6 +8,8 @@ using eDnevnikDev.ViewModel;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
+using System.Net;
+using System.Data.Entity.Migrations;
 
 namespace eDnevnikDev.Controllers
 {
@@ -70,6 +72,7 @@ namespace eDnevnikDev.Controllers
         /// Test name=UceniciController_Index
         /// </summary>
         /// <returns></returns>
+        [Authorize(Roles = "Administrator")]
         public ActionResult Index()
         {
 
@@ -82,24 +85,21 @@ namespace eDnevnikDev.Controllers
         /// TO BE TESTED
         /// </summary>
         /// <returns></returns>
+        [Authorize(Roles = "Administrator")]
         public ActionResult Dodaj()
         {
             var ucenikVM = new UcenikViewModel
             {
-                Ucenik = new Ucenik { Ime = "Firas", Prezime = "Aburas", Adresa = "Adresa 1", BrojTelefonaRoditelja = "+381-11/1234567", ImeMajke = "Majka", ImeOca = "Otac", PrezimeMajke = "Prezime", PrezimeOca = "Prezime", JMBG = "1708993730202", MestoPrebivalista = "Beograd", MestoRodjenjaId = 3, DatumRodjenja = new DateTime(2011, 12, 5) },
                 Gradovi = _context.Gradovi.OrderBy(g => g.Naziv).ToList(),
-                Smerovi = _context.Smerovi.Include("Oznake").OrderBy(s => s.Trajanje).ToList()
-
+                Smerovi = _context.Smerovi.Include("Oznake").OrderBy(s => s.Trajanje).ToList(),
+                Polovi = _context.Polovi.ToList()
             };
-
 
             return View("Dodaj", ucenikVM);
         }
 
         /// <summary>
         /// Cuvamo Ucenika. Provera da li je model ucenika validan sa unosa. Provera da li je slika validna i ubacivanje.
-        /// Ubacivanje ucenika u odeljenje sa odredjenim statusom. status 2 = u toku, status 3 = kreirano.
-        /// Kreiranje novog odeljenja u bazi ukoliko jos uvek ne postoji.
         /// Test name= UceniciController_Sacuvaj
         /// Prilikom registracije korisnika(ucenika) kreira se ucenik u tabeli Ucenik kao i korisnik
         /// u tabeli AspNetUsers
@@ -111,6 +111,8 @@ namespace eDnevnikDev.Controllers
         /// <param name="ucenikVM">The ucenik vm.</param>
         /// <returns>Vraca nas na Index stranicu Ucenika</returns>
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult> Sacuvaj(UcenikViewModel ucenikVM, HttpPostedFileBase upload)
         {
             //Proverava postajanje istog JMBG
@@ -123,7 +125,8 @@ namespace eDnevnikDev.Controllers
                 {
                     Ucenik = ucenikVM.Ucenik,
                     Gradovi = _context.Gradovi.OrderBy(g => g.Naziv).ToList(),
-                    Smerovi = _context.Smerovi.Include("Oznake").OrderBy(s => s.Trajanje).ToList()
+                    Smerovi = _context.Smerovi.Include("Oznake").OrderBy(s => s.Trajanje).ToList(),
+                    Polovi = _context.Polovi.ToList()
                 };
 
                 return View("Dodaj", podaci);
@@ -133,75 +136,13 @@ namespace eDnevnikDev.Controllers
             var oznaka = ucenikVM.Oznaka;
             var razred = ucenik.Razred;
 
-            
-
-            //var file = ucenikVM.File;
-
-            //Provera slike i vracanje na view ukoliko je NEVALIDNA. ne ubacuje ovde. save = line 164.
-            //if (file != null)
-            //{
-            //    string pic = System.IO.Path.GetExtension(file.FileName);
-
-            //    if (pic != ".jpg" && pic != ".jpeg" && pic != ".png")
-            //    {
-            //        ModelState.AddModelError("File", "Neispravna slika");
-
-            //        var podaci = new UcenikViewModel
-            //        {
-            //            Ucenik = ucenikVM.Ucenik,
-            //            Gradovi = _context.Gradovi.OrderBy(g => g.Naziv).ToList(),
-            //            Smerovi = _context.Smerovi.Include("Odeljenja").OrderBy(s => s.Trajanje).ToList()
-            //        };
-
-            //        return View("Dodaj", podaci);
-            //    }
-            //}
-
-            //Dodeljuje se odeljenje sa statusom koji je izabran na formi.
-            var odeljenje = _context.Odeljenja
-                .Include("Status")
-                .SingleOrDefault(o => o.OznakaID == oznaka && o.Razred == razred && o.StatusID == ucenikVM.SmestiUNovoOdeljenje);
-
-            //Ukoliko odeljenje nije ni kreirano u bazi bez obzira na status,kreira se.
-            if (odeljenje == null)
-            {
-                odeljenje = new Odeljenje()
-                {
-                    OznakaID = oznaka,
-                    Razred = razred,
-                    PocetakSkolskeGodine = Odeljenje.SledecaSkolskaGodina(razred, oznaka,_context),
-                    StatusID = 2, //Status 2 = u toku.
-                    KrajSkolskeGodine = Odeljenje.SledecaSkolskaGodina(razred, oznaka,_context) + 1
-                };
-                
-                _context.Odeljenja.Add(odeljenje);
-                _context.SaveChanges();  
-            }
-
-            else if(odeljenje.StatusID == 3)   //Status 3 = kreirano.
-            {
-                var poslednjiBrojUDnevniku = odeljenje.Ucenici.Max(u => u.BrojUDnevniku);
-
-                ucenik.BrojUDnevniku = poslednjiBrojUDnevniku + 1; //Ucenik se dodaje na kraj dnevnika.
-
-                ucenik.Odeljenje = odeljenje;
-
-                ucenik.GenerisiJedinstveniBroj();
-
-            }
-
-            ucenik.OdeljenjeId = odeljenje.Id;
-
             ucenik.RedniBroj = GenerisiRedniBrojUcenika(ucenik);
+            ucenik.DatumUnosa = DateTime.Now;
 
-            string username = ucenik.Ime.ToLower() + ucenik.RedniBroj;
-
-            await RegistracijaUcenika(username, ucenik.Ime, ucenik.RedniBroj);
-
+            string username = ucenik.Ime.Replace(" ", String.Empty) + ucenik.RedniBroj;
+            await RegistracijaUcenika(username, VratiImeUcenikaSaPrvimVelikimSlovom(ucenik.Ime), ucenik.RedniBroj);
             var idUserUcenik = _context.Users.SingleOrDefault(x => x.UserName == username).Id;
-
             //await UserManager.AddToRoleAsync(idUserUcenik, "Ucenik");
-
             ucenik.UserUcenikId = idUserUcenik;
 
             //Dodavanje fotografije za osobu
@@ -211,28 +152,109 @@ namespace eDnevnikDev.Controllers
                 {
                     ucenik.Fotografija = reader.ReadBytes(upload.ContentLength);
                 }
-
             }
 
             _context.Ucenici.Add(ucenik);
             _context.SaveChanges();
 
-            //Ubacivanje slike u fotografija property ucenika i save.
-            //if (file != null)
-            //{
-            //    var id = Ucenik.GetMd5Hash(ucenik.JMBG);
-
-            //    string pic = System.IO.Path.GetExtension(file.FileName);
-
-            //    file.SaveAs(HttpContext.Server.MapPath("~/slike/") + id + pic);
-
-            //    ucenik.Fotografija = id + pic;
-
-            //    _context.SaveChanges();
-
-            //}
-
             return RedirectToAction("Index", "Ucenici");
+        }
+
+        //GET
+        /// <summary>
+        /// Metoda koja vraca view izmeni za ucenika
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
+        [Authorize(Roles = "Administrator")]
+        public ActionResult Izmeni(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Ucenik ucenik = _context.Ucenici.Find(id);
+
+            if (ucenik == null)
+            {
+                return HttpNotFound();
+            }
+
+            UcenikViewModel ucenikVM = new UcenikViewModel()
+            {
+                Ucenik = ucenik,
+                Gradovi = _context.Gradovi.OrderBy(g => g.Naziv).ToList(),
+                Smerovi = _context.Smerovi.Include("Oznake").OrderBy(s => s.Trajanje).ToList(),
+                Polovi = _context.Polovi.ToList()
+            };
+
+            return View(ucenikVM);
+        }
+
+        //POST
+        /// <summary>
+        /// Metoda vrsi izmenu ucenika
+        /// </summary>
+        /// <param name="ucenikVM">The ucenik vm.</param>
+        /// <param name="upload">The upload.</param>
+        /// <returns></returns>
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        [Authorize(Roles = "Administrator")]
+        public ActionResult Izmeni(UcenikViewModel ucenikVM, HttpPostedFileBase upload)
+        {
+            if (ModelState.IsValid)
+            {
+                if (upload != null && upload.ContentLength > 0)
+                {
+                    using (var reader = new System.IO.BinaryReader(upload.InputStream))
+                    {
+                        ucenikVM.Ucenik.Fotografija = reader.ReadBytes(upload.ContentLength);
+                    }
+                }
+
+                Ucenik ucenik = new Ucenik()
+                {
+                    UcenikID = ucenikVM.Ucenik.UcenikID,
+                    Ime = ucenikVM.Ucenik.Ime,
+                    Prezime = ucenikVM.Ucenik.Prezime,
+                    ImeOca = ucenikVM.Ucenik.ImeOca,
+                    PrezimeOca = ucenikVM.Ucenik.PrezimeOca,
+                    ImeMajke = ucenikVM.Ucenik.ImeMajke,
+                    PrezimeMajke = ucenikVM.Ucenik.PrezimeMajke,
+                    JMBG = ucenikVM.Ucenik.JMBG,
+                    Adresa = ucenikVM.Ucenik.Adresa,
+                    MestoPrebivalista = ucenikVM.Ucenik.MestoPrebivalista,
+                    BrojTelefonaRoditelja = ucenikVM.Ucenik.BrojTelefonaRoditelja,
+                    MestoRodjenjaId = ucenikVM.Ucenik.MestoRodjenjaId,
+                    Vanredan = ucenikVM.Ucenik.Vanredan,
+                    RedniBroj = ucenikVM.Ucenik.RedniBroj,
+                    PromenaLozinke = ucenikVM.Ucenik.PromenaLozinke,
+                    SmerID = ucenikVM.Ucenik.SmerID,
+                    OdeljenjeId = ucenikVM.Ucenik.OdeljenjeId,
+                    Razred = ucenikVM.Ucenik.Razred,
+                    DatumRodjenja = ucenikVM.Ucenik.DatumRodjenja,
+                    JedinstveniBroj = ucenikVM.Ucenik.JedinstveniBroj,
+                    Fotografija = ucenikVM.Ucenik.Fotografija,
+                    BrojUDnevniku = ucenikVM.Ucenik.BrojUDnevniku,
+                    UserUcenikId = ucenikVM.Ucenik.UserUcenikId,
+                    DatumUnosa = ucenikVM.Ucenik.DatumUnosa,
+                    PolId = ucenikVM.Ucenik.PolId
+                };
+
+                try
+                {
+                    _context.Ucenici.AddOrUpdate(ucenik);
+                    _context.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                }
+
+            }
+            return RedirectToAction("Index");
+
         }
 
         /// <summary>
@@ -260,8 +282,8 @@ namespace eDnevnikDev.Controllers
             {
                 lista.Add(item);
             }
-                
-            return Json(lista,JsonRequestBehavior.AllowGet);
+
+            return Json(lista, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -278,11 +300,11 @@ namespace eDnevnikDev.Controllers
         {
             string redniBroj;
 
-            //Vracaju se ucenici koji pohadjaju bilo koje odeljenje, ali da se pocetak godine podudara 
-            //sa ucenikom koji se upisuje
+            //Vracaju se svi ucenici kojima je godina unosa u bazu jednaka danasnjoj godini
             var ucenici = _context.Ucenici
-                .Where(u => u.Odeljenje.PocetakSkolskeGodine == ucenik.Odeljenje.PocetakSkolskeGodine)
+                .Where(u => u.DatumUnosa.Year == DateTime.Now.Year)
                 .Select(u => u);
+
 
             //Ukoliko postoje takvi ucenici
             if (ucenici.Count() > 0)
@@ -295,31 +317,53 @@ namespace eDnevnikDev.Controllers
                 int pom = int.Parse(maxRedniBroj);
                 pom /= 100;
                 pom++;
-                
+
                 //Ako je jednocifreni broj dodaje se 0 ispred
-                if(pom.ToString().Length==1)
+                if (pom.ToString().Length == 1)
                 {
-                    redniBroj = "0" + pom + ucenik.Odeljenje.PocetakSkolskeGodine % 100;
+                    redniBroj = "0" + pom + DateTime.Now.Year % 100;
                 }
                 else
                 {
-                    redniBroj = pom + "" + ucenik.Odeljenje.PocetakSkolskeGodine % 100;
+                    redniBroj = pom + "" + DateTime.Now.Year % 100;
                 }
             }
             //Ukoliko takvi ucenici ne postoje, kreira se prvi ucenik sa rednim brojem koji krece od 01
             else
             {
-                redniBroj = "01" + ucenik.Odeljenje.PocetakSkolskeGodine % 100;
+                redniBroj = "01" + DateTime.Now.Year % 100;
             }
-
             return redniBroj;
         }
 
+        /// <summary>
+        /// Metoda sluzi za registraciju ucenika
+        /// Password se kreira tako sto se na ime ucenika doda tacka i redni broj
+        /// </summary>
+        /// <param name="username">The username.</param>
+        /// <param name="ime">The IME.</param>
+        /// <param name="brojIndeksa">The broj indeksa.</param>
+        /// <returns></returns>
         public async Task RegistracijaUcenika(string username, string ime, string brojIndeksa)
         {
-            var user = new ApplicationUser { UserName = username, Email = username+"@gmail.com" };
+            var user = new ApplicationUser { UserName = username.ToLower(), Email = username + "@gmail.com" };
             var result = await UserManager.CreateAsync(user, ime + "." + brojIndeksa);
 
+        }
+
+        /// <summary>
+        /// Vraca se ime ucenika tako da prvo slovo bude veliko
+        /// </summary>
+        /// <param name="prezime">The prezime.</param>
+        /// <returns></returns>
+        public string VratiImeUcenikaSaPrvimVelikimSlovom(string ime)
+        {
+            switch (ime)
+            {
+                case null: throw new ArgumentNullException(nameof(ime));
+                case "": throw new ArgumentException($"{nameof(ime)} ne moze da bude prazno", nameof(ime));
+                default: return ime.First().ToString().ToUpper().Replace(" ", string.Empty) + ime.Substring(1).Replace(" ", string.Empty);
+            }
         }
     }
 }

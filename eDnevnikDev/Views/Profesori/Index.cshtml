@@ -19,25 +19,18 @@
                         <th>Prezime</th>
                         <th>Adresa</th>
                         <th>Broj telefona</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (Profesor profesor in Model)
                     {
                         <tr>
-                            <td>
-                                @profesor.Ime
-                            </td>
-                            <td>
-                                @profesor.Prezime
-                            </td>
-                            <td>
-                                @profesor.Adresa
-                            </td>
-                            <td>
-                                @profesor.Telefon
-                            </td>
-                            
+                            <td> @profesor.Ime</td>
+                            <td>@profesor.Prezime</td>
+                            <td>@profesor.Adresa</td>
+                            <td>@profesor.Telefon</td>
+                            <td>@Html.ActionLink("Izmeni", "Izmeni", new { id=profesor.ProfesorID})</td>
                         </tr>
                     }
                 </tbody>

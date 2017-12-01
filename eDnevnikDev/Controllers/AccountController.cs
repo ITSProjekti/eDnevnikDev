@@ -100,27 +100,40 @@ namespace eDnevnikDev.Controllers
             var result = await SignInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, shouldLockout: false);
 
             //var user = UserManager.FindById(User.Identity.Name);
-            var user = _context.Users
-                .Single(u => u.UserName == model.Username);
+
 
             switch (result)
             {
                 case SignInStatus.Success:
                     {
-                        bool promenaLozinke=false;
+                        var user = _context.Users
+                        .Single(u => u.UserName == model.Username);
+
+                        bool promenaLozinke = false;
                         try
                         {
                             promenaLozinke = _context.Profesori
                                 .Single(p => p.UserProfesorId == user.Id)
                                 .PromenaLozinke;
-                        }catch (Exception){}
+                        }
+                        catch (Exception) { }
 
                         try
                         {
                             promenaLozinke = _context.Ucenici
                                 .Single(p => p.UserUcenikId == user.Id)
                                 .PromenaLozinke;
-                        }catch (Exception) { }
+                        }
+                        catch (Exception) { }
+
+                        var pravaPristupa = UserManager.GetRoles(user.Id);
+                        foreach (var pravoPristupa in pravaPristupa)
+                        {
+                            if (pravoPristupa == "Administrator")
+                            {
+                                return RedirectToLocal(returnUrl);
+                            }
+                        }
 
                         if (promenaLozinke)
                         {
@@ -137,11 +150,9 @@ namespace eDnevnikDev.Controllers
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
+                    ModelState.AddModelError("", "Niste uneli ispravne podatke");
                     return View(model);
             }
-
-
         }
 
         //

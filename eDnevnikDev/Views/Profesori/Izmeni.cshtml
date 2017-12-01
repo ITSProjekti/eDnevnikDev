@@ -1,0 +1,294 @@
+﻿@model eDnevnikDev.ViewModel.ProfesorViewModel
+@{
+    ViewBag.Title = "Izmeni";
+}
+
+<h2>Izmena profesora</h2>
+
+@using (Html.BeginForm("Izmeni", "Profesori", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data", id = "formaId" })) 
+{
+    @Html.AntiForgeryToken();
+
+    <div class="form-horizontal">
+
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(p => p.Profesor.ProfesorID)
+        @Html.HiddenFor(p => p.Profesor.RedniBroj)
+        @Html.HiddenFor(p => p.Profesor.PromenaLozinke)
+        @Html.HiddenFor(p => p.Profesor.UserProfesorId)
+        @Html.HiddenFor(p => p.Profesor.Fotografija)
+
+        <div class="form-group">
+            @Html.LabelFor(p => p.Profesor.Fotografija, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @if (Model.Profesor.Fotografija != null)
+                {
+                    <img id="fotografijaProfesora" src="data:image;base64,@System.Convert.ToBase64String(Model.Profesor.Fotografija)" alt="" width="194px" height="240px" />
+
+                }
+                else
+                {
+                    if (Model.Profesor.Pol.Naziv == "Ženski")
+                    {
+                        <img id="fotografijaProfesora" src="~/ProfilneSlike/female.png" alt="" width="194px" height="240px" />
+                    }
+                    else
+                    {
+                        <img id="fotografijaProfesora" src="~/ProfilneSlike/male.png" alt="" width="194px" height="240px" />
+                    }
+                }
+                <div class="col-sm-12" style="margin-bottom:20px;">
+                    <label class="btn-bs-file btn btn-success">
+
+                        Izmeni sliku
+                        <input type="file" name="upload" accept="image/*" id="fotografijaProfesora" onchange="readURL(this);" />
+                    </label>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(p => p.Profesor.Ime, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(p => p.Profesor.Ime, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(p => p.Profesor.Ime, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            @Html.LabelFor(p => p.Profesor.Prezime, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(p => p.Profesor.Prezime, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(p => p.Profesor.Prezime, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            @Html.LabelFor(p => p.Profesor.Pol, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select class="form-control" name="Profesor.PolId">
+                    @foreach (var item in Model.Polovi)
+                    {
+                        if (item.PolId == Model.Profesor.PolId)
+                        {
+                            <option value="@item.PolId" selected>@item.Naziv</option>
+                        }
+                        else
+                        {
+                            <option value="@item.PolId">@item.Naziv</option>
+                        }
+                    }
+                </select>
+                @Html.ValidationMessageFor(p => p.Profesor.PolId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            @Html.LabelFor(p => p.Profesor.Adresa, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(p => p.Profesor.Adresa, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(p => p.Profesor.Adresa, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            @Html.LabelFor(p => p.Profesor.Telefon, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(p => p.Profesor.Telefon, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(p => p.Profesor.Telefon, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            @Html.LabelFor(p => p.Profesor.Zvanje, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(p => p.Profesor.Zvanje, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(p => p.Profesor.Zvanje, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            @Html.LabelFor(p => p.Profesor.Licenca, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.CheckBoxFor(p => p.Profesor.Licenca, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(p => p.Profesor.Licenca, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            @Html.LabelFor(p => p.Profesor.RazredniStaresina, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.CheckBoxFor(p => p.Profesor.RazredniStaresina, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(p => p.Profesor.RazredniStaresina, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            @Html.LabelFor(p => p.Profesor.Vanredan, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.CheckBoxFor(p => p.Profesor.Vanredan, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(p => p.Profesor.Vanredan, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+        @{
+            List<int> listaPredmeta = new List<int>();
+
+            foreach (var item in Model.Profesor.Predmeti)
+            {
+                int predmetId = item.PredmetID;
+                listaPredmeta.Add(predmetId);
+            }
+        }
+        <div class="form-group">
+            @Html.LabelFor(p => p.PredmetiIDs, new { @class = "control-label col-md-2" })
+            <div class="col-md-9">
+                @Html.ListBoxFor(p => p.PredmetiIDs, new MultiSelectList(Model.Predmeti, "PredmetID", "NazivPredmeta", listaPredmeta), new { @class = "form-control" })
+                @Html.ValidationMessageFor(p => p.PredmetiIDs, "", new { @class = "text-danger" })
+            </div>
+
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-md-10 col-md-offset-2">
+                <button type="reset" class="btn btn-default" onclick="ResetValidacije()">Poništi</button>
+                <button type="submit" class="btn btn-primary">Sačuvaj</button>
+            </div>
+        </div>
+
+        <div>
+            @Html.ActionLink("Vrati se na listu profesora", "Index")
+        </div>
+    </div>
+            }
+
+@section Scripts
+{
+
+    @Scripts.Render("~/bundles/jqueryval");
+    <script src="~/Scripts/moment.js"></script>
+
+    <script>
+        var predmetiProfesora = [];
+
+        $(function () {
+
+            // Pokupi iz select-a samo selektovane predmete i smesti u niz
+            $.each($("#PredmetiIDs option:selected"), function () {
+
+                var selektovaniPredmet = {
+                    id: $(this).val(),
+                    naziv: $(this).text()
+                };
+                predmetiProfesora.push(selektovaniPredmet);
+            });
+        });
+
+        $("#PredmetiIDs").select2({
+            placeholder: "Izaberite predmete"
+        });
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#fotografijaProfesora')
+                        .attr('src', e.target.result)
+                        .width(150)
+                        .height(200);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Funkcija on click ponisti za reset forme i validacije
+        function ResetValidacije() {
+
+            ResetListeIzabranihPredmeta();
+
+            $("#formaId")[0].reset();
+            $(".text-danger").html("");
+
+            var slika = $("#Profesor_Fotografija").val();
+            var pol=@Html.Raw(Json.Encode(@Model.Profesor.Pol.Naziv));
+
+            if(slika.length>0)
+            {
+                $("#fotografijaProfesora").attr("src", "data:image;base64," + slika);
+            }
+            else
+            {
+                if(pol=="Ženski")
+                {
+                    $("#fotografijaProfesora").attr("src", "/ProfilneSlike/female.png");
+                }
+                else if(pol=="Muški")
+                {
+                    $("#fotografijaProfesora").attr("src", "/ProfilneSlike/male.png");
+                }
+            }
+        }
+
+        // Funkcija ponisti za listu predmeta
+        function ResetListeIzabranihPredmeta() {
+
+            // Pokupi iz select-a sve predmete i smesti u niz
+            var predmeti = [];
+            $.each($("#PredmetiIDs option"), function () {
+
+                var predmet = {
+                    id: $(this).val(),
+                    naziv: $(this).text()
+                };
+
+                predmeti.push(predmet);
+            });
+
+            // Pokupi sve predmete koji nisu bili iniciijalno selektovani
+            var predmetiKojiNisuSelektovani = [];
+            for (var i = 0; i < predmeti.length; i++) {
+                for (var j = 0; j < predmetiProfesora.length; j++) {
+                    if (predmeti[i].id == predmetiProfesora[j].id) {
+                        predmeti.splice(i, 1);
+                    }
+                }
+            }
+
+
+            // Ponisti sve sto je selectovano
+            $('#PredmetiIDs')
+            .find('option')
+            .remove()
+            .end();
+
+
+            // Napuni ponovo select svim predmetima u koje ne spadaju selektovani
+            for (var i = 0; i < predmeti.length; i++) {
+
+                $('#PredmetiIDs').append('<option value="' + predmeti[i].id + '">' + predmeti[i].naziv + '</option>');
+            }
+
+            // Npuni ponovo select svim predmetima koji su bili inicijalno selektovani
+            for (var i = 0; i <predmetiProfesora.length; i++) {
+                $('#PredmetiIDs').append('<option selected="selected" value="' + predmetiProfesora[i].id + '">' + predmetiProfesora[i].naziv + '</option>');
+
+            }
+        }
+
+    </script>
+}

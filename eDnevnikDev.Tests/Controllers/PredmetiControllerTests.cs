@@ -12,6 +12,9 @@ using System.Web.Mvc;
 using System.Web;
 using System.Linq.Expressions;
 using eDnevnikDev.ViewModel;
+using Newtonsoft.Json.Linq;
+using eDnevnikDev.Tests.helpers;
+using Newtonsoft.Json;
 
 namespace eDnevnikDev.Controllers.Tests
 {
@@ -67,7 +70,7 @@ namespace eDnevnikDev.Controllers.Tests
         [TestMethod()]
         public void PredmetiController_SacuvajPredmet()
         {
-            var predmet = new Predmet();
+            var predmet = new KreiranjePredmetaViewModel();
             predmet.NazivPredmeta = "Matematika";
 
             var mockSet = new Mock<DbSet<Predmet>>();
@@ -193,6 +196,55 @@ namespace eDnevnikDev.Controllers.Tests
 
             //mockSetPredmet.Verify(p => p.Add(It.IsAny<Predmet>()), Times.Once());
             mockContext.Verify(p => p.SaveChanges(), Times.Once());
+
+        }
+
+        //DONE
+        [TestMethod]
+        public void VratiSveTipoveOcenaPredmeta()
+        {
+            var tipoviOcenaPredmeta = new List<TipOcenePredmeta>()
+            {
+                new TipOcenePredmeta() {TipOcenePredmetaId=1, Tip="Brojcana" },
+                new TipOcenePredmeta() {TipOcenePredmetaId=2, Tip="Numericka" }
+            }.AsQueryable();
+
+            var mockSetTipOcenePredmeta = new Mock<DbSet<TipOcenePredmeta>>();
+            mockSetTipOcenePredmeta.As<IQueryable<TipOcenePredmeta>>().Setup(m => m.Provider).Returns(tipoviOcenaPredmeta.Provider);
+            mockSetTipOcenePredmeta.As<IQueryable<TipOcenePredmeta>>().Setup(m => m.Expression).Returns(tipoviOcenaPredmeta.Expression);
+            mockSetTipOcenePredmeta.As<IQueryable<TipOcenePredmeta>>().Setup(m => m.ElementType).Returns(tipoviOcenaPredmeta.ElementType);
+            mockSetTipOcenePredmeta.As<IQueryable<TipOcenePredmeta>>().Setup(m => m.GetEnumerator()).Returns(tipoviOcenaPredmeta.GetEnumerator());
+
+
+            var mockContext = new Mock<ApplicationDbContext>();
+            foreach (var item in tipoviOcenaPredmeta)
+                mockSetTipOcenePredmeta.Setup(t => t.Add(item));
+            mockContext.Setup(x => x.TipoviOcenaPredmeta).Returns(mockSetTipOcenePredmeta.Object);
+
+            var controller = new PredmetiController(mockContext.Object);
+
+            var result = controller.VratiSveTipoveOcenaPredmeta() as JsonResult;
+
+            //Assert result
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.JsonRequestBehavior == JsonRequestBehavior.AllowGet);
+
+            //Test JSON
+            string jsonString = JsonConvert.SerializeObject(result.Data);
+            System.Diagnostics.Debug.WriteLine(jsonString);
+
+            var jsonArray = JArray.Parse(Helper.checkJsonJArray(jsonString));
+            foreach (JObject item in jsonArray)
+            {
+                var tipOcenePredmetaId = item["TipOcenePredmetaId"].ToString();
+                var tip = item["Tip"].ToString();
+
+                TipOcenePredmeta temp = tipoviOcenaPredmeta.FirstOrDefault(t => t.TipOcenePredmetaId == int.Parse(tipOcenePredmetaId));
+                Assert.AreEqual<string>(tipOcenePredmetaId, temp.TipOcenePredmetaId.ToString());
+                Assert.AreEqual<string>(tip, temp.Tip.ToString());
+                Assert.AreEqual<int>(jsonArray.Count(), 2);
+
+            }
 
         }
     }

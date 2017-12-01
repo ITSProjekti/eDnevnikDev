@@ -2,93 +2,132 @@
 @{
     ViewBag.Title = "Dodaj";
 }
-
-<h2 style="text-align:center">Nov profesor</h2>
 <div class="container">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-10 col-sm-10">
             <!--<form class="form-horizontal">-->
             <div class="well">
-                @using (Html.BeginForm("Sacuvaj", "Profesori", FormMethod.Post, new { @class = "form-horizontal" }))
-            {
+                @using (Html.BeginForm("Sacuvaj", "Profesori", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" , id="formId"}))
+                {
+                    @Html.AntiForgeryToken()
+                    <h3>Novi profesor</h3>
+                    <hr />
                     <fieldset>
-                        <legend>Novi</legend>
-                        <div class="form-group">
-                          
+                        <div class="col-md-4 col-sm-4">
+                            <div class="form-group">
+                                <img id="fotografijaProfesora" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/User_icon-cp.svg/194px-User_icon-cp.svg.png" alt="" width="194px" height="240px" />
 
-                            @Html.LabelFor(p=>p.Profesor.Ime, new { @class = "col-md-3 control-label" })
-                            <div class="col-md-9">
+                                <div class="col-sm-12" style="margin-bottom:20px;">
+                                    <label class="btn-bs-file btn btn-success">
 
-                                
-                                @Html.TextBoxFor(p=>p.Profesor.Ime, new { @class = "form-control", placeholder = " Unesite Ime" })
-                                @Html.ValidationMessageFor(p=>p.Profesor.Ime )
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            
+                                            Dodaj sliku
+                                            <input accept="image/*" type="file" name="upload" id="fotografijaProfesora" onchange="readURL(this);" />
+                                    </label>
 
-                            @Html.LabelFor(p=>p.Profesor.Prezime, new { @class = "col-md-3 control-label" })
-                            <div class="col-md-9">
-
-                         
-                                @Html.TextBoxFor(p=>p.Profesor.Prezime, new { @class = "form-control", placeholder = " Unesite Prezime" })
-                                @Html.ValidationMessageFor(p=>p.Profesor.Prezime)
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            
-
-                            @Html.LabelFor(p=>p.Profesor.Adresa, new { @class = "col-md-3 control-label" })
-                            <div class="col-md-9">
-
-                               
-                                @Html.TextBoxFor(p=>p.Profesor.Adresa, new { @class = "form-control", placeholder = "Adresa" })
-                                @Html.ValidationMessageFor(p=>p.Profesor.Adresa)
-                            </div>
-                        </div>
-                        <div class="form-group">
-                         
-                            @Html.LabelFor(p=>p.Profesor.Telefon, new { @class = "col-md-3 control-label" })
-                            <div class="col-md-9">
-                                
-                                @Html.TextBoxFor(p => p.Profesor.Telefon, new { @class = "form-control", placeholder = "Broj telefona" })
-                                @Html.ValidationMessageFor(p => p.Profesor.Telefon)
-                            </div>
-                        </div>
-                        <div class="form-group">
-
-                            @Html.LabelFor(p=>p.Profesor.RazredniStaresina, new { @class = "col-md-3 control-label" })
-                            <div class="checkbox col-md-9">
-                                @Html.CheckBoxFor(p=>p.Profesor.RazredniStaresina )
-                            </div>
-                        </div>
-                        <div class="form-group">
-
-                            @Html.LabelFor(p=>p.Profesor.Vanredan, new { @class = "col-md-3 control-label" })
-                            <div class="checkbox col-md-9">
-                                @Html.CheckBoxFor(p=>p.Profesor.Vanredan )
-                            </div>
-                        </div>
-                                     
-                        <div class="form-group">
-
-                            @Html.LabelFor(p => p.PredmetiIDs, new { @class = "col-md-3 control-label" })
-                            <div class="col-md-9">
-                                @Html.ListBoxFor(p => p.PredmetiIDs, new SelectList(Model.Predmeti, "PredmetID", "NazivPredmeta"), new { @class = "form-control" })
-                                @Html.ValidationMessageFor(p => p.PredmetiIDs)
-                            </div>
-                        </div>
-                                
-                   
-                        <div class="form-group">
-                            <div class="col-md-10 col-md-offset-2">
-                                <button type="reset" class="btn btn-default">Poništi</button>
-                                <button type="submit" class="btn btn-primary">Sačuvaj</button>
+                                </div>
                             </div>
                         </div>
 
 
+                        <div class="col-md-8 col-sm-8">
+
+                            <div class="form-group">
+                                @Html.LabelFor(p => p.Profesor.Ime, new { @class = "col-md-3 control-label" })
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(p => p.Profesor.Ime, new { @class = "form-control", placeholder = " Unesite ime" })
+                                    @Html.ValidationMessageFor(p => p.Profesor.Ime, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                @Html.LabelFor(p => p.Profesor.Prezime, new { @class = "col-md-3 control-label" })
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(p => p.Profesor.Prezime, new { @class = "form-control", placeholder = "Unesite prezime" })
+                                    @Html.ValidationMessageFor(p => p.Profesor.Prezime, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                @Html.LabelFor(p => p.Profesor.Pol, new { @class = "col-md-3 control-label" })
+                                <div class="col-md-9">
+                                    @Html.DropDownListFor(p => p.Profesor.PolId, new SelectList(Model.Polovi, "PolId", "Naziv"), "Izaberite pol", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(p => p.Profesor.PolId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                @Html.LabelFor(p => p.Profesor.Adresa, new { @class = "col-md-3 control-label" })
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(p => p.Profesor.Adresa, new { @class = "form-control", placeholder = "Unesite adresu" })
+                                    @Html.ValidationMessageFor(p => p.Profesor.Adresa, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(p => p.Profesor.Telefon, new { @class = "col-md-3 control-label" })
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(p => p.Profesor.Telefon, new { @class = "form-control", placeholder = "(+381-__/_______)" })
+                                    @Html.ValidationMessageFor(p => p.Profesor.Telefon, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(p => p.Profesor.Zvanje, new { @class = "col-md-3 control-label" })
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(p => p.Profesor.Zvanje, new { @class = "form-control", placeholder = "Unesite zvanje" })
+                                    @Html.ValidationMessageFor(p => p.Profesor.Zvanje, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(p => p.Profesor.Licenca, new { @class = "col-md-3 control-label" })
+                                <div class="checkbox col-md-9">
+                                    @Html.CheckBoxFor(p => p.Profesor.Licenca)
+                                    @Html.ValidationMessageFor(p => p.Profesor.Licenca, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(p => p.Profesor.RazredniStaresina, new { @class = "col-md-3 control-label" })
+                                <div class="checkbox col-md-9">
+                                    @Html.CheckBoxFor(p => p.Profesor.RazredniStaresina)
+                                    @Html.ValidationMessageFor(p => p.Profesor.RazredniStaresina, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                @Html.LabelFor(p => p.Profesor.Vanredan, new { @class = "col-md-3 control-label" })
+                                <div class="checkbox col-md-9">
+                                    @Html.CheckBoxFor(p => p.Profesor.Vanredan)
+                                    @Html.ValidationMessageFor(p => p.Profesor.Vanredan, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                @Html.LabelFor(p => p.PredmetiIDs, new { @class = "col-md-3 control-label" })
+                                <div class="col-md-9">
+                                    @Html.ListBoxFor(p => p.PredmetiIDs, new SelectList(Model.Predmeti, "PredmetID", "NazivPredmeta"), new {  @class = "form-control" })
+                                   <br />
+                                     @Html.ValidationMessageFor(p => p.PredmetiIDs, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
                     </fieldset>
+
+                    <hr />
+
+                    <div class="form-group">
+                        <div class="col-md-9">
+                            <button type="reset" class="btn btn-default" onclick="ResetValidacije()">Poništi</button>
+                            <button type="submit" class="btn btn-success">Sačuvaj</button>
+                        </div>
+                    </div>
+
+
                 }
             </div>
         </div>
@@ -100,7 +139,7 @@
 
 @section Scripts
 {
-     @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryval")
 
     <script>
 
@@ -108,7 +147,69 @@
             placeholder: "Izaberite predmete"
         });
 
+        // Sklanja se default vrednost u comboboxu za izbor pola
+        $(document).ready(function () {
 
+            $("#Profesor_PolId option").first().prop("hidden", true);
+        });
+
+        
+        //funkcija koja sluzi da se slika odmah ucita nakon sto se izabere na choose file
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#fotografijaProfesora')
+                        .attr('src', e.target.result)
+                        .width(150)
+                        .height(200);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Funckija on click ponisti za reset forme i validacije
+        function ResetValidacije() {
+
+            $("#formId")[0].reset();
+            $(".text-danger").html("");
+            $("#fotografijaProfesora").attr("src", "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/User_icon-cp.svg/194px-User_icon-cp.svg.png");
+
+            ResetListeIzabranihPredmeta();
+        }
+
+        // Funkcija ponisti za listu predmeta
+        function ResetListeIzabranihPredmeta() {
+            
+            // Pokupi iz select-a sve predmete i smesti u niz
+            var predmeti = [];
+
+            $.each($("#PredmetiIDs option"), function () {
+
+                var predmet = {
+                    id: $(this).val(),
+                    naziv: $(this).text()
+                };
+
+                predmeti.push(predmet);
+            });
+
+            // Ponisti sve sto je selectovano
+            $('#PredmetiIDs')
+            .find('option')
+            .remove()
+            .end();
+            // Napuni ponovo sleect svim predmetima
+            for (var i = 0; i < predmeti.length; i++) {
+                $('#PredmetiIDs').append('<option value="' + predmeti[i].id + '">' + predmeti[i].naziv + '</option>');
+            }
+        }
+
+        
+
+        
     </script>
 
 

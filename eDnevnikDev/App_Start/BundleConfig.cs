@@ -34,7 +34,7 @@ namespace eDnevnikDev
                       "~/Content/styles.css",
                       "~/Content/bootstrap.min.css",
                       "~/Content/jquery.dataTables.min.css",
-                      "~/Content/site.css"));
+                      "~/Content/Site.css"));
         }
     }
 }

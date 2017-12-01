@@ -35,9 +35,9 @@ namespace eDnevnikDev.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -58,12 +58,12 @@ namespace eDnevnikDev.Controllers
         public async Task<ActionResult> Index(ManageMessageId? message)
         {
             ViewBag.StatusMessage =
-                message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
-                : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
+                message == ManageMessageId.ChangePasswordSuccess ? "Uspešno ste izmenili lozinku"
+                : message == ManageMessageId.SetPasswordSuccess ? "Uspešno ste postavili lozinku"
                 : message == ManageMessageId.SetTwoFactorSuccess ? "Your two-factor authentication provider has been set."
-                : message == ManageMessageId.Error ? "An error has occurred."
-                : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
-                : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
+                : message == ManageMessageId.Error ? "Došlo je do greške"
+                : message == ManageMessageId.AddPhoneSuccess ? "Uspešno ste dodali broj telefona"
+                : message == ManageMessageId.RemovePhoneSuccess ? "Uspešno ste uklonili broj telefona"
                 : "";
 
             var userId = User.Identity.GetUserId();
@@ -259,7 +259,7 @@ namespace eDnevnikDev.Controllers
                         .Single(p => p.UserProfesorId == user.Id);
 
                     //proveravamo da li je ikad promenio lozinku sto je obavezno kada se loguje prvi put
-                    if(!profesor.PromenaLozinke)
+                    if (!profesor.PromenaLozinke)
                     {
                         //ukoliko nije dodajemo mu tada rolu i setujemo da je promenaLozinke true
                         await UserManager.AddToRoleAsync(user.Id, "Profesor");
@@ -291,7 +291,18 @@ namespace eDnevnikDev.Controllers
 
                 return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
             }
-            AddErrors(result);
+
+            if (result.Errors.First() == "Incorrect password." && result.Errors.Count() == 1)
+            {
+                ModelState.AddModelError(string.Empty, "Pogrešno ste uneli trenutnu lozinku");
+
+            }
+            else
+            {
+                AddErrors(result);
+
+            }
+
             return View(model);
         }
 
@@ -384,7 +395,7 @@ namespace eDnevnikDev.Controllers
             base.Dispose(disposing);
         }
 
-#region Helpers
+        #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
@@ -435,6 +446,6 @@ namespace eDnevnikDev.Controllers
             Error
         }
 
-#endregion
+        #endregion
     }
 }

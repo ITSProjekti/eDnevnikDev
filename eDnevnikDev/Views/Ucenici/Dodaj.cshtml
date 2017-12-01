@@ -3,232 +3,210 @@
 
     ViewBag.Title = "Dodaj";
     var smerovi = new SelectList(Model.Smerovi, "SmerID", "NazivSmera", "Trajanje", 0);
+    var polovi = new SelectList(Model.Polovi, "PolId", "Naziv");
 }
 
 <h2 style="text-align:center">Nov učenik</h2>
 
-@using (Html.BeginForm("Sacuvaj", "Ucenici", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
+@using (Html.BeginForm("Sacuvaj", "Ucenici", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data", id="formId" }))
 {
-        @*<div class="col-md-3 col-sm-5 fff">
+    @Html.AntiForgeryToken()
 
-                <a href="#"><img src="http://placehold.it/230x240" id="placeholder" alt=""></a>
+    <div class="col-md-3 col-sm-5 fff">
+        <img id="fotografijaUcenika" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/User_icon-cp.svg/194px-User_icon-cp.svg.png" alt="" width="194px" height="240px" />
+        <div class="col-sm-12" style="margin-bottom:20px;">
+            <label class="btn-bs-file btn btn-success">
 
-                <label class="btn btn-success uploadbutton" id="upload">
-                    DODAJ SLIKU <input type="file" name="File" id="File" style="display: none;" onchange="loadFile(event)">
-                </label>
-                @Html.ValidationMessageFor(u => u.File)
+                Dodaj sliku
+                <input accept="image/*" type="file" name="upload" id="fotografijaUcenika" onchange="readURL(this);" />
+            </label>
 
-        </div>*@
-
-        <div class="col-md-3 col-sm-5 fff">
-            <input accept="image/*" type="file" name="upload" id="fotografijaUcenika"/>
-        </div>    
-
-        <div class="col-md-7 col-sm-7 col-md-offset-2 ">
-            <!--<form class="form-horizontal">-->
-            
-            <div class="well">
-            
-                    <fieldset >
-                        <legend>Novi</legend>
-                        <div class="form-group">
-                            <!--<label for="inputEmail" class="col-lg-2 control-label">Email</label>-->
-
-                            @Html.LabelFor(u => u.Ucenik.ImeOca, new { @class = "col-md-3 control-label" })
-                            <div class="col-md-9">
-
-                                <!--    <input type="text" class="form-control" id="inputEmail" placeholder="Email"> -->
-                                @Html.TextBoxFor(u => u.Ucenik.ImeOca, new { @class = "form-control", placeholder = "Ime Oca" })
-                                @Html.ValidationMessageFor(u => u.Ucenik.ImeOca)
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <!--<label for="inputEmail" class="col-lg-2 control-label">Email</label>-->
-
-                            @Html.LabelFor(u => u.Ucenik.PrezimeOca, new { @class = "col-md-3 control-label" })
-                            <div class="col-md-9">
-
-                                <!--    <input type="text" class="form-control" id="inputEmail" placeholder="Email"> -->
-                                @Html.TextBoxFor(u => u.Ucenik.PrezimeOca, new { @class = "form-control", placeholder = "Prezime Oca" })
-                                @Html.ValidationMessageFor(u => u.Ucenik.PrezimeOca)
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <!--<label for="inputEmail" class="col-lg-2 control-label">Email</label>-->
-
-                            @Html.LabelFor(u => u.Ucenik.ImeMajke, new { @class = "col-md-3 control-label" })
-                            <div class="col-md-9">
-
-                                <!--    <input type="text" class="form-control" id="inputEmail" placeholder="Email"> -->
-                                @Html.TextBoxFor(u => u.Ucenik.ImeMajke, new { @class = "form-control", placeholder = "Ime Majke" })
-                                @Html.ValidationMessageFor(u => u.Ucenik.ImeMajke)
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <!--<label for="inputEmail" class="col-lg-2 control-label">Email</label>-->
-
-                            @Html.LabelFor(u => u.Ucenik.PrezimeMajke, new { @class = "col-md-3 control-label" })
-                            <div class="col-md-9">
-
-                                <!--    <input type="text" class="form-control" id="inputEmail" placeholder="Email"> -->
-                                @Html.TextBoxFor(u => u.Ucenik.PrezimeMajke, new { @class = "form-control", placeholder = "Prezime Majke" })
-                                @Html.ValidationMessageFor(u => u.Ucenik.PrezimeMajke)
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <!--<label for="inputEmail" class="col-lg-2 control-label">Email</label>-->
-                            @Html.LabelFor(u => u.Ucenik.Ime, new { @class = "col-md-3 control-label" })
-                            <div class="col-md-9">
-
-                                <!--    <input type="text" class="form-control" id="inputEmail" placeholder="Email"> -->
-                                @Html.TextBoxFor(u => u.Ucenik.Ime, new { @class = "form-control", placeholder = " Unesite Ime" })
-                                @Html.ValidationMessageFor(u => u.Ucenik.Ime)
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <!--<label for="inputEmail" class="col-lg-2 control-label">Email</label>-->
-
-                            @Html.LabelFor(u => u.Ucenik.Prezime, new { @class = "col-md-3 control-label" })
-                            <div class="col-md-9">
-
-                                <!--    <input type="text" class="form-control" id="inputEmail" placeholder="Email"> -->
-                                @Html.TextBoxFor(u => u.Ucenik.Prezime, new { @class = "form-control", placeholder = " Unesite Prezime" })
-                                @Html.ValidationMessageFor(u => u.Ucenik.Prezime)
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <!--<label for="inputEmail" class="col-lg-2 control-label">Email</label>-->
-
-                            @Html.LabelFor(u => u.Ucenik.DatumRodjenja, new { @class = "col-md-3 control-label" })
-                            <div class="col-md-9">
-                                <input type="text" id="datum" class="form-control" name="datum" data-val="true" data-val-required="Polje za datum rođenja je obavezno" readonly>
-                                <input type="hidden" name="Ucenik.DatumRodjenja" id="Ucenik_DatumRodjenja" >
-                                @*@Html.ValidationMessageFor(u => u.Ucenik.DatumRodjenja)*@
-                                <span class="field-validation-valid" data-valmsg-for="datum" data-valmsg-replace="true"></span>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-
-                            @Html.LabelFor(u => u.Ucenik.JMBG, new { @class = "col-md-3 control-label" })
-                            <div class="col-md-9">
-
-                                <!--    <input type="text" class="form-control" id="inputEmail" placeholder="Email"> -->
-                                @Html.TextBoxFor(u => u.Ucenik.JMBG, new { @class = "form-control", placeholder = "JMBG", maxlength = "13" })
-                                @Html.ValidationMessageFor(u => u.Ucenik.JMBG)
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <!--<label for="inputEmail" class="col-lg-2 control-label">Email</label>-->
-
-                            @Html.LabelFor(u => u.Ucenik.Adresa, new { @class = "col-md-3 control-label" })
-                            <div class="col-md-9">
-
-                                <!--    <input type="text" class="form-control" id="inputEmail" placeholder="Email"> -->
-                                @Html.TextBoxFor(u => u.Ucenik.Adresa, new { @class = "form-control", placeholder = "Adresa" })
-                                @Html.ValidationMessageFor(u => u.Ucenik.Adresa)
-                            </div>
-                        </div>
-                        <div class="form-group">
-
-                            <!--<label for="inputEmail" class="col-lg-2 control-label">Email</label>-->
-                            @Html.LabelFor(u => u.Ucenik.MestoPrebivalista, new { @class = "col-md-3 control-label" })
-                            <div class="col-md-9">
-                                <!--    <input type="text" class="form-control" id="inputEmail" placeholder="Email"> -->
-                                @Html.TextBoxFor(u => u.Ucenik.MestoPrebivalista, new { @class = "form-control", placeholder = "Mesto prebivališta" })
-                                @Html.ValidationMessageFor(u => u.Ucenik.MestoPrebivalista)
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <!--<label for="inputEmail" class="col-lg-2 control-label">Email</label>-->
-                            @Html.LabelFor(u => u.Ucenik.BrojTelefonaRoditelja, new { @class = "col-md-3 control-label" })
-                            <div class="col-md-9">
-                                <!--    <input type="text" class="form-control" id="inputEmail" placeholder="Email"> -->
-                                @Html.TextBoxFor(u => u.Ucenik.BrojTelefonaRoditelja, new { @class = "form-control", placeholder = "Broj telefona" })
-                                @Html.ValidationMessageFor(u => u.Ucenik.BrojTelefonaRoditelja)
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            @Html.LabelFor(u => u.Ucenik.MestoRodjenja, new { @class = "col-md-3 control-label" })
-                            <div class="col-md-9">
-                                @Html.DropDownListFor(u => u.Ucenik.MestoRodjenjaId, new SelectList(Model.Gradovi, "Id", "Naziv"), "Grad", new { @class = "form-control" })
-                                @Html.ValidationMessageFor(u => u.Ucenik.MestoRodjenjaId)
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                                                            
-                                    @Html.LabelFor(u => u.Ucenik.Vanredan, new { @class = "col-md-3 control-label" })
-                                    <div class="checkbox col-md-9 col-md-offset-3 col-sm-offset-1">
-                                        @Html.CheckBoxFor(u => u.Ucenik.Vanredan)
-                                    </div>
-                         </div>
-                                      
-                        <div class="form-group">
-                            @Html.LabelFor(u => u.Ucenik.SmerID, new { @class = "col-md-3 control-label" })
-                            <div class="col-md-9 ">
-                                @Html.DropDownListFor(u => u.Ucenik.SmerID, smerovi, " ", new { @class = "form-control" })
-                                @Html.ValidationMessageFor(u => u.Ucenik.SmerID)
-                            </div>
-                        </div>
-                        <div style="display:none;" id="RazredOdeljenje">
-                            <div class="form-group">
-                                @Html.LabelFor(u => u.Ucenik.Razred, new { @class = "col-md-3 control-label" })
-                                <div class="col-md-9">                                    
-                                    <select name="Ucenik.Razred" class="form-control" id="Ucenik_Razred">
-
-                                    </select>
-                                    @Html.ValidationMessageFor(u => u.Ucenik.Razred)
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                @Html.LabelFor(u => u.Oznaka, new { @class = "col-md-3 control-label" })
-                                <div class="col-md-9">
-                                    <select name="Oznaka" class="form-control" id="Oznaka">
-
-                                    </select>
-                                    @Html.ValidationMessageFor(u => u.Oznaka)
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                @Html.LabelFor(u => u.SmestiUNovoOdeljenje, new { @class = "col-md-3 control-label" })
-                                <div class="col-md-9 ">
-                                    <select name="SmestiUNovoOdeljenje" class="form-control" id="SmestiUNovoOdeljenje">
-                                        <option value="2">U toku</option>
-                                    </select>
-                                    @Html.ValidationMessageFor(u => u.SmestiUNovoOdeljenje)
-                                </div>
-                            </div>
-                            </div>
-                        
-
-                        <div class="form-group">
-                            <div class="col-md-10 col-md-offset-4 col-sm-offset-2 col-xs-offset-2">
-                                <button type="reset" class="btn btn-default">Poništi</button>
-                                <button type="submit" class="btn btn-success">Sačuvaj</button>
-                            </div>
-                        </div>
-                    </fieldset>
-                    @foreach (var smer in Model.Smerovi)
-                    {
-                        <input type="hidden" value="@smer.Trajanje" id="@("smer" + smer.SmerID)">
-                        foreach (var oznaka in smer.Oznake)
-                        {
-                            <input type="hidden" value="@oznaka.OznakaId" class="@("odeljenje" + smer.SmerID)">
-                            @*<input type="hidden" value="@odeljenje.Id" id="@("odeljenjeID" + odeljenje.Oznaka)">*@
-                        }
-                    }
-            </div>
         </div>
+
+    </div>
+
+    <div class="col-md-7 col-sm-7 col-md-offset-2 ">
+        <div class="well">
+
+            <fieldset>
+                <legend>Novi</legend>
+
+
+                
+
+
+                <div class="form-group">
+                    @Html.LabelFor(u => u.Ucenik.Ime, new { @class = "col-md-3 control-label" })
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(u => u.Ucenik.Ime, new { @class = "form-control", placeholder = "Unesite ime" })
+                        @Html.ValidationMessageFor(u => u.Ucenik.Ime, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    @Html.LabelFor(u => u.Ucenik.Prezime, new { @class = "col-md-3 control-label" })
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(u => u.Ucenik.Prezime, new { @class = "form-control", placeholder = "Unesite prezime" })
+                        @Html.ValidationMessageFor(u => u.Ucenik.Prezime, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    @Html.LabelFor(u => u.Ucenik.Pol, new { @class = "col-md-3 control-label" })
+
+                    <div class="col-md-9">
+                        @Html.DropDownListFor(u => u.Ucenik.PolId, polovi, "Izaberite pol", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(u => u.Ucenik.PolId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(u => u.Ucenik.DatumRodjenja, new { @class = "col-md-3 control-label" })
+                    <div class="col-md-9">
+                        <input type="text" id="datum" class="form-control" name="datum" placeholder="Unesite datum rođenja" data-val="true" data-val-required="Polje za datum rođenja je obavezno" readonly>
+                        <input type="hidden" name="Ucenik.DatumRodjenja" id="Ucenik_DatumRodjenja">
+                        @*@Html.ValidationMessageFor(u => u.Ucenik.DatumRodjenja)*@
+                        <span class="field-validation-valid text-danger" data-valmsg-for="datum" data-valmsg-replace="true"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(u => u.Ucenik.MestoRodjenja, new { @class = "col-md-3 control-label" })
+                    <div class="col-md-9">
+                        @Html.DropDownListFor(u => u.Ucenik.MestoRodjenjaId, new SelectList(Model.Gradovi, "Id", "Naziv"), "Izaberite grad", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(u => u.Ucenik.MestoRodjenjaId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    @Html.LabelFor(u => u.Ucenik.JMBG, new { @class = "col-md-3 control-label" })
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(u => u.Ucenik.JMBG, new { @class = "form-control", placeholder = "Unesite JMBG", maxlength = "13" })
+                        @Html.ValidationMessageFor(u => u.Ucenik.JMBG, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    @Html.LabelFor(u => u.Ucenik.Adresa, new { @class = "col-md-3 control-label" })
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(u => u.Ucenik.Adresa, new { @class = "form-control", placeholder = "Unesite adresu" })
+                        @Html.ValidationMessageFor(u => u.Ucenik.Adresa, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    @Html.LabelFor(u => u.Ucenik.MestoPrebivalista, new { @class = "col-md-3 control-label" })
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(u => u.Ucenik.MestoPrebivalista, new { @class = "form-control", placeholder = "Unesite mesto prebivališta" })
+                        @Html.ValidationMessageFor(u => u.Ucenik.MestoPrebivalista, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+
+                <div class="form-group">
+                    @Html.LabelFor(u => u.Ucenik.ImeOca, new { @class = "col-md-3 control-label" })
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(u => u.Ucenik.ImeOca, new { @class = "form-control", placeholder = "Unesite ime oca/staratelja" })
+                        @Html.ValidationMessageFor(u => u.Ucenik.ImeOca, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    @Html.LabelFor(u => u.Ucenik.PrezimeOca, new { @class = "col-md-3 control-label" })
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(u => u.Ucenik.PrezimeOca, new { @class = "form-control", placeholder = "Unesite prezime oca/staratelja" })
+                        @Html.ValidationMessageFor(u => u.Ucenik.PrezimeOca, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    @Html.LabelFor(u => u.Ucenik.ImeMajke, new { @class = "col-md-3 control-label" })
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(u => u.Ucenik.ImeMajke, new { @class = "form-control", placeholder = "Unesite ime majke/staratelja" })
+                        @Html.ValidationMessageFor(u => u.Ucenik.ImeMajke, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    @Html.LabelFor(u => u.Ucenik.PrezimeMajke, new { @class = "col-md-3 control-label" })
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(u => u.Ucenik.PrezimeMajke, new { @class = "form-control", placeholder = "Unesite prezime majke/staratelja" })
+                        @Html.ValidationMessageFor(u => u.Ucenik.PrezimeMajke, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    @Html.LabelFor(u => u.Ucenik.BrojTelefonaRoditelja, new { @class = "col-md-3 control-label" })
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(u => u.Ucenik.BrojTelefonaRoditelja, new { @class = "form-control", placeholder = "(+381-__/_______)" })
+                        @Html.ValidationMessageFor(u => u.Ucenik.BrojTelefonaRoditelja, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                
+
+                <div class="form-group">
+
+                    @Html.LabelFor(u => u.Ucenik.Vanredan, new { @class = "col-md-3 control-label" })
+                    <div class="checkbox col-md-9">
+                        @Html.CheckBoxFor(u => u.Ucenik.Vanredan)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(u => u.Ucenik.Smer, new { @class = "col-md-3 control-label" })
+                    <div class="col-md-9">
+                        @Html.DropDownListFor(u => u.Ucenik.SmerID, smerovi, "Izaberite smer", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(u => u.Ucenik.SmerID, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <div class="col-md-10 col-md-offset-4 col-sm-offset-2 col-xs-offset-2">
+                        <button type="reset" class="btn btn-default" onclick="ResetValidacije();">Poništi</button>
+                        <button type="submit" class="btn btn-success">Sačuvaj</button>
+                    </div>
+                </div>
+            </fieldset>
+            
+        </div>
+    </div>
 }
-    
-<!--       </form> -->
+
 
 @section Scripts
 {
     @Scripts.Render("~/bundles/jqueryval")
     <script src="~/Scripts/moment.js"></script>
+    <!-- Ucitavanje slike pri odabiru iste preko FileDialoga -->
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#fotografijaUcenika')
+                        .attr('src', e.target.result)
+                        .width(150)
+                        .height(200);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
     <script>
         var recnik = {
             1: "Prvi",
@@ -237,46 +215,18 @@
             4: "Četvrti"
         }
 
-
+        // Dodeljuje se ime za optgroupu u comboboxu za izbor smera
+        // Uklanja se default vrednost u comboboxovima 
         $(document).ready(function () {
             $("#Ucenik_SmerID optgroup[label=4]").prop({ label: "Četvorogodišnji smerovi" });
             $("#Ucenik_SmerID optgroup[label=3]").prop({ label: "Trogodišnji smerovi" });
 
-
-            $("#Ucenik_SmerID").change(function () {
-                var smerId = $("#Ucenik_SmerID").val();
-
-                if (smerId == '') {
-                    $("#RazredOdeljenje").hide();
-                } else {
-
-                    var trajeGodina = $("#smer" + smerId).val();
-
-                    var html = "";
-
-                    for (i = 1; i <= trajeGodina; i++) {
-                        html += '<option value="' + i + '">' + recnik[i] + '</option>';
-                    }
-
-                    $("#Ucenik_Razred").html(html);
-                    html = "";
-
-                    $(".odeljenje" + smerId).each(function () {
-
-                        html += '<option value="' + $(this).val() + '">' + $(this).val() + '</option>';
-                    });
-
-                    $("#Oznaka").html(html);
-
-                    $("#RazredOdeljenje").show();
-                }
-
-                PostojiKreirano();
-
-            }).change();
+            $("#Ucenik_MestoRodjenjaId option").first().prop("hidden", true);
+            $("#Ucenik_PolId option").first().prop("hidden", true);
+            $("#Ucenik_SmerID option").first().prop("hidden", true);
+        });
 
 
-        })
         $("#datum").datepicker({
             constrainInput: true,
             dateFormat: "dd.mm.yy.",
@@ -293,78 +243,62 @@
             $(this).blur();
         });
 
-        $("form").submit(function (e) {
-            if ($("#File").val() == "")
-                return;
+        function ResetValidacije() {
 
-            var ext = $("#File").val().split(".").pop().toLowerCase();
+            $("#formId")[0].reset();
+            $(".text-danger").html('');
+            $("#fotografijaUcenika").attr("src", "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/User_icon-cp.svg/194px-User_icon-cp.svg.png");
+        }
 
-            if ($.inArray(ext, ['png', 'jpg', 'jpeg']) == -1) {
-                e.preventDefault();
-                $("[data-valmsg-for='File']").text("Slika koju ste izabrali nije ispravna");
-            }
+        //$("form").submit(function (e) {
+        //    if ($("#File").val() == "")
+        //        return;
 
-        });
+        //    var ext = $("#File").val().split(".").pop().toLowerCase();
 
-        $("#File").change(function () {
-            var ext = $("#File").val().split(".").pop().toLowerCase();
+        //    if ($.inArray(ext, ['png', 'jpg', 'jpeg']) == -1) {
+        //        e.preventDefault();
+        //        $("[data-valmsg-for='File']").text("Slika koju ste izabrali nije ispravna");
+        //    }
+        //});
 
-            if ($.inArray(ext, ['png', 'jpg', 'jpeg']) == -1) {
-                $("[data-valmsg-for='File']").text("Slika koju ste izabrali nije ispravna");
-            }
-            else {
-                $("[data-valmsg-for='File']").text("");
-            }
-        });
+        //$("#File").change(function () {
+        //    var ext = $("#File").val().split(".").pop().toLowerCase();
 
-        $("#datum").val(moment("@Model.Ucenik.DatumRodjenja.ToString()").format("DD.MM.YYYY."));
+        //    if ($.inArray(ext, ['png', 'jpg', 'jpeg']) == -1) {
+        //        $("[data-valmsg-for='File']").text("Slika koju ste izabrali nije ispravna");
+        //    }
+        //    else {
+        //        $("[data-valmsg-for='File']").text("");
+        //    }
+        //});
+
+        @*$("#datum").val(moment("@Model.Ucenik.DatumRodjenja.ToString()").format("DD.MM.YYYY."));
 
         $(function () {
             var datum = $("#datum").val();
             $("#Ucenik_DatumRodjenja").val(moment(datum).format("YYYY-MM-DD"));
-        });
+        });*@
 
-        function PostojiKreirano()
-        {
-            var razred = $("#Ucenik_Razred").val();
-            var odeljenje = $("#Oznaka").val();
+        //function PostojiKreirano() {
+        //    var razred = $("#Ucenik_Razred").val();
+        //    var odeljenje = $("#Oznaka").val();
 
-            var zahtev = $.getJSON("/Ucenici/DaLiPostojiKreirano?razred=" + razred + "&oznaka=" + odeljenje);
+        //    var zahtev = $.getJSON("/Ucenici/DaLiPostojiKreirano?razred=" + razred + "&oznaka=" + odeljenje);
 
-            zahtev.done(function (podaci) {
-                if(podaci.Kreirano)
-                {
-                    if($("#SmestiUNovoOdeljenje option[value='3']").length == 0)
-                        $("#SmestiUNovoOdeljenje").append("<option value='3'>Kreirano</option>");
-                }
-                else
-                {
-                    $("#SmestiUNovoOdeljenje option[value='3']").remove();
-                }
-            });
+        //    zahtev.done(function (podaci) {
+        //        if (podaci.Kreirano) {
+        //            if ($("#SmestiUNovoOdeljenje option[value='3']").length == 0)
+        //                $("#SmestiUNovoOdeljenje").append("<option value='3'>Kreirano</option>");
+        //        }
+        //        else {
+        //            $("#SmestiUNovoOdeljenje option[value='3']").remove();
+        //        }
+        //    });
 
-            zahtev.fail(function (gr) { $("#p1").html(gr.statusText); });
+        //    zahtev.fail(function (gr) { $("#p1").html(gr.statusText); });
 
-        }
-
-        $(function () {
-            $("#Ucenik_Razred").change(function () {
-                PostojiKreirano();
-            });
-            $("#Oznaka").change(function () {
-                PostojiKreirano();
-            });
-        })
-
-        //Boz pomozi
-        //var loadFile = function (event) {
-        //    var reader = new FileReader();
-        //    reader.onload = function () {
-        //        var output = document.getElementById('placeholder');
-        //        output.src = reader.result;
-        //    };
-        //    reader.readAsDataURL(event.target.files[0]);
-        //};
+        //}
 
     </script>
 

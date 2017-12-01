@@ -1,4 +1,5 @@
-﻿using eDnevnikDev.Helpers;
+﻿using eDnevnikDev.DTOs;
+using eDnevnikDev.Helpers;
 using eDnevnikDev.Models;
 using eDnevnikDev.ViewModel;
 using System;
@@ -56,24 +57,34 @@ namespace eDnevnikDev.Controllers
         }
 
         /// <summary>
-        /// Cuva predmet Unet u Spisak predmeta. Test name=PredmetController_SacuvajPredmet
+        /// Cuva predmet sa sve tipom ocene koji mu se dodeljuje. Test name=PredmetController_SacuvajPredmet
         /// <see cref="Predmet"/>
         /// </summary>
         /// <param name="predmet">The predmet.</param>
         /// <returns>Vraca nas na index stranu Predmeta</returns>
-        public ActionResult SacuvajPredmet(Predmet predmet)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SacuvajPredmet(KreiranjePredmetaViewModel predmetViewModel)
         {
             if (ModelState.IsValid)
             {
-                _context.Predmeti.Add(predmet);
-                _context.SaveChanges();
-                return RedirectToAction("Index", "Predmeti");
-                
+                try
+                {
+                    Predmet predmet = new Predmet();
+                    predmet.NazivPredmeta = predmetViewModel.NazivPredmeta;
+                    predmet.TipOcenePredmetaId = predmetViewModel.TipOcenePredmetaId;
+
+                    _context.Predmeti.Add(predmet);
+                    _context.SaveChanges();
+                    return RedirectToAction("Index", "Predmeti");
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(ex);
+                }
             }
-            else
-            {
-                return View("Dodaj", predmet);
-            }
+
+            return View("Dodaj", predmetViewModel);
         }
 
         /// <summary>
@@ -129,6 +140,32 @@ namespace eDnevnikDev.Controllers
             //Ova linija je pomerena iz try bloka, jer kad je bila u njemu aplikacija je radila, 
             //ali test nije zato sto u testu nije implementirana AddOrUpdate metoda
             _context.SaveChanges();
+        }
+
+        /// <summary>
+        /// Kontroler vraća sve tipove ocena predmeta npr(brojčana, opisna)
+        /// Test name=PredmetController_VratiSveTipoveOcenaPredmeta
+        /// </summary>
+        /// <returns></returns>
+        public JsonResult VratiSveTipoveOcenaPredmeta()
+        {
+            try
+            {
+                var tipoviOcenaPredmeta = _context.TipoviOcenaPredmeta
+                .Select(t => new DTOTipOcenePredmeta() { TipOcenePredmetaId = t.TipOcenePredmetaId, Tip = t.Tip });
+
+                if (tipoviOcenaPredmeta != null)
+                {
+                    return Json(tipoviOcenaPredmeta, JsonRequestBehavior.AllowGet);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+
+            return Json(new List<DTOTipOcenePredmeta>(), JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -135,7 +135,7 @@ namespace eDnevnikDev.Models
         /// Broj telefona
         /// </value>
         [Required(AllowEmptyStrings = false, ErrorMessage = "Polje za broj telefona roditelja je obavezno")]
-        [RegularExpression(@"^\+(\d{1,3})-(\d{1,3})\/(\d{6,7})$", ErrorMessage = "Broj telefona roditelja nije ispravan (format: +381-11/1234567)")]
+        [RegularExpression(@"^\+(\d{1,3})-(\d{1,3})\/(\d{6,7})$", ErrorMessage = "Broj telefona roditelja nije ispravan (format: +381-__/_______)")]
         [Display(Name = "Broj telefona roditelja")]
         public string BrojTelefonaRoditelja { get; set; }
 
@@ -147,6 +147,7 @@ namespace eDnevnikDev.Models
         /// Grad
         /// </value>
         [ForeignKey("MestoRodjenjaId")]
+        [Display(Name ="Mesto rođenja")]
         public Grad MestoRodjenja { get; set; }
 
         /// <summary>
@@ -155,7 +156,7 @@ namespace eDnevnikDev.Models
         /// <value>
         /// int
         /// </value>
-        [Display(Name = "Mesto Rođenja")]
+        [Display(Name = "Mesto rođenja")]
         [Required(ErrorMessage = "Polje za mesto rođenja je obavezno")]
         public int MestoRodjenjaId { get; set; }
 
@@ -179,6 +180,7 @@ namespace eDnevnikDev.Models
         /// Smer
         /// </value>
         [ForeignKey("SmerID")]
+        [Display(Name = "Smer")]
         public Smer Smer { get; set; }
 
         /// <summary>
@@ -187,9 +189,10 @@ namespace eDnevnikDev.Models
         /// <value>
         /// int
         /// </value>
-        [Required(ErrorMessage = "Polje za smer je obavezno")]
+        //[Required(ErrorMessage = "Polje za smer je obavezno")]
         [Display(Name = "Smer")]
-        public int SmerID { get; set; }
+        [Required(ErrorMessage ="Polje za smer je obavezno")]
+        public int? SmerID { get; set; }
 
         /// <summary>
         /// Gets or sets the odeljenje.
@@ -207,7 +210,7 @@ namespace eDnevnikDev.Models
         /// </value>
         [ForeignKey("Odeljenje")]
         [Display(Name = "Odeljenje")]
-        [Required(ErrorMessage = "Polje za odeljenje je obavezno")]
+        //[Required(ErrorMessage = "Polje za odeljenje je obavezno")]
         public int? OdeljenjeId { get; set; }
 
         /// <summary>
@@ -216,7 +219,7 @@ namespace eDnevnikDev.Models
         /// <value>
         /// The razred.
         /// </value>
-        [Required(ErrorMessage = "Polje za razred je obavezno!")]
+        //[Required(ErrorMessage = "Polje za razred je obavezno!")]
         public byte Razred { get; set; }
 
         [Required(ErrorMessage = "Polje za datum rođenja je obavezno")]
@@ -232,6 +235,14 @@ namespace eDnevnikDev.Models
 
         public int? BrojUDnevniku { get; set; }
 
+        public DateTime DatumUnosa { get; set; }
+
+        [ForeignKey("PolId")]
+        public Pol Pol { get; set; }
+
+        [Display(Name ="Pol")]
+        [Required(ErrorMessage ="Polje za pol je obavezno")]
+        public int PolId { get; set; }
 
         /// <summary>
         ///  Služi za čuvanje ID-a korisnika kojii je upisan u tabelu AspNetUsers

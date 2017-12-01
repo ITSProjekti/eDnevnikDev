@@ -236,6 +236,7 @@
     <Compile Include="DTOs\DTOProfesor.cs" />
     <Compile Include="DTOs\DTORola.cs" />
     <Compile Include="DTOs\DTOTipOcene.cs" />
+    <Compile Include="DTOs\DTOTipOcenePredmeta.cs" />
     <Compile Include="DTOs\DTOTipOpisneOcene.cs" />
     <Compile Include="DTOs\DTOUcenik.cs" />
     <Compile Include="DTOs\DTOUcenikOdeljenja.cs" />
@@ -247,6 +248,38 @@
     <Compile Include="Migrations\201710301416098_InitialSprint4.cs" />
     <Compile Include="Migrations\201710301416098_InitialSprint4.Designer.cs">
       <DependentUpon>201710301416098_InitialSprint4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710311132002_UcenikModelSmerIOdeljenjeUNullable.cs" />
+    <Compile Include="Migrations\201710311132002_UcenikModelSmerIOdeljenjeUNullable.Designer.cs">
+      <DependentUpon>201710311132002_UcenikModelSmerIOdeljenjeUNullable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710311233318_UbacenDatumUnosaUUcenika.cs" />
+    <Compile Include="Migrations\201710311233318_UbacenDatumUnosaUUcenika.Designer.cs">
+      <DependentUpon>201710311233318_UbacenDatumUnosaUUcenika.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711071344114_DodatPolUModeluUcenik.cs" />
+    <Compile Include="Migrations\201711071344114_DodatPolUModeluUcenik.Designer.cs">
+      <DependentUpon>201711071344114_DodatPolUModeluUcenik.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711101331418_UcenikModelRequiredZaNekaPolja.cs" />
+    <Compile Include="Migrations\201711101331418_UcenikModelRequiredZaNekaPolja.Designer.cs">
+      <DependentUpon>201711101331418_UcenikModelRequiredZaNekaPolja.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711101411564_DodatPolUModeluProfesor.cs" />
+    <Compile Include="Migrations\201711101411564_DodatPolUModeluProfesor.Designer.cs">
+      <DependentUpon>201711101411564_DodatPolUModeluProfesor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711101419519_DodataFotografijaUModelulProfesor.cs" />
+    <Compile Include="Migrations\201711101419519_DodataFotografijaUModelulProfesor.Designer.cs">
+      <DependentUpon>201711101419519_DodataFotografijaUModelulProfesor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711211234354_DodateLicencaIZvanjeUProfesoru.cs" />
+    <Compile Include="Migrations\201711211234354_DodateLicencaIZvanjeUProfesoru.Designer.cs">
+      <DependentUpon>201711211234354_DodateLicencaIZvanjeUProfesoru.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711211356185_LicencaIZvanjeRequiredAnotacija.cs" />
+    <Compile Include="Migrations\201711211356185_LicencaIZvanjeRequiredAnotacija.Designer.cs">
+      <DependentUpon>201711211356185_LicencaIZvanjeRequiredAnotacija.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -261,6 +294,7 @@
     <Compile Include="Models\Odeljenje.cs" />
     <Compile Include="Models\Odsustvo.cs" />
     <Compile Include="Models\Oznaka.cs" />
+    <Compile Include="Models\Pol.cs" />
     <Compile Include="Models\Predmet.cs" />
     <Compile Include="Models\Profesor.cs" />
     <Compile Include="Models\RoleNames.cs" />
@@ -273,6 +307,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModel\KreirajOdeljenjeViewModel.cs" />
+    <Compile Include="ViewModel\KreiranjePredmetaViewModel.cs" />
     <Compile Include="ViewModel\PredmetTipOcenePredmetaViewModel.cs" />
     <Compile Include="ViewModel\ProfesorRoleViewModel.cs" />
     <Compile Include="ViewModel\EvidencijaUcenikaViewModel.cs" />
@@ -502,6 +537,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="ProfilneSlike\female.png" />
+    <Content Include="ProfilneSlike\male.png" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap-table.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -701,6 +738,8 @@
     <Content Include="Views\Casovi\Cas - Copy.cshtml" />
     <Content Include="Views\Odeljenje\KreirajOdeljenje.cshtml" />
     <Content Include="Views\Shared\_LayoutChangePassword.cshtml" />
+    <Content Include="Views\Ucenici\Izmeni.cshtml" />
+    <Content Include="Views\Profesori\Izmeni.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -712,6 +751,30 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201710301416098_InitialSprint4.resx">
       <DependentUpon>201710301416098_InitialSprint4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710311132002_UcenikModelSmerIOdeljenjeUNullable.resx">
+      <DependentUpon>201710311132002_UcenikModelSmerIOdeljenjeUNullable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710311233318_UbacenDatumUnosaUUcenika.resx">
+      <DependentUpon>201710311233318_UbacenDatumUnosaUUcenika.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711071344114_DodatPolUModeluUcenik.resx">
+      <DependentUpon>201711071344114_DodatPolUModeluUcenik.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711101331418_UcenikModelRequiredZaNekaPolja.resx">
+      <DependentUpon>201711101331418_UcenikModelRequiredZaNekaPolja.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711101411564_DodatPolUModeluProfesor.resx">
+      <DependentUpon>201711101411564_DodatPolUModeluProfesor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711101419519_DodataFotografijaUModelulProfesor.resx">
+      <DependentUpon>201711101419519_DodataFotografijaUModelulProfesor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711211234354_DodateLicencaIZvanjeUProfesoru.resx">
+      <DependentUpon>201711211234354_DodateLicencaIZvanjeUProfesoru.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711211356185_LicencaIZvanjeRequiredAnotacija.resx">
+      <DependentUpon>201711211356185_LicencaIZvanjeRequiredAnotacija.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

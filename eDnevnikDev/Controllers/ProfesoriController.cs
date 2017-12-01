@@ -7,6 +7,8 @@ using eDnevnikDev.Models;
 using eDnevnikDev.ViewModel;
 using Microsoft.AspNet.Identity.Owin;
 using System.Threading.Tasks;
+using System.Net;
+using System.Data.Entity.Migrations;
 
 namespace eDnevnikDev.Controllers
 {
@@ -60,6 +62,7 @@ namespace eDnevnikDev.Controllers
         /// Uzima se lista profesora iz Baze. Test name=ProfesoriController_Index
         /// </summary>
         /// <returns>Vraca listu u View</returns>
+        [Authorize(Roles = "Administrator")]
         public ActionResult Index()
         {
             IEnumerable<Profesor> ListaProfesora = _context.Profesori.ToList();
@@ -69,11 +72,13 @@ namespace eDnevnikDev.Controllers
         /// Dodaje se Profesor u Listu Profesora. Test name=ProfesoriController_Dodaj
         /// </summary>
         /// <returns>Vraca novog profesora, <see cref="ProfesorViewModel"/></returns>
+        [Authorize(Roles = "Administrator")]
         public ActionResult Dodaj()
         {
             var model = new ProfesorViewModel
             {
-                Predmeti = _context.Predmeti.ToList()
+                Predmeti = _context.Predmeti.ToList(),
+                Polovi=_context.Polovi.ToList()
             };
             return View("Dodaj",model);
         }
@@ -88,7 +93,9 @@ namespace eDnevnikDev.Controllers
         /// <param name="pvm">The PVM.</param>
         /// <returns>Vraca nas na Index stranu Profesora</returns>
         [HttpPost]
-        public async Task<ActionResult> Sacuvaj(ProfesorViewModel pvm)
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
+        public async Task<ActionResult> Sacuvaj(ProfesorViewModel pvm, HttpPostedFileBase upload)
         {
 
             if (ModelState.IsValid)
@@ -101,16 +108,26 @@ namespace eDnevnikDev.Controllers
                 }
 
                 profesor.RedniBroj = GenerisiRedniBrojProfesora();
-                
-                string username = profesor.Ime.ToLower() + "." + profesor.Prezime.ToLower() + profesor.RedniBroj;
 
-                await RegistracijaProfesora(username, profesor.Ime, profesor.Prezime, profesor.RedniBroj);
+                string ime = VratiImeProfesoraSaPrvimVelikimSlovom(profesor.Ime);
+                string prezime = VratiPrezimeProfesoraSaPrvimVelikimSlovom(profesor.Prezime);
+                
+                string username = profesor.Ime.ToLower().Replace(" ", string.Empty) + "." + profesor.Prezime.ToLower().Replace(" ", string.Empty) + profesor.RedniBroj;
+
+                await RegistracijaProfesora(username, ime, prezime, profesor.RedniBroj);
 
                 var id = _context.Users.SingleOrDefault(x => x.UserName == username).Id;
 
-                //await UserManager.AddToRoleAsync(id, "Profesor");
-
                 profesor.UserProfesorId = id;
+
+                //Dodavanje fotografije 
+                if (upload != null && upload.ContentLength > 0)
+                {
+                    using (var reader = new System.IO.BinaryReader(upload.InputStream))
+                    {
+                        profesor.Fotografija = reader.ReadBytes(upload.ContentLength);
+                    }
+                }
 
                 _context.Profesori.Add(profesor);
                 _context.SaveChanges();
@@ -125,6 +142,117 @@ namespace eDnevnikDev.Controllers
             }
         }
 
+        //GET
+        /// <summary>
+        /// Metoda koja vrava view Izmeni za profesora
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
+        [Authorize(Roles = "Administrator")]
+        public ActionResult Izmeni(int? id)
+        {
+            if(id==null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Profesor profesor = _context.Profesori.Find(id);
+
+            if(profesor==null)
+            {
+                return HttpNotFound();
+            }
+
+            ProfesorViewModel profesorVM = new ProfesorViewModel()
+            {
+                Profesor = profesor,
+                Polovi = _context.Polovi.ToList(),
+                Predmeti=_context.Predmeti.ToList()
+            };
+
+            
+
+            return View(profesorVM);
+        }
+
+        /// <summary>
+        /// Metoda koja sluzi za izmenu profesora
+        /// </summary>
+        /// <param name="profesorVM">The profesor vm.</param>
+        /// <param name="upload">The upload.</param>
+        /// <returns></returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
+        //POST
+        public ActionResult Izmeni(ProfesorViewModel profesorVM, HttpPostedFileBase upload)
+        {
+            if(ModelState.IsValid)
+            {
+                if(upload!=null && upload.ContentLength>0)
+                {
+                    using (var reader = new System.IO.BinaryReader(upload.InputStream))
+                    {
+                        profesorVM.Profesor.Fotografija = reader.ReadBytes(upload.ContentLength);
+                    }
+                }
+
+                Profesor profesor = new Profesor()
+                {
+                    ProfesorID = profesorVM.Profesor.ProfesorID,
+                    Licenca=profesorVM.Profesor.Licenca,
+                    Zvanje=profesorVM.Profesor.Zvanje,
+                    Ime = profesorVM.Profesor.Ime,
+                    Prezime = profesorVM.Profesor.Prezime,
+                    Telefon = profesorVM.Profesor.Telefon,
+                    Adresa = profesorVM.Profesor.Adresa,
+                    Vanredan = profesorVM.Profesor.Vanredan,
+                    RazredniStaresina = profesorVM.Profesor.RazredniStaresina,
+                    RedniBroj = profesorVM.Profesor.RedniBroj,
+                    PromenaLozinke = profesorVM.Profesor.PromenaLozinke,
+                    UserProfesorId = profesorVM.Profesor.UserProfesorId,
+                    PolId = profesorVM.Profesor.PolId,
+                    Fotografija=profesorVM.Profesor.Fotografija
+                };
+
+                try
+                {
+                    _context.Profesori.AddOrUpdate(profesor);
+                    _context.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                }
+
+
+                //promenljiva koja je potrebna kako bismo profesoru koji se menja mogli da obrisemo sve
+                //predmete koje predaje, kako bismo kasnije dodali sve nove koji su prosledjeni sa forme za izmenu
+                var profesor1 = _context.Profesori
+                    .SingleOrDefault(p => p.ProfesorID == profesorVM.Profesor.ProfesorID);
+
+                //brisanje svih predmeta profesora koje on predaje
+                foreach (var predmet in profesor1.Predmeti.ToList())
+                {
+                    profesor1.Predmeti.Remove(predmet);
+                    _context.SaveChanges();
+                }
+
+                //dodavanje svih predmeta profesoru koje on predaje
+                foreach (var predmetId in profesorVM.PredmetiIDs)
+                {
+                    Predmet predmet = _context.Predmeti
+                        .SingleOrDefault(p => p.PredmetID == predmetId);
+
+                    profesor1.Predmeti.Add(predmet);
+                    _context.SaveChanges();
+
+                }
+            }
+
+            return RedirectToAction("Index");
+        }
+
         /// <summary>
         /// Generiše se redni broj profesora 
         /// Svaki profesor ima svoj jedinstveni redni broj koji će se koristiti za username i password
@@ -135,15 +263,17 @@ namespace eDnevnikDev.Controllers
         /// <returns></returns>
         public int GenerisiRedniBrojProfesora()
         {
+            int redniBroj;
+
             var profesori = _context.Profesori
                 .Select(p => p);
 
-            int redniBroj = profesori
+            if (profesori.Count() > 0)
+            {
+                redniBroj = profesori
                    .Select(p => p.RedniBroj)
                    .Max();
 
-            if (profesori.Count() > 0)
-            {
                 var idProf = profesori.Select(p => p.ProfesorID).Max();
 
                 if(idProf%2==0)
@@ -176,9 +306,39 @@ namespace eDnevnikDev.Controllers
         /// <returns></returns>
         public async Task RegistracijaProfesora(string username, string ime, string prezime, int redniBroj)
         {
-            var user = new ApplicationUser { UserName = username, Email=username+"@gmail.com" };
+            var user = new ApplicationUser { UserName = username, Email=username.ToLower()+"@gmail.com" };
             var result = await UserManager.CreateAsync(user, ime + "." + prezime + redniBroj);
           
+        }
+
+        /// <summary>
+        /// Vraca se ime profesora tako da prvo slovo bude veliko
+        /// </summary>
+        /// <param name="ime">The IME.</param>
+        /// <returns></returns>
+        public string VratiImeProfesoraSaPrvimVelikimSlovom(string ime)
+        {
+            switch (ime)
+            {
+                case null: throw new ArgumentNullException(nameof(ime));
+                case "": throw new ArgumentException($"{nameof(ime)} ne moze da bude prazno", nameof(ime));
+                default: return ime.First().ToString().ToUpper().Replace(" ", string.Empty) + ime.Substring(1).Replace(" ", string.Empty);
+            }
+        }
+
+        /// <summary>
+        /// Vraca se prezime profesora tako da prvo slovo bude veliko
+        /// </summary>
+        /// <param name="prezime">The prezime.</param>
+        /// <returns></returns>
+        public string VratiPrezimeProfesoraSaPrvimVelikimSlovom(string prezime)
+        {
+            switch (prezime)
+            {
+                case null: throw new ArgumentNullException(nameof(prezime));
+                case "": throw new ArgumentException($"{nameof(prezime)} ne moze da bude prazno", nameof(prezime));
+                default: return prezime.First().ToString().ToUpper().Replace(" ", string.Empty) + prezime.Substring(1).Replace(" ", string.Empty);
+            }
         }
     }
 }
