@@ -55,7 +55,7 @@ namespace eDnevnikDev.Models
         /// string
         /// </value>
         [Required(AllowEmptyStrings = false, ErrorMessage = "Polje za broj telefona  je obavezno")]
-        [RegularExpression(@"^\+(\d{1,3})-(\d{1,3})\/(\d{6,7})$", ErrorMessage = "Broj telefona roditelja nije ispravan (format: +381-11/1234567)")]
+        [RegularExpression(@"^\+(\d{1,3})-(\d{1,3})\/(\d{6,7})$", ErrorMessage = "Broj telefona roditelja nije ispravan (format: +381-__/_______)")]
         [Display(Name = "Broj telefona ")]
         public string Telefon { get; set; }
 
@@ -84,13 +84,24 @@ namespace eDnevnikDev.Models
         /// <value>
         /// bool
         /// </value>
-        [Display(Name = "Razredni Starešina")]
+        [Display(Name = "Razredni starešina")]
         public bool RazredniStaresina { get; set; }
 
 
         public int RedniBroj { get; set; }
 
         public bool PromenaLozinke { get; set; }
+
+        public byte[] Fotografija { get; set; }
+
+        [Required(ErrorMessage ="Polje za licencu je obavezno")]
+        [Display(Name ="Licenca")]
+        public bool Licenca { get; set; }
+
+        [Required(ErrorMessage ="Polje za zvanje je obavezno")]
+        [Display(Name = "Zvanje")]
+        [RegularExpression(@"^([A-ZŠĐČĆŽa-zšđčćž]+ ?)+$", ErrorMessage = "Polje za zvanje može da sadrži samo slova")]
+        public string Zvanje { get; set; }
 
 
         /// <summary>
@@ -111,12 +122,14 @@ namespace eDnevnikDev.Models
         /// </value>
         public virtual ApplicationUser User { get; set; }
 
-        /// <summary>
-        ///  Služi za čuvanje predmeta na kojima profesor predaje
-        /// </summary>
-        /// <value>
-        /// ICollection<Predmet>
-        /// </value>
+
+        [ForeignKey("PolId")]
+        public Pol Pol { get; set; }
+
+        [Display(Name ="Pol")]
+        [Required(ErrorMessage ="Polje za pol je obavezno")]
+        public int PolId { get; set; }
+
         public virtual ICollection<Predmet> Predmeti { get; set; }
 
         public virtual ICollection<Napomena> Napomene { get; set; }

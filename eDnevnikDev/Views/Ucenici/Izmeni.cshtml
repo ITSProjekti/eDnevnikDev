@@ -1,0 +1,324 @@
+﻿@model eDnevnikDev.ViewModel.UcenikViewModel
+
+@{
+    ViewBag.Title = "Izmeni";
+}
+
+<h2>Izmena učenika</h2>
+
+@using (Html.BeginForm("Izmeni", "Ucenici", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data", id = "formId" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Ucenik.UcenikID)
+        @Html.HiddenFor(model => model.Ucenik.Fotografija)
+        @Html.HiddenFor(model => model.Ucenik.OdeljenjeId)
+        @Html.HiddenFor(model => model.Ucenik.BrojUDnevniku)
+        @Html.HiddenFor(model => model.Ucenik.JedinstveniBroj)
+        @Html.HiddenFor(model => model.Ucenik.UserUcenikId)
+        @Html.HiddenFor(model => model.Ucenik.DatumUnosa)
+        @Html.HiddenFor(model => model.Ucenik.PromenaLozinke)
+        @Html.HiddenFor(model => model.Ucenik.RedniBroj)
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Ucenik.Fotografija, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+
+
+                @if (Model.Ucenik.Fotografija != null)
+                {
+                    <img id="fotografijaUcenika" src="data:image;base64,@System.Convert.ToBase64String(Model.Ucenik.Fotografija)" alt="" width="194px" height="240px" />
+                }
+                else
+                {
+                    if (Model.Ucenik.Pol.Naziv == "Ženski")
+                    {
+                        <img id="fotografijaUcenika" src="~/ProfilneSlike/female.png" alt="" width="194px" height="240px" />
+                    }
+                    else
+                    {
+                        <img id="fotografijaUcenika" src="~/ProfilneSlike/male.png" alt="" width="194px" height="240px" />
+                    }
+                }
+                <div class="col-sm-12" style="margin-bottom:20px;">
+                    <label class="btn-bs-file btn btn-success">
+
+                        Izmeni sliku
+                        <input type="file" accept="image/*" name="upload" id="fotografijaUcenika" onchange="readURL(this);" />
+                    </label>
+
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Ucenik.Ime, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Ucenik.Ime, new { htmlAttributes = new { @class = "form-control", placeholder = "Unesite ime" } })
+                @Html.ValidationMessageFor(model => model.Ucenik.Ime, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Ucenik.Prezime, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Ucenik.Prezime, new { htmlAttributes = new { @class = "form-control", placeholder = "Unesite ime" } })
+                @Html.ValidationMessageFor(model => model.Ucenik.Prezime, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Ucenik.PolId, htmlAttributes: new { @class = "control-label col-md-2" })
+
+            <div class="col-md-10">
+                <select class="form-control" name="Ucenik.PolId">
+                    @foreach (var item in Model.Polovi)
+                    {
+                        if (item.PolId == Model.Ucenik.PolId)
+                        {
+                            <option value="@item.PolId" selected>@item.Naziv</option>
+                        }
+                        else
+                        {
+                            <option value="@item.PolId">@item.Naziv</option>
+                        }
+                    }
+                </select>
+                @Html.ValidationMessageFor(model => model.Ucenik.PolId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Ucenik.DatumRodjenja, htmlAttributes: new { @class = "control-label col-md-2" })
+
+            <div class="col-md-10">
+                <input type="text" id="datum" class="form-control" name="Ucenik.DatumRodjenja" value="@Model.Ucenik.DatumRodjenja.ToString("dd.MM.yyyy")" data-val="true" data-val-required="Polje za datum rođenja je obavezno" readonly>
+                <input type="hidden" name="Ucenik.DatumRodjenja" id="Ucenik_DatumRodjenja">
+                @*@Html.ValidationMessageFor(u => u.Ucenik.DatumRodjenja)*@
+                <span class="field-validation-valid" data-valmsg-for="datum" data-valmsg-replace="true"></span>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Ucenik.MestoRodjenjaId, "MestoRodjenjaId", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select class="form-control" name="Ucenik.MestoRodjenjaId">
+                    @foreach (var item in Model.Gradovi)
+                    {
+                        if (item.Id == Model.Ucenik.MestoRodjenjaId)
+                        {
+                            <option value="@item.Id" selected>@item.Naziv</option>
+                        }
+                        else
+                        {
+                            <option value="@item.Id">@item.Naziv</option>
+                        }
+                    }
+                </select>
+                @Html.ValidationMessageFor(model => model.Ucenik.MestoRodjenjaId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Ucenik.JMBG, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Ucenik.JMBG, new { htmlAttributes = new { @class = "form-control", placeholder = "Unesite JMBG" } })
+                @Html.ValidationMessageFor(model => model.Ucenik.JMBG, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Ucenik.Adresa, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Ucenik.Adresa, new { htmlAttributes = new { @class = "form-control", placeholder = "Unesite adresu" } })
+                @Html.ValidationMessageFor(model => model.Ucenik.Adresa, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Ucenik.MestoPrebivalista, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Ucenik.MestoPrebivalista, new { htmlAttributes = new { @class = "form-control", placeholder = "Unesite mesto prebivališta" } })
+                @Html.ValidationMessageFor(model => model.Ucenik.MestoPrebivalista, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Ucenik.ImeOca, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Ucenik.ImeOca, new { htmlAttributes = new { @class = "form-control", placeholder = "Unesite ime oca/staratelja" } })
+                @Html.ValidationMessageFor(model => model.Ucenik.ImeOca, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Ucenik.PrezimeOca, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Ucenik.PrezimeOca, new { htmlAttributes = new { @class = "form-control", placeholder = "Unesite prezime oca/staratelja" } })
+                @Html.ValidationMessageFor(model => model.Ucenik.PrezimeOca, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Ucenik.ImeMajke, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Ucenik.ImeMajke, new { htmlAttributes = new { @class = "form-control", placeholder = "Unesite ime majke/staratelja" } })
+                @Html.ValidationMessageFor(model => model.Ucenik.ImeMajke, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Ucenik.PrezimeMajke, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Ucenik.PrezimeMajke, new { htmlAttributes = new { @class = "form-control", placeholder = "Unesite prezime majke/staratelja" } })
+                @Html.ValidationMessageFor(model => model.Ucenik.PrezimeMajke, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Ucenik.BrojTelefonaRoditelja, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Ucenik.BrojTelefonaRoditelja, new { htmlAttributes = new { @class = "form-control", placeholder = "(+381-__/_______)" } })
+                @Html.ValidationMessageFor(model => model.Ucenik.BrojTelefonaRoditelja, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Ucenik.Vanredan, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.Ucenik.Vanredan)
+                    @Html.ValidationMessageFor(model => model.Ucenik.Vanredan, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Ucenik.SmerID, "Smer", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select class="form-control" name="Ucenik.SmerID" id="Ucenik_SmerID">
+                    <optgroup label="Trogodišnji smerovi">
+                        @foreach (var item in Model.Smerovi.Where(s => s.Trajanje == 3))
+                        {
+                            if (item.SmerID == Model.Ucenik.Smer.SmerID)
+                            {
+                                <option value="@item.SmerID" selected>@item.NazivSmera</option>
+                            }
+                            else
+                            {
+                                <option value="@item.SmerID">@item.NazivSmera</option>
+                            }
+                        }
+                    </optgroup>
+
+                    <optgroup label="Četvorogodišnji smerovi">
+                        @foreach (var item in Model.Smerovi.Where(s => s.Trajanje == 4))
+                        {
+                            if (item.SmerID == Model.Ucenik.Smer.SmerID)
+                            {
+                                <option value="@item.SmerID" selected>@item.NazivSmera</option>
+                            }
+                            else
+                            {
+                                <option value="@item.SmerID">@item.NazivSmera</option>
+                            }
+                        }
+                    </optgroup>
+
+                </select>
+
+                @Html.ValidationMessageFor(model => model.Ucenik.SmerID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="button" id="k" value="Poništi" class="btn btn-default" onclick="ResetValidacije()" />
+                <input type="submit" value="Sačuvaj" class="btn btn-success" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Vrati se na listu učenika", "Index")
+</div>
+
+@section Scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/moment.js"></script>
+
+    <script>
+
+        $("#datum").datepicker({
+            constrainInput: true,
+            dateFormat: "dd.mm.yy.",
+            dayNamesMin: ["Ned", "Pon", "Uto", "Sre", "Cet", "Pet", "Sub"],
+            monthNamesShort: ["Jan", "Feb", "Mart", "April", "Maj", "Jun", "Jul", "Avgust", "Sept", "Okt", "Nov", "Dec"],
+            altField: "#Ucenik_DatumRodjenja",
+            altFormat: "yy-mm-dd",
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "1970:"
+        });
+
+        $("#datum").change(function () {
+            $(this).blur();
+        });
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#fotografijaUcenika')
+                        .attr('src', e.target.result)
+                        .width(150)
+                        .height(200);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function ResetValidacije() {
+
+            $("#formId")[0].reset();
+            $(".text-danger").html('');
+
+            var slika = $("#Ucenik_Fotografija").val();
+            var pol=@Html.Raw(Json.Encode(@Model.Ucenik.Pol.Naziv));
+
+            if(slika.length>0)
+            {
+                $("#fotografijaUcenika").attr("src", "data:image;base64," + slika);
+            }
+            else
+            {
+                if(pol=="Ženski")
+                {
+                    $("#fotografijaUcenika").attr("src", "/ProfilneSlike/female.png");
+                }
+                else if(pol=="Muški")
+                {
+                    $("#fotografijaUcenika").attr("src", "/ProfilneSlike/male.png");
+                }
+            }
+        }
+
+
+    </script>
+
+}

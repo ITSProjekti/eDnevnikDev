@@ -30,6 +30,9 @@ namespace eDnevnikDev.ViewModel
         [Display(Name ="Predmeti")]
         public List<int> PredmetiIDs { get; set; }
 
+        public HttpPostedFileBase File { get; set; }
+
+
         /// <summary>
         /// Gets or sets the predmeti.
         /// </summary>
@@ -38,6 +41,7 @@ namespace eDnevnikDev.ViewModel
         /// </value>
         public IEnumerable<Predmet> Predmeti { get; set; }
 
+        public IEnumerable<Pol> Polovi { get; set; }
 
     }
 }

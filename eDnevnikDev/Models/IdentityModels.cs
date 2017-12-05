@@ -38,6 +38,7 @@ namespace eDnevnikDev.Models
         public virtual DbSet<Status> Statusi{ get; set; }
         public virtual DbSet<Oznaka> Oznake { get; set; }
         public virtual DbSet<TipOcenePredmeta> TipoviOcenaPredmeta { get; set; }
+        public virtual DbSet<Pol> Polovi { get; set; }
         public virtual DbSet<SkolskaGodina> SkolskaGodine { get; set; }
         public virtual DbSet<Polugodiste> Polugodista { get; set; }
         public virtual DbSet<Tromesecje> Tromesecja { get; set; }

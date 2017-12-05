@@ -4,8 +4,6 @@
 
 }
 
-
-
         <div class="col-md-12 col-xs-12 ">
 
             <table class="table table-striped table-hover" id="podaci">
@@ -14,7 +12,7 @@
                         <th>JMBG</th>
                         <th>Ime</th>
                         <th>Prezime</th>
-                        <th>Adresa</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -24,7 +22,7 @@
                             <td>@Ucenik.JMBG</td>
                             <td>@Ucenik.Ime</td>
                             <td>@Ucenik.Prezime</td>
-                            <td>@Ucenik.Adresa</td>
+                            <td>@Html.ActionLink("Izmeni", "Izmeni", new { id=Ucenik.UcenikID})</td>
                         </tr>
                     }
                 </tbody>
@@ -41,7 +39,6 @@
                 }
             });
         });
-
 
     </script>
 

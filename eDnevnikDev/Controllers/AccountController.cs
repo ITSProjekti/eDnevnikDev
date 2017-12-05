@@ -122,8 +122,7 @@ namespace eDnevnikDev.Controllers
                         }
                         catch (Exception) { }
 
-                        if (!promenaLozinke)
-                        {
+                       
                             var pravaPristupa = UserManager.GetRoles(user.Id);
 
                             foreach (var pravoPristupa in pravaPristupa)
@@ -145,13 +144,17 @@ namespace eDnevnikDev.Controllers
                                     return RedirectToAction("IndexAdmin", "Home");
                                 }
                             }
-
-                                return RedirectToLocal(returnUrl);
+                            
+                                
+                        if (promenaLozinke)
+                        {
+                            return RedirectToLocal(returnUrl);
                         }
                         else
                         {
                             return RedirectToAction("ChangePassword", "Manage");
                         }
+                        
                     }
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -159,11 +162,9 @@ namespace eDnevnikDev.Controllers
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
+                    ModelState.AddModelError("", "Niste uneli ispravne podatke");
                     return View(model);
             }
-
-
         }
 
         //

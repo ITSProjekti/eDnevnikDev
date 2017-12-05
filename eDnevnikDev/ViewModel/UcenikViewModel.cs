@@ -35,6 +35,8 @@ namespace eDnevnikDev.ViewModel
         /// </value>
         public IEnumerable<Smer> Smerovi { get; set; }
 
+        public IEnumerable<Pol> Polovi { get; set; }
+
         /// <summary>
         /// Gets or sets the file.
         /// </summary>

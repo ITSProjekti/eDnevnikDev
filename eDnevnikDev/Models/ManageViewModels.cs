@@ -41,20 +41,21 @@ namespace eDnevnikDev.Models
 
     public class ChangePasswordViewModel
     {
-        [Required]
+        [Required(ErrorMessage ="Polje za trenutnu lozinku je obavezno")]
         [DataType(DataType.Password)]
-        [Display(Name = "Current password")]
+        [Display(Name = "Trenutna lozinka")]
         public string OldPassword { get; set; }
 
-        [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [Required(ErrorMessage = "Polje za novu lozinku je obavezno")]
+        [StringLength(100, ErrorMessage = "Nova lozinka mora imati minimum {2} karaktera", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "New password")]
+        [Display(Name = "Nova lozinka")]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{6,30}$", ErrorMessage ="Nova lozinka mora da sadrži bar 1 veliko slovo, 1 malo slovo, 1 broj i 1 specijalni karakter")]
         public string NewPassword { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm new password")]
-        [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
+        [Display(Name = "Potvrda nove lozinke")]
+        [Compare("NewPassword", ErrorMessage = "Nova lozinka i potvrda nove lozinke se ne poklapaju")]
         public string ConfirmPassword { get; set; }
     }
 
