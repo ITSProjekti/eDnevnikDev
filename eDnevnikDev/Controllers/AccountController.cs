@@ -134,14 +134,26 @@ namespace eDnevnikDev.Controllers
                                     int mesec = Convert.ToInt32(datum.Month.ToString());
                                     int godina = Convert.ToInt32(datum.Year.ToString());
 
-                                    var skolskaGodina = _context.SkolskaGodine.Max(s => s.PocetakSkolskeGodine.Year);
+                                    var skolskeGodine = _context.SkolskaGodine.ToList();
 
-                                    if (mesec >= 8 && dan >= 10 && godina!=skolskaGodina)
+                                if(skolskeGodine != null && skolskeGodine.Count()>0)
+                                {
+                                    var poslednjaSkolskaGodina = skolskeGodine.Max(x => x.PocetakSkolskeGodine).Year;
+
+                                    if (mesec >= 8 && dan >= 10 && godina != poslednjaSkolskaGodina)
                                     {
                                         return RedirectToAction("RokZaKreiranjeSkolskeGodine", "UpisSkolskeGodine");
                                     }
+                                }
+                                //else
+                                //{
+                                //    return RedirectToAction("RokZaKreiranjeSkolskeGodine", "UpisSkolskeGodine");
 
-                                    return RedirectToAction("IndexAdmin", "Home");
+                                //}
+
+
+
+                                return RedirectToAction("IndexAdmin", "Home");
                                 }
                             }
                             

@@ -5,34 +5,43 @@ using System.Web;
 using Quartz;
 using System.Net;
 using eDnevnikDev.Controllers;
+using eDnevnikDev.Models;
 
 namespace eDnevnikDev.Helpers
 {
     public class PromeniStatusJob : IJob
     {
+        private ApplicationDbContext _context = new ApplicationDbContext();
+
         public void Execute(IJobExecutionContext context)
         {
 
-            DateTime pocetakSkolskeGodine = Convert.ToDateTime("11/12/2017").Date;
-            DateTime krajSkolskeGodine = Convert.ToDateTime("11/13/2017").Date;
-            DateTime trenutniDatum = DateTime.Now.Date;
+            var skolskaGodina = _context.SkolskaGodine.SingleOrDefault(s => s.Aktuelna == true);
 
-            OdeljenjeController odeljenje = new OdeljenjeController();
-
-            if (odeljenje != null)
+            if (skolskaGodina != null)
             {
-                if (trenutniDatum == pocetakSkolskeGodine)
+                DateTime pocetakSkolskeGodine = skolskaGodina.PocetakSkolskeGodine;
+                DateTime krajSkolskeGodine = skolskaGodina.KrajSkolskeGodine;
+                DateTime trenutniDatum = DateTime.Now;
+
+                OdeljenjeController odeljenje = new OdeljenjeController();
+
+                if (odeljenje != null)
                 {
-                    odeljenje.PromeniStatusOdeljenjima();
-                }
-                else if(trenutniDatum==krajSkolskeGodine)
-                {
-                    odeljenje.ArhivirajKreiranaOdeljenja();
+                    if (trenutniDatum.Day == pocetakSkolskeGodine.Day + 1 && trenutniDatum.Month == pocetakSkolskeGodine.Month && trenutniDatum.Year == pocetakSkolskeGodine.Year)
+                    {
+                        odeljenje.PromeniStatusOdeljenjima();
+                    }
+                    else if (trenutniDatum.Day == krajSkolskeGodine.Day && trenutniDatum.Month == krajSkolskeGodine.Month && trenutniDatum.Year == krajSkolskeGodine.Year)
+                    {
+                        odeljenje.ArhivirajKreiranaOdeljenja();
+                        skolskaGodina.Aktuelna = false;
+                        _context.SaveChanges();
+                    }
                 }
             }
 
-            //odeljenje.ArhivirajKreiranaOdeljenja();
-            //odeljenje.PromeniStatusOdeljenjima();
         }
+
     }
 }

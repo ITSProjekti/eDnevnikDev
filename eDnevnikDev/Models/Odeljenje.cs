@@ -97,8 +97,8 @@ namespace eDnevnikDev.Models
             //Ukoliko ne nadje,znaci da ne postoji ni jedno odeljenje.Jos.
             if (odeljenja.Any())
                 // Skolska godina je sada foreign key, i zbog te izmene ovaj deo treba da se menja
-                //return odeljenja.Max(o => o.KrajSkolskeGodine);
-                throw new NotImplementedException();
+                return odeljenja.Max(o => o.KrajSkolskeGodine);
+                //throw new NotImplementedException();
             else
                 return DateTime.Now.Year;
         }

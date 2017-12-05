@@ -48,8 +48,14 @@ namespace eDnevnikDev.Controllers
             int skolskaGodinaId = _context.SkolskaGodine.OrderByDescending(x => x.SkolskaGodinaId).First().SkolskaGodinaId;
             AdminIndexViewModel podaci = new AdminIndexViewModel()
             {
-                Decaci = 156,
-                Devojcice = 259,
+                Decaci = _context
+                         .Ucenici
+                         .Where(x => x.StatusUcenika.StatusUcenikaId == 1 && x.Pol.PolId == 1 )
+                         .Count(),
+                Devojcice = _context
+                            .Ucenici
+                            .Where(x => x.StatusUcenika.StatusUcenikaId == 1 && x.Pol.PolId == 1)
+                            .Count(),
                 PocetakPrvogPolugodista = KonverizjaDatuma.izAmerickogUSrpski(_context.Polugodista.Single(x => x.SkolskaGodinaId == skolskaGodinaId && x.TipPolugodista == 1).PocetakPolugodista),
                 KrajPrvogPolugodista = KonverizjaDatuma.izAmerickogUSrpski(_context.Polugodista.Single(x => x.SkolskaGodinaId == skolskaGodinaId && x.TipPolugodista == 1).KrajPolugodista),
                 PocetakDrugogPolugodista = KonverizjaDatuma.izAmerickogUSrpski(_context.Polugodista.Single(x => x.SkolskaGodinaId == skolskaGodinaId && x.TipPolugodista == 2).PocetakPolugodista),

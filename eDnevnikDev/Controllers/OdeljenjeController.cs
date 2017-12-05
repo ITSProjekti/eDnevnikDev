@@ -469,75 +469,84 @@ namespace eDnevnikDev.Controllers
         /// <returns></returns>
         public void DodajUcenikaUOdeljenje(int ucenikId, int razred, int oznaka)
         {
-            DateTime pocetakSkolskeGodine = Convert.ToDateTime("11/13/2017");
-            DateTime krajSkolskeGodine = Convert.ToDateTime("6/20/2018");
-            DateTime trenutniDatum = DateTime.Now.Date;
+            //DateTime pocetakSkolskeGodine = Convert.ToDateTime("11/13/2017");
+            //DateTime krajSkolskeGodine = Convert.ToDateTime("6/20/2018");
+            //DateTime trenutniDatum = DateTime.Now.Date;
 
-            int status = 0;
+            var skolskaGodina = _context.SkolskaGodine.SingleOrDefault(s => s.Aktuelna == true);
 
-            //Ako nije pocela skolska godina status je 2
-            if (trenutniDatum < pocetakSkolskeGodine)
+            if(skolskaGodina!=null)
             {
-                status = 2;//Status 2 oznacava da je upis ucenika u toku
-            }
-            //Ako je pocela skolska godina status je 3
-            else if (trenutniDatum >= pocetakSkolskeGodine && trenutniDatum <= krajSkolskeGodine)
-            {
-                status = 3;//Status 3 oznacava vanredan upis ucenika u odeljenje i tom prilikom ucenik dolazi na kraj dnevnika
-            }
+                DateTime pocetakSkolskeGodine = skolskaGodina.PocetakSkolskeGodine.Date;
+                DateTime krajSkolskeGodine = skolskaGodina.KrajSkolskeGodine.Date;
+                DateTime trenutniDatum = DateTime.Now.Date;
 
+                int status = 0;
 
-            var ucenik = _context.Ucenici.Where(u => u.UcenikID == ucenikId)
-                                         .SingleOrDefault();
-
-            if (ucenik != null)
-            {
-                //Dodeljuje se odeljenje sa statusom koji je izabran na formi.
-                var odeljenje = _context.Odeljenja
-                    .Include("Status")
-                    .SingleOrDefault(o => o.OznakaID == oznaka && o.Razred == razred && o.StatusID == status);
-
-                //Ukoliko odeljenje nije ni kreirano u bazi bez obzira na status,kreira se.
-                if (odeljenje == null)
+                //Ako nije pocela skolska godina status je 2
+                if (trenutniDatum < pocetakSkolskeGodine)
                 {
-                    odeljenje = new Odeljenje()
-                    {
-                        OznakaID = oznaka,
-                        Razred = razred,
-                        PocetakSkolskeGodine = Odeljenje.SledecaSkolskaGodina(razred, oznaka, _context),
-                        StatusID = 2,
-                        KrajSkolskeGodine = Odeljenje.SledecaSkolskaGodina(razred, oznaka, _context) + 1
-                    };
+                    status = 2;//Status 2 oznacava da je upis ucenika u toku
+                }
+                //Ako je pocela skolska godina status je 3
+                else if (trenutniDatum >= pocetakSkolskeGodine && trenutniDatum <= krajSkolskeGodine)
+                {
+                    status = 3;//Status 3 oznacava vanredan upis ucenika u odeljenje i tom prilikom ucenik dolazi na kraj dnevnika
+                }
 
-                    _context.Odeljenja.Add(odeljenje);
+
+                var ucenik = _context.Ucenici.Where(u => u.UcenikID == ucenikId)
+                                             .SingleOrDefault();
+
+                if (ucenik != null)
+                {
+                    //Dodeljuje se odeljenje sa statusom koji je izabran na formi.
+                    var odeljenje = _context.Odeljenja
+                        .Include("Status")
+                        .SingleOrDefault(o => o.OznakaID == oznaka && o.Razred == razred && o.StatusID == status);
+
+                    //Ukoliko odeljenje nije ni kreirano u bazi bez obzira na status,kreira se.
+                    if (odeljenje == null)
+                    {
+                        odeljenje = new Odeljenje()
+                        {
+                            OznakaID = oznaka,
+                            Razred = razred,
+                            PocetakSkolskeGodine = Odeljenje.SledecaSkolskaGodina(razred, oznaka, _context),
+                            StatusID = 2,
+                            KrajSkolskeGodine = Odeljenje.SledecaSkolskaGodina(razred, oznaka, _context) + 1
+                        };
+
+                        _context.Odeljenja.Add(odeljenje);
+                        _context.SaveChanges();
+                    }
+
+                    else if (odeljenje.StatusID == 3)   //Status 3 = kreirano.
+                    {
+                        var poslednjiBrojUDnevniku = odeljenje.Ucenici.Max(u => u.BrojUDnevniku);
+
+                        ucenik.BrojUDnevniku = poslednjiBrojUDnevniku + 1; //Ucenik se dodaje na kraj dnevnika.
+
+                        ucenik.Odeljenje = odeljenje;
+
+                        ucenik.GenerisiJedinstveniBroj();
+
+                    }
+
+                    ucenik.OdeljenjeId = odeljenje.Id;
+                    _context.Ucenici.AddOrUpdate(ucenik);
                     _context.SaveChanges();
                 }
 
-                else if (odeljenje.StatusID == 3)   //Status 3 = kreirano.
+                if (status == 3)
                 {
-                    var poslednjiBrojUDnevniku = odeljenje.Ucenici.Max(u => u.BrojUDnevniku);
-
-                    ucenik.BrojUDnevniku = poslednjiBrojUDnevniku + 1; //Ucenik se dodaje na kraj dnevnika.
-
-                    ucenik.Odeljenje = odeljenje;
-
-                    ucenik.GenerisiJedinstveniBroj();
-
+                    /*Metoda se pozvia da proveri da li postoji odeljenje 
+                      kojem nije promenjen status iz "Upis u toku" u "Kreirano odeljenje",
+                      do ovoga moze doci ukoliko je neko odeljenje prvi put kreirano nakon 
+                      pocetka skolske.
+                    */
+                    PromeniStatusOdeljenjima();
                 }
-
-                ucenik.OdeljenjeId = odeljenje.Id;
-                _context.Ucenici.AddOrUpdate(ucenik);
-                _context.SaveChanges();
-            }
-
-            if (status == 3)
-            {
-                /*Metoda se pozvia da proveri da li postoji odeljenje 
-                  kojem nije promenjen status iz "Upis u toku" u "Kreirano odeljenje",
-                  do ovoga moze doci ukoliko je neko odeljenje prvi put kreirano nakon 
-                  pocetka skolske.
-                */
-                PromeniStatusOdeljenjima();
             }
         }
 

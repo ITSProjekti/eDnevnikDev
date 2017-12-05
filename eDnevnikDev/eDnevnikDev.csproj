@@ -327,6 +327,10 @@
     <Compile Include="Migrations\201712011218058_EnableNullUcenikOdeljenjeID.Designer.cs">
       <DependentUpon>201712011218058_EnableNullUcenikOdeljenjeID.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201712011350080_test.cs" />
+    <Compile Include="Migrations\201712011350080_test.Designer.cs">
+      <DependentUpon>201712011350080_test.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ArhivaOdeljenja.cs" />
@@ -859,6 +863,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201711211356185_LicencaIZvanjeRequiredAnotacija.resx">
       <DependentUpon>201711211356185_LicencaIZvanjeRequiredAnotacija.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712011350080_test.resx">
+      <DependentUpon>201712011350080_test.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
