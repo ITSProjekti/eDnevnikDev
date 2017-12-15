@@ -331,6 +331,10 @@
     <Compile Include="Migrations\201712011350080_test.Designer.cs">
       <DependentUpon>201712011350080_test.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201712051422344_proba.cs" />
+    <Compile Include="Migrations\201712051422344_proba.Designer.cs">
+      <DependentUpon>201712051422344_proba.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ArhivaOdeljenja.cs" />
@@ -361,6 +365,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModel\AdminIndexViewModel.cs" />
+    <Compile Include="ViewModel\IzmenaPredmetaViewModel.cs" />
     <Compile Include="ViewModel\KreirajOdeljenjeViewModel.cs" />
     <Compile Include="ViewModel\KreiranjePredmetaViewModel.cs" />
     <Compile Include="ViewModel\PredmetTipOcenePredmetaViewModel.cs" />
@@ -369,6 +374,8 @@
     <Compile Include="ViewModel\EvidencijaUcenikaViewModel.cs" />
     <Compile Include="ViewModel\ProfesorViewModel.cs" />
     <Compile Include="ViewModel\RasporedjenUcenikViewModel.cs" />
+    <Compile Include="ViewModel\SkolskaGodinaViewModel.cs" />
+    <Compile Include="ViewModel\TipOcenePredmetaViewModel.cs" />
     <Compile Include="ViewModel\UcenikRoleViewModel.cs" />
     <Compile Include="ViewModel\UcenikSaPrisustvomViewModel.cs" />
     <Compile Include="ViewModel\UcenikViewModel.cs" />
@@ -600,6 +607,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="ProfilneSlike\female.png" />
     <Content Include="ProfilneSlike\male.png" />
+    <Content Include="ProfilneSlike\user-default.png" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap-table.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -735,7 +743,9 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\sweetalert2.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -807,6 +817,7 @@
     <Content Include="Views\Profesori\Izmeni.cshtml" />
     <Content Include="Views\UpisSkolskeGodine\Create.cshtml" />
     <Content Include="Views\Home\IndexAdmin.cshtml" />
+    <Content Include="Views\Predmeti\IzmeniPredmet.cshtml" />
     <Content Include="Views\UpisSkolskeGodine\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -867,6 +878,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201712011350080_test.resx">
       <DependentUpon>201712011350080_test.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712051422344_proba.resx">
+      <DependentUpon>201712051422344_proba.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

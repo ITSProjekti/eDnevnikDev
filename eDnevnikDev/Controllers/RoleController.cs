@@ -44,12 +44,12 @@ namespace eDnevnikDev.Controllers
             }
         }
 
-        public ActionResult Index()
+        private ActionResult Index()
         {
             return View();
         }
 
-        public async Task<JsonResult> VratiProfesore()
+        private async Task<JsonResult> VratiProfesore()
         {
             
             var profesori = _context.Profesori.ToList();
@@ -83,7 +83,7 @@ namespace eDnevnikDev.Controllers
         }
 
 
-        public async Task<JsonResult> VratiUcenike()
+        private async Task<JsonResult> VratiUcenike()
         {
 
             var ucenici = _context.Ucenici.ToList();
@@ -116,9 +116,9 @@ namespace eDnevnikDev.Controllers
 
 
         }
-     
 
-        public async Task<ActionResult> PromeniPravoPristupaProfesora(string id)
+
+        private async Task<ActionResult> PromeniPravoPristupaProfesora(string id)
         {
 
             if (id == null)
@@ -162,7 +162,7 @@ namespace eDnevnikDev.Controllers
 
             }
 
-        public async Task<ActionResult> PromeniPravoPristupaUcenika(string id)
+        private async Task<ActionResult> PromeniPravoPristupaUcenika(string id)
         {
 
             if (id == null)
@@ -211,7 +211,7 @@ namespace eDnevnikDev.Controllers
 
         [HttpPost]
         [ValidateHeaderAntiForgeryToken]
-        public async Task DodajRolu(DTORola dtoRola)
+        private async Task DodajRolu(DTORola dtoRola)
         {
 
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_context));
@@ -221,7 +221,7 @@ namespace eDnevnikDev.Controllers
 
         [HttpPost]
         [ValidateHeaderAntiForgeryToken]
-        public async Task ObrisiRolu(DTORola dtoRola)
+        private async Task ObrisiRolu(DTORola dtoRola)
         {
 
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_context));

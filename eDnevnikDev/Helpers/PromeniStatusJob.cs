@@ -35,8 +35,6 @@ namespace eDnevnikDev.Helpers
                     else if (trenutniDatum.Day == krajSkolskeGodine.Day && trenutniDatum.Month == krajSkolskeGodine.Month && trenutniDatum.Year == krajSkolskeGodine.Year)
                     {
                         odeljenje.ArhivirajKreiranaOdeljenja();
-                        skolskaGodina.Aktuelna = false;
-                        _context.SaveChanges();
                     }
                 }
             }

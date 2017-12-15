@@ -29,7 +29,7 @@ namespace eDnevnikDev.Controllers
         /// NOT TESTED
         /// </summary>
         /// <returns>Spisak ucenika u odredjenom odeljenju</returns>
-        public ActionResult Index1()
+        private ActionResult Index1()
         {
             // Assembly assem = typeof(Ucenik2).Assembly;
             // Type objType = typeof(Ucenik2);
@@ -85,7 +85,7 @@ namespace eDnevnikDev.Controllers
             
         }
 
-        public ActionResult Collapse()
+        private ActionResult Collapse()
         {
             return View();
         }
@@ -93,7 +93,7 @@ namespace eDnevnikDev.Controllers
 
 
 
-        public JsonResult VratiPredmenete(int? odeljenjeId, int? profesorId)
+        private JsonResult VratiPredmenete(int? odeljenjeId, int? profesorId)
         {
 
             if(odeljenjeId!=null && profesorId!=null)
@@ -138,7 +138,7 @@ namespace eDnevnikDev.Controllers
 
         }
 
-        public JsonResult VratiOcene(int? odeljenjeId, int? profesorId, int? predmetId, int? ucenikId)
+        private JsonResult VratiOcene(int? odeljenjeId, int? profesorId, int? predmetId, int? ucenikId)
         {
 
             if (odeljenjeId != null && profesorId != null && predmetId!=null)

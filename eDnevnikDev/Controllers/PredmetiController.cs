@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -44,7 +45,7 @@ namespace eDnevnikDev.Controllers
         public ActionResult Index()
         {
             IEnumerable<Predmet> ListaPredmeta = _context.Predmeti.ToList();
-            return View("Index",ListaPredmeta);
+            return View("Index", ListaPredmeta);
         }
 
         /// <summary>
@@ -64,7 +65,7 @@ namespace eDnevnikDev.Controllers
         /// <returns>Vraca nas na index stranu Predmeta</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SacuvajPredmet(KreiranjePredmetaViewModel predmetViewModel)
+        public ActionResult SacuvajPredmet(Predmet predmetViewModel)
         {
             if (ModelState.IsValid)
             {
@@ -93,22 +94,22 @@ namespace eDnevnikDev.Controllers
         /// kao i liste tipova ocena predmeta
         /// </summary>
         /// <returns></returns>
-        public ActionResult PrikaziPredmeteSaTipovimaOcena()
-        {
-            var listaPredmeta = _context.Predmeti.
-                Select(x => x);
+        //public ActionResult PrikaziPredmeteSaTipovimaOcena()
+        //{
+        //    var listaPredmeta = _context.Predmeti.
+        //        Select(x => x);
 
-            var listaPredmetaSaTipom = listaPredmeta.Include("TipOcenePredmeta")
-                .ToList();
-                
-            var listaTipovaOcenaPredmeta = _context.TipoviOcenaPredmeta
-                .ToList();
+        //    var listaPredmetaSaTipom = listaPredmeta.Include("TipOcenePredmeta")
+        //        .ToList();
 
-            var predmetTipOcenePredmetaViewModel =  
-                new PredmetTipOcenePredmetaViewModel(){ Predmeti= listaPredmetaSaTipom, TipoviOcenaPredmeta=listaTipovaOcenaPredmeta};
+        //    var listaTipovaOcenaPredmeta = _context.TipoviOcenaPredmeta
+        //        .ToList();
 
-            return View(predmetTipOcenePredmetaViewModel);
-        }
+        //    var predmetTipOcenePredmetaViewModel =
+        //        new PredmetTipOcenePredmetaViewModel() { Predmeti = listaPredmetaSaTipom, TipoviOcenaPredmeta = listaTipovaOcenaPredmeta };
+
+        //    return View(predmetTipOcenePredmetaViewModel);
+        //}
 
         /// <summary>
         /// Menja se tip ocene za određeni predmet
@@ -125,21 +126,15 @@ namespace eDnevnikDev.Controllers
 
             var tip = _context.TipoviOcenaPredmeta.SingleOrDefault(x => x.TipOcenePredmetaId == tipOcenePredmetaId);
 
-            predmet.TipOcenePredmetaId = tipOcenePredmetaId;
-            predmet.TipOcenePredmeta = tip;
-
-            try
+            if (predmet != null && tip != null)
             {
+                predmet.TipOcenePredmetaId = tipOcenePredmetaId;
+                predmet.TipOcenePredmeta = tip;
                 _context.Predmeti.AddOrUpdate(predmet);
-                
+                _context.SaveChanges();
+
             }
-            catch (Exception)
-            {
-                
-            }
-            //Ova linija je pomerena iz try bloka, jer kad je bila u njemu aplikacija je radila, 
-            //ali test nije zato sto u testu nije implementirana AddOrUpdate metoda
-            _context.SaveChanges();
+
         }
 
         /// <summary>
@@ -166,6 +161,66 @@ namespace eDnevnikDev.Controllers
             }
 
             return Json(new List<DTOTipOcenePredmeta>(), JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult IzmeniPredmet(int? id)
+        {
+
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Predmet predmet = _context.Predmeti.SingleOrDefault(p => p.PredmetID == id);
+
+            if (predmet == null)
+            {
+                return HttpNotFound();
+            }
+
+            var model = new IzmenaPredmetaViewModel
+            {
+                PredmetId = predmet.PredmetID,
+                NazivPredmeta = predmet.NazivPredmeta,
+                TipOcenePredmetaId = predmet.TipOcenePredmetaId,
+                TipoviOcenaPredmeta = _context.TipoviOcenaPredmeta.Select(x => new TipOcenePredmetaViewModel
+                {
+                    TipOcenePredmetaId = x.TipOcenePredmetaId,
+                    Tip = x.Tip
+                }).ToList()
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult IzmeniPredmet(IzmenaPredmetaViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var predmet = new Predmet
+                {
+                    PredmetID = model.PredmetId,
+                    NazivPredmeta = model.NazivPredmeta,
+                    TipOcenePredmetaId = model.TipOcenePredmetaId
+                };
+
+                _context.Predmeti.AddOrUpdate(predmet);
+                _context.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+
+            model.TipoviOcenaPredmeta = _context.TipoviOcenaPredmeta.Select(x => new TipOcenePredmetaViewModel
+            {
+                TipOcenePredmetaId = x.TipOcenePredmetaId,
+                Tip = x.Tip
+
+            }).ToList();
+
+            return View(model);
+
         }
     }
 }
