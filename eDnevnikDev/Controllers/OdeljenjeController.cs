@@ -36,7 +36,20 @@ namespace eDnevnikDev.Controllers
         /// <returns>Vraca Index View</returns>
         public ActionResult Index()
         {
-            return View();
+            var skolskGodina = _context.SkolskaGodine.Where(s => s.Aktuelna == true)
+                                                    .Select(s => new SkolskaGodinaViewModel
+                                                    {
+                                                        PocetakSkolskeGodine = s.PocetakSkolskeGodine.Year,
+                                                        KrajSkolskeGodine = s.KrajSkolskeGodine.Year
+                                                    })
+                                                    .SingleOrDefault();
+            if (skolskGodina != null)
+            {
+                return View(skolskGodina);
+            }
+
+            return View(new SkolskaGodinaViewModel());
+
         }
         /// <summary>
         /// Ukoliko je odeljenje vec kreirano tojest pocela je skolska godina, prikazuju se svi ucenici koji se trenutno
@@ -46,7 +59,19 @@ namespace eDnevnikDev.Controllers
         /// <returns></returns>
         public ActionResult PregledKreiranih()
         {
-            return View();
+            var skolskGodina = _context.SkolskaGodine.Where(s => s.Aktuelna == true)
+                                                     .Select(s=>new SkolskaGodinaViewModel
+                                                     {
+                                                         PocetakSkolskeGodine=s.PocetakSkolskeGodine.Year,
+                                                         KrajSkolskeGodine=s.KrajSkolskeGodine.Year
+                                                     })
+                                                     .SingleOrDefault();
+            if(skolskGodina!=null)
+            {
+                return View(skolskGodina);
+            }
+
+            return View(new SkolskaGodinaViewModel());
         }
 
         /// <summary>
@@ -126,21 +151,55 @@ namespace eDnevnikDev.Controllers
                 .Include("Status")
                 .SingleOrDefault(o => o.StatusID == status && o.Razred == razred && o.OznakaID == oznakaOdeljenja);
 
+            var polovi = _context.Polovi.ToList();
 
             var podaci = new DTOOdeljenjeSaUcenicima();
 
-            if (odeljenje != null)
+            if (odeljenje != null && polovi!=null && polovi.Count()>0)
             {
                 //Ako je status u toku, prikazuju se ucenici ubaceni u to odeljenje sortirani po:
                 //1. prezime, 2. ime, 3. ImeOca.
                 if (status == 2)
                 {
-                    podaci.Ucenici = odeljenje.Ucenici
-                        .OrderBy(u => u.Prezime)
-                        .ThenBy(u => u.Ime)
-                        .ThenBy(u => u.ImeOca)
-                        .Select(u => new DTOUcenikOdeljenja { ID = u.UcenikID, Ime = u.Ime, Prezime = u.Prezime, Fotografija = u.Fotografija, BrojUDnevniku = u.BrojUDnevniku })
-                        .ToList();
+
+                    var ucenici = odeljenje.Ucenici
+                                           .OrderBy(u => u.Prezime)
+                                           .ThenBy(u => u.Ime)
+                                           .ThenBy(u => u.ImeOca)
+                                           .Select(u => u)
+                                           .ToList();
+
+
+                    if (ucenici != null && ucenici.Count() > 0)
+                    {
+                        podaci.Ucenici = new List<DTOUcenikOdeljenja>();
+
+                        foreach (var ucenik in ucenici)
+                        {
+                            var dtoUcenik = new DTOUcenikOdeljenja();
+                            dtoUcenik.ID = ucenik.UcenikID;
+                            dtoUcenik.Ime = ucenik.Ime;
+                            dtoUcenik.Prezime = ucenik.Prezime;
+                            dtoUcenik.Pol = polovi.Where(p=>p.PolId==ucenik.PolId)
+                                                  .SingleOrDefault()
+                                                  .Naziv;
+
+                            if (ucenik.Fotografija != null)
+                            {
+                                dtoUcenik.Fotografija = Convert.ToBase64String(ucenik.Fotografija);
+                            }
+
+                            podaci.Ucenici.Add(dtoUcenik);
+                        }
+                    }
+
+                    //podaci.Ucenici = odeljenje.Ucenici
+                    //    .OrderBy(u => u.Prezime)
+                    //    .ThenBy(u => u.Ime)
+                    //    .ThenBy(u => u.ImeOca)
+                    //    .Select(u => new DTOUcenikOdeljenja { ID = u.UcenikID, Ime = u.Ime, Prezime = u.Prezime, Fotografija = u.Fotografija, BrojUDnevniku = u.BrojUDnevniku })
+                    //    .ToList();
+
                 }
                 //Ako je status kreirano, sortiraju se ucenici po broju u dnevniku.
                 else
@@ -151,18 +210,34 @@ namespace eDnevnikDev.Controllers
                         int a = casovi.Max(x => x.RedniBrojCasa);
                         var cas = casovi.FirstOrDefault(x => x.RedniBrojCasa == a);
 
-                        foreach (var item in odeljenje.Ucenici)
+                        foreach (var ucenik in odeljenje.Ucenici)
                         {
-                            var odsutan = item.Odsustva.Where(x => x.CasId == cas.CasId).SingleOrDefault(x => x.UcenikId == item.UcenikID);
+                             var dtoUcenik = new DTOUcenikOdeljenja();
+                            dtoUcenik.ID = ucenik.UcenikID;
+                            dtoUcenik.Ime = ucenik.Ime;
+                            dtoUcenik.Prezime = ucenik.Prezime;
+                            dtoUcenik.BrojUDnevniku = ucenik.BrojUDnevniku;
+                            dtoUcenik.Pol = polovi.Where(p=>p.PolId==ucenik.PolId)
+                                                  .SingleOrDefault()
+                                                  .Naziv;
+
+                            if (ucenik.Fotografija != null)
+                            {
+                                dtoUcenik.Fotografija = Convert.ToBase64String(ucenik.Fotografija);
+                            }
+
+                            var odsutan = ucenik.Odsustva.Where(x => x.CasId == cas.CasId).SingleOrDefault(x => x.UcenikId == ucenik.UcenikID);
 
                             if (odsutan == null)
                             {
-                                uc.Add(new DTOUcenikOdeljenja { ID = item.UcenikID, Ime = item.Ime, Prezime = item.Prezime, Fotografija = item.Fotografija, BrojUDnevniku = item.BrojUDnevniku, Prisutan = true });
+                                dtoUcenik.Prisutan = true;
                             }
                             else
                             {
-                                uc.Add(new DTOUcenikOdeljenja { ID = item.UcenikID, Ime = item.Ime, Prezime = item.Prezime, Fotografija = item.Fotografija, BrojUDnevniku = item.BrojUDnevniku, Prisutan = false });
+                                dtoUcenik.Prisutan = true;
                             }
+
+                            uc.Add(dtoUcenik);
                         }
 
                         podaci.Ucenici = uc.OrderBy(x => x.BrojUDnevniku).ToList();
@@ -170,10 +245,41 @@ namespace eDnevnikDev.Controllers
                     }
                     else
                     {
-                        podaci.Ucenici = odeljenje.Ucenici
-                            .OrderBy(u => u.BrojUDnevniku)
-                            .Select(u => new DTOUcenikOdeljenja { ID = u.UcenikID, Ime = u.Ime, Prezime = u.Prezime, Fotografija = u.Fotografija, BrojUDnevniku = u.BrojUDnevniku, Prisutan = true })
-                            .ToList();
+                        var ucenici = odeljenje.Ucenici
+                                          .OrderBy(u => u.BrojUDnevniku)
+                                          .Select(u => u)
+                                          .ToList();
+
+
+                        if (ucenici != null && ucenici.Count() > 0)
+                        {
+                            podaci.Ucenici = new List<DTOUcenikOdeljenja>();
+
+                            foreach (var ucenik in ucenici)
+                            {
+                                var dtoUcenik = new DTOUcenikOdeljenja();
+                                dtoUcenik.ID = ucenik.UcenikID;
+                                dtoUcenik.Ime = ucenik.Ime;
+                                dtoUcenik.Prezime = ucenik.Prezime;
+                                dtoUcenik.BrojUDnevniku = ucenik.BrojUDnevniku;
+                                dtoUcenik.Pol = polovi.Where(p => p.PolId == ucenik.PolId)
+                                                      .SingleOrDefault()
+                                                      .Naziv;
+                                dtoUcenik.Prisutan = true;
+
+                                if (ucenik.Fotografija != null)
+                                {
+                                    dtoUcenik.Fotografija = Convert.ToBase64String(ucenik.Fotografija);
+                                }
+
+                                podaci.Ucenici.Add(dtoUcenik);
+                            }
+                        }
+
+                        //podaci.Ucenici = odeljenje.Ucenici
+                        //    .OrderBy(u => u.BrojUDnevniku)
+                        //    .Select(u => new DTOUcenikOdeljenja { ID = u.UcenikID, Ime = u.Ime, Prezime = u.Prezime, Fotografija = u.Fotografija, BrojUDnevniku = u.BrojUDnevniku, Prisutan = true })
+                        //    .ToList();
                     }
 
                 }
@@ -300,7 +406,7 @@ namespace eDnevnikDev.Controllers
         /// </summary>
         /// <param name="odsutni">Lista sa ID-evima od odsutnih ucenika</param>
         /// <returns></returns>
-        public JsonResult UpisiOdsutne(int[] odsutni)
+        private JsonResult UpisiOdsutne(int[] odsutni)
         {
             var datum = DateTime.Today;
             var casId = 7;
@@ -349,7 +455,7 @@ namespace eDnevnikDev.Controllers
         /// <param name="odeljenje">odeljenje koje se dobija iz combobox-a.</param>
         /// <param name="razred">Razred koji se dobija iz combobox-a.</param>
         /// <returns></returns>
-        public JsonResult RedniBrojCasa(int odeljenje, int razred)
+        private JsonResult RedniBrojCasa(int odeljenje, int razred)
         {
             var datum = DateTime.Today;
             var izabranoOdeljenje = _context.Odeljenja.Where(x => x.OznakaID == odeljenje && x.StatusID == 3).Single(x => x.Razred == razred);
@@ -469,13 +575,9 @@ namespace eDnevnikDev.Controllers
         /// <returns></returns>
         public void DodajUcenikaUOdeljenje(int ucenikId, int razred, int oznaka)
         {
-            //DateTime pocetakSkolskeGodine = Convert.ToDateTime("11/13/2017");
-            //DateTime krajSkolskeGodine = Convert.ToDateTime("6/20/2018");
-            //DateTime trenutniDatum = DateTime.Now.Date;
-
             var skolskaGodina = _context.SkolskaGodine.SingleOrDefault(s => s.Aktuelna == true);
 
-            if(skolskaGodina!=null)
+            if (skolskaGodina != null)
             {
                 DateTime pocetakSkolskeGodine = skolskaGodina.PocetakSkolskeGodine.Date;
                 DateTime krajSkolskeGodine = skolskaGodina.KrajSkolskeGodine.Date;
@@ -493,6 +595,12 @@ namespace eDnevnikDev.Controllers
                 {
                     status = 3;//Status 3 oznacava vanredan upis ucenika u odeljenje i tom prilikom ucenik dolazi na kraj dnevnika
                 }
+                else if (trenutniDatum > krajSkolskeGodine)
+                {
+                    status = 2;//Status 2 oznacava da je upis ucenika u toku jer je zavrsena skolska godina
+                               // i vrsi se upis za sledecu skolsku godinu
+                }
+
 
 
                 var ucenik = _context.Ucenici.Where(u => u.UcenikID == ucenikId)
@@ -500,6 +608,7 @@ namespace eDnevnikDev.Controllers
 
                 if (ucenik != null)
                 {
+
                     //Dodeljuje se odeljenje sa statusom koji je izabran na formi.
                     var odeljenje = _context.Odeljenja
                         .Include("Status")
@@ -508,14 +617,32 @@ namespace eDnevnikDev.Controllers
                     //Ukoliko odeljenje nije ni kreirano u bazi bez obzira na status,kreira se.
                     if (odeljenje == null)
                     {
-                        odeljenje = new Odeljenje()
+                        //Ukoliko je kreirana nova skolska godina njen Id se dodeljuje odeljenju
+                        if (skolskaGodina.PocetakSkolskeGodine.Year == DateTime.Now.Year)
                         {
-                            OznakaID = oznaka,
-                            Razred = razred,
-                            PocetakSkolskeGodine = Odeljenje.SledecaSkolskaGodina(razred, oznaka, _context),
-                            StatusID = 2,
-                            KrajSkolskeGodine = Odeljenje.SledecaSkolskaGodina(razred, oznaka, _context) + 1
-                        };
+                            odeljenje = new Odeljenje()
+                            {
+                                OznakaID = oznaka,
+                                Razred = razred,
+                                PocetakSkolskeGodine = Odeljenje.SledecaSkolskaGodina(razred, oznaka, _context),
+                                StatusID = 2,
+                                KrajSkolskeGodine = Odeljenje.SledecaSkolskaGodina(razred, oznaka, _context) + 1,
+                                SkolskaGodinaId = skolskaGodina.SkolskaGodinaId
+                            };
+                        }
+                        //Ukoliko nije kreirana nova skolska godina njen Id se dodeljuje odeljenju kada se bude kreirala
+                        else
+                        {
+                            odeljenje = new Odeljenje()
+                            {
+                                OznakaID = oznaka,
+                                Razred = razred,
+                                PocetakSkolskeGodine = Odeljenje.SledecaSkolskaGodina(razred, oznaka, _context),
+                                StatusID = 2,
+                                KrajSkolskeGodine = Odeljenje.SledecaSkolskaGodina(razred, oznaka, _context) + 1
+                            };
+                        }
+
 
                         _context.Odeljenja.Add(odeljenje);
                         _context.SaveChanges();
@@ -583,7 +710,7 @@ namespace eDnevnikDev.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult KreirajOdeljenje(KreirajOdeljenjeViewModel model)
         {
-           //Ovaj deo koda ce se izvrsiti ukoliko dodje do greske prilikom prenosa parametara sa forme
+            //Ovaj deo koda ce se izvrsiti ukoliko dodje do greske prilikom prenosa parametara sa forme
             if (model.ListaRasporedjenihUcenika == null && model.Razred == 0 && model.Odeljenje == 0)
             {
                 var viewModelGreska = new KreirajOdeljenjeViewModel
@@ -820,7 +947,6 @@ namespace eDnevnikDev.Controllers
                 }
             }
         }
-
     }
 }
 

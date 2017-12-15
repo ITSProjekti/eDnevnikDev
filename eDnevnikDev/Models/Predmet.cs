@@ -34,7 +34,7 @@ namespace eDnevnikDev.Models
         /// </value>
         [Display(Name = "Naziv predmeta")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Polje za naziv je obavezno")]
-        [RegularExpression(@"^[A-ZŠĐČĆŽa-zšđčćž0-9'\.\-\s\,]+$", ErrorMessage = "Nisu dozoljeni specijalni karakteri")]
+        [RegularExpression(@"^([A-ZŠĐČĆŽa-zšđčćž0-9\s]+ ?)+$", ErrorMessage = "Nisu dozvoljeni specijalni karakteri")]
         public string NazivPredmeta { get; set; }
 
         /// <summary>
@@ -51,6 +51,7 @@ namespace eDnevnikDev.Models
         /// <value>
         /// The tip ocene predmeta identifier.
         /// </value>
+        [Display(Name = "Tip predmeta")]
         [ForeignKey("TipOcenePredmeta")]
         public int TipOcenePredmetaId { get; set; }
 

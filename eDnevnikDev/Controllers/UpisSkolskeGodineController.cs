@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using eDnevnikDev.ViewModel;
 using eDnevnikDev.Helpers;
+using System.Data.Entity.Migrations;
 
 namespace eDnevnikDev.Controllers
 {
@@ -79,12 +80,42 @@ namespace eDnevnikDev.Controllers
                     
                 }
 
+                //Pronalazi se stara skolska godina
+                var staraSkolskaGodina = _context.SkolskaGodine.SingleOrDefault(s => s.Aktuelna == true);
+
+                if(staraSkolskaGodina !=null)
+                {
+                    //Vrednost stare skolske godine se setuje na false jer se upisuje nova
+                    staraSkolskaGodina.Aktuelna = false;
+                    _context.SkolskaGodine.AddOrUpdate(staraSkolskaGodina);
+                    _context.SaveChanges();
+                }
+              
+
                 var skolskaGodina = new SkolskaGodina() { PocetakSkolskeGodine = podaci.PrvoPocetak, KrajSkolskeGodine = podaci.CetvrtoKraj, Aktuelna = true };
                 _context.SkolskaGodine.Add(skolskaGodina);
                 _context.SaveChanges();
 
                 //uzimamo id od skolske godine da bi mogli da unesemo polugodista
                 var skolskaGodinaId = _context.SkolskaGodine.Single(x => x.PocetakSkolskeGodine == podaci.PrvoPocetak).SkolskaGodinaId;
+
+                var odeljenja = _context.Odeljenja.Where(o => o.SkolskaGodinaId == null && o.StatusID == 2)
+                                                  .Select(o=>o)
+                                                  .ToList();
+                if(odeljenja!=null)
+                {
+                    //Dodeljuje se skolska godina odeljenima koja nemaju skolsku godinu
+                    for (int i = 0; i < odeljenja.Count(); i++)
+                    {
+                        var odeljenje = odeljenja.ElementAt(i);
+                        odeljenje.SkolskaGodinaId = skolskaGodina.SkolskaGodinaId;
+                        _context.Odeljenja.AddOrUpdate(odeljenje);
+                        _context.SaveChanges();
+
+                    }
+
+
+                }
 
                 var prvoPolugodiste = new Polugodiste()
                 {

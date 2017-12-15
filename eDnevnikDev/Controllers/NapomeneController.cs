@@ -39,7 +39,7 @@ namespace eDnevnikDev.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateHeaderAntiForgeryToken]
-        public void DodajIliIzmeniNapomenu(DTONapomena dtoNapomena)
+        private void DodajIliIzmeniNapomenu(DTONapomena dtoNapomena)
         {
             if(dtoNapomena!=null)
             {
@@ -69,7 +69,7 @@ namespace eDnevnikDev.Controllers
         /// <param name="ucenikId"></param>
         /// <param name="casId"></param>
         /// <returns></returns>
-        public JsonResult VratiNapomenu(int ucenikId, int casId)
+        private JsonResult VratiNapomenu(int ucenikId, int casId)
         {
             var napomena = _context.Napomene
                 .Where(n => n.UcenikId == ucenikId)

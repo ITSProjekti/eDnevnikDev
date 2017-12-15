@@ -30,7 +30,7 @@ namespace eDnevnikDev.Controllers
         }
 
         // GET: Casovi/Create
-        public ActionResult Create()
+        private ActionResult Create()
         {
             ViewBag.OdeljenjeId = new SelectList(_context.Odeljenja, "Id", "Id");
             ViewBag.PredmetId = new SelectList(_context.Predmeti, "PredmetID", "NazivPredmeta");
@@ -48,7 +48,7 @@ namespace eDnevnikDev.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(UpisCasaViewModel casViewModel)
+        private ActionResult Create(UpisCasaViewModel casViewModel)
         {
             var odeljenje = _context.Odeljenja
                 .SingleOrDefault(x => x.Razred == casViewModel.Razred && x.OznakaID == casViewModel.Odeljenje && x.StatusID == 3);
@@ -231,7 +231,7 @@ namespace eDnevnikDev.Controllers
         /// <param name="razred">The razred.</param>
         /// <param name="odeljenje">The odeljenje.</param>
         /// <returns></returns>
-        public JsonResult VratiPredmete(int razred, int odeljenje)
+        private JsonResult VratiPredmete(int razred, int odeljenje)
         {
             string user = User.Identity.GetUserId();
             try
@@ -265,7 +265,7 @@ namespace eDnevnikDev.Controllers
         /// <param name="odeljenje">The odeljenje.</param>
         /// <param name="predmetId">The predmet identifier.</param>
         /// <returns></returns>
-        public JsonResult VratiRedniBrojPredmeta(int razred, int odeljenje, int predmetId)
+        private JsonResult VratiRedniBrojPredmeta(int razred, int odeljenje, int predmetId)
         {
             try
             {
@@ -305,7 +305,7 @@ namespace eDnevnikDev.Controllers
         /// <param name="odeljenje">The odeljenje.</param>
         /// <param name="redniBrojCasa">The redni broj casa.</param>
         /// <returns></returns>
-        public JsonResult ProveraPostojanjaRednogBrojaCasa(int razred, int odeljenje, int redniBrojCasa)
+        private JsonResult ProveraPostojanjaRednogBrojaCasa(int razred, int odeljenje, int redniBrojCasa)
         {
             try
             {
@@ -342,7 +342,7 @@ namespace eDnevnikDev.Controllers
         /// <param name="predmetId">The predmet identifier.</param>
         /// <param name="rbPredmeta">The rb predmeta.</param>
         /// <returns></returns>
-        public JsonResult ProveraPostojanjaRednogBrojaPredmeta(int razred, int odeljenje, int predmetId, int rbPredmeta)
+        private JsonResult ProveraPostojanjaRednogBrojaPredmeta(int razred, int odeljenje, int predmetId, int rbPredmeta)
         {
             try
             {
@@ -374,7 +374,7 @@ namespace eDnevnikDev.Controllers
 
 
         //Aca Radi
-        public JsonResult VratiOcene(int? odeljenjeId, int? profesorId, int? predmetId, int? ucenikId)
+        private JsonResult VratiOcene(int? odeljenjeId, int? profesorId, int? predmetId, int? ucenikId)
         {
 
             if (odeljenjeId != null && profesorId != null && predmetId != null)
@@ -442,7 +442,7 @@ namespace eDnevnikDev.Controllers
         }
 
 
-        public JsonResult VratiPredmeteID()
+        private JsonResult VratiPredmeteID()
         {
             if (predmetiID != null && predmetiID.Count() > 0)
             {

@@ -24,14 +24,14 @@ namespace eDnevnikDev.Controllers
         }
 
         // GET: Ocene
-        public ActionResult Index()
+        private ActionResult Index()
         {
             var ocene = _context.Ocene.Include(o => o.Cas).Include(o => o.TipOcene).Include(o => o.TipOpisneOcene).Include(o => o.Ucenik);
             return View(ocene.ToList());
         }
 
         // GET: Ocene/Details/5
-        public ActionResult Details(int? id)
+        private ActionResult Details(int? id)
         {
             if (id == null)
             {
@@ -46,7 +46,7 @@ namespace eDnevnikDev.Controllers
         }
 
         // GET: Ocene/Create
-        public ActionResult Create()
+        private ActionResult Create()
         {
             ViewBag.CasId = new SelectList(_context.Casovi, "CasId", "Opis");
             ViewBag.TipOceneId = new SelectList(_context.TipoviOcena, "TipOceneId", "Tip");
@@ -60,7 +60,7 @@ namespace eDnevnikDev.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "OcenaId,Oznaka,Plus,UcenikId,CasId,TipOceneId,TipOpisneOceneId,Napomena")] Ocena ocena)
+        private ActionResult Create([Bind(Include = "OcenaId,Oznaka,Plus,UcenikId,CasId,TipOceneId,TipOpisneOceneId,Napomena")] Ocena ocena)
         {
             if (ModelState.IsValid)
             {
@@ -77,7 +77,7 @@ namespace eDnevnikDev.Controllers
         }
 
         // GET: Ocene/Edit/5
-        public ActionResult Edit(int? id)
+        private ActionResult Edit(int? id)
         {
             if (id == null)
             {
@@ -100,7 +100,7 @@ namespace eDnevnikDev.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "OcenaId,Oznaka,Plus,UcenikId,CasId,TipOceneId,TipOpisneOceneId,Napomena")] Ocena ocena)
+        private ActionResult Edit([Bind(Include = "OcenaId,Oznaka,Plus,UcenikId,CasId,TipOceneId,TipOpisneOceneId,Napomena")] Ocena ocena)
         {
             if (ModelState.IsValid)
             {
@@ -116,7 +116,7 @@ namespace eDnevnikDev.Controllers
         }
 
         // GET: Ocene/Delete/5
-        public ActionResult Delete(int? id)
+        private ActionResult Delete(int? id)
         {
             if (id == null)
             {
@@ -133,7 +133,7 @@ namespace eDnevnikDev.Controllers
         // POST: Ocene/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        private ActionResult DeleteConfirmed(int id)
         {
             Ocena ocena = _context.Ocene.Find(id);
             _context.Ocene.Remove(ocena);
@@ -154,7 +154,7 @@ namespace eDnevnikDev.Controllers
         /// TESTED. TEST_NAME= PredmetiTest_VracaPredmete()
         /// </summary>
         /// <returns>Listu predmeta</returns>
-        public ActionResult Predmeti()
+        private ActionResult Predmeti()
         {
             string user = User.Identity.GetUserId();
             var predmeti = _context.Profesori

@@ -3,18 +3,20 @@
     ViewBag.Title = "Predmeti";
 }
 
-<div class="container">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-12">
 
             <h2 style="text-align:center">Predmeti</h2>
 
-            @Html.ActionLink("Dodaj Novi", "Dodaj", "Predmeti", null, new { @class = "btn btn-primary btn-lg" })
-
-            <table class="table table-striped table-hover ">
-                <thead>
+            @Html.ActionLink("Dodaj Novi", "Dodaj", "Predmeti", null, new { @class = "btn btn-success" })
+            <br/>
+            <br/>
+            <table class="table  table-hover"   id="predmeti">
+                <thead style="background-color:#9dbf75;">
                     <tr>
                         <th>Naziv</th>
+                        <th>Tip</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -24,13 +26,31 @@
                             <td>
                                 @predmet.NazivPredmeta
                             </td>
+                            <td>
+                                @predmet.TipOcenePredmeta.Tip
+                            </td>
+                            <td>
+                                <center>
+                                    <a class="btn btn-success btn-xs" href="/Predmeti/IzmeniPredmet/@predmet.PredmetID">Izmeni</a>
+                                </center>
+                            </td>
                         </tr>
                     }
                 </tbody>
             </table>
-
         </div>
     </div>
-</div>
+
+@section Scripts{
+    <script>
+        $(function () {
+            $('#predmeti').DataTable({
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Serbian.json"
+                }
+            });
+        });
+    </script>
+   }
 
 

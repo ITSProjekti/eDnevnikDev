@@ -22,6 +22,6 @@ namespace eDnevnikDev.ViewModel
         /// <value>
         /// The tipovi ocena predmeta.
         /// </value>
-        public List<TipOcenePredmeta> TipoviOcenaPredmeta { get; set; }
+        public List<TipOcenePredmetaViewModel> TipoviOcenaPredmeta { get; set; }
     }
 }

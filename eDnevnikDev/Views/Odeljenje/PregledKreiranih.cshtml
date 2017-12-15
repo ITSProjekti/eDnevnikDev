@@ -1,90 +1,153 @@
-﻿
+﻿@model SkolskaGodinaViewModel
 @{
     ViewBag.Title = "PregledKreiranih";
 }
 
-<h2>Pregled kreiranih</h2>
+<div class="row">
+    <div class="col-md-12">
+        <h2 class="text-center">Odeljenja za školsku @Model.PocetakSkolskeGodine/@Model.KrajSkolskeGodine godinu.</h2>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <br />
+        <br />
+        <form class="form-inline">
+            <center>
+                <label>Godina:</label>
+                <select id="razred" style="width:100px;" name="Razred" class="form-control">
+                    <option value="1">I</option>
+                    <option value="2">II</option>
+                    <option value="3">III</option>
+                    <option value="4">IV</option>
+                </select>
+                <label>Odeljenje:</label>
+                <select id="odeljenja" style="width:100px;" name="Odeljenje" class="form-control"></select>
+            </center>
+        </form>
+        @*<span id="dugme"></span>
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-4">
-            <label for="razred">Razred</label>
-            <select id="razred">
-                <option value="1">Prvi</option>
-                <option value="2">Drugi</option>
-                <option value="3">Treći</option>
-                <option value="4">Četvrti</option>
-            </select>
-            <label for="odeljenja">Odeljenje</label>
-            <select id="odeljenja"></select>
+        <p id="p1"></p>*@
 
-            <span id="dugme"></span>
-
-            <p id="p1"></p>
-
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="col-md-12">
+            <div class="col-md-12">
+                <div class="col-md-12">
+                    <br />
+                    <h3 id="odeljenjeNaslov"></h3>
+                    <br />
+                </div>
+            </div>
         </div>
     </div>
-    <div id="poruka">  </div>
-    <div class="row" id="ucenici">
+</div>
+<div id="poruka">  </div>
+<div class="row">
+    <div class="col-md-12" id="ucenici">
 
     </div>
-
-    
-
-
 </div>
 
 @section Scripts
 {
 
     <script>
+
         function Odeljenja() {
             var razred = $("#razred").val();
-            var zahtev = $.getJSON("/Odeljenje/OdeljenjeTrajanje?godina="+razred);
+            var zahtev = $.getJSON("/Odeljenje/OdeljenjeTrajanje?godina=" + razred);
+
+            var razredOption = "";
+
+            if (razred == 1) {
+                razredOption = "I-";
+            }
+            else if (razred == 2) {
+                razredOption = "II-";
+            }
+            else if (razred == 3) {
+                razredOption = "III-";
+            }
+            else if (razred == 4) {
+                razredOption = "IV-";
+            }
 
 
             zahtev.done(function (odeljenja) {
 
                 for (var odeljenje in odeljenja) {
-                    $("#odeljenja").append("<option value='" + odeljenja[odeljenje].Oznaka + "'>" + odeljenja[odeljenje].Oznaka + "</option>");
+                    $("#odeljenja").append("<option value='" + odeljenja[odeljenje].Oznaka + "'>" + razredOption + odeljenja[odeljenje].Oznaka + "</option>");
                 }
             });
             zahtev.fail(function (gr) { $("#p1").html(gr.statusText); });
         }
 
-        function GenerisiKarticuUcenika(id,ime,prezime,fotografija,brojudnevniku)
-        {
-            if (fotografija == null)
-                fotografija = "http://via.placeholder.com/140x176";
-            else
-                fotografija = "/slike/" + fotografija;
+        function GenerisiKarticuUcenika(id, ime, prezime, fotografija, brojudnevniku, pol) {
+            if (fotografija == null) {
+                if (pol == "Ženski") {
+                    fotografija = "/ProfilneSlike/female.png";
+                }
+                else {
+                    fotografija = "/ProfilneSlike/male.png";
+                }
+            }
+            else {
+                fotografija = "data:image;base64," + fotografija;
+
+            }
 
             //return   "<div class='col-md-3'><div class='ucenik-kartica'><img src='" + fotografija + "' class='ucenik-slika' style='width:140px;height:176px;' /><div class='ucenik-ime'>" + ime + " " + prezime + " </div></div></div>";
-            return '<div class="col-sm-6 col-md-3" style="text-align:center; "><div class="thumbnail"><img src="' + fotografija + '" style="width:140px; height:176px; display: block;"> <div class="caption"> <h3>'+ brojudnevniku + '. ' + ime + ' ' + prezime + '</h3> </div></div> </div>';
+            return '<div class="col-md-2" style="text-align:center; background-color:#9dbf75; margin-top:50px; margin-left:40px;"><br><div class="thumbnail"><br><img src="' + fotografija + '" style="width:150px; height:200px; display: block;"> <div class="caption"> <h3>' + brojudnevniku + '. ' + ime + ' ' + prezime + '</h3> </div></div><br></div>';
         }
 
         function Ucenici() {
+
+       
             var razred = $("#razred").val();
             var odeljenje = $("#odeljenja").val();
-
+            var odeljenjeOznaka = $("#odeljenja option:selected").text();
             if (odeljenje == undefined)
+            {
                 odeljenje = 1;
+
+                if (razred == 1)
+                {
+                    odeljenjeOznaka = "I-1";
+                }
+                else if(razred == 2)
+                {
+                    odeljenjeOznaka = "II-1";
+                }
+                else if(razred==3)
+                {
+                    odeljenjeOznaka = "III-1";
+                }
+                else if (razred == 4) {
+                    odeljenjeOznaka = "IV-1";
+                }
+            }
+
+            //ispis podataka o odeljenju
+            $("#odeljenjeNaslov").html("");
+            $("#odeljenjeNaslov").append("Učenici " + odeljenjeOznaka + " odeljenja");
+
 
             var zahtev = $.getJSON("/Odeljenje/OdeljenjeUcenici?razred=" + razred + "&oznakaOdeljenja=" + odeljenje + '&status=3');
 
             zahtev.done(function (podaci) {
 
-                if (podaci.Ucenici == null)
-                {
+                if (podaci.Ucenici == null) {
                     $("#ucenici").append('<div class="alert alert-warning" role="alert"><strong>Upozorenje!</strong> Nema učenika u izabranom odeljenju </div>');
                     return;
                 }
-
-                for (var ucenik in podaci.Ucenici) {
-                    $("#ucenici").append(GenerisiKarticuUcenika(podaci.Ucenici[ucenik].ID, podaci.Ucenici[ucenik].Ime, podaci.Ucenici[ucenik].Prezime, podaci.Ucenici[ucenik].Fotografija, podaci.Ucenici[ucenik].BrojUDnevniku));
+                else {
+                    for (var ucenik in podaci.Ucenici) {
+                        $("#ucenici").append(GenerisiKarticuUcenika(podaci.Ucenici[ucenik].ID, podaci.Ucenici[ucenik].Ime, podaci.Ucenici[ucenik].Prezime, podaci.Ucenici[ucenik].Fotografija, podaci.Ucenici[ucenik].BrojUDnevniku, podaci.Ucenici[ucenik].Pol));
+                    }
                 }
-
-
             });
             zahtev.fail(function (gr) { $("#p1").html(gr.statusText); });
         }
@@ -103,33 +166,33 @@
                 Ucenici();
             }).change();
 
+
+
         });
 
-        function dugmeClickKreiraj()
-        {
-                var odeljenje = {
-                    Razred: $("#razred").val(),
-                    Oznaka: $("#odeljenja").val()
+        function dugmeClickKreiraj() {
+            var odeljenje = {
+                Razred: $("#razred").val(),
+                Oznaka: $("#odeljenja").val()
+            }
+            var zahtev = $.post("/Odeljenje/KreirajOdeljenje", odeljenje);
+
+            zahtev.done(function (rezultat) {
+                if (rezultat == 0) {
+                    $('#odeljenja').change();
+                    //$("#poruka").append('<div class="alert alert-success alert-dismissable"><strong>Uspeh!</strong> Uspešno kreirano odeljenje.</div>');
+                    $("#poruka").append('<div class="alert alert-success alert-dismissable"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Uspeh!</strong> Uspešno kreirano odeljenje.</div>');
+
+
                 }
-                var zahtev = $.post("/Odeljenje/KreirajOdeljenje", odeljenje);
+            });
+            zahtev.fail(function (rezultat) {
 
-                zahtev.done(function (rezultat) {
-                    if (rezultat == 0) {
-                        $('#odeljenja').change();
-                        //$("#poruka").append('<div class="alert alert-success alert-dismissable"><strong>Uspeh!</strong> Uspešno kreirano odeljenje.</div>');
-                        $("#poruka").append('<div class="alert alert-success alert-dismissable"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Uspeh!</strong> Uspešno kreirano odeljenje.</div>');
-
-
-                    }
-                });
-                zahtev.fail(function (rezultat) {
-
-                });
+            });
 
         }
 
-        function dugmeClickArhiviraj()
-        {
+        function dugmeClickArhiviraj() {
 
             var razred = $("#razred").val();
             var odeljenje = $("#odeljenja").val();

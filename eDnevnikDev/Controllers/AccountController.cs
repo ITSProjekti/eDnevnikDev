@@ -145,14 +145,7 @@ namespace eDnevnikDev.Controllers
                                         return RedirectToAction("RokZaKreiranjeSkolskeGodine", "UpisSkolskeGodine");
                                     }
                                 }
-                                //else
-                                //{
-                                //    return RedirectToAction("RokZaKreiranjeSkolskeGodine", "UpisSkolskeGodine");
-
-                                //}
-
-
-
+                            
                                 return RedirectToAction("IndexAdmin", "Home");
                                 }
                             }
