@@ -1,17 +1,9 @@
 ﻿@model UpisTromesecjaStringViewModel
+@using eDnevnikDev.Helpers
 @{
-    ViewBag.Title = "Upis školske godine";
+    ViewBag.Title = "Izmena školske godine";
 
-    string rok = "";
-    if (Model.RokZaKreiranjeSkolskeGodine)
-    {
-        rok = "Potrebno je da kreirate školsku godinu da biste nastavili sa radom";
-        Layout = "~/Views/Shared/_LayoutChangePassword.cshtml";
-    }
 }
-
-<h2>@rok</h2>
-<br />
 
 
 @if (Model.Poruka != "uspesno")
@@ -21,66 +13,68 @@
 }
 @if (Model.Poruka == "uspesno")
 {
-    <p id="poruka1" hidden="hidden">Uspesno je upisana godina!</p>
+    <p id="poruka1" hidden="hidden">Uspesno je izmenjena godina!</p>
 
 }
 
 
-<form  method="post" id="formazasubmit" >
+<form method="post" id="formazasubmit">
     @Html.AntiForgeryToken()
+
+    @*onload="ProveraDatumaZaDisable('#tromesecje1o')"*@
 
     <div class="col-md-6">
         <label for="datum">Početak prvog tromesečja:</label>
-        <input type="text" onclick="provera()" id="tromesecje1o" name="PrvoPocetak" class="form-control" data-val="true" data-val-required="Polje je obavezno" readonly>
+        <input type="text" value="@Model.PrvoPocetak" onclick="provera()" id="tromesecje1o" name="PrvoPocetak" class="form-control" data-val="true" data-val-required="Polje je obavezno" readonly>
+
         <span class="field-validation-valid" data-valmsg-for="datum" data-valmsg-replace="true"></span>
     </div>
 
     <div class="col-md-6">
         <label for="datum">Kraj prvog tromesečja:</label>
-        <input type="text" onclick="provera()" id="tromesecje1d" name="PrvoKraj" class="form-control" data-val="true" data-val-required="Polje je obavezno" readonly>
+        <input type="text" value="@Model.PrvoKraj" onclick="provera()" id="tromesecje1d" name="PrvoKraj" class="form-control" data-val="true" data-val-required="Polje je obavezno" readonly>
         <span class="field-validation-valid" data-valmsg-for="datum" data-valmsg-replace="true"></span>
     </div>
 
     <div class="col-md-6">
         <label for="datum">Početak drugog tromesečja:</label>
-        <input type="text" onclick="provera()" id="tromesecje2o" name="DrugoPocetak" class="form-control" data-val="true" data-val-required="Polje je obavezno" readonly>
+        <input type="text" value="@Model.DrugoPocetak" onclick="provera()" id="tromesecje2o" name="DrugoPocetak" class="form-control" data-val="true" data-val-required="Polje je obavezno" readonly>
         <span class="field-validation-valid" data-valmsg-for="datum" data-valmsg-replace="true"></span>
     </div>
 
     <div class="col-md-6">
         <label for="datum">Kraj drugog tromesečja:</label>
-        <input type="text" onclick="provera()" id="tromesecje2d" name="DrugoKraj" class="form-control" data-val="true" data-val-required="Polje je obavezno" readonly>
+        <input type="text" value="@Model.DrugoKraj" onclick="provera()" id="tromesecje2d" name="DrugoKraj" class="form-control" data-val="true" data-val-required="Polje je obavezno" readonly>
         <span class="field-validation-valid" data-valmsg-for="datum" data-valmsg-replace="true"></span>
     </div>
 
     <div class="col-md-6">
         <label for="datum">Početak trećeg tromesečja:</label>
-        <input type="text" onclick="provera()" id="tromesecje3o" name="TrecePocetak" class="form-control" data-val="true" data-val-required="Polje je obavezno" readonly>
+        <input type="text" value="@Model.TrecePocetak" onclick="provera()" id="tromesecje3o" name="TrecePocetak" class="form-control" data-val="true" data-val-required="Polje je obavezno" readonly>
         <span class="field-validation-valid" data-valmsg-for="datum" data-valmsg-replace="true"></span>
     </div>
 
     <div class="col-md-6">
         <label for="datum">Kraj trećeg tromesečja:</label>
-        <input type="text" onclick="provera()" id="tromesecje3d" name="TreceKraj" class="form-control" data-val="true" data-val-required="Polje je obavezno" readonly>
+        <input type="text" value="@Model.TreceKraj" onclick="provera()" id="tromesecje3d" name="TreceKraj" class="form-control" data-val="true" data-val-required="Polje je obavezno" readonly>
         <span class="field-validation-valid" data-valmsg-for="datum" data-valmsg-replace="true"></span>
     </div>
 
     <div class="col-md-6">
         <label for="datum">Početak četvrtog tromesečja:</label>
-        <input type="text" onclick="provera()" id="tromesecje4o" name="CetvrtoPocetak" class="form-control" data-val="true" data-val-required="Polje je obavezno" readonly>
+        <input type="text" value="@Model.CetvrtoPocetak" onclick="provera()" id="tromesecje4o" name="CetvrtoPocetak" class="form-control" data-val="true" data-val-required="Polje je obavezno" readonly>
         <span class="field-validation-valid" data-valmsg-for="datum" data-valmsg-replace="true"></span>
     </div>
 
     <div class="col-md-6">
         <label for="datum">Kraj četvrtog tromesečja:</label>
-        <input type="text" onclick="provera()" id="tromesecje4d" name="CetvrtoKraj" class="form-control" data-val="true" data-val-required="Polje je obavezno" readonly>
+        <input type="text" value="@Model.CetvrtoKraj" onclick="provera()" id="tromesecje4d" name="CetvrtoKraj" class="form-control" data-val="true" data-val-required="Polje je obavezno" readonly>
         <span class="field-validation-valid" data-valmsg-for="datum" data-valmsg-replace="true"></span>
     </div>
-
     <div class="col-md-6">
         <br />
-        <input value="Upiši godinu" onclick="potvrdi()" class="btn btn-success">
-        <input type="submit" id="submit" hidden="hidden"/>
+        <input value="Izmeni godinu" onclick="potvrdi()" class="btn btn-success">
+        <input type="submit" id="submit" hidden="hidden" />
     </div>
 
 </form>
@@ -88,13 +82,13 @@
 
 @section Scripts
 {
-    
+
 
     @Scripts.Render("~/bundles/jqueryval")
-    
+
     <script>
         // funkcija za popunjavanje svih polja
-        function puni(){
+        function puni() {
             $("#tromesecje1o").val("1.1.2017");
             $("#tromesecje1d").val("2.1.2017");
             $("#tromesecje2o").val("3.1.2017");
@@ -104,8 +98,81 @@
             $("#tromesecje4o").val("7.1.2017");
             $("#tromesecje4d").val("8.1.2017");
         }
+
+        
     </script>
-    
+
+    <script>
+        // Promeni kursor na svim datepick poljima na pointer - da ne bude znak zabrane
+        $("#tromesecje1o").css('cursor', 'pointer');
+        $("#tromesecje1d").css('cursor', 'pointer');
+        $("#tromesecje2o").css('cursor', 'pointer');
+        $("#tromesecje2d").css('cursor', 'pointer');
+        $("#tromesecje3o").css('cursor', 'pointer');
+        $("#tromesecje3d").css('cursor', 'pointer');
+        $("#tromesecje4o").css('cursor', 'pointer');
+        $("#tromesecje4d").css('cursor', 'pointer');
+
+
+        //konvertovanje svih datuma sa forme iz srpskog u americki kako bi mogli da se porede sa danasnjim datumom
+        var danasnjiDatum = new Date("@DateTime.Now");
+        var pocetakPrvog = new Date("@KonverizjaDatuma.izSrpskogUAmericki(Model.PrvoPocetak)");
+        var krajPrvog = new Date("@KonverizjaDatuma.izSrpskogUAmericki(Model.PrvoKraj)");
+        var pocetakDrugog = new Date("@KonverizjaDatuma.izSrpskogUAmericki(Model.DrugoPocetak)");
+        var krajDrugog = new Date("@KonverizjaDatuma.izSrpskogUAmericki(Model.DrugoKraj)");
+        var pocetakTreceg = new Date("@KonverizjaDatuma.izSrpskogUAmericki(Model.TrecePocetak)");
+        var krajTreceg = new Date("@KonverizjaDatuma.izSrpskogUAmericki(Model.TreceKraj)");
+        var pocetakCetvrtog = new Date("@KonverizjaDatuma.izSrpskogUAmericki(Model.CetvrtoPocetak)");
+        var krajCetvrtog = new Date("@KonverizjaDatuma.izSrpskogUAmericki(Model.CetvrtoKraj)");
+
+        //provera da li je datum manji od danasnjeg datuma
+        //ako jeste onda se ne dozvoljava izmena tog datuma i menja se kursor u not-allowed ikonicu
+        if (pocetakPrvog <= danasnjiDatum) {
+            $("#tromesecje1o").prop("disabled", true);
+            $("#tromesecje1o").css("cursor", "not-allowed");
+        }
+        if (krajPrvog <= danasnjiDatum) {
+            $("#tromesecje1d").prop("disabled", true);
+            $("#tromesecje1d").css("cursor", "not-allowed");
+        }
+        if (pocetakDrugog <= danasnjiDatum) {
+            $("#tromesecje2o").prop("disabled", true);
+            $("#tromesecje2o").css("cursor", "not-allowed");
+        }
+        if (krajDrugog <= danasnjiDatum) {
+            $("#tromesecje2d").prop("disabled", true);
+            $("#tromesecje2d").css("cursor", "not-allowed");
+        }
+        if (pocetakTreceg <= danasnjiDatum) {
+            $("#tromesecje3o").prop("disabled", true);
+            $("#tromesecje3o").css("cursor", "not-allowed");
+        }
+        if (krajTreceg <= danasnjiDatum) {
+            $("#tromesecje3d").prop("disabled", true);
+            $("#tromesecje3d").css("cursor", "not-allowed");
+        }
+        if (pocetakCetvrtog <= danasnjiDatum) {
+            $("#tromesecje4o").prop("disabled", true);
+            $("#tromesecje4o").css("cursor", "not-allowed");
+        }
+        if (krajCetvrtog <= danasnjiDatum) {
+            $("#tromesecje4d").prop("disabled", true);
+            $("#tromesecje4d").css("cursor", "not-allowed");
+        }
+        
+            
+
+
+        //Proba za drugu validaciju
+        //
+        //var date2 = $('#tromesecje4o').getDate('getDate');
+        //if(date2 != null)
+        //    date2.setDate(date2.getDate() + 1);
+
+        //$('#tromesecje4d').datepicker('option', 'minDate', date2);
+
+    </script>
+
     <script>
         // Provera da li je godina upisana ili ne i ispis poruke pri ucitavanju stranice
         // ukoliko je poruka vracena na samu stranicu, odnosno ukoliko postoji paragraf sa idjem poruke
@@ -113,16 +180,14 @@
         var p1 = document.getElementById("poruka1");
         (function () {
 
-            if (p1)
-            {
-               swal(
-              'Bravo',
-              "Uspesno je upisana godina!",
-              'success'
-            );
+            if (p1) {
+                swal(
+               'Bravo',
+               "Uspešno je upisana godina!",
+               'success'
+             );
             }
-            if (p0.innerHTML != "")
-            {
+            if (p0.innerHTML != "") {
                 swal(
                   'Ups...',
                   document.getElementById("poruka0").innerHTML,
@@ -212,16 +277,15 @@
             };
 
             {
-                // Promeni kursor na svim datepick poljima na pointer - da ne bude znak zabrane
-                $("#tromesecje1o").css('cursor', 'pointer');
-                $("#tromesecje1d").css('cursor', 'pointer');
-                $("#tromesecje2o").css('cursor', 'pointer');
-                $("#tromesecje2d").css('cursor', 'pointer');
-                $("#tromesecje3o").css('cursor', 'pointer');
-                $("#tromesecje3d").css('cursor', 'pointer');
-                $("#tromesecje4o").css('cursor', 'pointer');
-                $("#tromesecje4d").css('cursor', 'pointer');
-            
+
+                // Minimalni datum je uvek sutrasnji datum, da bi osigurali da se svi dogadjaju
+                // koji se aktiviraju u odredjeno vreme odrade
+                var minDatum = new Date("@DateTime.Now.Date.ToShortDateString()");
+                minDatum.setDate(minDatum.getDate() + 1);
+                //$('#tromesecje4d').datepicker('option', 'minDate', minDatum);
+                $('#tromesecje4d').datepicker('option', { minDate: minDatum });
+                
+                
                 // funckije za postavljanje minimalnog datuma na sledeci datepicker i formatiranje samih datepicker-a
                 $("#tromesecje1o").datepicker({
                     constrainInput: true,
@@ -231,14 +295,15 @@
                     altFormat: "yy-mm-dd",
                     changeMonth: true,
                     changeYear: true,
-                    minDate: 0,
+                    minDate: minDatum,
                     onSelect: function (date) {
                         var date2 = $('#tromesecje1o').datepicker('getDate');
                         date2.setDate(date2.getDate() + 1);
                         //sets minDate to dt1 date + 1
                         $('#tromesecje1d').datepicker('option', 'minDate', date2);
+                    },
 
-                    }
+
                 });
                 $("#tromesecje1d").datepicker({
                     constrainInput: true,
@@ -248,6 +313,7 @@
                     altFormat: "yy-mm-dd",
                     changeMonth: true,
                     changeYear: true,
+                    minDate: minDatum,
                     onSelect: function (date) {
                         if (document.getElementById('tromesecje1o').value === '') {
                             alert('Morate izabrati datum pocetka prvog tromesecja');
@@ -258,9 +324,7 @@
                             date2.setDate(date2.getDate() + 1);
                             $('#tromesecje2o').datepicker('option', 'minDate', date2);
 
-
                         }
-
                     }
                 });
                 $("#tromesecje2o").datepicker({
@@ -271,6 +335,7 @@
                     altFormat: "yy-mm-dd",
                     changeMonth: true,
                     changeYear: true,
+                    minDate: minDatum,
                     onSelect: function (date) {
                         if (document.getElementById('tromesecje1d').value === '') {
                             alert('Morate izabrati datum kraja prvog tromesecja');
@@ -292,6 +357,7 @@
                     altFormat: "yy-mm-dd",
                     changeMonth: true,
                     changeYear: true,
+                    minDate: minDatum,
                     onSelect: function (date) {
                         if (document.getElementById('tromesecje2o').value === '') {
                             alert('Morate izabrati datum pocetka drugog tromesecja');
@@ -312,6 +378,7 @@
                     altFormat: "yy-mm-dd",
                     changeMonth: true,
                     changeYear: true,
+                    minDate: minDatum,
                     onSelect: function (dateStr) {
                         if (document.getElementById('tromesecje2d').value === '') {
                             alert('Morate izabrati datum kraj drugog tromesecja');
@@ -332,6 +399,7 @@
                     altFormat: "yy-mm-dd",
                     changeMonth: true,
                     changeYear: true,
+                    minDate: minDatum,
                     onSelect: function (dateStr) {
                         if (document.getElementById('tromesecje3o').value === '') {
                             alert('Morate izabrati datum pocetka treceg tromesecja');
@@ -352,6 +420,7 @@
                     altFormat: "yy-mm-dd",
                     changeMonth: true,
                     changeYear: true,
+                    minDate: minDatum,
                     onSelect: function (dateStr) {
                         if (document.getElementById('tromesecje3d').value === '') {
                             alert('Morate izabrati datum kraja treceg tromesecja');
@@ -372,6 +441,7 @@
                     altFormat: "yy-mm-dd",
                     changeMonth: true,
                     changeYear: true,
+                    minDate: minDatum,
                     onSelect: function (dateStr) {
 
                         if (document.getElementById('tromesecje4o').value === '') {
@@ -385,6 +455,49 @@
 
                     }
                 });
+
+                var minDatum = new Date("@DateTime.Now.Date.ToShortDateString()");
+                minDatum.setDate(minDatum.getDate() + 1);
+
+                datum1d = new Date($('#tromesecje1o').datepicker('getDate'));
+                datum2o = new Date($('#tromesecje1d').datepicker('getDate'));
+                datum2d = new Date($('#tromesecje2o').datepicker('getDate'));
+                datum3o = new Date($('#tromesecje2d').datepicker('getDate'));
+                datum3d = new Date($('#tromesecje3o').datepicker('getDate'));
+                datum4o = new Date($('#tromesecje3d').datepicker('getDate'));
+                datum4d = new Date($('#tromesecje4o').datepicker('getDate'));
+
+                if (minDatum < datum1d) {
+                    datum1d.setDate(datum1d.getDate() + 2);
+                    $('#tromesecje2o').datepicker('option', { minDate: datum1d });
+                }
+
+                if (minDatum < datum2o) {
+                    datum2o.setDate(datum2o.getDate() + 2 );
+                    $('#tromesecje2d').datepicker('option', { minDate: datum2o });
+                }
+
+                if (minDatum < datum2d) {
+                    datum2d.setDate(datum2d.getDate() + 2);
+                    $('#tromesecje3o').datepicker('option', { minDate: datum2d });
+                }
+
+                if (minDatum < datum3o) {
+                    datum3o.setDate(datum3o.getDate() + 2);
+                    $('#tromesecje3d').datepicker('option', { minDate: datum3o });
+                }
+
+                if (minDatum < datum3d) {
+                    datum3d.setDate(datum3d.getDate() + 2);
+                    $('#tromesecje4o').datepicker('option', { minDate: datum3d });
+                }
+
+                if (minDatum < datum4o) {
+                    datum4o.setDate(datum4o.getDate() + 2);
+                    $('#tromesecje4d').datepicker('option', { minDate: datum4o });
+                }
+
+
             }
 
         }

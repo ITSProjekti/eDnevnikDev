@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using eDnevnikDev.ViewModel;
 using eDnevnikDev.Helpers;
+using System.Data.Entity.Migrations;
 
 namespace eDnevnikDev.Controllers
 {
@@ -157,7 +158,7 @@ namespace eDnevnikDev.Controllers
                 _context.SaveChanges();
 
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 srpskiDatumi.Poruka = "Greška pri upisu u bazu";
                 return View(srpskiDatumi);
@@ -166,6 +167,150 @@ namespace eDnevnikDev.Controllers
             poruka = "uspesno";
             srpskiDatumi.Poruka = poruka;
             return View(srpskiDatumi);
+        }
+
+        //GET
+        public ActionResult Edit()
+        {
+            SkolskaGodina skolskaGodina = _context.SkolskaGodine
+                .SingleOrDefault(s => s.Aktuelna == true);
+
+            Polugodiste prvoPolugodiste = _context.Polugodista
+                .SingleOrDefault(p => p.SkolskaGodinaId == skolskaGodina.SkolskaGodinaId && p.TipPolugodista==1);
+
+            Polugodiste drugoPolugodiste = _context.Polugodista
+                .SingleOrDefault(p => p.SkolskaGodinaId == skolskaGodina.SkolskaGodinaId && p.TipPolugodista == 2);
+
+            Tromesecje prvoTromesecje = _context.Tromesecja
+                .SingleOrDefault(t => t.PolugodisteId == prvoPolugodiste.PolugodisteId && t.TipTromesecja == 1);
+
+            Tromesecje drugoTromesecje = _context.Tromesecja
+                .SingleOrDefault(t => t.PolugodisteId == prvoPolugodiste.PolugodisteId && t.TipTromesecja == 2);
+
+            Tromesecje treceTromesecje = _context.Tromesecja
+                .SingleOrDefault(t => t.PolugodisteId == drugoPolugodiste.PolugodisteId && t.TipTromesecja == 3);
+
+            Tromesecje cetvrtoTromesecje = _context.Tromesecja
+                .SingleOrDefault(t => t.PolugodisteId == drugoPolugodiste.PolugodisteId && t.TipTromesecja == 4);
+
+            if (skolskaGodina==null)
+            {
+                return HttpNotFound();
+            }
+
+            UpisTromesecjaStringViewModel tromesecjeVM = new UpisTromesecjaStringViewModel()
+            {
+                PrvoPocetak = KonverizjaDatuma.izAmerickogUSrpski(prvoTromesecje.PocetakTromesecja),
+                PrvoKraj = KonverizjaDatuma.izAmerickogUSrpski(prvoTromesecje.KrajTromesecja),
+                DrugoPocetak = KonverizjaDatuma.izAmerickogUSrpski(drugoTromesecje.PocetakTromesecja),
+                DrugoKraj = KonverizjaDatuma.izAmerickogUSrpski(drugoTromesecje.KrajTromesecja),
+                TrecePocetak = KonverizjaDatuma.izAmerickogUSrpski(treceTromesecje.PocetakTromesecja),
+                TreceKraj = KonverizjaDatuma.izAmerickogUSrpski(treceTromesecje.KrajTromesecja),
+                CetvrtoPocetak = KonverizjaDatuma.izAmerickogUSrpski(cetvrtoTromesecje.PocetakTromesecja),
+                CetvrtoKraj = KonverizjaDatuma.izAmerickogUSrpski(cetvrtoTromesecje.KrajTromesecja)
+            };
+                
+            return View(tromesecjeVM);
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public ActionResult Edit(UpisTromesecjaStringViewModel tromesecja)
+        {
+            SkolskaGodina skolskaGodina = _context.SkolskaGodine
+                .SingleOrDefault(s => s.Aktuelna == true);
+
+            Polugodiste prvoPolugodiste = _context.Polugodista
+                .SingleOrDefault(p => p.SkolskaGodinaId == skolskaGodina.SkolskaGodinaId && p.TipPolugodista == 1);
+
+            Polugodiste drugoPolugodiste = _context.Polugodista
+                .SingleOrDefault(p => p.SkolskaGodinaId == skolskaGodina.SkolskaGodinaId && p.TipPolugodista == 2);
+
+            Tromesecje prvoTromesecje = _context.Tromesecja
+                .SingleOrDefault(t => t.PolugodisteId == prvoPolugodiste.PolugodisteId && t.TipTromesecja == 1);
+
+            Tromesecje drugoTromesecje = _context.Tromesecja
+                .SingleOrDefault(t => t.PolugodisteId == prvoPolugodiste.PolugodisteId && t.TipTromesecja == 2);
+
+            Tromesecje treceTromesecje = _context.Tromesecja
+                .SingleOrDefault(t => t.PolugodisteId == drugoPolugodiste.PolugodisteId && t.TipTromesecja == 3);
+
+            Tromesecje cetvrtoTromesecje = _context.Tromesecja
+                .SingleOrDefault(t => t.PolugodisteId == drugoPolugodiste.PolugodisteId && t.TipTromesecja == 4);
+
+            if (ModelState.IsValid)
+            {
+                skolskaGodina.PocetakSkolskeGodine = KonverizjaDatuma.izSrpskogUAmericki(tromesecja.PrvoPocetak);
+                skolskaGodina.KrajSkolskeGodine = KonverizjaDatuma.izSrpskogUAmericki(tromesecja.CetvrtoKraj);
+
+                prvoPolugodiste.PocetakPolugodista= KonverizjaDatuma.izSrpskogUAmericki(tromesecja.PrvoPocetak);
+                prvoPolugodiste.KrajPolugodista = KonverizjaDatuma.izSrpskogUAmericki(tromesecja.DrugoKraj);
+                drugoPolugodiste.PocetakPolugodista = KonverizjaDatuma.izSrpskogUAmericki(tromesecja.TrecePocetak);
+                drugoPolugodiste.KrajPolugodista = KonverizjaDatuma.izSrpskogUAmericki(tromesecja.CetvrtoKraj);
+
+                prvoTromesecje.PocetakTromesecja= KonverizjaDatuma.izSrpskogUAmericki(tromesecja.PrvoPocetak);
+                prvoTromesecje.KrajTromesecja = KonverizjaDatuma.izSrpskogUAmericki(tromesecja.PrvoKraj);
+                drugoTromesecje.PocetakTromesecja = KonverizjaDatuma.izSrpskogUAmericki(tromesecja.DrugoPocetak);
+                drugoTromesecje.KrajTromesecja = KonverizjaDatuma.izSrpskogUAmericki(tromesecja.DrugoKraj);
+                treceTromesecje.PocetakTromesecja = KonverizjaDatuma.izSrpskogUAmericki(tromesecja.TrecePocetak);
+                treceTromesecje.KrajTromesecja = KonverizjaDatuma.izSrpskogUAmericki(tromesecja.TreceKraj);
+                cetvrtoTromesecje.PocetakTromesecja = KonverizjaDatuma.izSrpskogUAmericki(tromesecja.CetvrtoPocetak);
+                cetvrtoTromesecje.KrajTromesecja = KonverizjaDatuma.izSrpskogUAmericki(tromesecja.CetvrtoKraj);
+
+            }
+
+            try
+            {
+                _context.SkolskaGodine.AddOrUpdate(skolskaGodina);
+                _context.SaveChanges();
+
+                _context.Polugodista.AddOrUpdate(prvoPolugodiste);
+                _context.SaveChanges();
+
+                _context.Polugodista.AddOrUpdate(drugoPolugodiste);
+                _context.SaveChanges();
+
+                _context.Tromesecja.AddOrUpdate(prvoTromesecje);
+                _context.SaveChanges();
+
+                _context.Tromesecja.AddOrUpdate(drugoTromesecje);
+                _context.SaveChanges();
+
+                _context.Tromesecja.AddOrUpdate(treceTromesecje);
+                _context.SaveChanges();
+
+                _context.Tromesecja.AddOrUpdate(cetvrtoTromesecje);
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+
+            string poruka = "uspesno";
+            tromesecja.Poruka = poruka;
+            return View(tromesecja);
+        }
+
+        private string ProveraRedosledaUpisanihGodina(UpisTromesecjaViewModel tromesecja)
+        {
+            //provera da li je redosled datuma dobar
+            if (tromesecja.PrvoPocetak < tromesecja.PrvoKraj
+                && tromesecja.PrvoKraj < tromesecja.DrugoPocetak
+                && tromesecja.DrugoPocetak < tromesecja.DrugoKraj
+                && tromesecja.DrugoKraj < tromesecja.TrecePocetak
+                && tromesecja.TrecePocetak < tromesecja.TreceKraj
+                && tromesecja.TreceKraj < tromesecja.CetvrtoPocetak
+                && tromesecja.CetvrtoPocetak < tromesecja.CetvrtoKraj)
+            {
+
+            }
+            else
+            {
+                return "Datumi nisu lepo raspoređeni";
+            }
+
+            return "";
         }
 
         private string ProveraGodina(UpisTromesecjaViewModel godine)
@@ -181,31 +326,9 @@ namespace eDnevnikDev.Controllers
                 return "Početna godina mora biti trenutna godina, a krajnja mora biti sledeća";
             }
 
-            //provera da li je redosled datuma dobar
-            if (godine.PrvoPocetak < godine.PrvoKraj
-                && godine.PrvoKraj < godine.DrugoPocetak
-                && godine.DrugoPocetak < godine.DrugoKraj
-                && godine.DrugoKraj < godine.TrecePocetak
-                && godine.TrecePocetak < godine.TreceKraj
-                && godine.TreceKraj < godine.CetvrtoPocetak
-                && godine.CetvrtoPocetak < godine.CetvrtoKraj)
-            {
-
-            }
-            else
-            {
-                return "Datumi nisu lepo rasporedjeni";
-            }
-
-
-
+            ProveraRedosledaUpisanihGodina(godine);
 
             return "";
-
-
         }
-        
-
-
     }
 }

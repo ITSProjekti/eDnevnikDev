@@ -31,17 +31,17 @@
 
                 @if (Model.Ucenik.Fotografija != null)
                 {
-                    <img id="fotografijaUcenika" src="data:image;base64,@System.Convert.ToBase64String(Model.Ucenik.Fotografija)" alt="" width="194px" height="240px" />
+                    <img id="fotografijaUcenika" src="data:image;base64,@System.Convert.ToBase64String(Model.Ucenik.Fotografija)" alt="" style="width:194px; height:240px" />
                 }
                 else
                 {
                     if (Model.Ucenik.Pol.Naziv == "Ženski")
                     {
-                        <img id="fotografijaUcenika" src="~/ProfilneSlike/female.png" alt="" width="194px" height="240px" />
+                        <img id="fotografijaUcenika" src="~/ProfilneSlike/female.png" alt="" style="width:194px; height:240px" />
                     }
                     else
                     {
-                        <img id="fotografijaUcenika" src="~/ProfilneSlike/male.png" alt="" width="194px" height="240px" />
+                        <img id="fotografijaUcenika" src="~/ProfilneSlike/male.png" alt="" style="width:194px; height:240px" />
                     }
                 }
                 <div class="col-sm-12" style="margin-bottom:20px;">
@@ -96,10 +96,9 @@
 
         <div class="form-group">
             @Html.LabelFor(model => model.Ucenik.DatumRodjenja, htmlAttributes: new { @class = "control-label col-md-2" })
-
             <div class="col-md-10">
                 <input type="text" id="datum" class="form-control" name="Ucenik.DatumRodjenja" value="@Model.Ucenik.DatumRodjenja.ToString("dd.MM.yyyy")" data-val="true" data-val-required="Polje za datum rođenja je obavezno" readonly>
-                <input type="hidden" name="Ucenik.DatumRodjenja" id="Ucenik_DatumRodjenja">
+                <input type="hidden" name="Ucenik.DatumRodjenja" id="Ucenik_DatumRodjenja" value="@Model.Ucenik.DatumRodjenja">
                 @*@Html.ValidationMessageFor(u => u.Ucenik.DatumRodjenja)*@
                 <span class="field-validation-valid" data-valmsg-for="datum" data-valmsg-replace="true"></span>
             </div>
@@ -248,12 +247,15 @@
                 <input type="submit" value="Sačuvaj" class="btn btn-success" />
             </div>
         </div>
+
+        <div class="form-group">
+            <div class="col-md-10">
+                @Html.ActionLink("Vrati se na listu učenika", "Index", "Ucenici", new { @class = "btn btn-success btn-xs" })
+            </div>
+        </div>
     </div>
 }
 
-<div>
-    @Html.ActionLink("Vrati se na listu učenika", "Index")
-</div>
 
 @section Scripts
 {
@@ -276,6 +278,11 @@
 
         $("#datum").change(function () {
             $(this).blur();
+        });
+
+        //Promeni se kursor u rucicu umesto da bude znak zabrane
+        $(document).ready(function () {
+            $("#datum").css('cursor', 'pointer');
         });
 
         function readURL(input) {

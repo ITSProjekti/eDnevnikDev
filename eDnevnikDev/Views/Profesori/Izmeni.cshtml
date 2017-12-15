@@ -24,18 +24,18 @@
             <div class="col-md-10">
                 @if (Model.Profesor.Fotografija != null)
                 {
-                    <img id="fotografijaProfesora" src="data:image;base64,@System.Convert.ToBase64String(Model.Profesor.Fotografija)" alt="" width="194px" height="240px" />
+                    <img id="fotografijaProfesora" src="data:image;base64,@System.Convert.ToBase64String(Model.Profesor.Fotografija)" style="width:194px; height:240px" alt="" />
 
                 }
                 else
                 {
                     if (Model.Profesor.Pol.Naziv == "Ženski")
                     {
-                        <img id="fotografijaProfesora" src="~/ProfilneSlike/female.png" alt="" width="194px" height="240px" />
+                        <img id="fotografijaProfesora" src="~/ProfilneSlike/female.png" alt="" style="width:194px; height:240px" />
                     }
                     else
                     {
-                        <img id="fotografijaProfesora" src="~/ProfilneSlike/male.png" alt="" width="194px" height="240px" />
+                        <img id="fotografijaProfesora" src="~/ProfilneSlike/male.png" alt="" style="width:194px; height:240px" />
                     }
                 }
                 <div class="col-sm-12" style="margin-bottom:20px;">
@@ -165,12 +165,14 @@
         <div class="form-group">
             <div class="col-md-10 col-md-offset-2">
                 <button type="reset" class="btn btn-default" onclick="ResetValidacije()">Poništi</button>
-                <button type="submit" class="btn btn-primary">Sačuvaj</button>
+                <button type="submit" class="btn btn-success">Sačuvaj</button>
             </div>
         </div>
 
-        <div>
-            @Html.ActionLink("Vrati se na listu profesora", "Index")
+        <div class="form-group">
+            <div class="col-md-10">
+                @Html.ActionLink("Vrati se na listu profesora", "Index", "Profesori", new { @class = "btn btn-success btn-xs" })
+            </div>
         </div>
     </div>
             }
