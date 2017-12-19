@@ -1,4 +1,5 @@
 ﻿@model AdminIndexViewModel
+@using eDnevnikDev.Helpers;
 @{
     ViewBag.Title = "IndexAdmin";
 }
@@ -275,7 +276,7 @@
         <div class="col-md-6">
             <div class="well well-md col-md-12">
                 <div>
-                    <h4>Izveštaj o polugodištima</h4>
+                    <h4>Izveštaj o školskoj godini</h4>
                     <hr />
                     <div class="col-md-12">
                         <h4 align="center">Prvo polugodište</h4>
@@ -301,8 +302,75 @@
                             <input disabled class="form-control" value="@Model.KrajDrugogPolugodista" />
                         </div>
                     </div>
+
                     
-                    
+                    <div class="col-md-12">
+                        <h4 align="center">Prvo tromesečje</h4>
+
+                        <div class="col-sm-6">
+                            <label>Početak</label>
+                            <input disabled class="form-control" value="@Model.PocetakPrvogTromesecja" />
+                        </div>
+                        <div class="col-sm-6">
+                            <label>Kraj</label>
+                            <input disabled class="form-control" value="@Model.KrajPrvogTromesecja" />
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <h4 align="center">Drugo tromesečje</h4>
+
+                        <div class="col-sm-6">
+                            <label>Početak</label>
+                            <input disabled class="form-control" value="@Model.PocetakDrugogTromesecja" />
+                        </div>
+                        <div class="col-sm-6">
+                            <label>Kraj</label>
+                            <input disabled class="form-control" value="@Model.KrajDrugogTromesecja" />
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-md-12">
+                        <h4 align="center">Treće tromesečje</h4>
+
+                        <div class="col-sm-6">
+                            <label>Početak</label>
+                            <input disabled class="form-control" value="@Model.PocetakTrecegTromesecja" />
+                        </div>
+                        <div class="col-sm-6">
+                            <label>Kraj</label>
+                            <input disabled class="form-control" value="@Model.KrajTrecegTromesecja" />
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <h4 align="center">Četvrto tromesečje</h4>
+
+                        <div class="col-sm-6">
+                            <label>Početak</label>
+                            <input disabled class="form-control" value="@Model.PocetakCetvrtogTromesecja" />
+                        </div>
+                        <div class="col-sm-6">
+                            <label>Kraj</label>
+                            <input disabled class="form-control" value="@Model.KrajCetvrtogTromesecja" />
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-12">
+                        <br />
+                        <center>
+                            @if (DateTime.Now.Date > KonverizjaDatuma.izSrpskogUAmericki(Model.KrajDrugogPolugodista))
+                            {
+                                <a class="btn btn-success" href="/UpisSkolskeGodine/Create">Unesi novu školsku goidnu</a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-success" href="/UpisSkolskeGodine/Edit">Izmeni Podatke</a>
+                            }
+
+                        </center>
+                    </div>
                     
                 </div>
                 
