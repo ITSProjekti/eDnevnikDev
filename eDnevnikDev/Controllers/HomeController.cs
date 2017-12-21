@@ -23,6 +23,7 @@ namespace eDnevnikDev.Controllers
             this._context = db;
         }
 
+        [Authorize]
         public ActionResult Index()
         {
             return View();
@@ -43,7 +44,7 @@ namespace eDnevnikDev.Controllers
         }
        
         [Authorize(Roles = "Administrator")]
-        public ActionResult IndexAdmin()
+        private ActionResult IndexAdmin()
         {
             int skolskaGodinaId = _context.SkolskaGodine.OrderByDescending(x => x.SkolskaGodinaId).First().SkolskaGodinaId;
             int prvoPolugodisteId = _context.Polugodista.SingleOrDefault(x => x.SkolskaGodinaId == skolskaGodinaId && x.TipPolugodista == 1).PolugodisteId;

@@ -33,7 +33,7 @@ namespace eDnevnikDev.Helpers
         .RepeatForever())
     .Build();
 
-            scheduler.ScheduleJob(job, trigger);
+            //scheduler.ScheduleJob(job, trigger);
         }
     }
 }

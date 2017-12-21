@@ -42,19 +42,45 @@ namespace eDnevnikDev.Controllers
         /// Ucitavamo Listu Predmeta iz Baze. Test name=PredmetController_Index
         /// </summary>
         /// <returns>Vracamo View sa Listom Predmeta</returns>
-        public ActionResult Index()
+        [Authorize(Roles = "Administrator, Editor")]
+        public ActionResult Index(bool? dodatPredmet, bool? izmenjenPredmet)
         {
-            IEnumerable<Predmet> ListaPredmeta = _context.Predmeti.ToList();
-            return View("Index", ListaPredmeta);
+            if (dodatPredmet != null)
+            {
+                var model = new ListaPredmetaViewModel
+                {
+                    ListaPredmeta = _context.Predmeti.ToList(),
+                    DodatPredmet = (bool)dodatPredmet
+                };
+
+                return View(model);
+            }
+
+            if (izmenjenPredmet != null)
+            {
+                var model = new ListaPredmetaViewModel
+                {
+                    ListaPredmeta = _context.Predmeti.ToList(),
+                    IzmenjenPredmet = (bool)izmenjenPredmet
+                };
+
+                return View(model);
+            }
+
+            return View(new ListaPredmetaViewModel
+            {
+                ListaPredmeta = _context.Predmeti.ToList()
+            });
         }
 
         /// <summary>
         /// Ucitava View za dodavanje predmeta. Test name=PredmetController_Dodaj
         /// </summary>
         /// <returns>Vraca View  Dodaj</returns>
+        [Authorize(Roles = "Administrator, Editor")]
         public ActionResult Dodaj()
         {
-            return View("Dodaj");
+            return View(new PredmetViewModel());
         }
 
         /// <summary>
@@ -63,53 +89,40 @@ namespace eDnevnikDev.Controllers
         /// </summary>
         /// <param name="predmet">The predmet.</param>
         /// <returns>Vraca nas na index stranu Predmeta</returns>
+        [Authorize(Roles = "Administrator, Editor")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SacuvajPredmet(Predmet predmetViewModel)
+        public ActionResult SacuvajPredmet(PredmetViewModel predmetViewModel)
         {
+            //proverava se da li predmet vec postoji u bazi
+            if (_context.Predmeti.Where(p => p.NazivPredmeta == predmetViewModel.Predmet.NazivPredmeta).Any())
+                ModelState.AddModelError("Predmet.NazivPredmeta", "Predmet već postoji!");
+
             if (ModelState.IsValid)
             {
                 try
                 {
                     Predmet predmet = new Predmet();
-                    predmet.NazivPredmeta = predmetViewModel.NazivPredmeta;
-                    predmet.TipOcenePredmetaId = predmetViewModel.TipOcenePredmetaId;
+                    predmet.NazivPredmeta = predmetViewModel.Predmet.NazivPredmeta;
+                    predmet.TipOcenePredmetaId = predmetViewModel.Predmet.TipOcenePredmetaId;
 
                     _context.Predmeti.Add(predmet);
                     _context.SaveChanges();
-                    return RedirectToAction("Index", "Predmeti");
+                    return RedirectToAction("Index", "Predmeti", new { dodatPredmet = true });
                 }
                 catch (Exception ex)
                 {
                     System.Diagnostics.Debug.WriteLine(ex);
                 }
+                return View("Dodaj", new PredmetViewModel { Predmet = predmetViewModel.Predmet, Greska = true });
+            }
+            else
+            {
+                return View("Dodaj", new PredmetViewModel { Predmet = predmetViewModel.Predmet, Greska = true });
             }
 
-            return View("Dodaj", predmetViewModel);
         }
 
-        /// <summary>
-        /// Vraća se lista predmeta kao i njihovi tipovi ocena (opisna, numerička)
-        /// Koristi se "PredmetTipOcenePredmetaViewModel" koji sadrži liste predmeta 
-        /// kao i liste tipova ocena predmeta
-        /// </summary>
-        /// <returns></returns>
-        //public ActionResult PrikaziPredmeteSaTipovimaOcena()
-        //{
-        //    var listaPredmeta = _context.Predmeti.
-        //        Select(x => x);
-
-        //    var listaPredmetaSaTipom = listaPredmeta.Include("TipOcenePredmeta")
-        //        .ToList();
-
-        //    var listaTipovaOcenaPredmeta = _context.TipoviOcenaPredmeta
-        //        .ToList();
-
-        //    var predmetTipOcenePredmetaViewModel =
-        //        new PredmetTipOcenePredmetaViewModel() { Predmeti = listaPredmetaSaTipom, TipoviOcenaPredmeta = listaTipovaOcenaPredmeta };
-
-        //    return View(predmetTipOcenePredmetaViewModel);
-        //}
 
         /// <summary>
         /// Menja se tip ocene za određeni predmet
@@ -119,7 +132,7 @@ namespace eDnevnikDev.Controllers
         /// <param name="tipOcenePredmetaId">The tip ocene predmeta identifier.</param>
         [HttpPost]
         [ValidateHeaderAntiForgeryToken]
-        public void IzmenaTipaOcenaUPredmetu(int predmetId, int tipOcenePredmetaId)
+        private void IzmenaTipaOcenaUPredmetu(int predmetId, int tipOcenePredmetaId)
         {
             var predmet = _context.Predmeti
                 .SingleOrDefault(p => p.PredmetID == predmetId);
@@ -142,6 +155,7 @@ namespace eDnevnikDev.Controllers
         /// Test name=PredmetController_VratiSveTipoveOcenaPredmeta
         /// </summary>
         /// <returns></returns>
+        [Authorize(Roles = "Administrator, Editor")]
         public JsonResult VratiSveTipoveOcenaPredmeta()
         {
             try
@@ -163,6 +177,7 @@ namespace eDnevnikDev.Controllers
             return Json(new List<DTOTipOcenePredmeta>(), JsonRequestBehavior.AllowGet);
         }
 
+        [Authorize(Roles = "Administrator, Editor")]
         public ActionResult IzmeniPredmet(int? id)
         {
 
@@ -193,10 +208,26 @@ namespace eDnevnikDev.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Administrator, Editor")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult IzmeniPredmet(IzmenaPredmetaViewModel model)
-        {
+         {
+            //proverava se da li predmet vec postoji u bazi
+            if (_context.Predmeti.Where(p => p.NazivPredmeta == model.NazivPredmeta).Any())
+            {
+                var predmetId = _context.Predmeti
+                    .Where(p => p.NazivPredmeta == model.NazivPredmeta)
+                    .Select(p => p.PredmetID)
+                    .SingleOrDefault();
+
+                if(predmetId!=model.PredmetId)
+                {
+                    ModelState.AddModelError("NazivPredmeta", "Predmet već postoji!");
+                }
+            }
+
+
             if (ModelState.IsValid)
             {
                 var predmet = new Predmet
@@ -209,7 +240,7 @@ namespace eDnevnikDev.Controllers
                 _context.Predmeti.AddOrUpdate(predmet);
                 _context.SaveChanges();
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { izmenjenPredmet = true });
             }
 
             model.TipoviOcenaPredmeta = _context.TipoviOcenaPredmeta.Select(x => new TipOcenePredmetaViewModel
@@ -218,6 +249,8 @@ namespace eDnevnikDev.Controllers
                 Tip = x.Tip
 
             }).ToList();
+
+            model.Greska = true;
 
             return View(model);
 

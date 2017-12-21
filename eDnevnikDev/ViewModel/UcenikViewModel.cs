@@ -48,5 +48,7 @@ namespace eDnevnikDev.ViewModel
         public int Oznaka { get; set; }
 
         public int SmestiUNovoOdeljenje { get; set; }
+
+        public bool? Greska { get; set; }
     }
 }

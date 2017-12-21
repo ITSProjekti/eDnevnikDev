@@ -16,9 +16,12 @@ namespace eDnevnikDev.Helpers
         {
             string userNameAdmin = "rootadmin";
             string passwordAdmin = "P@ssw0rd";
+            string emailAdmin = "rootadmin@admin.admin";
 
             string userNameAdmin2 = "rootadmin2";
             string passwordAdmin2 = "P@ssw0rd";
+            string emailAdmin2 = "rootadmin2@admin.admin";
+
 
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
@@ -45,7 +48,8 @@ namespace eDnevnikDev.Helpers
             {
                 user = new ApplicationUser()
                 {
-                    UserName = userNameAdmin
+                    UserName = userNameAdmin,
+                    Email = emailAdmin
                 };
                 IdentityResult userResult = userManager.Create(user, passwordAdmin);
                 if (userResult.Succeeded)
@@ -59,7 +63,8 @@ namespace eDnevnikDev.Helpers
             {
                 user = new ApplicationUser()
                 {
-                    UserName = userNameAdmin2
+                    UserName = userNameAdmin2,
+                    Email=emailAdmin2
                 };
                 IdentityResult userResult = userManager.Create(user, passwordAdmin2);
                 if (userResult.Succeeded)
