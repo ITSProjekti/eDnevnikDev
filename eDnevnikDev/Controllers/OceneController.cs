@@ -24,7 +24,7 @@ namespace eDnevnikDev.Controllers
         }
 
         // GET: Ocene
-        private ActionResult Index()
+        public ActionResult Index()
         {
             var ocene = _context.Ocene.Include(o => o.Cas).Include(o => o.TipOcene).Include(o => o.TipOpisneOcene).Include(o => o.Ucenik);
             return View(ocene.ToList());
@@ -46,7 +46,7 @@ namespace eDnevnikDev.Controllers
         }
 
         // GET: Ocene/Create
-        private ActionResult Create()
+        public ActionResult Create()
         {
             ViewBag.CasId = new SelectList(_context.Casovi, "CasId", "Opis");
             ViewBag.TipOceneId = new SelectList(_context.TipoviOcena, "TipOceneId", "Tip");
@@ -60,7 +60,7 @@ namespace eDnevnikDev.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        private ActionResult Create([Bind(Include = "OcenaId,Oznaka,Plus,UcenikId,CasId,TipOceneId,TipOpisneOceneId,Napomena")] Ocena ocena)
+        public ActionResult Create([Bind(Include = "OcenaId,Oznaka,Plus,UcenikId,CasId,TipOceneId,TipOpisneOceneId,Napomena")] Ocena ocena)
         {
             if (ModelState.IsValid)
             {
@@ -77,7 +77,7 @@ namespace eDnevnikDev.Controllers
         }
 
         // GET: Ocene/Edit/5
-        private ActionResult Edit(int? id)
+        public ActionResult Edit(int? id)
         {
             if (id == null)
             {
@@ -100,7 +100,7 @@ namespace eDnevnikDev.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        private ActionResult Edit([Bind(Include = "OcenaId,Oznaka,Plus,UcenikId,CasId,TipOceneId,TipOpisneOceneId,Napomena")] Ocena ocena)
+        public ActionResult Edit([Bind(Include = "OcenaId,Oznaka,Plus,UcenikId,CasId,TipOceneId,TipOpisneOceneId,Napomena")] Ocena ocena)
         {
             if (ModelState.IsValid)
             {
@@ -116,7 +116,7 @@ namespace eDnevnikDev.Controllers
         }
 
         // GET: Ocene/Delete/5
-        private ActionResult Delete(int? id)
+        public ActionResult Delete(int? id)
         {
             if (id == null)
             {

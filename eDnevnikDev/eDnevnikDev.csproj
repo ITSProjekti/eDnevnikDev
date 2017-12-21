@@ -250,6 +250,7 @@
     <Compile Include="DTOs\DTOProfesor.cs" />
     <Compile Include="DTOs\DTORasporedjenUcenik.cs" />
     <Compile Include="DTOs\DTORola.cs" />
+    <Compile Include="DTOs\DTOStatusUcenika.cs" />
     <Compile Include="DTOs\DTOTipOcene.cs" />
     <Compile Include="DTOs\DTOTipOcenePredmeta.cs" />
     <Compile Include="DTOs\DTOTipOpisneOcene.cs" />
@@ -327,13 +328,13 @@
     <Compile Include="Migrations\201712011218058_EnableNullUcenikOdeljenjeID.Designer.cs">
       <DependentUpon>201712011218058_EnableNullUcenikOdeljenjeID.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201712011350080_test.cs" />
-    <Compile Include="Migrations\201712011350080_test.Designer.cs">
-      <DependentUpon>201712011350080_test.cs</DependentUpon>
+    <Compile Include="Migrations\201712151429428_DodatDatumIspisaUUceniku.cs" />
+    <Compile Include="Migrations\201712151429428_DodatDatumIspisaUUceniku.Designer.cs">
+      <DependentUpon>201712151429428_DodatDatumIspisaUUceniku.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201712051422344_proba.cs" />
-    <Compile Include="Migrations\201712051422344_proba.Designer.cs">
-      <DependentUpon>201712051422344_proba.cs</DependentUpon>
+    <Compile Include="Migrations\201712151459518_datumIspisaUNullable.cs" />
+    <Compile Include="Migrations\201712151459518_datumIspisaUNullable.Designer.cs">
+      <DependentUpon>201712151459518_datumIspisaUNullable.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -880,11 +881,11 @@
     <EmbeddedResource Include="Migrations\201711211356185_LicencaIZvanjeRequiredAnotacija.resx">
       <DependentUpon>201711211356185_LicencaIZvanjeRequiredAnotacija.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201712011350080_test.resx">
-      <DependentUpon>201712011350080_test.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201712151429428_DodatDatumIspisaUUceniku.resx">
+      <DependentUpon>201712151429428_DodatDatumIspisaUUceniku.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201712051422344_proba.resx">
-      <DependentUpon>201712051422344_proba.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201712151459518_datumIspisaUNullable.resx">
+      <DependentUpon>201712151459518_datumIspisaUNullable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

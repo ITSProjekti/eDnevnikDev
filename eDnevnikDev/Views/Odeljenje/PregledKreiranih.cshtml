@@ -27,7 +27,7 @@
         </form>
         @*<span id="dugme"></span>
 
-        <p id="p1"></p>*@
+            <p id="p1"></p>*@
 
     </div>
 </div>
@@ -55,6 +55,34 @@
 {
 
     <script>
+        var statusiUcenika = [];
+
+        $(function () {
+            $("#razred").change(function () {
+                $("#odeljenja").html("");
+                $('#odeljenja').change();  //Okidanje dogadjaja za promenu drop down-a za izbor odeljenja prilikom promene razreda.
+                Odeljenja();
+            }).change();
+
+
+            $('#odeljenja').change(function () {
+                $("#ucenici").html("");
+                $("#dugme").html("");
+                Ucenici();
+            }).change();
+
+            VratiSveStatuseUcenika();
+
+        });
+
+        //vracaju se svi statusi ucenika i smestaju se u globalnu promenljivu
+        function VratiSveStatuseUcenika() {
+            var zahtev = $.getJSON("/Ucenici/VratiSveStatuseUcenika");
+
+            zahtev.done(function (podaci) {
+                statusiUcenika = podaci;
+            });
+        }
 
         function Odeljenja() {
             var razred = $("#razred").val();
@@ -75,7 +103,6 @@
                 razredOption = "IV-";
             }
 
-
             zahtev.done(function (odeljenja) {
 
                 for (var odeljenje in odeljenja) {
@@ -85,44 +112,22 @@
             zahtev.fail(function (gr) { $("#p1").html(gr.statusText); });
         }
 
-        function GenerisiKarticuUcenika(id, ime, prezime, fotografija, brojudnevniku, pol) {
-            if (fotografija == null) {
-                if (pol == "Ženski") {
-                    fotografija = "/ProfilneSlike/female.png";
-                }
-                else {
-                    fotografija = "/ProfilneSlike/male.png";
-                }
-            }
-            else {
-                fotografija = "data:image;base64," + fotografija;
-
-            }
-
-            //return   "<div class='col-md-3'><div class='ucenik-kartica'><img src='" + fotografija + "' class='ucenik-slika' style='width:140px;height:176px;' /><div class='ucenik-ime'>" + ime + " " + prezime + " </div></div></div>";
-            return '<div class="col-md-2" style="text-align:center; background-color:#9dbf75; margin-top:50px; margin-left:40px;"><br><div class="thumbnail"><br><img src="' + fotografija + '" style="width:150px; height:200px; display: block;"> <div class="caption"> <h3>' + brojudnevniku + '. ' + ime + ' ' + prezime + '</h3> </div></div><br></div>';
-        }
 
         function Ucenici() {
 
-       
             var razred = $("#razred").val();
             var odeljenje = $("#odeljenja").val();
             var odeljenjeOznaka = $("#odeljenja option:selected").text();
-            if (odeljenje == undefined)
-            {
+            if (odeljenje == undefined) {
                 odeljenje = 1;
 
-                if (razred == 1)
-                {
+                if (razred == 1) {
                     odeljenjeOznaka = "I-1";
                 }
-                else if(razred == 2)
-                {
+                else if (razred == 2) {
                     odeljenjeOznaka = "II-1";
                 }
-                else if(razred==3)
-                {
+                else if (razred == 3) {
                     odeljenjeOznaka = "III-1";
                 }
                 else if (razred == 4) {
@@ -134,7 +139,6 @@
             $("#odeljenjeNaslov").html("");
             $("#odeljenjeNaslov").append("Učenici " + odeljenjeOznaka + " odeljenja");
 
-
             var zahtev = $.getJSON("/Odeljenje/OdeljenjeUcenici?razred=" + razred + "&oznakaOdeljenja=" + odeljenje + '&status=3');
 
             zahtev.done(function (podaci) {
@@ -145,75 +149,78 @@
                 }
                 else {
                     for (var ucenik in podaci.Ucenici) {
-                        $("#ucenici").append(GenerisiKarticuUcenika(podaci.Ucenici[ucenik].ID, podaci.Ucenici[ucenik].Ime, podaci.Ucenici[ucenik].Prezime, podaci.Ucenici[ucenik].Fotografija, podaci.Ucenici[ucenik].BrojUDnevniku, podaci.Ucenici[ucenik].Pol));
+                        $("#ucenici").append(GenerisiKarticuUcenika(podaci.Ucenici[ucenik].ID, podaci.Ucenici[ucenik].Ime, podaci.Ucenici[ucenik].Prezime, podaci.Ucenici[ucenik].Fotografija, podaci.Ucenici[ucenik].BrojUDnevniku, podaci.Ucenici[ucenik].Pol, podaci.Ucenici[ucenik].Status));
                     }
                 }
             });
             zahtev.fail(function (gr) { $("#p1").html(gr.statusText); });
         }
 
-        $(function () {
-            $("#razred").change(function () {
-                $("#odeljenja").html("");
-                $('#odeljenja').change();  //Okidanje dogadjaja za promenu drop down-a za izbor odeljenja prilikom promene razreda.
-                Odeljenja();
-            }).change();
+        //metoda se poziva za svakog ucenika posebno i ispisuje se njegova kartica
+        function GenerisiKarticuUcenika(id, ime, prezime, fotografija, brojudnevniku, pol, status) {
 
 
-            $('#odeljenja').change(function () {
-                $("#ucenici").html("");
-                $("#dugme").html("");
-                Ucenici();
-            }).change();
-
-
-
-        });
-
-        function dugmeClickKreiraj() {
-            var odeljenje = {
-                Razred: $("#razred").val(),
-                Oznaka: $("#odeljenja").val()
+            if (fotografija == null) {
+                if (pol == "Ženski") {
+                    fotografija = "/ProfilneSlike/female.png";
+                }
+                else {
+                    fotografija = "/ProfilneSlike/male.png";
+                }
             }
-            var zahtev = $.post("/Odeljenje/KreirajOdeljenje", odeljenje);
+            else {
+                fotografija = "data:image;base64," + fotografija;
+            }
 
-            zahtev.done(function (rezultat) {
-                if (rezultat == 0) {
-                    $('#odeljenja').change();
-                    //$("#poruka").append('<div class="alert alert-success alert-dismissable"><strong>Uspeh!</strong> Uspešno kreirano odeljenje.</div>');
-                    $("#poruka").append('<div class="alert alert-success alert-dismissable"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Uspeh!</strong> Uspešno kreirano odeljenje.</div>');
+            var pom = '<div class="col-md-2" style="width:20%; text-align:center; background-color:#9dbf75; margin-top:50px; margin-left:40px;">'
+                    + '<br>'
+                        + '<div class="thumbnail">'
+                        + '<br>'
+                            + '<img src="' + fotografija + '" style="width:194px; height:240px; display: block;"> '
+                        + '<div class="caption"> '
+                            + '<h5>' + brojudnevniku + '. ' + ime + ' ' + prezime + '</h5> ';
 
+            //prolazi se kroz sve statuse u bazi i ispisuju se radio button-ni sa kojima se menja status
+            for (var i = 0; i < statusiUcenika.length; i++) {
+                if (status == statusiUcenika[i].Opis) {
+                    pom += '<input checked onchange="IzmeniStatusUcenika(' + id + ', ' + statusiUcenika[i].StatusUcenikaId + ')" type="radio" name="status' + id + '" id="' + statusiUcenika[i].StatusUcenikaId + '" value="' + statusiUcenika[i].StatusUcenikaId + '">' + statusiUcenika[i].Opis + '</input> ';
+                }
+                else {
+                    pom += '<input onchange="IzmeniStatusUcenika(' + id + ', ' + statusiUcenika[i].StatusUcenikaId + ')" type="radio" name="status' + id + '" id="' + statusiUcenika[i].StatusUcenikaId + '" value="' + statusiUcenika[i].StatusUcenikaId + '">' + statusiUcenika[i].Opis + '</input> ';
+                }
+            }
 
+            pom += '</div>'
+            + '</div>'
+            + '<br>'
+            + '</div>';
+
+            return pom;
+        }
+
+        //funkcija menja status ucenika preko ajaxa pozivajuci metodu IzmeniStatusUcenika u kontroleru Ucenik
+        function IzmeniStatusUcenika(idUcenika, idStatusa) {
+
+            $.ajax({
+                type: "POST",
+                url: "/Ucenici/IzmeniStatusUcenika?idUcenika=" + idUcenika + "&idStatusa=" + idStatusa,
+                success: function (data) {
+                    swal({
+                        confirmButtonColor: '#8ad919',
+                        type: 'success',
+                        title: 'Bravo!',
+                        text: 'Uspešno ste promenili status učenika!'
+                    })
+                },
+                error: function () {
+                    swal(
+                    'Ups...',
+                    'Došlo je do greške!',
+                    'error'
+                    )
                 }
             });
-            zahtev.fail(function (rezultat) {
-
-            });
-
         }
-
-        function dugmeClickArhiviraj() {
-
-            var razred = $("#razred").val();
-            var odeljenje = $("#odeljenja").val();
-
-            var zahtev = $.getJSON("/Odeljenje/MogucnostArhiviranja?razred=" + razred + "&oznakaOdeljenja=" + odeljenje);
-
-            zahtev.done(function (podaci) {
-                if (podaci.Moguce)
-                    console.log("radi")
-                else
-                    console.log("ne radi")
-            });
-
-            zahtev.fail(function (gr) { $("#p1").html(gr.statusText); });
-
-
-
-        }
-
-
-
 
     </script>
 
