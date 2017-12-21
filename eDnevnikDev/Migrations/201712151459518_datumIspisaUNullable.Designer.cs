@@ -7,13 +7,13 @@ namespace eDnevnikDev.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class test : IMigrationMetadata
+    public sealed partial class datumIspisaUNullable : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(test));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(datumIspisaUNullable));
         
         string IMigrationMetadata.Id
         {
-            get { return "201712011350080_test"; }
+            get { return "201712151459518_datumIspisaUNullable"; }
         }
         
         string IMigrationMetadata.Source

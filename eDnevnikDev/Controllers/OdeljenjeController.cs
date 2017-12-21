@@ -60,13 +60,13 @@ namespace eDnevnikDev.Controllers
         public ActionResult PregledKreiranih()
         {
             var skolskGodina = _context.SkolskaGodine.Where(s => s.Aktuelna == true)
-                                                     .Select(s=>new SkolskaGodinaViewModel
+                                                     .Select(s => new SkolskaGodinaViewModel
                                                      {
-                                                         PocetakSkolskeGodine=s.PocetakSkolskeGodine.Year,
-                                                         KrajSkolskeGodine=s.KrajSkolskeGodine.Year
+                                                         PocetakSkolskeGodine = s.PocetakSkolskeGodine.Year,
+                                                         KrajSkolskeGodine = s.KrajSkolskeGodine.Year
                                                      })
                                                      .SingleOrDefault();
-            if(skolskGodina!=null)
+            if (skolskGodina != null)
             {
                 return View(skolskGodina);
             }
@@ -152,10 +152,11 @@ namespace eDnevnikDev.Controllers
                 .SingleOrDefault(o => o.StatusID == status && o.Razred == razred && o.OznakaID == oznakaOdeljenja);
 
             var polovi = _context.Polovi.ToList();
+            var statusiUcenika = _context.StatusiUcenika.ToList();
 
             var podaci = new DTOOdeljenjeSaUcenicima();
 
-            if (odeljenje != null && polovi!=null && polovi.Count()>0)
+            if (odeljenje != null && polovi != null && polovi.Count() > 0 && statusiUcenika != null && statusiUcenika.Count() > 0)
             {
                 //Ako je status u toku, prikazuju se ucenici ubaceni u to odeljenje sortirani po:
                 //1. prezime, 2. ime, 3. ImeOca.
@@ -180,7 +181,7 @@ namespace eDnevnikDev.Controllers
                             dtoUcenik.ID = ucenik.UcenikID;
                             dtoUcenik.Ime = ucenik.Ime;
                             dtoUcenik.Prezime = ucenik.Prezime;
-                            dtoUcenik.Pol = polovi.Where(p=>p.PolId==ucenik.PolId)
+                            dtoUcenik.Pol = polovi.Where(p => p.PolId == ucenik.PolId)
                                                   .SingleOrDefault()
                                                   .Naziv;
 
@@ -188,6 +189,9 @@ namespace eDnevnikDev.Controllers
                             {
                                 dtoUcenik.Fotografija = Convert.ToBase64String(ucenik.Fotografija);
                             }
+                            dtoUcenik.Status = statusiUcenika.Where(s => s.StatusUcenikaId == ucenik.StatusUcenikaId)
+                                                             .SingleOrDefault()
+                                                             .Opis;
 
                             podaci.Ucenici.Add(dtoUcenik);
                         }
@@ -212,12 +216,12 @@ namespace eDnevnikDev.Controllers
 
                         foreach (var ucenik in odeljenje.Ucenici)
                         {
-                             var dtoUcenik = new DTOUcenikOdeljenja();
+                            var dtoUcenik = new DTOUcenikOdeljenja();
                             dtoUcenik.ID = ucenik.UcenikID;
                             dtoUcenik.Ime = ucenik.Ime;
                             dtoUcenik.Prezime = ucenik.Prezime;
                             dtoUcenik.BrojUDnevniku = ucenik.BrojUDnevniku;
-                            dtoUcenik.Pol = polovi.Where(p=>p.PolId==ucenik.PolId)
+                            dtoUcenik.Pol = polovi.Where(p => p.PolId == ucenik.PolId)
                                                   .SingleOrDefault()
                                                   .Naziv;
 
@@ -225,6 +229,10 @@ namespace eDnevnikDev.Controllers
                             {
                                 dtoUcenik.Fotografija = Convert.ToBase64String(ucenik.Fotografija);
                             }
+
+                            dtoUcenik.Status = statusiUcenika.Where(s => s.StatusUcenikaId == ucenik.StatusUcenikaId)
+                                                             .SingleOrDefault()
+                                                             .Opis;
 
                             var odsutan = ucenik.Odsustva.Where(x => x.CasId == cas.CasId).SingleOrDefault(x => x.UcenikId == ucenik.UcenikID);
 
@@ -271,6 +279,10 @@ namespace eDnevnikDev.Controllers
                                 {
                                     dtoUcenik.Fotografija = Convert.ToBase64String(ucenik.Fotografija);
                                 }
+
+                                dtoUcenik.Status = statusiUcenika.Where(s => s.StatusUcenikaId == ucenik.StatusUcenikaId)
+                                                             .SingleOrDefault()
+                                                             .Opis;
 
                                 podaci.Ucenici.Add(dtoUcenik);
                             }

@@ -14,5 +14,6 @@ namespace eDnevnikDev.DTOs
         public int? BrojUDnevniku { get; set; }
         public bool Prisutan { get; set; }
         public string Pol { get; set; }
+        public string Status { get; set; }
     }
 }

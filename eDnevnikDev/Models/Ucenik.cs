@@ -172,6 +172,8 @@ namespace eDnevnikDev.Models
 
         public bool PromenaLozinke { get; set; }
 
+        public DateTime? DatumIspisa { get; set; }
+
 
         /// <summary>
         /// Navigacioni property, referencira smer u tabeli Smer

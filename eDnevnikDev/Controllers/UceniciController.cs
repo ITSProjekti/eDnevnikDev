@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using System.Net;
 using System.Data.Entity.Migrations;
+using eDnevnikDev.DTOs;
 
 namespace eDnevnikDev.Controllers
 {
@@ -138,6 +139,7 @@ namespace eDnevnikDev.Controllers
 
             ucenik.RedniBroj = GenerisiRedniBrojUcenika(ucenik);
             ucenik.DatumUnosa = DateTime.Now;
+            ucenik.StatusUcenikaId = 1;
 
             string username = ucenik.Ime.Replace(" ", String.Empty) + ucenik.RedniBroj;
             await RegistracijaUcenika(username, VratiImeUcenikaSaPrvimVelikimSlovom(ucenik.Ime), ucenik.RedniBroj);
@@ -239,7 +241,8 @@ namespace eDnevnikDev.Controllers
                     BrojUDnevniku = ucenikVM.Ucenik.BrojUDnevniku,
                     UserUcenikId = ucenikVM.Ucenik.UserUcenikId,
                     DatumUnosa = ucenikVM.Ucenik.DatumUnosa,
-                    PolId = ucenikVM.Ucenik.PolId
+                    PolId = ucenikVM.Ucenik.PolId,
+                    StatusUcenikaId=ucenikVM.Ucenik.StatusUcenikaId
                 };
 
                 try
@@ -272,6 +275,66 @@ namespace eDnevnikDev.Controllers
             //Ukoliko je null vraca se false, ako jeste vraca se true.
             return odeljenje == null ? Json(new { Kreirano = false }, JsonRequestBehavior.AllowGet) : Json(new { Kreirano = true }, JsonRequestBehavior.AllowGet);
 
+        }
+
+        /// <summary>
+        /// Metoda vraca listu svih statusa ucenika
+        /// </summary>
+        /// <returns></returns>
+        public JsonResult VratiSveStatuseUcenika()
+        {
+            var listaStatusa = _context.StatusiUcenika
+            .Select(s => new DTOStatusUcenika() { StatusUcenikaId = s.StatusUcenikaId, Opis = s.Opis })
+            .ToList();
+
+            if (listaStatusa != null)
+            {
+                return Json(listaStatusa, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new List<DTOStatusUcenika>(), JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Metoda koja vrsi izmenu statusa ucenika i datuma ispisa ucenika
+        /// </summary>
+        /// <returns></returns>
+        public JsonResult IzmeniStatusUcenika(int idUcenika, int idStatusa)
+        {
+            if(ModelState.IsValid)
+            {
+                //nalazimo ucenika koji je prosledjen u metodi
+                var ucenik = _context.Ucenici
+                    .SingleOrDefault(u => u.UcenikID == idUcenika);
+
+                ucenik.StatusUcenikaId = idStatusa;
+
+                //nalazimo status ucenika koji je prosledjen u metodi
+                var statusUcenika = _context.StatusiUcenika
+                    .SingleOrDefault(s => s.StatusUcenikaId == idStatusa);
+
+                //ukoliko je status "Neaktivan" onda se u uceniku popunjava polje DatumIspisa
+                //ukoliko je satus "Aktivan" onda se polje za DatumIspisa vraca na NULL vrednost
+                if(statusUcenika.Opis=="Aktivan")
+                {
+                    ucenik.DatumIspisa=null;
+                }
+                if(statusUcenika.Opis=="Neaktivan")
+                {
+                    ucenik.DatumIspisa = DateTime.Now;
+                }
+
+                try
+                {
+                    _context.Ucenici.AddOrUpdate(ucenik);
+                    _context.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                }
+            }
+            return Json("success", JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult test()
