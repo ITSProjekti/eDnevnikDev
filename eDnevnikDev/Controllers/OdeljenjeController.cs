@@ -34,7 +34,7 @@ namespace eDnevnikDev.Controllers
         /// Index kontrola. Test name= OdeljenjeController_Index()
         /// </summary>
         /// <returns>Vraca Index View</returns>
-        public ActionResult Index()
+        private ActionResult Index()
         {
             var skolskGodina = _context.SkolskaGodine.Where(s => s.Aktuelna == true)
                                                     .Select(s => new SkolskaGodinaViewModel
@@ -57,7 +57,7 @@ namespace eDnevnikDev.Controllers
         /// Test name=PregledKreiranihTest()
         /// </summary>
         /// <returns></returns>
-        public ActionResult PregledKreiranih()
+        private ActionResult PregledKreiranih()
         {
             var skolskGodina = _context.SkolskaGodine.Where(s => s.Aktuelna == true)
                                                      .Select(s=>new SkolskaGodinaViewModel
@@ -82,7 +82,7 @@ namespace eDnevnikDev.Controllers
         /// </summary>
         /// <param name="godina"></param>
         /// <returns></returns>
-        public JsonResult OdeljenjeTrajanje(int godina)
+        private JsonResult OdeljenjeTrajanje(int godina)
         {
             //Kreiranje kolekcije oznaka koje mogu ciniti odeljenja na godini koja je prosledjena kao parametar. O.O
             var kolekcijaOznaka = _context.Smerovi
@@ -114,7 +114,7 @@ namespace eDnevnikDev.Controllers
         /// <param name="oznaka"></param>
         /// <param name="status"></param>
         /// <returns></returns>
-        public JsonResult OdeljenjeSkolskaGodina(int godina, int oznaka, int status = 2)
+        private JsonResult OdeljenjeSkolskaGodina(int godina, int oznaka, int status = 2)
         {
             //Trazi odeljenje sa prosledjenom godinom oznakom i statusom u toku(Moze i hardcode).
             var pov = _context.Odeljenja.SingleOrDefault(o => o.OznakaID == oznaka && o.Razred == godina && o.StatusID == status);
@@ -140,7 +140,7 @@ namespace eDnevnikDev.Controllers
         /// <param name="oznakaOdeljenja"></param>
         /// <param name="status"></param>
         /// <returns></returns>
-        public JsonResult OdeljenjeUcenici(int razred, int oznakaOdeljenja, int status)
+        private JsonResult OdeljenjeUcenici(int razred, int oznakaOdeljenja, int status)
         {
             var datum = DateTime.Today;
             var casovi = _context.Casovi.
@@ -294,7 +294,7 @@ namespace eDnevnikDev.Controllers
         /// <param name="o"></param>
         /// <returns></returns>
 
-        public int ArhivirajOdeljenje(Odeljenje o)
+        private int ArhivirajOdeljenje(Odeljenje o)
         {
             foreach (var ucenik in o.Ucenici)
             {
@@ -314,7 +314,7 @@ namespace eDnevnikDev.Controllers
         /// </summary>
         /// <param name="odeljenje"></param>
         /// <returns></returns>
-        public int PremestiUSledecuGodinu(Odeljenje odeljenje)
+        private int PremestiUSledecuGodinu(Odeljenje odeljenje)
         {
             var pom = _context.Odeljenja.Include("Oznaka").SingleOrDefault(o => o.Id == odeljenje.Id);
 
@@ -491,7 +491,7 @@ namespace eDnevnikDev.Controllers
         /// <see cref="KreirajOdeljenjeViewModel"/>
         /// </summary>
         /// <returns>KreirajOdeljenje View</returns>
-        public ActionResult KreirajOdeljenje()
+        private ActionResult KreirajOdeljenje()
         {
 
             var model = new KreirajOdeljenjeViewModel
@@ -519,7 +519,7 @@ namespace eDnevnikDev.Controllers
         /// <param name="razred">razred koji se dobija iz combobox-a.</param>
         /// <param name="oznaka">oznaka kodeljenja koja se dobija iz combobox-a.</param>
         /// <returns></returns>
-        public JsonResult VratiUcenikeZaOdeljenje(int? razred, int? oznaka)
+        private JsonResult VratiUcenikeZaOdeljenje(int? razred, int? oznaka)
         {
             if (razred != null && oznaka != null)
             {
@@ -573,7 +573,7 @@ namespace eDnevnikDev.Controllers
         /// <param name="razred"></param>
         /// <param name="oznaka"></param>
         /// <returns></returns>
-        public void DodajUcenikaUOdeljenje(int ucenikId, int razred, int oznaka)
+        private void DodajUcenikaUOdeljenje(int ucenikId, int razred, int oznaka)
         {
             var skolskaGodina = _context.SkolskaGodine.SingleOrDefault(s => s.Aktuelna == true);
 
@@ -682,7 +682,7 @@ namespace eDnevnikDev.Controllers
         /// </summary>
         /// <param name="ucenikId"></param>
         /// <returns></returns>
-        public void IzbaciUcenikaIzOdeljenja(int ucenikId)
+        private void IzbaciUcenikaIzOdeljenja(int ucenikId)
         {
             var ucenik = _context.Ucenici.Where(u => u.UcenikID == ucenikId)
                                          .SingleOrDefault();
@@ -708,7 +708,7 @@ namespace eDnevnikDev.Controllers
         /// <returns>Vraca KreirajOdeljenje View</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult KreirajOdeljenje(KreirajOdeljenjeViewModel model)
+        private ActionResult KreirajOdeljenje(KreirajOdeljenjeViewModel model)
         {
             //Ovaj deo koda ce se izvrsiti ukoliko dodje do greske prilikom prenosa parametara sa forme
             if (model.ListaRasporedjenihUcenika == null && model.Razred == 0 && model.Odeljenje == 0)

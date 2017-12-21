@@ -72,12 +72,35 @@ namespace eDnevnikDev.Controllers
         /// Test name=UceniciController_Index
         /// </summary>
         /// <returns></returns>
-        [Authorize(Roles = "Administrator")]
-        public ActionResult Index()
+        [Authorize(Roles = "Administrator, Editor")]
+        public ActionResult Index(bool? dodatUcenik, bool? izmenjenUcenik)
         {
+            if (dodatUcenik != null)
+            {
+                var model = new ListaUcenikaViewModel
+                {
+                    ListaUcenika = _context.Ucenici.ToList(),
+                    DodatUcenik = (bool)dodatUcenik
+                };
 
-            IEnumerable<Ucenik> ListaUcenika = _context.Ucenici.ToList();
-            return View("Index", ListaUcenika);
+                return View(model);
+            }
+
+            if (izmenjenUcenik != null)
+            {
+                var model = new ListaUcenikaViewModel
+                {
+                    ListaUcenika = _context.Ucenici.ToList(),
+                    IzmenjenUcenik = (bool)izmenjenUcenik
+                };
+
+                return View(model);
+            }
+
+            return View("Index", new ListaUcenikaViewModel
+            {
+                ListaUcenika = _context.Ucenici.ToList()
+            });
         }
         /// <summary>
         ///
@@ -85,7 +108,7 @@ namespace eDnevnikDev.Controllers
         /// TO BE TESTED
         /// </summary>
         /// <returns></returns>
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator, Editor")]
         public ActionResult Dodaj()
         {
             var ucenikVM = new UcenikViewModel
@@ -112,7 +135,7 @@ namespace eDnevnikDev.Controllers
         /// <returns>Vraca nas na Index stranicu Ucenika</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator, Editor")]
         public async Task<ActionResult> Sacuvaj(UcenikViewModel ucenikVM, HttpPostedFileBase upload)
         {
             //Proverava postajanje istog JMBG
@@ -126,7 +149,8 @@ namespace eDnevnikDev.Controllers
                     Ucenik = ucenikVM.Ucenik,
                     Gradovi = _context.Gradovi.OrderBy(g => g.Naziv).ToList(),
                     Smerovi = _context.Smerovi.Include("Oznake").OrderBy(s => s.Trajanje).ToList(),
-                    Polovi = _context.Polovi.ToList()
+                    Polovi = _context.Polovi.ToList(),
+                    Greska = true
                 };
 
                 return View("Dodaj", podaci);
@@ -157,7 +181,7 @@ namespace eDnevnikDev.Controllers
             _context.Ucenici.Add(ucenik);
             _context.SaveChanges();
 
-            return RedirectToAction("Index", "Ucenici");
+            return RedirectToAction("Index", "Ucenici", new { dodatUcenik = true });
         }
 
         //GET
@@ -166,7 +190,7 @@ namespace eDnevnikDev.Controllers
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator, Editor")]
         public ActionResult Izmeni(int? id)
         {
             if (id == null)
@@ -200,60 +224,90 @@ namespace eDnevnikDev.Controllers
         /// <returns></returns>
         [ValidateAntiForgeryToken]
         [HttpPost]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator, Editor")]
         public ActionResult Izmeni(UcenikViewModel ucenikVM, HttpPostedFileBase upload)
         {
-            if (ModelState.IsValid)
+            //Proverava postajanje istog JMBG
+            if (_context.Ucenici.Where(x => x.JMBG == ucenikVM.Ucenik.JMBG).Any())
             {
-                if (upload != null && upload.ContentLength > 0)
-                {
-                    using (var reader = new System.IO.BinaryReader(upload.InputStream))
-                    {
-                        ucenikVM.Ucenik.Fotografija = reader.ReadBytes(upload.ContentLength);
-                    }
-                }
+                var ucenikId = _context.Ucenici
+                    .Where(x => x.JMBG == ucenikVM.Ucenik.JMBG)
+                    .Select(x=>x.UcenikID)
+                    .SingleOrDefault();
 
-                Ucenik ucenik = new Ucenik()
+                if(ucenikId!=ucenikVM.Ucenik.UcenikID)
                 {
-                    UcenikID = ucenikVM.Ucenik.UcenikID,
-                    Ime = ucenikVM.Ucenik.Ime,
-                    Prezime = ucenikVM.Ucenik.Prezime,
-                    ImeOca = ucenikVM.Ucenik.ImeOca,
-                    PrezimeOca = ucenikVM.Ucenik.PrezimeOca,
-                    ImeMajke = ucenikVM.Ucenik.ImeMajke,
-                    PrezimeMajke = ucenikVM.Ucenik.PrezimeMajke,
-                    JMBG = ucenikVM.Ucenik.JMBG,
-                    Adresa = ucenikVM.Ucenik.Adresa,
-                    MestoPrebivalista = ucenikVM.Ucenik.MestoPrebivalista,
-                    BrojTelefonaRoditelja = ucenikVM.Ucenik.BrojTelefonaRoditelja,
-                    MestoRodjenjaId = ucenikVM.Ucenik.MestoRodjenjaId,
-                    Vanredan = ucenikVM.Ucenik.Vanredan,
-                    RedniBroj = ucenikVM.Ucenik.RedniBroj,
-                    PromenaLozinke = ucenikVM.Ucenik.PromenaLozinke,
-                    SmerID = ucenikVM.Ucenik.SmerID,
-                    OdeljenjeId = ucenikVM.Ucenik.OdeljenjeId,
-                    Razred = ucenikVM.Ucenik.Razred,
-                    DatumRodjenja = ucenikVM.Ucenik.DatumRodjenja,
-                    JedinstveniBroj = ucenikVM.Ucenik.JedinstveniBroj,
-                    Fotografija = ucenikVM.Ucenik.Fotografija,
-                    BrojUDnevniku = ucenikVM.Ucenik.BrojUDnevniku,
-                    UserUcenikId = ucenikVM.Ucenik.UserUcenikId,
-                    DatumUnosa = ucenikVM.Ucenik.DatumUnosa,
-                    PolId = ucenikVM.Ucenik.PolId
+                    ModelState.AddModelError("Ucenik.JMBG", "JMBG već postoji u bazi!");
+                }
+            }
+
+            if (!ModelState.IsValid)
+            {
+                var listaPolova = _context.Polovi.ToList();
+                ucenikVM.Ucenik.Pol = listaPolova.SingleOrDefault(p => p.PolId == ucenikVM.Ucenik.PolId);
+                ucenikVM.Ucenik.Smer = _context.Smerovi.SingleOrDefault(s => s.SmerID == ucenikVM.Ucenik.SmerID);
+
+                var podaci = new UcenikViewModel
+                {
+                    Ucenik = ucenikVM.Ucenik,
+                    Gradovi = _context.Gradovi.OrderBy(g => g.Naziv).ToList(),
+                    Smerovi = _context.Smerovi.Include("Oznake").OrderBy(s => s.Trajanje).ToList(),
+                    Polovi = listaPolova,
+                    Greska = true
                 };
 
-                try
-                {
-                    _context.Ucenici.AddOrUpdate(ucenik);
-                    _context.SaveChanges();
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine(ex.Message);
-                }
-
+                return View("Izmeni", podaci);
             }
-            return RedirectToAction("Index");
+
+
+            if (upload != null && upload.ContentLength > 0)
+            {
+                using (var reader = new System.IO.BinaryReader(upload.InputStream))
+                {
+                    ucenikVM.Ucenik.Fotografija = reader.ReadBytes(upload.ContentLength);
+                }
+            }
+
+            Ucenik ucenik = new Ucenik()
+            {
+                UcenikID = ucenikVM.Ucenik.UcenikID,
+                Ime = ucenikVM.Ucenik.Ime,
+                Prezime = ucenikVM.Ucenik.Prezime,
+                ImeOca = ucenikVM.Ucenik.ImeOca,
+                PrezimeOca = ucenikVM.Ucenik.PrezimeOca,
+                ImeMajke = ucenikVM.Ucenik.ImeMajke,
+                PrezimeMajke = ucenikVM.Ucenik.PrezimeMajke,
+                JMBG = ucenikVM.Ucenik.JMBG,
+                Adresa = ucenikVM.Ucenik.Adresa,
+                MestoPrebivalista = ucenikVM.Ucenik.MestoPrebivalista,
+                BrojTelefonaRoditelja = ucenikVM.Ucenik.BrojTelefonaRoditelja,
+                MestoRodjenjaId = ucenikVM.Ucenik.MestoRodjenjaId,
+                Vanredan = ucenikVM.Ucenik.Vanredan,
+                RedniBroj = ucenikVM.Ucenik.RedniBroj,
+                PromenaLozinke = ucenikVM.Ucenik.PromenaLozinke,
+                SmerID = ucenikVM.Ucenik.SmerID,
+                OdeljenjeId = ucenikVM.Ucenik.OdeljenjeId,
+                Razred = ucenikVM.Ucenik.Razred,
+                DatumRodjenja = ucenikVM.Ucenik.DatumRodjenja,
+                JedinstveniBroj = ucenikVM.Ucenik.JedinstveniBroj,
+                Fotografija = ucenikVM.Ucenik.Fotografija,
+                BrojUDnevniku = ucenikVM.Ucenik.BrojUDnevniku,
+                UserUcenikId = ucenikVM.Ucenik.UserUcenikId,
+                DatumUnosa = ucenikVM.Ucenik.DatumUnosa,
+                PolId = ucenikVM.Ucenik.PolId
+            };
+
+            try
+            {
+                _context.Ucenici.AddOrUpdate(ucenik);
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+
+            return RedirectToAction("Index", new { izmenjenUcenik = true });
 
         }
 
@@ -263,7 +317,7 @@ namespace eDnevnikDev.Controllers
         /// <param name="razred"></param>
         /// <param name="oznaka"></param>
         /// <returns></returns>
-        public JsonResult DaLiPostojiKreirano(int razred, int oznaka)
+        private JsonResult DaLiPostojiKreirano(int razred, int oznaka)
         {
             //Uzima se odeljenje koje je kreirano.ako ga ima.
             var odeljenje = _context.Odeljenja
@@ -274,7 +328,7 @@ namespace eDnevnikDev.Controllers
 
         }
 
-        public JsonResult test()
+        private JsonResult test()
         {
             var lista = new List<Smer>();
             var temp = _context.Smerovi.Include("Oznake");
@@ -296,6 +350,7 @@ namespace eDnevnikDev.Controllers
         /// </summary>
         /// <param name="ucenik">The ucenik.</param>
         /// <returns>redni broj učenika</returns>
+        [Authorize(Roles = "Administrator, Editor")]
         public string GenerisiRedniBrojUcenika(Ucenik ucenik)
         {
             string redniBroj;
@@ -344,6 +399,7 @@ namespace eDnevnikDev.Controllers
         /// <param name="ime">The IME.</param>
         /// <param name="brojIndeksa">The broj indeksa.</param>
         /// <returns></returns>
+        [Authorize(Roles = "Administrator, Editor")]
         public async Task RegistracijaUcenika(string username, string ime, string brojIndeksa)
         {
             var user = new ApplicationUser { UserName = username.ToLower(), Email = username + "@gmail.com" };
@@ -356,6 +412,7 @@ namespace eDnevnikDev.Controllers
         /// </summary>
         /// <param name="prezime">The prezime.</param>
         /// <returns></returns>
+        [Authorize(Roles = "Administrator, Editor")]
         public string VratiImeUcenikaSaPrvimVelikimSlovom(string ime)
         {
             switch (ime)

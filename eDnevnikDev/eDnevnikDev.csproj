@@ -368,8 +368,12 @@
     <Compile Include="ViewModel\IzmenaPredmetaViewModel.cs" />
     <Compile Include="ViewModel\KreirajOdeljenjeViewModel.cs" />
     <Compile Include="ViewModel\KreiranjePredmetaViewModel.cs" />
+    <Compile Include="ViewModel\ListaPredmetaViewModel.cs" />
+    <Compile Include="ViewModel\ListaProfesoraViewModel.cs" />
+    <Compile Include="ViewModel\ListaUcenikaViewModel.cs" />
     <Compile Include="ViewModel\PredmetTipOcenePredmetaViewModel.cs" />
     <Compile Include="ViewModel\NerasporedjenUcenikViewModel.cs" />
+    <Compile Include="ViewModel\PredmetViewModel.cs" />
     <Compile Include="ViewModel\ProfesorRoleViewModel.cs" />
     <Compile Include="ViewModel\EvidencijaUcenikaViewModel.cs" />
     <Compile Include="ViewModel\ProfesorViewModel.cs" />

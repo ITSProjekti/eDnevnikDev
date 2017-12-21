@@ -64,15 +64,8 @@ namespace eDnevnikDev.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
-            if (!Request.IsAuthenticated)
-            {
                 ViewBag.ReturnUrl = returnUrl;
                 return View();
-            }
-            else
-            {
-                return RedirectToAction("Index", "Home");
-            }
         }
 
         //
@@ -146,9 +139,11 @@ namespace eDnevnikDev.Controllers
                                     }
                                 }
                             
-                                return RedirectToAction("IndexAdmin", "Home");
-                                }
+                                //return RedirectToAction("IndexAdmin", "Home");
+                                return RedirectToAction("Index", "Home");
+
                             }
+                        }
                             
                                 
                         if (promenaLozinke)
@@ -175,7 +170,7 @@ namespace eDnevnikDev.Controllers
         //
         // GET: /Account/VerifyCode
         [AllowAnonymous]
-        public async Task<ActionResult> VerifyCode(string provider, string returnUrl, bool rememberMe)
+        private async Task<ActionResult> VerifyCode(string provider, string returnUrl, bool rememberMe)
         {
             // Require that the user has already logged in via username/password or external login
             if (!await SignInManager.HasBeenVerifiedAsync())
@@ -190,7 +185,7 @@ namespace eDnevnikDev.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> VerifyCode(VerifyCodeViewModel model)
+        private async Task<ActionResult> VerifyCode(VerifyCodeViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -218,7 +213,7 @@ namespace eDnevnikDev.Controllers
         //
         // GET: /Account/Register
         [Authorize(Roles = "Administrator")]
-        public ActionResult Register()
+        private ActionResult Register()
         {
             return View();
         }
@@ -228,7 +223,7 @@ namespace eDnevnikDev.Controllers
         [HttpPost]
         [Authorize(Roles = "Administrator")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
+        private async Task<ActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -256,7 +251,7 @@ namespace eDnevnikDev.Controllers
         //
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]
-        public async Task<ActionResult> ConfirmEmail(string userId, string code)
+        private async Task<ActionResult> ConfirmEmail(string userId, string code)
         {
             if (userId == null || code == null)
             {
@@ -269,7 +264,7 @@ namespace eDnevnikDev.Controllers
         //
         // GET: /Account/ForgotPassword
         [AllowAnonymous]
-        public ActionResult ForgotPassword()
+        private ActionResult ForgotPassword()
         {
             return View();
         }
@@ -279,7 +274,7 @@ namespace eDnevnikDev.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        private async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -305,7 +300,7 @@ namespace eDnevnikDev.Controllers
         //
         // GET: /Account/ForgotPasswordConfirmation
         [AllowAnonymous]
-        public ActionResult ForgotPasswordConfirmation()
+        private ActionResult ForgotPasswordConfirmation()
         {
             return View();
         }
@@ -313,7 +308,7 @@ namespace eDnevnikDev.Controllers
         //
         // GET: /Account/ResetPassword
         [AllowAnonymous]
-        public ActionResult ResetPassword(string code)
+        private ActionResult ResetPassword(string code)
         {
             return code == null ? View("Error") : View();
         }
@@ -323,7 +318,7 @@ namespace eDnevnikDev.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ResetPassword(ResetPasswordViewModel model)
+        private async Task<ActionResult> ResetPassword(ResetPasswordViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -347,7 +342,7 @@ namespace eDnevnikDev.Controllers
         //
         // GET: /Account/ResetPasswordConfirmation
         [AllowAnonymous]
-        public ActionResult ResetPasswordConfirmation()
+        private ActionResult ResetPasswordConfirmation()
         {
             return View();
         }
@@ -357,7 +352,7 @@ namespace eDnevnikDev.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult ExternalLogin(string provider, string returnUrl)
+        private ActionResult ExternalLogin(string provider, string returnUrl)
         {
             // Request a redirect to the external login provider
             return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
@@ -366,7 +361,7 @@ namespace eDnevnikDev.Controllers
         //
         // GET: /Account/SendCode
         [AllowAnonymous]
-        public async Task<ActionResult> SendCode(string returnUrl, bool rememberMe)
+        private async Task<ActionResult> SendCode(string returnUrl, bool rememberMe)
         {
             var userId = await SignInManager.GetVerifiedUserIdAsync();
             if (userId == null)
@@ -383,7 +378,7 @@ namespace eDnevnikDev.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> SendCode(SendCodeViewModel model)
+        private async Task<ActionResult> SendCode(SendCodeViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -401,7 +396,7 @@ namespace eDnevnikDev.Controllers
         //
         // GET: /Account/ExternalLoginCallback
         [AllowAnonymous]
-        public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
+        private async Task<ActionResult> ExternalLoginCallback(string returnUrl)
         {
             var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
             if (loginInfo == null)
@@ -433,7 +428,7 @@ namespace eDnevnikDev.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model, string returnUrl)
+        private async Task<ActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model, string returnUrl)
         {
             if (User.Identity.IsAuthenticated)
             {
@@ -473,13 +468,13 @@ namespace eDnevnikDev.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login", "Account");
         }
 
         //
         // GET: /Account/ExternalLoginFailure
         [AllowAnonymous]
-        public ActionResult ExternalLoginFailure()
+        private ActionResult ExternalLoginFailure()
         {
             return View();
         }

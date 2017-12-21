@@ -1,6 +1,6 @@
-﻿@model IEnumerable<Predmet>
+﻿@model ListaPredmetaViewModel
 @{
-    ViewBag.Title = "Predmeti";
+    ViewBag.Title = "Lista predmeta";
 }
 
     <div class="row">
@@ -20,7 +20,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (Predmet predmet in Model)
+                    @foreach (Predmet predmet in Model.ListaPredmeta)
                     {
                         <tr>
                             <td>
@@ -49,6 +49,32 @@
                     "url": "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Serbian.json"
                 }
             });
+
+            var dodatPredmet=false;
+            var dodatPredmet=@Html.Raw(Json.Encode(Model.DodatPredmet));
+
+            if(dodatPredmet)
+            {
+                swal({
+                    confirmButtonColor: '#8ad919',
+                    type: 'success',
+                    title: 'Uspeh!',
+                    text: 'Uspešno ste dodali nov predmet!'
+                });
+            }
+
+            var izmenjenPredmet=false;
+            var izmenjenPredmet=@Html.Raw(Json.Encode(Model.IzmenjenPredmet));
+
+            if(izmenjenPredmet)
+            {
+                swal({
+                    confirmButtonColor: '#8ad919',
+                    type: 'success',
+                    title: 'Uspeh!',
+                    text: 'Uspešno ste izmenili predmet!'
+                });
+            }
         });
     </script>
    }

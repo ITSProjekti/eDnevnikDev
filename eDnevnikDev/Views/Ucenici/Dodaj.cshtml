@@ -1,7 +1,7 @@
 ﻿@model UcenikViewModel
 @{
 
-    ViewBag.Title = "Dodaj";
+    ViewBag.Title = "Dodaj učenika";
     var smerovi = new SelectList(Model.Smerovi, "SmerID", "NazivSmera", "Trajanje", 0);
     var polovi = new SelectList(Model.Polovi, "PolId", "Naziv");
 }
@@ -13,7 +13,7 @@
         @Html.AntiForgeryToken()
 
         <div class="col-md-7 col-sm-7 col-md-offset-2 ">
-            <h2 style="text-align:center">Nov učenik</h2>
+            <h2 style="text-align:center">Novi učenik</h2>
             <br>
 
             <div class="well">
@@ -23,7 +23,7 @@
                     <div class="form-group">
                         <div class="col-md-11">
                             <center>
-                                <img id="fotografijaUcenika" src="~/ProfilneSlike/user-default.png" style="width:150px; height:200px;" />
+                                <img id="fotografijaUcenika" class="img-responsive" src="~/ProfilneSlike/user-default.png" style="width:194px; height:240px;" />
                             </center>
                         </div>
                     </div>
@@ -66,15 +66,15 @@
                     <div class="form-group">
                         @Html.LabelFor(u => u.Ucenik.DatumRodjenja, new { @class = "col-md-3 control-label" })
                         <div class="col-md-9">
-                            @{ 
+                            @{
                                 string datumRodjenja = "";
 
-                                if(Model.Ucenik!=null)
+                                if (Model.Ucenik != null)
                                 {
-                                        datumRodjenja = Model.Ucenik.DatumRodjenja.ToString("dd.MM.yyyy");
+                                    datumRodjenja = Model.Ucenik.DatumRodjenja.ToString("dd.MM.yyyy");
                                 }
                             }
-                            <input type="text" id="datum"  value="@datumRodjenja" class="form-control" name="datum" placeholder="Unesite datum rođenja" data-val="true" data-val-required="Polje za datum rođenja je obavezno" readonly>
+                            <input type="text" id="datum" value="@datumRodjenja" class="form-control" name="datum" placeholder="Unesite datum rođenja" data-val="true" data-val-required="Polje za datum rođenja je obavezno" readonly>
                             <input type="hidden" value="@datumRodjenja" name="Ucenik.DatumRodjenja" id="Ucenik_DatumRodjenja">
                             <span class="field-validation-valid text-danger" data-valmsg-for="datum" data-valmsg-replace="true"></span>
                         </div>
@@ -164,8 +164,8 @@
                     <div class="form-group">
 
                         @Html.LabelFor(u => u.Ucenik.Vanredan, new { @class = "col-md-3 control-label" })
-                        <div class="checkbox col-md-9">
-                            @Html.CheckBoxFor(u => u.Ucenik.Vanredan)
+                        <div class="col-md-9">
+                            @Html.CheckBoxFor(u => u.Ucenik.Vanredan, new { htmlAttributes = new { @class = "form-control" } })
                         </div>
                     </div>
 
@@ -180,15 +180,18 @@
 
                     <div class="form-group">
                         <div class="col-md-10 col-md-offset-4 col-sm-offset-2 col-xs-offset-2">
-                            <button type="reset" class="btn btn-danger" onclick="ResetValidacije();">Poništi</button>
                             <button type="submit" class="btn btn-success">Sačuvaj</button>
+                            <button type="reset" class="btn btn-danger" onclick="ResetValidacije();">Poništi</button>
                         </div>
                     </div>
                 </fieldset>
 
             </div>
         </div>
-    }
+                                }
+</div>
+<div>
+    @Html.ActionLink("Vrati se na listu učenika", "Index", null, new { @class = "btn btn-info" })
 </div>
 
 @section Scripts
@@ -204,8 +207,8 @@
                 reader.onload = function (e) {
                     $('#fotografijaUcenika')
                         .attr('src', e.target.result)
-                        .width(150)
-                        .height(200);
+                        .width(194)
+                        .height(240);
                 };
 
                 reader.readAsDataURL(input.files[0]);
@@ -213,6 +216,29 @@
         }
     </script>
     <script>
+
+        $(function () {
+
+            var greska = false;
+            greska=@Html.Raw(Json.Encode(Model.Greska));
+
+            if(greska)
+            {
+                swal({
+                    confirmButtonColor: '#d9534f',
+                    type: 'error',
+                    title: 'Ups!',
+                    text: 'Došlo je do greške!'
+                });
+            }
+        });
+
+
+        $(function () {
+            $("#datum").css('cursor', 'pointer');
+            $("#datum").css('background-color', '#ffffff');
+        });
+
         var recnik = {
             1: "Prvi",
             2: "Drugi",

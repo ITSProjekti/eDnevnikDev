@@ -25,11 +25,11 @@ namespace eDnevnikDev.Controllers
         }
 
         // GET: UpisSkolskeGodine/Create
-        public ActionResult Create()
+        private ActionResult Create()
         {
             return View(new UpisTromesecjaStringViewModel());
         }
-        public ActionResult RokZaKreiranjeSkolskeGodine()
+        private ActionResult RokZaKreiranjeSkolskeGodine()
         {
             var model = new UpisTromesecjaStringViewModel
             {
@@ -42,7 +42,7 @@ namespace eDnevnikDev.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(UpisTromesecjaStringViewModel srpskiDatumi)
+        private ActionResult Create(UpisTromesecjaStringViewModel srpskiDatumi)
         {
             UpisTromesecjaViewModel podaci = new UpisTromesecjaViewModel()
             {
@@ -200,7 +200,7 @@ namespace eDnevnikDev.Controllers
         }
 
         //GET
-        public ActionResult Edit()
+        private ActionResult Edit()
         {
             SkolskaGodina skolskaGodina = _context.SkolskaGodine
                 .SingleOrDefault(s => s.Aktuelna == true);
@@ -245,7 +245,7 @@ namespace eDnevnikDev.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult Edit(UpisTromesecjaStringViewModel tromesecja)
+        private ActionResult Edit(UpisTromesecjaStringViewModel tromesecja)
         {
             SkolskaGodina skolskaGodina = _context.SkolskaGodine
                 .SingleOrDefault(s => s.Aktuelna == true);

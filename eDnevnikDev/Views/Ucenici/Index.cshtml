@@ -1,8 +1,7 @@
-﻿@model IEnumerable<Ucenik>
+﻿@model ListaUcenikaViewModel
 
 @{
-    ViewBag.Title = "Lista ucenika";
-
+    ViewBag.Title = "Lista učenika";
 
 }
 <div class="row">
@@ -12,8 +11,8 @@
         @Html.ActionLink("Dodaj novog", "Dodaj", "Ucenici", null, new { @class = "btn btn-success" })
         <br /><br />
 
-        <table class="table table-striped table-hover" id="podaci">
-            <thead>
+        <table class="table table-hover" id="podaci">
+            <thead style="background-color:#9dbf75;">
                 <tr>
                     <th>JMBG</th>
                     <th>Ime</th>
@@ -23,14 +22,18 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var ucenik in Model)
+                @foreach (var ucenik in Model.ListaUcenika)
             {
                     <tr>
                         <td>@ucenik.JMBG</td>
                         <td>@ucenik.Ime</td>
                         <td>@ucenik.Prezime</td>
                         <td>@ucenik.BrojTelefonaRoditelja</td>
-                        <td>@Html.ActionLink("Izmeni", "Izmeni", "Ucenici", new { @id = ucenik.UcenikID }, new { @class = "btn btn-success btn-xs" })</td>
+                        <td>
+                        <center>
+                            @Html.ActionLink("Izmeni", "Izmeni", "Ucenici", new { @id = ucenik.UcenikID }, new { @class = "btn btn-success btn-xs" })
+                        </center>
+                       </td>
                     </tr>
                 }
             </tbody>
@@ -47,6 +50,32 @@
                     "url": "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Serbian.json"
                 }
             });
+
+            var dodatUcenik=false;
+            var dodatUcenik=@Html.Raw(Json.Encode(Model.DodatUcenik));
+
+            if(dodatUcenik)
+            {
+                swal({
+                    confirmButtonColor: '#8ad919',
+                    type: 'success',
+                    title: 'Uspeh!',
+                    text: 'Uspešno ste dodali novog učenika!'
+                });
+            }
+
+            var izmenjenUcenik=false;
+            var izmenjenUcenik=@Html.Raw(Json.Encode(Model.IzmenjenUcenik));
+
+            if(izmenjenUcenik)
+            {
+                swal({
+                    confirmButtonColor: '#8ad919',
+                    type: 'success',
+                    title: 'Uspeh!',
+                    text: 'Uspešno ste izmenili učenika!'
+                });
+            }
         });
 
     </script>

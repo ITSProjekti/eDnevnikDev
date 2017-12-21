@@ -18,5 +18,7 @@ namespace eDnevnikDev.ViewModel
         [Display(Name = "Tip predmeta")]
         public int TipOcenePredmetaId { get; set; }
         public List<TipOcenePredmetaViewModel> TipoviOcenaPredmeta { get; set; }
+
+        public bool Greska { get; set; }
     }
 }

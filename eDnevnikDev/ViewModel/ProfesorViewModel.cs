@@ -32,6 +32,8 @@ namespace eDnevnikDev.ViewModel
 
         public HttpPostedFileBase File { get; set; }
 
+        public bool Greska { get; set; }
+
 
         /// <summary>
         /// Gets or sets the predmeti.
@@ -42,6 +44,7 @@ namespace eDnevnikDev.ViewModel
         public IEnumerable<Predmet> Predmeti { get; set; }
 
         public IEnumerable<Pol> Polovi { get; set; }
+
 
     }
 }

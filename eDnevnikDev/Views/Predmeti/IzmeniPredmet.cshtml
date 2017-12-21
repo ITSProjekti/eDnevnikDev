@@ -1,6 +1,6 @@
 ﻿@model IzmenaPredmetaViewModel
 @{
-    ViewBag.Title = "Izmena predmeta";
+    ViewBag.Title = "Izmeni predmet";
 }
 
 <h2 style="text-align:center">Izmena predmeta</h2>
@@ -39,15 +39,15 @@
                         <div class="form-group">
                             @Html.LabelFor(p => p.NazivPredmeta, new { @class = "col-md-3 control-label" })
                             <div class="col-md-9">
-                                @Html.TextBoxFor(p => p.NazivPredmeta, new { @class = "form-control", placeholder = " Unesite Naziv" })
+                                @Html.TextBoxFor(p => p.NazivPredmeta, new { @class = "form-control", placeholder = "Unesite naziv" })
                                 @Html.ValidationMessageFor(p => p.NazivPredmeta, "", new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-md-11">
                                 <center>
-                                    <button type="button" class="btn btn-danger" onclick="ResetForme()">Poništi</button>
                                     <button type="submit" class="btn btn-success">Sačuvaj</button>
+                                    <button type="button" class="btn btn-danger" onclick="ResetForme()">Poništi</button>
                                 </center>
                             </div>
                         </div>
@@ -58,12 +58,33 @@
         </div>
     </div>
 </div>
+<div>
+    @Html.ActionLink("Vrati se na listu predmeta", "Index", null, new { @class = "btn btn-info" })
+</div>
 <!--       </form> -->
 @section Scripts
 {
     @Scripts.Render("~/bundles/jqueryval")
 
     <script>
+
+        $(function(){
+
+            var greska=false;
+            greska=@Html.Raw(Json.Encode(Model.Greska));
+
+            if(greska)
+            {
+                swal({
+                    confirmButtonColor: '#d9534f',
+                    type: 'error',
+                    title: 'Ups!',
+                    text: 'Došlo je do greške!'
+                });
+            }
+        })
+
+
         function ResetForme() {
 
             $("#forma")[0].reset();

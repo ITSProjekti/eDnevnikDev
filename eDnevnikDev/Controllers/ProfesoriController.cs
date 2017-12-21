@@ -62,25 +62,60 @@ namespace eDnevnikDev.Controllers
         /// Uzima se lista profesora iz Baze. Test name=ProfesoriController_Index
         /// </summary>
         /// <returns>Vraca listu u View</returns>
-        [Authorize(Roles = "Administrator")]
-        public ActionResult Index()
+        [Authorize(Roles = "Administrator, Editor")]
+        public ActionResult Index(bool? dodatProfesor, bool? izmenjenProfesor)
         {
-            IEnumerable<Profesor> ListaProfesora = _context.Profesori.ToList();
-            return View("Index",ListaProfesora);
+            if (dodatProfesor != null)
+            {
+                var model = new ListaProfesoraViewModel
+                {
+                    ListaProfesora = _context.Profesori.ToList(),
+                    DodatProfesor = (bool)dodatProfesor
+                };
+
+                return View(model);
+            }
+
+            if (izmenjenProfesor != null)
+            {
+                var model = new ListaProfesoraViewModel
+                {
+                    ListaProfesora = _context.Profesori.ToList(),
+                    IzmenjenProfesor = (bool)izmenjenProfesor
+                };
+
+                return View(model);
+            }
+
+            return View(new ListaProfesoraViewModel
+            {
+                ListaProfesora = _context.Profesori.ToList()
+            });
         }
         /// <summary>
         /// Dodaje se Profesor u Listu Profesora. Test name=ProfesoriController_Dodaj
         /// </summary>
         /// <returns>Vraca novog profesora, <see cref="ProfesorViewModel"/></returns>
-        [Authorize(Roles = "Administrator")]
-        public ActionResult Dodaj()
+        [Authorize(Roles = "Administrator, Editor")]
+        public ActionResult Dodaj(bool? greska)
         {
+            if (greska != null)
+            {
+                var modelSaGreskom = new ProfesorViewModel
+                {
+                    Predmeti = _context.Predmeti.ToList(),
+                    Polovi = _context.Polovi.ToList(),
+                    Greska = (bool)greska
+                };
+                return View("Dodaj", modelSaGreskom);
+            }
             var model = new ProfesorViewModel
             {
                 Predmeti = _context.Predmeti.ToList(),
-                Polovi=_context.Polovi.ToList()
+                Polovi = _context.Polovi.ToList()
             };
-            return View("Dodaj",model);
+
+            return View("Dodaj", model);
         }
 
         /// <summary>
@@ -94,7 +129,7 @@ namespace eDnevnikDev.Controllers
         /// <returns>Vraca nas na Index stranu Profesora</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator, Editor")]
         public async Task<ActionResult> Sacuvaj(ProfesorViewModel pvm, HttpPostedFileBase upload)
         {
 
@@ -111,7 +146,7 @@ namespace eDnevnikDev.Controllers
 
                 string ime = VratiImeProfesoraSaPrvimVelikimSlovom(profesor.Ime);
                 string prezime = VratiPrezimeProfesoraSaPrvimVelikimSlovom(profesor.Prezime);
-                
+
                 string username = profesor.Ime.ToLower().Replace(" ", string.Empty) + "." + profesor.Prezime.ToLower().Replace(" ", string.Empty) + profesor.RedniBroj;
 
                 await RegistracijaProfesora(username, ime, prezime, profesor.RedniBroj);
@@ -133,12 +168,11 @@ namespace eDnevnikDev.Controllers
                 _context.SaveChanges();
 
 
-                return RedirectToAction("Index", "Profesori");
+                return RedirectToAction("Index", "Profesori", new { dodatProfesor = true });
             }
             else
             {
-                pvm.Predmeti = _context.Predmeti.ToList();
-                return View("Dodaj", pvm);
+                return RedirectToAction("Dodaj", new { greska = true });
             }
         }
 
@@ -148,29 +182,40 @@ namespace eDnevnikDev.Controllers
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
-        [Authorize(Roles = "Administrator")]
-        public ActionResult Izmeni(int? id)
+        [Authorize(Roles = "Administrator, Editor")]
+        public ActionResult Izmeni(int? id, bool? greska)
         {
-            if(id==null)
+            if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
             Profesor profesor = _context.Profesori.Find(id);
 
-            if(profesor==null)
+            if (profesor == null)
             {
                 return HttpNotFound();
+            }
+
+            if(greska!=null)
+            {
+                ProfesorViewModel profesorVMGreska = new ProfesorViewModel()
+                {
+                    Profesor = profesor,
+                    Polovi = _context.Polovi.ToList(),
+                    Predmeti = _context.Predmeti.ToList(),
+                    Greska = (bool)greska
+                };
+
+                return View(profesorVMGreska);
             }
 
             ProfesorViewModel profesorVM = new ProfesorViewModel()
             {
                 Profesor = profesor,
                 Polovi = _context.Polovi.ToList(),
-                Predmeti=_context.Predmeti.ToList()
+                Predmeti = _context.Predmeti.ToList()
             };
-
-            
 
             return View(profesorVM);
         }
@@ -181,15 +226,15 @@ namespace eDnevnikDev.Controllers
         /// <param name="profesorVM">The profesor vm.</param>
         /// <param name="upload">The upload.</param>
         /// <returns></returns>
+        //POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrator")]
-        //POST
+        [Authorize(Roles = "Administrator, Editor")]
         public ActionResult Izmeni(ProfesorViewModel profesorVM, HttpPostedFileBase upload)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                if(upload!=null && upload.ContentLength>0)
+                if (upload != null && upload.ContentLength > 0)
                 {
                     using (var reader = new System.IO.BinaryReader(upload.InputStream))
                     {
@@ -200,8 +245,8 @@ namespace eDnevnikDev.Controllers
                 Profesor profesor = new Profesor()
                 {
                     ProfesorID = profesorVM.Profesor.ProfesorID,
-                    Licenca=profesorVM.Profesor.Licenca,
-                    Zvanje=profesorVM.Profesor.Zvanje,
+                    Licenca = profesorVM.Profesor.Licenca,
+                    Zvanje = profesorVM.Profesor.Zvanje,
                     Ime = profesorVM.Profesor.Ime,
                     Prezime = profesorVM.Profesor.Prezime,
                     Telefon = profesorVM.Profesor.Telefon,
@@ -212,7 +257,7 @@ namespace eDnevnikDev.Controllers
                     PromenaLozinke = profesorVM.Profesor.PromenaLozinke,
                     UserProfesorId = profesorVM.Profesor.UserProfesorId,
                     PolId = profesorVM.Profesor.PolId,
-                    Fotografija=profesorVM.Profesor.Fotografija
+                    Fotografija = profesorVM.Profesor.Fotografija
                 };
 
                 try
@@ -248,9 +293,15 @@ namespace eDnevnikDev.Controllers
                     _context.SaveChanges();
 
                 }
+
+                return RedirectToAction("Index", new { izmenjenProfesor = true });
+
+            }
+            else
+            {
+                return RedirectToAction("Izmeni", new {id=profesorVM.Profesor.ProfesorID, greska = true });
             }
 
-            return RedirectToAction("Index");
         }
 
         /// <summary>
@@ -261,6 +312,7 @@ namespace eDnevnikDev.Controllers
         /// inkrementirati za 3, a ukoliko je ukupan broj paran inkrementiraće se za 5
         /// </summary>
         /// <returns></returns>
+        [Authorize(Roles = "Administrator, Editor")]
         public int GenerisiRedniBrojProfesora()
         {
             int redniBroj;
@@ -276,7 +328,7 @@ namespace eDnevnikDev.Controllers
 
                 var idProf = profesori.Select(p => p.ProfesorID).Max();
 
-                if(idProf%2==0)
+                if (idProf % 2 == 0)
                 {
                     redniBroj += 5;
                 }
@@ -304,11 +356,12 @@ namespace eDnevnikDev.Controllers
         /// <param name="prezime">The prezime.</param>
         /// <param name="redniBroj">The redni broj.</param>
         /// <returns></returns>
+        [Authorize(Roles = "Administrator, Editor")]
         public async Task RegistracijaProfesora(string username, string ime, string prezime, int redniBroj)
         {
-            var user = new ApplicationUser { UserName = username, Email=username.ToLower()+"@gmail.com" };
+            var user = new ApplicationUser { UserName = username, Email = username.ToLower() + "@gmail.com" };
             var result = await UserManager.CreateAsync(user, ime + "." + prezime + redniBroj);
-          
+
         }
 
         /// <summary>
@@ -316,6 +369,7 @@ namespace eDnevnikDev.Controllers
         /// </summary>
         /// <param name="ime">The IME.</param>
         /// <returns></returns>
+        [Authorize(Roles = "Administrator, Editor")]
         public string VratiImeProfesoraSaPrvimVelikimSlovom(string ime)
         {
             switch (ime)
@@ -331,6 +385,7 @@ namespace eDnevnikDev.Controllers
         /// </summary>
         /// <param name="prezime">The prezime.</param>
         /// <returns></returns>
+        [Authorize(Roles = "Administrator, Editor")]
         public string VratiPrezimeProfesoraSaPrvimVelikimSlovom(string prezime)
         {
             switch (prezime)

@@ -1,14 +1,40 @@
 ﻿@model eDnevnikDev.ViewModel.UcenikViewModel
 
 @{
-    ViewBag.Title = "Izmeni";
+    ViewBag.Title = "Izmeni učenika";
 }
 
-<div class="row">
+@if (Model.Ucenik.Pol == null || Model.Ucenik.Smer==null)
+{
+    <div class="row">
+        <div>
+            @Html.ActionLink("Vrati se na listu učenika", "Index", null, new { @class = "btn btn-info" })
+        </div>
+    </div>
 
-    @using (Html.BeginForm("Izmeni", "Ucenici", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data", id = "formId" }))
-    {
-        @Html.AntiForgeryToken()
+    @section Scripts
+{
+        <script>
+
+            $(function(){
+                swal({
+                    confirmButtonColor: '#d9534f',
+                    type: 'error',
+                    title: 'Ups!',
+                    text: 'Došlo je do neočekivane greške, molimo Vas pokušajte kasnije!'
+                });
+            });
+        </script>
+
+    }
+}
+else
+{
+    <div class="row">
+
+        @using (Html.BeginForm("Izmeni", "Ucenici", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data", id = "formId" }))
+        {
+            @Html.AntiForgeryToken()
 
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             @Html.HiddenFor(model => model.Ucenik.UcenikID)
@@ -26,7 +52,6 @@
                 <br>
 
                 <div class="well">
-
                     <fieldset>
                         <br>
                         <div class="form-group">
@@ -35,17 +60,17 @@
 
                                     @if (Model.Ucenik.Fotografija != null)
                                     {
-                                        <img id="fotografijaUcenika" src="data:image;base64,@System.Convert.ToBase64String(Model.Ucenik.Fotografija)" alt="" style="width:150px; height:200px;" />
+                                        <img id="fotografijaUcenika" class="img-responsive" src="data:image;base64,@System.Convert.ToBase64String(Model.Ucenik.Fotografija)" alt="" style="width:194px; height:240px;" />
                                     }
                                     else
                                     {
                                         if (Model.Ucenik.Pol.Naziv == "Ženski")
                                         {
-                                            <img id="fotografijaUcenika" src="~/ProfilneSlike/female.png" alt="" style="width:150px; height:200px;" />
+                                            <img id="fotografijaUcenika" class="img-responsive" src="~/ProfilneSlike/female.png" alt="" style="width:194px; height:240px;" />
                                         }
                                         else
                                         {
-                                            <img id="fotografijaUcenika" src="~/ProfilneSlike/male.png" alt="" style="width:150px; height:200px;" />
+                                            <img id="fotografijaUcenika" class="img-responsive" src="~/ProfilneSlike/male.png" alt="" style="width:194px; height:240px;" />
                                         }
                                     }
                                 </center>
@@ -63,35 +88,35 @@
                         </div>
 
                         @*<div class="form-group">
-                            @Html.LabelFor(model => model.Ucenik.Fotografija, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
+                                @Html.LabelFor(model => model.Ucenik.Fotografija, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
 
 
-                                @if (Model.Ucenik.Fotografija != null)
-                                {
-                                    <img id="fotografijaUcenika" src="data:image;base64,@System.Convert.ToBase64String(Model.Ucenik.Fotografija)" alt="" width="194px" height="240px" />
-                                }
-                                else
-                                {
-                                    if (Model.Ucenik.Pol.Naziv == "Ženski")
+                                    @if (Model.Ucenik.Fotografija != null)
                                     {
-                                        <img id="fotografijaUcenika" src="~/ProfilneSlike/female.png" alt="" width="194px" height="240px" />
+                                        <img id="fotografijaUcenika" src="data:image;base64,@System.Convert.ToBase64String(Model.Ucenik.Fotografija)" alt="" width="194px" height="240px" />
                                     }
                                     else
                                     {
-                                        <img id="fotografijaUcenika" src="~/ProfilneSlike/male.png" alt="" width="194px" height="240px" />
+                                        if (Model.Ucenik.Pol.Naziv == "Ženski")
+                                        {
+                                            <img id="fotografijaUcenika" src="~/ProfilneSlike/female.png" alt="" width="194px" height="240px" />
+                                        }
+                                        else
+                                        {
+                                            <img id="fotografijaUcenika" src="~/ProfilneSlike/male.png" alt="" width="194px" height="240px" />
+                                        }
                                     }
-                                }
-                                <div class="col-sm-12" style="margin-bottom:20px;">
-                                    <label class="btn-bs-file btn btn-success">
+                                    <div class="col-sm-12" style="margin-bottom:20px;">
+                                        <label class="btn-bs-file btn btn-success">
 
-                                        Izmeni sliku
-                                        <input type="file" accept="image/*" name="upload" id="fotografijaUcenika" onchange="readURL(this);" />
-                                    </label>
+                                            Izmeni sliku
+                                            <input type="file" accept="image/*" name="upload" id="fotografijaUcenika" onchange="readURL(this);" />
+                                        </label>
 
+                                    </div>
                                 </div>
-                            </div>
-                        </div>*@
+                            </div>*@
 
 
 
@@ -134,8 +159,8 @@
                         <div class="form-group">
                             @Html.LabelFor(model => model.Ucenik.DatumRodjenja, htmlAttributes: new { @class = "control-label col-md-3" })
                             <div class="col-md-9">
-                                <input type="text" id="datum" class="form-control" name="datum"  value="@Model.Ucenik.DatumRodjenja.ToString("dd.MM.yyyy")" data-val="true" data-val-required="Polje za datum rođenja je obavezno" readonly>
-                                <input type="hidden"  value="@Model.Ucenik.DatumRodjenja" name="Ucenik.DatumRodjenja" id="Ucenik_DatumRodjenja">
+                                <input type="text" id="datum" class="form-control" name="datum" value="@Model.Ucenik.DatumRodjenja.ToString("dd.MM.yyyy")" data-val="true" data-val-required="Polje za datum rođenja je obavezno" readonly>
+                                <input type="hidden" value="@Model.Ucenik.DatumRodjenja" name="Ucenik.DatumRodjenja" id="Ucenik_DatumRodjenja">
                                 <span class="field-validation-valid" data-valmsg-for="datum" data-valmsg-replace="true"></span>
                             </div>
                         </div>
@@ -162,7 +187,7 @@
                         <div class="form-group">
                             @Html.LabelFor(model => model.Ucenik.JMBG, htmlAttributes: new { @class = "control-label col-md-3" })
                             <div class="col-md-9">
-                                @Html.EditorFor(model => model.Ucenik.JMBG, new { htmlAttributes = new { @class = "form-control", placeholder = "Unesite JMBG" } })
+                                @Html.EditorFor(model => model.Ucenik.JMBG, new { htmlAttributes = new { @class = "form-control", placeholder = "Unesite JMBG", maxlength = "13" } })
                                 @Html.ValidationMessageFor(model => model.Ucenik.JMBG, "", new { @class = "text-danger" })
                             </div>
                         </div>
@@ -228,10 +253,8 @@
                         <div class="form-group">
                             @Html.LabelFor(model => model.Ucenik.Vanredan, htmlAttributes: new { @class = "control-label col-md-3" })
                             <div class="col-md-9">
-                                <div class="checkbox">
-                                    @Html.EditorFor(model => model.Ucenik.Vanredan)
-                                    @Html.ValidationMessageFor(model => model.Ucenik.Vanredan, "", new { @class = "text-danger" })
-                                </div>
+                                @Html.CheckBoxFor(model => model.Ucenik.Vanredan, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Ucenik.Vanredan, "", new { @class = "text-danger" })
                             </div>
                         </div>
 
@@ -273,88 +296,111 @@
                             </div>
                         </div>
 
-
-
                         <div class="form-group">
                             <div class="col-md-10 col-md-offset-4 col-sm-offset-2 col-xs-offset-2">
-                                <input type="button" id="k" value="Poništi" class="btn btn-danger" onclick="ResetValidacije()" />
                                 <input type="submit" value="Sačuvaj" class="btn btn-success" />
+                                <input type="button" id="k" value="Poništi" class="btn btn-danger" onclick="ResetValidacije()" />
                             </div>
                         </div>
-                        </fieldset>
-                    </div>
+                    </fieldset>
                 </div>
-                }
             </div>
+        }
+    </div>
 
-            <div>
-                @Html.ActionLink("Vrati se na listu učenika", "Index")
-            </div>
+    <div>
+        @Html.ActionLink("Vrati se na listu učenika", "Index", null, new { @class = "btn btn-info" })
+    </div>
 
-            @section Scripts
+
+
+    @section Scripts
 {
-                @Scripts.Render("~/bundles/jqueryval")
-                <script src="~/Scripts/moment.js"></script>
+        @Scripts.Render("~/bundles/jqueryval")
+        <script src="~/Scripts/moment.js"></script>
 
-                <script>
+        <script>
 
-                    $("#datum").datepicker({
-                        constrainInput: true,
-                        dateFormat: "dd.mm.yy.",
-                        dayNamesMin: ["Ned", "Pon", "Uto", "Sre", "Cet", "Pet", "Sub"],
-                        monthNamesShort: ["Jan", "Feb", "Mart", "April", "Maj", "Jun", "Jul", "Avgust", "Sept", "Okt", "Nov", "Dec"],
-                        altField: "#Ucenik_DatumRodjenja",
-                        altFormat: "yy-mm-dd",
-                        changeMonth: true,
-                        changeYear: true,
-                        yearRange: "1970:"
+            $(function(){
+
+                var greska = false;
+                greska=@Html.Raw(Json.Encode(Model.Greska));
+
+                if(greska)
+                {
+                    swal({
+                        confirmButtonColor: '#d9534f',
+                        type: 'error',
+                        title: 'Ups!',
+                        text: 'Došlo je do greške!'
                     });
+                }
+            });
 
-                    $("#datum").change(function () {
-                        $(this).blur();
-                    });
+            $(function () {
+                $("#datum").css('cursor', 'pointer');
+                $("#datum").css('background-color', '#ffffff');
+            });
 
-                    function readURL(input) {
-                        if (input.files && input.files[0]) {
-                            var reader = new FileReader();
+            $("#datum").datepicker({
+                constrainInput: true,
+                dateFormat: "dd.mm.yy.",
+                dayNamesMin: ["Ned", "Pon", "Uto", "Sre", "Cet", "Pet", "Sub"],
+                monthNamesShort: ["Jan", "Feb", "Mart", "April", "Maj", "Jun", "Jul", "Avgust", "Sept", "Okt", "Nov", "Dec"],
+                altField: "#Ucenik_DatumRodjenja",
+                altFormat: "yy-mm-dd",
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "1970:"
+            });
 
-                            reader.onload = function (e) {
-                                $('#fotografijaUcenika')
-                                    .attr('src', e.target.result)
-                                    .width(150)
-                                    .height(200);
-                            };
+            $("#datum").change(function () {
+                $(this).blur();
+            });
 
-                            reader.readAsDataURL(input.files[0]);
-                        }
-                    }
+            function readURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
 
-                    function ResetValidacije() {
+                    reader.onload = function (e) {
+                        $('#fotografijaUcenika')
+                            .attr('src', e.target.result)
+                            .width(194)
+                            .height(240);
+                    };
 
-                        $("#formId")[0].reset();
-                        $(".text-danger").html('');
-
-                        var slika = $("#Ucenik_Fotografija").val();
-                        var pol=@Html.Raw(Json.Encode(@Model.Ucenik.Pol.Naziv));
-
-                        if(slika.length>0)
-                        {
-                            $("#fotografijaUcenika").attr("src", "data:image;base64," + slika);
-                        }
-                        else
-                        {
-                            if(pol=="Ženski")
-                            {
-                                $("#fotografijaUcenika").attr("src", "/ProfilneSlike/female.png");
-                            }
-                            else if(pol=="Muški")
-                            {
-                                $("#fotografijaUcenika").attr("src", "/ProfilneSlike/male.png");
-                            }
-                        }
-                    }
-
-
-                </script>
-
+                    reader.readAsDataURL(input.files[0]);
+                }
             }
+
+            function ResetValidacije() {
+
+                $("#formId")[0].reset();
+                $(".text-danger").html('');
+
+                var slika = $("#Ucenik_Fotografija").val();
+                var pol=@Html.Raw(Json.Encode(@Model.Ucenik.Pol.Naziv));
+
+                if(slika.length>0)
+                {
+                    $("#fotografijaUcenika").attr("src", "data:image;base64," + slika);
+                }
+                else
+                {
+                    if(pol=="Ženski")
+                    {
+                        $("#fotografijaUcenika").attr("src", "/ProfilneSlike/female.png");
+                    }
+                    else if(pol=="Muški")
+                    {
+                        $("#fotografijaUcenika").attr("src", "/ProfilneSlike/male.png");
+                    }
+                }
+            }
+
+
+        </script>
+
+    }
+
+}

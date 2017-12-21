@@ -1,6 +1,6 @@
 ﻿@model ProfesorViewModel
 @{
-    ViewBag.Title = "Dodaj";
+    ViewBag.Title = "Dodaj profesora";
 }
     <div class="row">
             <!--<form class="form-horizontal">-->
@@ -8,30 +8,29 @@
                 {
                     @Html.AntiForgeryToken()
                     <div class="col-md-7 col-sm-7 col-md-offset-2 ">
-
-                        <h3>Novi profesor</h3>
-                        <hr />
+                        <h2 style="text-align:center">Novi profesor</h2>
+                        <br>
 
                         <div class="well">
                             <fieldset>
-                                <div class="col-md-4 col-sm-4">
-                                    <div class="form-group">
-                                        <img id="fotografijaProfesora" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/User_icon-cp.svg/194px-User_icon-cp.svg.png" alt="" width="194px" height="240px" />
-
-                                        <div class="col-sm-12" style="margin-bottom:20px;">
-                                            <label class="btn-bs-file btn btn-success">
-
-                                                Dodaj sliku
-                                                <input accept="image/*" type="file" name="upload" id="fotografijaProfesora" onchange="readURL(this);" />
-                                            </label>
-
-                                        </div>
+                                <br>
+                                <div class="form-group">
+                                    <div class="col-md-11">
+                                        <center>
+                                            <img id="fotografijaProfesora" class="img-responsive" src="~/ProfilneSlike/user-default.png" style="width:194px; height:240px;" />
+                                        </center>
                                     </div>
                                 </div>
 
-
-                                <div class="col-md-8 col-sm-8">
-
+                                <div class="form-group">
+                                    @Html.Label("Fotografija", new { @class = "col-md-3 control-label" })
+                                    <div class="col-md-9">
+                                        <label class="btn-bs-file btn btn-info" style="width:280px;">
+                                            Dodaj fotografiju
+                                            <input accept="image/*" type="file" name="upload" id="fotografijaProfesora" onchange="readURL(this);" />
+                                        </label>
+                                    </div>
+                                </div>
                                     <div class="form-group">
                                         @Html.LabelFor(p => p.Profesor.Ime, new { @class = "col-md-3 control-label" })
                                         <div class="col-md-9">
@@ -81,60 +80,51 @@
                                             @Html.ValidationMessageFor(p => p.Profesor.Zvanje, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
-
+                                <div class="form-group">
+                                    @Html.LabelFor(p => p.PredmetiIDs, new { @class = "col-md-3 control-label" })
+                                    <div class="col-md-9">
+                                        @Html.ListBoxFor(p => p.PredmetiIDs, new SelectList(Model.Predmeti, "PredmetID", "NazivPredmeta"), new { @class = "list-group" })
+                                        <br />
+                                        @Html.ValidationMessageFor(p => p.PredmetiIDs, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
                                     <div class="form-group">
                                         @Html.LabelFor(p => p.Profesor.Licenca, new { @class = "col-md-3 control-label" })
-                                        <div class="checkbox col-md-9">
-                                            @Html.CheckBoxFor(p => p.Profesor.Licenca)
+                                        <div class="col-md-9">
+                                            @Html.CheckBoxFor(p => p.Profesor.Licenca, new { htmlAttributes = new { @class = "form-control" } })
                                             @Html.ValidationMessageFor(p => p.Profesor.Licenca, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
-
                                     <div class="form-group">
                                         @Html.LabelFor(p => p.Profesor.RazredniStaresina, new { @class = "col-md-3 control-label" })
-                                        <div class="checkbox col-md-9">
-                                            @Html.CheckBoxFor(p => p.Profesor.RazredniStaresina)
+                                        <div class="col-md-9">
+                                            @Html.CheckBoxFor(p => p.Profesor.RazredniStaresina, new { htmlAttributes = new { @class = "form-control" } })
                                             @Html.ValidationMessageFor(p => p.Profesor.RazredniStaresina, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
-
-
                                     <div class="form-group">
                                         @Html.LabelFor(p => p.Profesor.Vanredan, new { @class = "col-md-3 control-label" })
-                                        <div class="checkbox col-md-9">
-                                            @Html.CheckBoxFor(p => p.Profesor.Vanredan)
+                                        <div class="col-md-9">
+                                            @Html.CheckBoxFor(p => p.Profesor.Vanredan, new { htmlAttributes = new { @class = "form-control" } })
                                             @Html.ValidationMessageFor(p => p.Profesor.Vanredan, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
-
-
-                                    <div class="form-group">
-                                        @Html.LabelFor(p => p.PredmetiIDs, new { @class = "col-md-3 control-label" })
-                                        <div class="col-md-9">
-                                            @Html.ListBoxFor(p => p.PredmetiIDs, new SelectList(Model.Predmeti, "PredmetID", "NazivPredmeta"), new { @class = "form-control" })
-                                            <br />
-                                            @Html.ValidationMessageFor(p => p.PredmetiIDs, "", new { @class = "text-danger" })
-                                        </div>
+                                <div class="form-group">
+                                    <div class="col-md-10 col-md-offset-4 col-sm-offset-2 col-xs-offset-2">
+                                        <button type="submit" class="btn btn-success">Sačuvaj</button>
+                                         <button type="reset" class="btn btn-danger" onclick="ResetValidacije()">Poništi</button>
                                     </div>
                                 </div>
+
                             </fieldset>
-
-                            <hr />
-
-                            <div class="form-group">
-                                <div class="col-md-9">
-                                    <button type="reset" class="btn btn-default" onclick="ResetValidacije()">Poništi</button>
-                                    <button type="submit" class="btn btn-success">Sačuvaj</button>
-                                </div>
-                            </div>
-
                         </div>
                     </div>
-
                 }
     </div>
 <!--       </form> -->
-
+<div>
+    @Html.ActionLink("Vrati se na listu profesora", "Index", null, new { @class = "btn btn-info" })
+</div>
 
 
 @section Scripts
@@ -151,6 +141,20 @@
         $(document).ready(function () {
 
             $("#Profesor_PolId option").first().prop("hidden", true);
+
+            var greska = false;
+            greska=@Html.Raw(Json.Encode(Model.Greska));
+
+            if(greska)
+            {
+                swal({
+                    confirmButtonColor: '#d9534f',
+                    type: 'error',
+                    title: 'Ups!',
+                    text: 'Došlo je do greške!'
+                });
+            }
+
         });
 
         
@@ -162,8 +166,8 @@
                 reader.onload = function (e) {
                     $('#fotografijaProfesora')
                         .attr('src', e.target.result)
-                        .width(150)
-                        .height(200);
+                        .width(194)
+                        .height(240);
                 };
 
                 reader.readAsDataURL(input.files[0]);
@@ -175,7 +179,7 @@
 
             $("#formId")[0].reset();
             $(".text-danger").html("");
-            $("#fotografijaProfesora").attr("src", "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/User_icon-cp.svg/194px-User_icon-cp.svg.png");
+            $("#fotografijaProfesora").attr("src", "/ProfilneSlike/user-default.png");
 
             ResetListeIzabranihPredmeta();
         }
