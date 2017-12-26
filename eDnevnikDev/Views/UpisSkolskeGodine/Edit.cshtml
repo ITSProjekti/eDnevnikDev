@@ -467,34 +467,44 @@
                 datum4o = new Date($('#tromesecje3d').datepicker('getDate'));
                 datum4d = new Date($('#tromesecje4o').datepicker('getDate'));
 
+                //if (minDatum < datum1o) {
+                //    datum1o.setDate(datum1o.getDate() + 2);
+                //    $('#tromesecje1d').datepicker('option', { minDate: datum1o });
+                //}
+
                 if (minDatum < datum1d) {
                     datum1d.setDate(datum1d.getDate() + 2);
-                    $('#tromesecje2o').datepicker('option', { minDate: datum1d });
+                    $('#tromesecje1d').datepicker('option', { minDate: datum1d });
                 }
 
                 if (minDatum < datum2o) {
                     datum2o.setDate(datum2o.getDate() + 2 );
-                    $('#tromesecje2d').datepicker('option', { minDate: datum2o });
+                    $('#tromesecje2o').datepicker('option', { minDate: datum2o });
                 }
 
                 if (minDatum < datum2d) {
                     datum2d.setDate(datum2d.getDate() + 2);
-                    $('#tromesecje3o').datepicker('option', { minDate: datum2d });
+                    $('#tromesecje2d').datepicker('option', { minDate: datum2d });
                 }
 
                 if (minDatum < datum3o) {
                     datum3o.setDate(datum3o.getDate() + 2);
-                    $('#tromesecje3d').datepicker('option', { minDate: datum3o });
+                    $('#tromesecje3o').datepicker('option', { minDate: datum3o });
                 }
 
                 if (minDatum < datum3d) {
                     datum3d.setDate(datum3d.getDate() + 2);
-                    $('#tromesecje4o').datepicker('option', { minDate: datum3d });
+                    $('#tromesecje3d').datepicker('option', { minDate: datum3d });
                 }
 
                 if (minDatum < datum4o) {
                     datum4o.setDate(datum4o.getDate() + 2);
-                    $('#tromesecje4d').datepicker('option', { minDate: datum4o });
+                    $('#tromesecje4o').datepicker('option', { minDate: datum4o });
+                }
+
+                if (minDatum < datum4d) {
+                    datum4d.setDate(datum4d.getDate() + 2);
+                    $('#tromesecje4d').datepicker('option', { minDate: datum4d });
                 }
 
 
