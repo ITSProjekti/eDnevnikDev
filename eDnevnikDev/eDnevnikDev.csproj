@@ -809,10 +809,8 @@
     <Content Include="Views\Napomene\Edit.cshtml" />
     <Content Include="Views\Napomene\Index.cshtml" />
     <Content Include="Views\Predmeti\PrikaziPredmeteSaTipovimaOcena.cshtml" />
-    <Content Include="Views\Casovi\Create.cshtml" />
     <Content Include="Views\Evidencija\Collapse.cshtml" />
     <Content Include="Views\Evidencija\Index.cshtml" />
-    <Content Include="Views\Casovi\Create.cshtml" />
     <Content Include="Views\Casovi\Cas.cshtml" />
     <Content Include="Views\Casovi\Cas - Copy.cshtml" />
     <Content Include="Views\Odeljenje\KreirajOdeljenje.cshtml" />
@@ -823,6 +821,7 @@
     <Content Include="Views\Home\IndexAdmin.cshtml" />
     <Content Include="Views\Predmeti\IzmeniPredmet.cshtml" />
     <Content Include="Views\UpisSkolskeGodine\Edit.cshtml" />
+    <Content Include="Views\Casovi\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

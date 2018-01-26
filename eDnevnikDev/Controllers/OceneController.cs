@@ -154,7 +154,7 @@ namespace eDnevnikDev.Controllers
         /// TESTED. TEST_NAME= PredmetiTest_VracaPredmete()
         /// </summary>
         /// <returns>Listu predmeta</returns>
-        private ActionResult Predmeti()
+        public ActionResult Predmeti()
         {
             string user = User.Identity.GetUserId();
             var predmeti = _context.Profesori

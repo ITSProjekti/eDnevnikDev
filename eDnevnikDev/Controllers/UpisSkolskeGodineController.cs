@@ -25,11 +25,11 @@ namespace eDnevnikDev.Controllers
         }
 
         // GET: UpisSkolskeGodine/Create
-        private ActionResult Create()
+        public ActionResult Create()
         {
             return View(new UpisTromesecjaStringViewModel());
         }
-        private ActionResult RokZaKreiranjeSkolskeGodine()
+        public ActionResult RokZaKreiranjeSkolskeGodine()
         {
             var model = new UpisTromesecjaStringViewModel
             {
@@ -42,7 +42,7 @@ namespace eDnevnikDev.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        private ActionResult Create(UpisTromesecjaStringViewModel srpskiDatumi)
+        public ActionResult Create(UpisTromesecjaStringViewModel srpskiDatumi)
         {
             UpisTromesecjaViewModel podaci = new UpisTromesecjaViewModel()
             {
@@ -200,7 +200,7 @@ namespace eDnevnikDev.Controllers
         }
 
         //GET
-        private ActionResult Edit()
+        public ActionResult Edit()
         {
             SkolskaGodina skolskaGodina = _context.SkolskaGodine
                 .SingleOrDefault(s => s.Aktuelna == true);
@@ -245,7 +245,7 @@ namespace eDnevnikDev.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        private ActionResult Edit(UpisTromesecjaStringViewModel tromesecja)
+        public ActionResult Edit(UpisTromesecjaStringViewModel tromesecja)
         {
             SkolskaGodina skolskaGodina = _context.SkolskaGodine
                 .SingleOrDefault(s => s.Aktuelna == true);
@@ -322,7 +322,7 @@ namespace eDnevnikDev.Controllers
             return View(tromesecja);
         }
 
-        private string ProveraRedosledaUpisanihGodina(UpisTromesecjaViewModel tromesecja)
+        public string ProveraRedosledaUpisanihGodina(UpisTromesecjaViewModel tromesecja)
         {
             //provera da li je redosled datuma dobar
             if (tromesecja.PrvoPocetak < tromesecja.PrvoKraj
@@ -343,7 +343,7 @@ namespace eDnevnikDev.Controllers
             return "";
         }
 
-        private string ProveraGodina(UpisTromesecjaViewModel godine)
+        public string ProveraGodina(UpisTromesecjaViewModel godine)
         {
             var godina = DateTime.Now.Year;
 

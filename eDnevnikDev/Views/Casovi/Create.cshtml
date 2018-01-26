@@ -1,179 +1,342 @@
-﻿@model eDnevnikDev.Models.Cas
+﻿@model eDnevnikDev.ViewModel.UpisCasaViewModel
+@using System.Globalization
 
 @{
     ViewBag.Title = "Create";
 }
 
-<h2>Create</h2>
+<h2>Upis časa</h2>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm(new { @id = "formaId" }))
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>Cas</h4>
+        <h3 id="porukaCas" class="text-danger"></h3>
+        <h3 id="porukaPredmet" class="text-danger"></h3>
+
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="row">
-            <div class="form-group col-md-5">
-                @Html.LabelFor(model => model.Datum, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    <h3>@DateTime.Today.Date.ToString("dd/MM/yyyy")</h3>
+
+        <div class="col-md-12">
+            <div class="row">
+                <div class="form-group col-md-12">
+                    @Html.LabelFor(model => model.Datum, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <h4>@DateTime.Now.ToString("dddd dd.MM.yyy", CultureInfo.CreateSpecificCulture("sr-Latn-CS"))</h4>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <h3 id="porukaCas"></h3>
-        <h3 id="porukaPredmet"></h3>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-6">
-                        <label for="razred">Razred</label>
-                        <select id="razred" name="Razred" class="form-control">
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Razred, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <select onchange="Odeljenja()" id="razred" name="Razred" class="form-control">
+                            <option value="-1">Izaberite razred</option>
                             <option value="1">Prvi</option>
                             <option value="2">Drugi</option>
                             <option value="3">Treći</option>
                             <option value="4">Četvrti</option>
                         </select>
+                        @Html.ValidationMessageFor(model => model.Razred, "", new { @class = "text-danger" })
+                        @*<span id="razredValidacija" class="field-validation-valid text-danger" data-valmsg-for="razred" data-valmsg-replace="true"></span>*@
                     </div>
-                    <div class="col-md-6">
-                        <label for="odeljenja">Odeljenje</label>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Odeljenje, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
                         <select id="odeljenja" name="Odeljenje" class="form-control"></select>
-                    </div><br />
+                        @Html.ValidationMessageFor(model => model.Odeljenje, "", new { @class = "text-danger" })
+                        @*<span id="odeljenjeValidacija" class="field-validation-valid text-danger" data-valmsg-for="Razred" data-valmsg-replace="true"></span>*@
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Naziv, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Naziv, new { htmlAttributes = new { @class = "form-control", @name = "Naziv", placeholder = "Unesite naziv" } })
+                        @Html.ValidationMessageFor(model => model.Naziv, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Opis, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextAreaFor(model => model.Opis, new { @class = "form-control", @name = "Opis", placeholder = "Unesite opis" })
+                        @Html.ValidationMessageFor(model => model.Opis, "", new { @class = "text-danger" })
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PredmetId, "Predmet", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @*@Html.DropDownList("PredmetId", null, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.PredmetId, "", new { @class = "text-danger" })*@
+
+                        <select id="predmeti" name="PredmetId" class="form-control"></select>
+                        @Html.ValidationMessageFor(model => model.PredmetId, "", new { @class = "text-danger" })
+                        @*<span id="predmetValidacija" class="field-validation-valid text-danger" data-valmsg-for="Razred" data-valmsg-replace="true"></span>*@
+
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.RedniBrojCasa, "Redni broj časa", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.RedniBrojCasa, new { htmlAttributes = new { @class = "form-control", @id = "rbCas", @onblur = "ProveraPostojanjaRednogBrojaCasa()" } })
+                        @Html.ValidationMessageFor(model => model.RedniBrojCasa, "", new { @class = "text-danger" })
+                        <span id="rbCasValidacija" class="field-validation-valid text-danger" data-valmsg-for="Razred" data-valmsg-replace="true"></span>
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.RedniBrojPredmeta, "Redni broj predmeta", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.RedniBrojPredmeta, new { htmlAttributes = new { @class = "form-control", @id = "rbPredmet", @onblur = "ProveraPostojanjaRednogBrojaPredmeta()" } })
+                        @Html.ValidationMessageFor(model => model.RedniBrojPredmeta, "", new { @class = "text-danger" })
+                        <span id="rbPredmetValidacija" class="field-validation-valid text-danger" data-valmsg-for="Razred" data-valmsg-replace="true"></span>
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" onclick="ProveraValidacije()" id="potvrdi" value="Upiši" class="btn btn-success" />
+                        <input type="reset" onclick="ResetForme()" id="reset" value="Poništi" class="btn btn-danger" />
+                    </div>
                 </div>
             </div>
         </div>
-        <br />
-        <div class="form-group">
-            @Html.LabelFor(model => model.Naziv, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Naziv, new { htmlAttributes = new { @class = "form-control", @name = "Naziv" } })
-                @Html.ValidationMessageFor(model => model.Naziv, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Opis, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextAreaFor(model => model.Opis, new { htmlAttributes = new { @class = "form-control", @name = "Opis" } })
-                @Html.ValidationMessageFor(model => model.Opis, "", new { @class = "text-danger" })
-
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.PredmetId, "Predmet", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @*@Html.DropDownList("PredmetId", null, htmlAttributes: new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.PredmetId, "", new { @class = "text-danger" })*@
-
-                <select id="predmeti" name="PredmetId" class="form-control"></select>
-            </div>
-        </div>
-
-
-        <div class="form-group">
-            <label class="control-label col-md-2">Redni broj časa</label>
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.RedniBrojCasa, new { htmlAttributes = new { @class = "form-control", @id = "rbCas", @name = "RedniBrojCasa", @onblur = "ProveraPostojanjaRednogBrojaCasa()" } })
-                @Html.ValidationMessageFor(model => model.RedniBrojCasa, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="control-label col-md-2">Redni broj predmeta</label>
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.RedniBrojPredmeta, new { htmlAttributes = new { @class = "form-control", @id = "rbPredmet", @name = "RedniBrojPredmeta", @onblur = "ProveraPostojanjaRednogBrojaPredmeta()" } })
-                @Html.ValidationMessageFor(model => model.RedniBrojPredmeta, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" id="potvrdi" value="Create" class="btn btn-default" />
-            </div>
-        </div>
     </div>
+    <br />
+
 }
-@section Scripts{
+@section Scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/moment.js"></script>
+
+
     <script>
+
+        //ukoliko postoji greska prilikom kreiranja casa, iskocice sweet alert
+        $(function () {
+
+            var opisGreske = @Html.Raw(Json.Encode(Model.OpisGreske));
+            var greska=false;
+            greska=@Html.Raw(Json.Encode(Model.Greska));
+
+            if(opisGreske == null){
+                opisGreske = "Došlo je do greške!";
+            }
+
+            if(greska)
+            {
+                swal({
+                    confirmButtonColor: '#d9534f',
+                    type: 'error',
+                    title: 'Ups!',
+                    text: opisGreske
+                });
+            }
+        })
+
+        //setovanje rbCasa i rbPredmeta na prazan string jer bi u suprotnom bile ispisane nule
+        //pri ucitavanju stranice
+        //dugme za potvrdu je disablevano sve dok se ne izabere predmet za upis casa, jer se tek tada
+        //popunjava polje za redni broj predmeta
+        $(function(){
+            $("#rbCas").val(null);
+            $("#rbPredmet").val(null);
+            $("#potvrdi").attr("disabled", "disabled");
+
+        })
+
+        //setovanje drop downova koji su pri ucitavanju stranice disabled (kurosr i bela pozadina)
+        $(function () {
+            //$("#odeljenja").css('cursor', 'context-menu');
+            $("#odeljenja").css('background-color', '#ffffff');
+            //$("#rbPredmet").css('cursor', 'context-menu');
+            $("#rbPredmet").css('background-color', '#ffffff');
+            //$("#rbCas").css('cursor', 'context-menu');
+            $("#rbCas").css('background-color', '#ffffff');
+            //$("#predmeti").css('cursor', 'context-menu');
+            $("#predmeti").css('background-color', '#ffffff');
+
+        });
+
+        //okida se prilikom menjanja razreda u dropdownu
+        $(function () {
+            $("#razred").change(function () {
+                $("#potvrdi").attr("disabled", "disabled");
+            })
+        })
+
+        //okida se prilikom menjanja odeljenja u dropdownu
+        $(function () {
+            $("#odeljenja").change(function () {
+                var razred = $("#razred").val();
+                var odeljenje = $("#odeljenja").val();
+                Predmeti(razred, odeljenje);
+                RedniBrojCasa(razred, odeljenje);
+                $("#potvrdi").attr("disabled", "disabled");
+            })
+        })
+
+        //okida se prilikom menjanja predmeta u dropdownu
+        $(function () {
+
+            $("#predmeti").change(function () {
+
+                $("#rbPredmet").prop("disabled", false);
+
+                var razred = $("#razred").val();
+                var odeljenje = $("#odeljenja").val();
+                var predmet = $("#predmeti").val();
+                RedniBrojPredmeta(razred, odeljenje, predmet);
+                $("#potvrdi").attr("disabled", false);
+            })
+
+        })
+
+        //sa drop downa se sklanja mogucnost izbora prvog elementa, a to je tekst tipa "Izaberite razred"
+        $(function(){
+
+            $("#razred option").first().prop("hidden", true);
+        })
+
+        //provera rednog broja casa i rednog broja predmeta
+        function ProveraValidacije(){
+
+            ProveraPostojanjaRednogBrojaCasa();
+            ProveraPostojanjaRednogBrojaPredmeta();
+
+            //var razred=$("#razredValidacija").val();
+            //var odeljenje=$("#odeljenjeValidacija").val();
+            //var predmet=$("#predmetValidacija").val();
+            //var rbCas=$("#rbCasValidacija").val();
+            //var rbPredmet=$("#rbPredmetValidacija").val();
+
+            //if(razred<1)
+            //{
+            //    $("#razredValidacija").html("");
+            //    $("#razredValidacija").append("Izaberite razred");
+            //}
+            //if(odeljenje<1)
+            //{
+            //    $("#odeljenjeValidacija").html("");
+            //    $("#odeljenjeValidacija").append("Izaberite odeljenje");
+            //}
+            //if(predmet<1)
+            //{
+            //    $("#predmetValidacija").html("");
+            //    $("#predmetValidacija").append("Izaberite predmet");
+            //}
+            //if(rbCas!=null)
+            //{
+            //    $("#rbCasValidacija").html("");
+            //    $("#rbCasValidacija").append("Unesite redni broj časa");
+            //}
+            //if(rbPredmet!=null)
+            //{
+            //    $("#rbPredmetValidacija").html("");
+            //    $("#rbPredmetValidacija").append("Unesite redni broj predmeta");
+            //}
+
+        }
+
+        //funckija za dugme reset
+        function ResetForme(){
+
+            $("#formId")[0].reset();
+            $(".text-danger").html('');
+        }
+
+        //poziva se metoda OdeljenjeTrajanje u kontroleru Odeljenje
+        //puni se dropdown sa odeljenjima
+        //poziva se nakon sto se izabere neki razred na formi
         function Odeljenja() {
+            //vracamo sve prethodno sto je uneseno na prazno polje, jer ispocetka treba da se bira odeljenje
+            //i samim tim ce i predmet, rbCasa i rbPredmeta biti drugaciji
+            $("#predmeti").prop("disabled", true);
+            $("#predmeti").val(null);
+            $("#rbCas").prop("disabled", true);
+            $("#rbCas").val(null);
+            $("#rbPredmet").prop("disabled", true);
+            $("#rbPredmet").val(null);
+
+            //kupi se vrednost razreda sa forme kako bi se prosledio parametar pozivanjem metode OdeljenjeTrajanje
             var razred = $("#razred").val();
+            $("#odeljenja").html("");
+
             var zahtev = $.getJSON("/Odeljenje/OdeljenjeTrajanje?godina=" + razred);
 
-
             zahtev.done(function (odeljenja) {
+
+                //kada se izabere razred, select za odeljenje se puni
+                $("#odeljenja").prop("disabled", false);
+                $("#odeljenja").css('cursor', 'context-menu');
+
+                $("#odeljenja").append("<option value='-1'>Izaberite odeljenje</option>");
 
                 for (var odeljenje in odeljenja) {
                     $("#odeljenja").append("<option value='" + odeljenja[odeljenje].Oznaka + "'>" + odeljenja[odeljenje].Oznaka + "</option>");
                 }
+
+                //sa drop downa se sklanja mogucnost izbora prvog elementa, a to je tekst tipa "Izaberite razred"
+                $("#odeljenja option").first().prop("hidden", true);
+
             });
             zahtev.fail(function (gr) { $("#p1").html(gr.statusText); });
         }
 
-        function Predmeti(razred, odeljenje)
-        {
+        //poziva se metoda VratiPredmete u kontroleru Casovi
+        //puni se dropdown sa predmetima i to onim koje profesor predaje tom konkretnom odeljenju
+        function Predmeti(razred, odeljenje) {
             var zahtev = $.getJSON("/Casovi/VratiPredmete?razred=" + razred + "&odeljenje=" + odeljenje);
 
             zahtev.done(function (predmeti) {
 
                 if (predmeti != "") {
                     $("#predmeti").html("");
+                    $("#predmeti").prop("disabled", false);
+
+                    $("#predmeti").append("<option value='-1'>Izaberite predmet</option>");
                     for (var predmet in predmeti) {
                         $("#predmeti").append("<option value='" + predmeti[predmet].PredmetID + "'>" + predmeti[predmet].NazivPredmeta + "</option>");
                     }
+
+                    //sa drop downa se sklanja mogucnost izbora prvog elementa, a to je tekst tipa "Izaberite predmet"
+                    $("#predmeti option").first().prop("hidden", true);
                 }
                 else {
                     $("#predmeti").html("");
+                    $("#predmeti").prop("disabled", false);
+                    $("#rbCas").val(null);
+                    $("#rbPredmet").val(null);
+                    $("#rbCas").prop("disabled", true);
+                    $("#rbPredmet").prop("disabled", true);
+
                     $("#predmeti").append("<option value='0'>Nema predmeta</option>");
                 }
-
             });
 
             zahtev.fail(function (greska) {
-                alert("Greska");
+                swal({
+                    confirmButtonColor: '#d9534f',
+                    type: 'error',
+                    title: 'Ups!',
+                    text: 'Došlo je do greške u metodi Predmeti!'
+                });
             });
         }
 
-        $(function () {
-
-            $("#razred").change(function () {
-                $("#odeljenja").html("");
-                $('#odeljenja').change();  //Okidanje dogadjaja za promenu drop down-a za izbor odeljenja prilikom promene razreda.
-                Odeljenja();
-            }).change();
-
-
-            $('#odeljenja').change(function () {
-                var razred = $("#razred").val();
-                var odeljenje = null;
-                odeljenje = $("#odeljenja").val();
-                if (odeljenje == null) {
-                    odeljenje = 1;
-                    razred = 1;
-                }
-                Predmeti(razred, odeljenje);
-                RedniBrojCasa();
-                RedniBrojPredmeta();
-            }).change();
-
-            $("#predmeti").change(function () {
-
-                RedniBrojPredmeta();
-            }).change();
-        });
-
-
         //sluzi da postavi combobox na vrednost casa koji trenutno treba da se odrzi
         // primer: ako je prethodni cas koji je odrzan bio 2. po redu, u combobox-u se prikazuje broj 3
-        function RedniBrojCasa() {
-            var razred = $("#razred").val();
-            var odeljenje = $("#odeljenja").val();
-            if (odeljenje == undefined)
-                odeljenje = 1;
-
-            //var zahtev = $.getJSON("/Odeljenje/RedniBrojCasa?odeljenje=" + odeljenje + "&razred=" + razred);
-
+        function RedniBrojCasa(razred, odeljenje) {
 
             //poziva metoda "RedniBrojCasa(int odeljenje, int razred)"
             //u kontroleru "Odeljenje"
@@ -183,101 +346,144 @@
                 success: function (data) {
                     if (data != "") {
                         $("#poruka").html("");
+
+                        $("#rbCas").prop("disabled", false);
                         $("#rbCas").val(data);
                     }
                     else {
-                        $("#poruka").html("Ne postoji odeljenje");
+                        //$("#poruka").html("Ne postoji odeljenje");
+                        $("#rbCas").prop("disabled", false);
                         $("#rbCas").val(null);
                     }
                     console.log(data);
+                },
+                error: function () {
+                    swal({
+                        confirmButtonColor: '#d9534f',
+                        type: 'error',
+                        title: 'Ups!',
+                        text: 'Došlo je do greške u metodi redni broj casa!'
+                    });
                 }
             });
         }
 
-        function RedniBrojPredmeta() {
+        //funkcija vraca redni broj predmeta za konkretno odeljenje
+        function RedniBrojPredmeta(razred, odeljenje, predmet) {
 
-            var razred = $("#razred").val();
-            var odeljenje = $("#odeljenja").val();
-            var predmetId=$("#predmeti").val();
 
-            if (odeljenje == undefined)
-                odeljenje = 1;
-
-            //var zahtev = $.getJSON("/Casovi/VratiRedniBrojPredmeta?razred" + razred + "&odeljenje=" + odeljenje + "&predmetId=" + predmetId);
 
             $.ajax({
                 method: "GET",
-                url: "/Casovi/VratiRedniBrojPredmeta?razred=" + razred + "&odeljenje=" + odeljenje + "&predmetId=" + predmetId,
+                url: "/Casovi/VratiRedniBrojPredmeta?razred=" + razred + "&odeljenje=" + odeljenje + "&predmetId=" + predmet,
                 success: function (data) {
                     if (data > -1) {
                         $("#porukaCas").html("");
+                        $("#rbPredmet").prop("disabled", false);
                         $("#rbPredmet").val(data);
                     }
                     else {
-                        $("#porukaCas").html("Ne postoji odeljenje");
+                        //$("#porukaCas").html("Ne postoji odeljenje");
+                        $("#rbPredmet").prop("disabled", false);
                         $("#rbPredmet").val(null);
                     }
                     console.log(data);
+                },
+                error: function () {
+                    swal({
+                        confirmButtonColor: '#d9534f',
+                        type: 'error',
+                        title: 'Ups!',
+                        text: 'Došlo je do greške u metodi redni broj predmeta!'
+                    });
                 }
             });
         }
 
-        function ProveraPostojanjaRednogBrojaCasa()
-        {
+        //proverava se da li je cas sa unetim rednim brojem casa vec upisan u bazu
+        //ukoliko jeste izbacice poruku o gresci
+        function ProveraPostojanjaRednogBrojaCasa() {
             var razred = $("#razred").val();
             var odeljenje = $("#odeljenja").val();
             var redniBrojCasa = $("#rbCas").val();
 
-            if (odeljenje == undefined)
-                odeljenje = 1;
+            if(redniBrojCasa > 0)
+            {
+                $("#rbCasValidacija").html("");
 
-            //var zahtev = $.getJSON("/Casovi/VratiRedniBrojPredmeta?razred" + razred + "&odeljenje=" + odeljenje + "&predmetId=" + predmetId);
-
-            $.ajax({
-                method: "GET",
-                url: "/Casovi/ProveraPostojanjaRednogBrojaCasa?razred=" + razred + "&odeljenje=" + odeljenje +  "&redniBrojCasa=" + redniBrojCasa,
-                success: function (data) {
-                    if (data > 0) {
-                        $("#porukaCas").html("");
-                        $("#potvrdi").removeAttr("disabled");
+                $.ajax({
+                    method: "GET",
+                    url: "/Casovi/ProveraPostojanjaRednogBrojaCasa?razred=" + razred + "&odeljenje=" + odeljenje + "&redniBrojCasa=" + redniBrojCasa,
+                    success: function (data) {
+                        if (data > 0) {
+                            $("#rbCasValidacija").html("");
+                            $("#potvrdi").removeAttr("disabled");
+                        }
+                        else {
+                            $("#rbCasValidacija").html("Čas je već upisan");
+                            $("#potvrdi").attr("disabled", "disabled");
+                        }
+                        console.log(data);
+                    },
+                    error: function () {
+                        swal({
+                            confirmButtonColor: '#d9534f',
+                            type: 'error',
+                            title: 'Ups!',
+                            text: 'Došlo je do greške / provera postojanja rb casa!'
+                        });
                     }
-                    else {
-                        $("#porukaCas").html("Čas je već upisan!");
-                        $("#potvrdi").attr("disabled", "disabled");
-                    }
-                    console.log(data);
-                }
-            });
+                });
+            }
+            else
+            {
+                $("#rbCasValidacija").html("");
+                //$("#rbCasValidacija").html("Unesite čas");
+            }
         }
 
+        //proverava se da li je cas sa unetim rednim brojem predmeta vec upisan u bazu
+        //ukoliko jeste izbacice poruku o gresci
         function ProveraPostojanjaRednogBrojaPredmeta() {
             var razred = $("#razred").val();
             var odeljenje = $("#odeljenja").val();
             var predmetId = $("#predmeti").val();
-            var rbPredmeta = $("#rbPredmet").val()
+            var rbPredmeta = $("#rbPredmet").val();
 
-            if (odeljenje == undefined)
-                odeljenje = 1;
 
-            //var zahtev = $.getJSON("/Casovi/VratiRedniBrojPredmeta?razred" + razred + "&odeljenje=" + odeljenje + "&predmetId=" + predmetId);
+            if(rbPredmeta > 0)
+            {
+                $("#rbPredmetValidacija").html("");
 
-            $.ajax({
-                method: "GET",
-                url: "/Casovi/ProveraPostojanjaRednogBrojaPredmeta?razred=" + razred + "&odeljenje=" + odeljenje + "&predmetId=" + predmetId + "&rbPredmeta=" + rbPredmeta,
-                success: function (data) {
-                    if (data > 0) {
-                        $("#porukaPredmet").html("");
-                        $("#potvrdi").removeAttr("disabled");
+                $.ajax({
+                    method: "GET",
+                    url: "/Casovi/ProveraPostojanjaRednogBrojaPredmeta?razred=" + razred + "&odeljenje=" + odeljenje + "&predmetId=" + predmetId + "&rbPredmeta=" + rbPredmeta,
+                    success: function (data) {
+                        if (data > 0) {
+                            $("#rbPredmetValidacija").html("");
+                            $("#potvrdi").removeAttr("disabled");
+                        }
+                        else {
+                            $("#rbPredmetValidacija").html("Predmet pod tim brojem je već upisan");
+                            $("#potvrdi").attr("disabled", "disabled");
+                        }
+                        console.log(data);
+                    },
+                    error: function () {
+                        swal({
+                            confirmButtonColor: '#d9534f',
+                            type: 'error',
+                            title: 'Ups!',
+                            text: 'Došlo je do greške / provra postojanja rb predmeta!'
+                        });
                     }
-                    else {
-                        $("#porukaPredmet").html("Predmet pod tim brojem je već upisan!");
-                        $("#potvrdi").attr("disabled", "disabled");
-                    }
-                    console.log(data);
-                }
-            });
+                });
+            }
+            else
+            {
+                $("#rbPredmetValidacija").html("");
+            }
         }
-
 
     </script>
 }

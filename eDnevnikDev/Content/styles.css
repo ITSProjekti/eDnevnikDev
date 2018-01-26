@@ -656,12 +656,7 @@ a.bg-danger:hover {
     max-width: 300px;
     margin: auto;
     margin-top: 100px;
-    text-align: center;
-    border-top:10px solid #83bd3f;
-    border-left:10px solid #83bd3f;
-    border-right:10px solid #83bd3f;
-    
-    
+    text-align: center;    
 }
 
 
@@ -695,12 +690,31 @@ a.bg-danger:hover {
 .borderevidencijacolor
 {
     border-top: 10px solid red !important;
+    border-bottom: 10px solid red !important;
     border-left:10px solid red !important;
     border-right:10px solid red !important;
+
+}
+.borderevidencijacolorG
+{
+    border-top: 10px solid #9dbf75 !important;
+    border-bottom: 10px solid #9dbf75 !important;
+    border-left:10px solid #9dbf75 !important;
+    border-right:10px solid #9dbf75 !important;
+
 }
 .buttonevidencijacolor
 {
     background-color: red !important;
+}
+
+.karticapodela
+{
+height: 1px;
+background-color:black;
+color:#FF0066;
+border: 0 none;
+
 }
 
 

@@ -162,6 +162,9 @@ namespace eDnevnikDev.Controllers
 
             ucenik.RedniBroj = GenerisiRedniBrojUcenika(ucenik);
             ucenik.DatumUnosa = DateTime.Now;
+            ucenik.StatusUcenikaId = _context.StatusiUcenika
+                .SingleOrDefault(x => x.Opis == "Aktivan")
+                .StatusUcenikaId;
 
             string username = ucenik.Ime.Replace(" ", String.Empty) + ucenik.RedniBroj;
             await RegistracijaUcenika(username, VratiImeUcenikaSaPrvimVelikimSlovom(ucenik.Ime), ucenik.RedniBroj);
