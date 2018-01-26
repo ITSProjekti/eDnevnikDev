@@ -15,7 +15,7 @@
                             <fieldset>
                                 <br>
                                 <div class="form-group">
-                                    <div class="col-md-11">
+                                    <div class="col-md-12">
                                         <center>
                                             <img id="fotografijaProfesora" class="img-responsive" src="~/ProfilneSlike/user-default.png" style="width:194px; height:240px;" />
                                         </center>
@@ -95,20 +95,6 @@
                                             @Html.ValidationMessageFor(p => p.Profesor.Licenca, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        @Html.LabelFor(p => p.Profesor.RazredniStaresina, new { @class = "col-md-3 control-label" })
-                                        <div class="col-md-9">
-                                            @Html.CheckBoxFor(p => p.Profesor.RazredniStaresina, new { htmlAttributes = new { @class = "form-control" } })
-                                            @Html.ValidationMessageFor(p => p.Profesor.RazredniStaresina, "", new { @class = "text-danger" })
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        @Html.LabelFor(p => p.Profesor.Vanredan, new { @class = "col-md-3 control-label" })
-                                        <div class="col-md-9">
-                                            @Html.CheckBoxFor(p => p.Profesor.Vanredan, new { htmlAttributes = new { @class = "form-control" } })
-                                            @Html.ValidationMessageFor(p => p.Profesor.Vanredan, "", new { @class = "text-danger" })
-                                        </div>
-                                    </div>
                                 <div class="form-group">
                                     <div class="col-md-10 col-md-offset-4 col-sm-offset-2 col-xs-offset-2">
                                         <button type="submit" class="btn btn-success">Sačuvaj</button>
@@ -134,7 +120,7 @@
     <script>
 
         $("#PredmetiIDs").select2({
-            placeholder: "Izaberite predmete"
+            placeholder: "Izaberite"
         });
 
         // Sklanja se default vrednost u comboboxu za izbor pola

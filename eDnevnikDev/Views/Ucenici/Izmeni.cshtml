@@ -56,7 +56,7 @@ else
                     <fieldset>
                         <br>
                         <div class="form-group">
-                            <div class="col-md-11">
+                            <div class="col-md-12">
                                 <center>
 
                                     @if (Model.Ucenik.Fotografija != null)
@@ -87,40 +87,6 @@ else
                                 </label>
                             </div>
                         </div>
-
-                        @*<div class="form-group">
-                                @Html.LabelFor(model => model.Ucenik.Fotografija, htmlAttributes: new { @class = "control-label col-md-2" })
-                                <div class="col-md-10">
-
-
-                                    @if (Model.Ucenik.Fotografija != null)
-                                    {
-                                        <img id="fotografijaUcenika" src="data:image;base64,@System.Convert.ToBase64String(Model.Ucenik.Fotografija)" alt="" width="194px" height="240px" />
-                                    }
-                                    else
-                                    {
-                                        if (Model.Ucenik.Pol.Naziv == "Ženski")
-                                        {
-                                            <img id="fotografijaUcenika" src="~/ProfilneSlike/female.png" alt="" width="194px" height="240px" />
-                                        }
-                                        else
-                                        {
-                                            <img id="fotografijaUcenika" src="~/ProfilneSlike/male.png" alt="" width="194px" height="240px" />
-                                        }
-                                    }
-                                    <div class="col-sm-12" style="margin-bottom:20px;">
-                                        <label class="btn-bs-file btn btn-success">
-
-                                            Izmeni sliku
-                                            <input type="file" accept="image/*" name="upload" id="fotografijaUcenika" onchange="readURL(this);" />
-                                        </label>
-
-                                    </div>
-                                </div>
-                            </div>*@
-
-
-
                         <div class="form-group">
                             @Html.LabelFor(model => model.Ucenik.Ime, htmlAttributes: new { @class = "control-label col-md-3" })
                             <div class="col-md-9">
@@ -168,20 +134,8 @@ else
                         <div class="form-group">
                             @Html.LabelFor(u => u.Ucenik.MestoRodjenja, new { @class = "col-md-3 control-label" })
                             <div class="col-md-9">
-                                <select class="form-control" name="Ucenik.MestoRodjenjaId">
-                                    @foreach (var item in Model.Gradovi)
-                                    {
-                                        if (item.Id == Model.Ucenik.MestoRodjenjaId)
-                                        {
-                                            <option value="@item.Id" selected>@item.Naziv</option>
-                                        }
-                                        else
-                                        {
-                                            <option value="@item.Id">@item.Naziv</option>
-                                        }
-                                    }
-                                </select>
-                                @Html.ValidationMessageFor(model => model.Ucenik.MestoRodjenjaId, "", new { @class = "text-danger" })
+                                @Html.EditorFor(model => model.Ucenik.MestoRodjenja, new { htmlAttributes = new { @class = "form-control", placeholder = "Unesite ime" } })
+                                @Html.ValidationMessageFor(model => model.Ucenik.MestoRodjenja, "", new { @class = "text-danger" })
                             </div>
                         </div>
 
@@ -249,12 +203,18 @@ else
                             </div>
                         </div>
 
-
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Ucenik.UDomu, htmlAttributes: new { @class = "control-label col-md-3" })
+                            <div class="col-md-9">
+                                @Html.CheckBoxFor(model => model.Ucenik.UDomu)
+                                @Html.ValidationMessageFor(model => model.Ucenik.UDomu, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
 
                         <div class="form-group">
                             @Html.LabelFor(model => model.Ucenik.Vanredan, htmlAttributes: new { @class = "control-label col-md-3" })
                             <div class="col-md-9">
-                                @Html.CheckBoxFor(model => model.Ucenik.Vanredan, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.CheckBoxFor(model => model.Ucenik.Vanredan)
                                 @Html.ValidationMessageFor(model => model.Ucenik.Vanredan, "", new { @class = "text-danger" })
                             </div>
                         </div>

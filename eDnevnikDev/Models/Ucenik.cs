@@ -141,24 +141,15 @@ namespace eDnevnikDev.Models
 
 
         /// <summary>
-        /// Navigacioni property, referencira grad u tabeli Grad
+        /// Služi za čuvanje mesta rodjenja
         /// </summary>
         /// <value>
-        /// Grad
+        /// Mesto rodjenja
         /// </value>
-        [ForeignKey("MestoRodjenjaId")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Polje za mesto rođenja je obavezno")]
+        [RegularExpression(@"^([A-ZŠĐČĆŽa-zšđčćž]+ ?)+$", ErrorMessage = "Mesto rođenja nije ispravno uneto")]
         [Display(Name ="Mesto rođenja")]
-        public Grad MestoRodjenja { get; set; }
-
-        /// <summary>
-        /// Properti koji cuva id Mesta rodjenja
-        /// </summary>
-        /// <value>
-        /// int
-        /// </value>
-        [Display(Name = "Mesto rođenja")]
-        [Required(ErrorMessage = "Polje za mesto rođenja je obavezno")]
-        public int MestoRodjenjaId { get; set; }
+        public string MestoRodjenja { get; set; }
 
         /// <summary>
         ///  Služi za čuvanje da li je ucenik redovan ili vandredan
@@ -167,6 +158,9 @@ namespace eDnevnikDev.Models
         /// bool
         /// </value>
         public bool Vanredan { get; set; }
+
+        [Display(Name = "U domu")]
+        public bool UDomu { get; set; }
 
         public string RedniBroj { get; set; }
 

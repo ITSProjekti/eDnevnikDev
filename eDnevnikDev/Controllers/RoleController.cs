@@ -44,11 +44,26 @@ namespace eDnevnikDev.Controllers
             }
         }
 
+ 
+        /// <summary>
+        /// Metoda vraca Index view za role
+        /// </summary>
+        /// <returns></returns>
         private ActionResult Index()
         {
             return View();
         }
 
+
+
+        /// <summary>
+        /// Metoda vraca sve profesore sa svojim rolama
+        /// Napomena: Ukoliko se na view-u ne prikaze ni jedan profesor i ako u bazi postoje
+        /// to znaci da neki od profesora nema svoj UserId, do ovoga moze doci ukoliko se rucno 
+        /// unose podaci u bazu
+        /// <see cref="DTOProfesor"/> 
+        /// </summary>
+        /// <returns></returns>
         private async Task<JsonResult> VratiProfesore()
         {
             
@@ -79,10 +94,17 @@ namespace eDnevnikDev.Controllers
             }
 
 
-
         }
 
 
+        /// <summary>
+        /// Metoda vraca sve ucenike sa svojim rolama
+        /// Napomena: Ukoliko se na view-u ne prikaze ni jedan ucenik i ako u bazi postoje
+        /// to znaci da neki od ucenika nema svoj UserId, do ovoga moze doci ukoliko se rucno 
+        /// unose podaci u bazu
+        /// <see cref="DTOUcenik"/> 
+        /// </summary>
+        /// <returns></returns>
         private async Task<JsonResult> VratiUcenike()
         {
 
@@ -118,6 +140,11 @@ namespace eDnevnikDev.Controllers
         }
 
 
+        /// <summary>
+        /// Metoda prikazuje view na kome mogu da se izmene role za profesora
+        /// <see cref="ProfesorRoleViewModel"/> 
+        /// </summary>
+        /// <returns></returns>
         private async Task<ActionResult> PromeniPravoPristupaProfesora(string id)
         {
 
@@ -157,11 +184,16 @@ namespace eDnevnikDev.Controllers
             }
 
 
-
                 return View(prvm);
 
             }
 
+
+        /// <summary>
+        /// Metoda prikazuje view na kome mogu da se izmene role za ucenika
+        /// <see cref="UcenikRoleViewModel"/> 
+        /// </summary>
+        /// <returns></returns>
         private async Task<ActionResult> PromeniPravoPristupaUcenika(string id)
         {
 
@@ -209,6 +241,11 @@ namespace eDnevnikDev.Controllers
         }
 
 
+        /// <summary>
+        /// Metoda dodaje novu rolu korisniku
+        /// <see cref="DTORola"/> 
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         [ValidateHeaderAntiForgeryToken]
         private async Task DodajRolu(DTORola dtoRola)
@@ -219,6 +256,12 @@ namespace eDnevnikDev.Controllers
             await userManager.AddToRoleAsync(dtoRola.KorisnikID, dtoRola.Rola);
         }
 
+
+        /// <summary>
+        /// Metoda brise rolu korisniku
+        /// <see cref="DTORola"/> 
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         [ValidateHeaderAntiForgeryToken]
         private async Task ObrisiRolu(DTORola dtoRola)

@@ -70,24 +70,6 @@ namespace eDnevnikDev.Models
         [RegularExpression(@"^[A-Za-z0-9'\.\-\s\,]+$", ErrorMessage = "Nisu dozoljeni specijalni karakteri")]
         public string Adresa { get; set; }
 
-        /// <summary>
-        ///  Služi za čuvanje da li je profesor redovan ili vandredan
-        /// </summary>
-        /// <value>
-        /// bool
-        /// </value>
-        public bool Vanredan { get; set; }
-
-        /// <summary>
-        ///  Služi za čuvanje da li je profesor razredni starešina
-        /// </summary>
-        /// <value>
-        /// bool
-        /// </value>
-        [Display(Name = "Razredni starešina")]
-        public bool RazredniStaresina { get; set; }
-
-
         public int RedniBroj { get; set; }
 
         public bool PromenaLozinke { get; set; }

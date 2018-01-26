@@ -18,6 +18,7 @@
     <script>
 
         $(function () {
+            //Prilikom ucitavanaja stranice se za default vrednost postavljaju profesori 
             $("#Korisnici").val('Profesori');
             VratiProfesore();
         });
@@ -36,6 +37,9 @@
             })
         });
 
+
+
+        //Metoda popunjava tabelu sa listom profesora
         function VratiProfesore() {
 
 
@@ -73,7 +77,7 @@
 
         }
 
-
+        //Metoda popunjava tabelu sa listom ucenika
         function VratiUcenike() {
 
 

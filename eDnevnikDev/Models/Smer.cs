@@ -31,7 +31,6 @@ namespace eDnevnikDev.Models
         /// string
         /// </value>
         [Required(AllowEmptyStrings = false, ErrorMessage = "Polje za naziv smera je obavezno")]
-        [RegularExpression(@"^([A-ZŠĐČĆŽa-zšđčćž]+ ?)+$", ErrorMessage = "Polje za naziv smera može da sadrži samo slova")]
         [Display(Name = "Naziv smera")]
         public string NazivSmera { get; set; }
 

@@ -82,7 +82,7 @@ namespace eDnevnikDev.Controllers
         /// </summary>
         /// <param name="godina"></param>
         /// <returns></returns>
-        private JsonResult OdeljenjeTrajanje(int godina)
+        public JsonResult OdeljenjeTrajanje(int godina)
         {
             //Kreiranje kolekcije oznaka koje mogu ciniti odeljenja na godini koja je prosledjena kao parametar. O.O
             var kolekcijaOznaka = _context.Smerovi
@@ -197,13 +197,6 @@ namespace eDnevnikDev.Controllers
                         }
                     }
 
-                    //podaci.Ucenici = odeljenje.Ucenici
-                    //    .OrderBy(u => u.Prezime)
-                    //    .ThenBy(u => u.Ime)
-                    //    .ThenBy(u => u.ImeOca)
-                    //    .Select(u => new DTOUcenikOdeljenja { ID = u.UcenikID, Ime = u.Ime, Prezime = u.Prezime, Fotografija = u.Fotografija, BrojUDnevniku = u.BrojUDnevniku })
-                    //    .ToList();
-
                 }
                 //Ako je status kreirano, sortiraju se ucenici po broju u dnevniku.
                 else
@@ -288,10 +281,6 @@ namespace eDnevnikDev.Controllers
                             }
                         }
 
-                        //podaci.Ucenici = odeljenje.Ucenici
-                        //    .OrderBy(u => u.BrojUDnevniku)
-                        //    .Select(u => new DTOUcenikOdeljenja { ID = u.UcenikID, Ime = u.Ime, Prezime = u.Prezime, Fotografija = u.Fotografija, BrojUDnevniku = u.BrojUDnevniku, Prisutan = true })
-                        //    .ToList();
                     }
 
                 }
@@ -356,7 +345,10 @@ namespace eDnevnikDev.Controllers
             //Dodavanje ucenika u isto odeljenje sledeceg razreda sa statusom u toku.
             foreach (var ucenik in odeljenje.Ucenici)
             {
-                ucenik.OdeljenjeId = sledecaGodinaOdeljenjeUToku.Id;
+                if(ucenik.StatusUcenikaId==1)//Status 1 je Aktivan
+                {
+                    ucenik.OdeljenjeId = sledecaGodinaOdeljenjeUToku.Id;
+                }
             }
 
             _context.SaveChanges();
@@ -509,6 +501,7 @@ namespace eDnevnikDev.Controllers
             var model = new KreirajOdeljenjeViewModel
             {
                 ListaNerasporedjenihUcenika = _context.Ucenici.Where(u => u.OdeljenjeId == null)
+                                                      .Where(u => u.StatusUcenikaId == 1)//Status 1 je Aktivan
                                                       .Select(u => new NerasporedjenUcenikViewModel
                                                       {
                                                           UcenikId = u.UcenikID,
@@ -541,13 +534,13 @@ namespace eDnevnikDev.Controllers
                                                      .SingleOrDefault();
 
 
-
                 if (odeljenjeId != null && odeljenjeId > 0)
                 {
 
                     //Lista ucenika koji su upisani u konkretno odeljenje
                     List<DTORasporedjenUcenik> listaRasporedjenihUcenika = _context.Ucenici
                                       .Where(u => u.OdeljenjeId == odeljenjeId)
+                                      .Where(u => u.StatusUcenikaId == 1)//Status 1 je Aktivan
                                       .Select(u => new DTORasporedjenUcenik
                                       {
                                           UcenikId = u.UcenikID,

@@ -12,16 +12,18 @@ namespace eDnevnikDev.ViewModel
         {
 
         }
-        public CasUceniciViewModel(Cas c, List<UcenikSaPrisustvomViewModel> u, List<Predmet> p)
+        public CasUceniciViewModel(Cas c, List<UcenikSaPrisustvomViewModel> u, List<OcenaViewModel> o, PredmetCasViewModel p)
         {
             Cas = c;
             Ucenici = u;
-            Predmeti = p;
+            listaOcena=o;
+            Predmet = p;
         }
         public Cas Cas { get; set; }
 
         public List<UcenikSaPrisustvomViewModel> Ucenici { get; set; }
-        public List<Predmet> Predmeti { get; set; }
+        public PredmetCasViewModel Predmet { get; set; }
+        public List<OcenaViewModel> listaOcena { get; set; }
 
 
     }

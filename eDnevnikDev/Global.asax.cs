@@ -20,6 +20,9 @@ namespace eDnevnikDev
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             ApplicationDbContext context = new ApplicationDbContext();
             IdentityHelper.SeedIdentities(context);
+            SeedHelper.Seed(context);
+            SeedHelper.SeedTipOcene(context);
+            SeedHelper.SeedTipPredmeta(context);
             JobScheduler.Start();
         }
     }

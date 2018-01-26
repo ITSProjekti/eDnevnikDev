@@ -21,7 +21,7 @@
                 <fieldset>
                     <br>
                     <div class="form-group">
-                        <div class="col-md-11">
+                        <div class="col-md-12">
                             <center>
                                 <img id="fotografijaUcenika" class="img-responsive" src="~/ProfilneSlike/user-default.png" style="width:194px; height:240px;" />
                             </center>
@@ -83,12 +83,10 @@
                     <div class="form-group">
                         @Html.LabelFor(u => u.Ucenik.MestoRodjenja, new { @class = "col-md-3 control-label" })
                         <div class="col-md-9">
-                            @Html.DropDownListFor(u => u.Ucenik.MestoRodjenjaId, new SelectList(Model.Gradovi, "Id", "Naziv"), "Izaberite grad", new { @class = "form-control" })
-                            @Html.ValidationMessageFor(u => u.Ucenik.MestoRodjenjaId, "", new { @class = "text-danger" })
+                            @Html.TextBoxFor(u => u.Ucenik.MestoRodjenja, new { @class = "form-control", placeholder = "Unesite mesto rođenja" })
+                            @Html.ValidationMessageFor(u => u.Ucenik.MestoRodjenja, "", new { @class = "text-danger" })
                         </div>
                     </div>
-
-
                     <div class="form-group">
                         @Html.LabelFor(u => u.Ucenik.JMBG, new { @class = "col-md-3 control-label" })
                         <div class="col-md-9">
@@ -160,12 +158,18 @@
                             @Html.ValidationMessageFor(u => u.Ucenik.BrojTelefonaRoditelja, "", new { @class = "text-danger" })
                         </div>
                     </div>
-
                     <div class="form-group">
-
+                        @Html.LabelFor(u => u.Ucenik.UDomu, new { @class = "col-md-3 control-label" })
+                        <div class="col-md-9">
+                            @Html.CheckBoxFor(u => u.Ucenik.UDomu, new { @checked = true })
+                            @Html.ValidationMessageFor(u => u.Ucenik.UDomu, "", new { @class = "text-danger" })
+                         </div>
+                    </div>
+                    <div class="form-group">
                         @Html.LabelFor(u => u.Ucenik.Vanredan, new { @class = "col-md-3 control-label" })
                         <div class="col-md-9">
-                            @Html.CheckBoxFor(u => u.Ucenik.Vanredan, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.CheckBoxFor(u => u.Ucenik.Vanredan)
+                            @Html.ValidationMessageFor(u => u.Ucenik.UDomu, "", new { @class = "text-danger" })
                         </div>
                     </div>
 

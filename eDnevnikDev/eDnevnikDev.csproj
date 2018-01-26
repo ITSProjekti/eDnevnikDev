@@ -263,6 +263,7 @@
     <Compile Include="Helpers\JobScheduler.cs" />
     <Compile Include="Helpers\PromeniStatusJob.cs" />
     <Compile Include="Helpers\KonverizjaDatuma.cs" />
+    <Compile Include="Helpers\SeedHelper.cs" />
     <Compile Include="Helpers\ValidateHeaderAntiForgeryTokenAttribute.cs" />
     <Compile Include="Migrations\201710301416098_InitialSprint4.cs" />
     <Compile Include="Migrations\201710301416098_InitialSprint4.Designer.cs">
@@ -336,12 +337,19 @@
     <Compile Include="Migrations\201712151459518_datumIspisaUNullable.Designer.cs">
       <DependentUpon>201712151459518_datumIspisaUNullable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201712281330515_IzbacenGradDodatoMestoRodjenjaRucnoDodatPropertiUDomuRadioAca.cs" />
+    <Compile Include="Migrations\201712281330515_IzbacenGradDodatoMestoRodjenjaRucnoDodatPropertiUDomuRadioAca.Designer.cs">
+      <DependentUpon>201712281330515_IzbacenGradDodatoMestoRodjenjaRucnoDodatPropertiUDomuRadioAca.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712281519558_BrisanjePropertijaVanredanIRazredniStaresinaRadioAca.cs" />
+    <Compile Include="Migrations\201712281519558_BrisanjePropertijaVanredanIRazredniStaresinaRadioAca.Designer.cs">
+      <DependentUpon>201712281519558_BrisanjePropertijaVanredanIRazredniStaresinaRadioAca.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ArhivaOdeljenja.cs" />
     <Compile Include="Models\Cas.cs" />
     <Compile Include="Models\Evidencija.cs" />
-    <Compile Include="Models\Grad.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Napomena.cs" />
@@ -372,6 +380,8 @@
     <Compile Include="ViewModel\ListaPredmetaViewModel.cs" />
     <Compile Include="ViewModel\ListaProfesoraViewModel.cs" />
     <Compile Include="ViewModel\ListaUcenikaViewModel.cs" />
+    <Compile Include="ViewModel\OcenaViewModel.cs" />
+    <Compile Include="ViewModel\PredmetCasViewModel.cs" />
     <Compile Include="ViewModel\PredmetTipOcenePredmetaViewModel.cs" />
     <Compile Include="ViewModel\NerasporedjenUcenikViewModel.cs" />
     <Compile Include="ViewModel\PredmetViewModel.cs" />
@@ -824,6 +834,7 @@
     <Content Include="Views\Home\IndexAdmin.cshtml" />
     <Content Include="Views\Predmeti\IzmeniPredmet.cshtml" />
     <Content Include="Views\UpisSkolskeGodine\Edit.cshtml" />
+    <Content Include="Views\Casovi\Cas - Copy %282%29.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -886,6 +897,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201712151459518_datumIspisaUNullable.resx">
       <DependentUpon>201712151459518_datumIspisaUNullable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712281330515_IzbacenGradDodatoMestoRodjenjaRucnoDodatPropertiUDomuRadioAca.resx">
+      <DependentUpon>201712281330515_IzbacenGradDodatoMestoRodjenjaRucnoDodatPropertiUDomuRadioAca.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712281519558_BrisanjePropertijaVanredanIRazredniStaresinaRadioAca.resx">
+      <DependentUpon>201712281519558_BrisanjePropertijaVanredanIRazredniStaresinaRadioAca.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -165,6 +165,19 @@ namespace eDnevnikDev.Controllers
 
             return View(predmeti);
         }
+
+        public JsonResult VratiZakljucnuOcenu()
+        {
+            var zakljucnaOcena = _context.TipoviOcena
+                .SingleOrDefault(t => t.Tip == "Zakljucna");
+
+            if(zakljucnaOcena==null)
+            {
+                return new JsonResult();
+            }
+
+            return Json(zakljucnaOcena.TipOceneId, JsonRequestBehavior.AllowGet);
+        }
         
     }
 }

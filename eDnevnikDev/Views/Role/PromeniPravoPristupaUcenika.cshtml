@@ -52,12 +52,14 @@
 
         $(function () {
 
+            //Preuzimanje Anti Forgery tokena sa forme
             var form = $('#__AjaxAntiForgeryForm');
             var token = $('input[name="__RequestVerificationToken"]', form).val();
 
             var headers = {};
             headers["__RequestVerificationToken"] = token;
 
+            //Za rolu 'Ucenik' se na dogadjaj 'change' proverava da li rolu treba dodati ili obrisati
             $("#Ucenik").change(function () {
 
                 var rola = {
@@ -94,6 +96,7 @@
 
 
 
+            //Za rolu 'Editor' se na dogadjaj 'change' proverava da li rolu treba dodati ili obrisati
             $("#Editor").change(function () {
 
                 var rola = {

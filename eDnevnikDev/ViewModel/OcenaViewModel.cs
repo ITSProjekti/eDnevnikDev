@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace eDnevnikDev.DTOs
+namespace eDnevnikDev.ViewModel
 {
-    public class DTOOcena
+    public class OcenaViewModel
     {
         public int OcenaId { get; set; }
         public int? Ocena { get; set; }
@@ -17,13 +17,6 @@ namespace eDnevnikDev.DTOs
         public int Polugodiste { get; set; }
         public int Tromesecje { get; set; }
         public int UcenikId { get; set; }
-
-
-
-
-
-
-
 
     }
 }

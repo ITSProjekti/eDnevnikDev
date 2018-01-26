@@ -136,10 +136,14 @@ namespace eDnevnikDev.Controllers
             if (ModelState.IsValid)
             {
                 Profesor profesor = pvm.Profesor;
-                foreach (var pr in pvm.PredmetiIDs)
+
+                if(pvm.PredmetiIDs!=null)
                 {
-                    Predmet predmet = _context.Predmeti.SingleOrDefault(p => p.PredmetID == pr);
-                    profesor.Predmeti.Add(predmet);
+                    foreach (var pr in pvm.PredmetiIDs)
+                    {
+                        Predmet predmet = _context.Predmeti.SingleOrDefault(p => p.PredmetID == pr);
+                        profesor.Predmeti.Add(predmet);
+                    }
                 }
 
                 profesor.RedniBroj = GenerisiRedniBrojProfesora();
@@ -251,8 +255,6 @@ namespace eDnevnikDev.Controllers
                     Prezime = profesorVM.Profesor.Prezime,
                     Telefon = profesorVM.Profesor.Telefon,
                     Adresa = profesorVM.Profesor.Adresa,
-                    Vanredan = profesorVM.Profesor.Vanredan,
-                    RazredniStaresina = profesorVM.Profesor.RazredniStaresina,
                     RedniBroj = profesorVM.Profesor.RedniBroj,
                     PromenaLozinke = profesorVM.Profesor.PromenaLozinke,
                     UserProfesorId = profesorVM.Profesor.UserProfesorId,
@@ -283,16 +285,21 @@ namespace eDnevnikDev.Controllers
                     _context.SaveChanges();
                 }
 
-                //dodavanje svih predmeta profesoru koje on predaje
-                foreach (var predmetId in profesorVM.PredmetiIDs)
+
+                if(profesorVM.PredmetiIDs!=null)
                 {
-                    Predmet predmet = _context.Predmeti
-                        .SingleOrDefault(p => p.PredmetID == predmetId);
+                    //dodavanje svih predmeta profesoru koje on predaje
+                    foreach (var predmetId in profesorVM.PredmetiIDs)
+                    {
+                        Predmet predmet = _context.Predmeti
+                            .SingleOrDefault(p => p.PredmetID == predmetId);
 
-                    profesor1.Predmeti.Add(predmet);
-                    _context.SaveChanges();
+                        profesor1.Predmeti.Add(predmet);
+                        _context.SaveChanges();
 
+                    }
                 }
+      
 
                 return RedirectToAction("Index", new { izmenjenProfesor = true });
 

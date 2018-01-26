@@ -114,7 +114,6 @@ namespace eDnevnikDev.Controllers
         {
             var ucenikVM = new UcenikViewModel
             {
-                Gradovi = _context.Gradovi.OrderBy(g => g.Naziv).ToList(),
                 Smerovi = _context.Smerovi.Include("Oznake").OrderBy(s => s.Trajanje).ToList(),
                 Polovi = _context.Polovi.ToList()
             };
@@ -148,7 +147,6 @@ namespace eDnevnikDev.Controllers
                 var podaci = new UcenikViewModel
                 {
                     Ucenik = ucenikVM.Ucenik,
-                    Gradovi = _context.Gradovi.OrderBy(g => g.Naziv).ToList(),
                     Smerovi = _context.Smerovi.Include("Oznake").OrderBy(s => s.Trajanje).ToList(),
                     Polovi = _context.Polovi.ToList(),
                     Greska = true
@@ -209,7 +207,6 @@ namespace eDnevnikDev.Controllers
             UcenikViewModel ucenikVM = new UcenikViewModel()
             {
                 Ucenik = ucenik,
-                Gradovi = _context.Gradovi.OrderBy(g => g.Naziv).ToList(),
                 Smerovi = _context.Smerovi.Include("Oznake").OrderBy(s => s.Trajanje).ToList(),
                 Polovi = _context.Polovi.ToList()
             };
@@ -252,7 +249,6 @@ namespace eDnevnikDev.Controllers
                 var podaci = new UcenikViewModel
                 {
                     Ucenik = ucenikVM.Ucenik,
-                    Gradovi = _context.Gradovi.OrderBy(g => g.Naziv).ToList(),
                     Smerovi = _context.Smerovi.Include("Oznake").OrderBy(s => s.Trajanje).ToList(),
                     Polovi = listaPolova,
                     Greska = true
@@ -283,7 +279,7 @@ namespace eDnevnikDev.Controllers
                     Adresa = ucenikVM.Ucenik.Adresa,
                     MestoPrebivalista = ucenikVM.Ucenik.MestoPrebivalista,
                     BrojTelefonaRoditelja = ucenikVM.Ucenik.BrojTelefonaRoditelja,
-                    MestoRodjenjaId = ucenikVM.Ucenik.MestoRodjenjaId,
+                    MestoRodjenja = ucenikVM.Ucenik.MestoRodjenja,
                     Vanredan = ucenikVM.Ucenik.Vanredan,
                     RedniBroj = ucenikVM.Ucenik.RedniBroj,
                     PromenaLozinke = ucenikVM.Ucenik.PromenaLozinke,
@@ -297,7 +293,8 @@ namespace eDnevnikDev.Controllers
                     UserUcenikId = ucenikVM.Ucenik.UserUcenikId,
                     DatumUnosa = ucenikVM.Ucenik.DatumUnosa,
                     PolId = ucenikVM.Ucenik.PolId,
-                    StatusUcenikaId=ucenikVM.Ucenik.StatusUcenikaId
+                    StatusUcenikaId=ucenikVM.Ucenik.StatusUcenikaId,
+                    UDomu=ucenikVM.Ucenik.UDomu
                 };
 
             try

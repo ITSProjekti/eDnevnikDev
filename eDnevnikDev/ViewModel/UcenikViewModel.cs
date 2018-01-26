@@ -19,13 +19,6 @@ namespace eDnevnikDev.ViewModel
         /// The ucenik.
         /// </value>
         public Ucenik  Ucenik { get; set; }
-        /// <summary>
-        /// Gets or sets the gradovi.
-        /// </summary>
-        /// <value>
-        /// The gradovi. IEnumerable<Grad> Kolekcija
-        /// </value>
-        public IEnumerable<Grad> Gradovi { get; set; }
 
         /// <summary>
         /// Gets or sets the smerovi.

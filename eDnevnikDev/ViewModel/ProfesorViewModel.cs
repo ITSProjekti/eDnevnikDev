@@ -26,7 +26,6 @@ namespace eDnevnikDev.ViewModel
         /// <value>
         /// The predmeti i ds.List<int> PredmetiIDs Kolekcija
         /// </value>
-        [Required(ErrorMessage ="Izaberite bar jedan predmet")]
         [Display(Name ="Predmeti")]
         public List<int> PredmetiIDs { get; set; }
 
