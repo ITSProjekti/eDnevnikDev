@@ -703,7 +703,12 @@ a.bg-danger:hover {
     background-color: red !important;
 }
 
+/*
+    Srki: pokusaj 
 
+    .button.disabled {
+    cursor:not-allowed;
+}*/
 
 
 

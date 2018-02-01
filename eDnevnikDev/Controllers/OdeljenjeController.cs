@@ -82,7 +82,7 @@ namespace eDnevnikDev.Controllers
         /// </summary>
         /// <param name="godina"></param>
         /// <returns></returns>
-        private JsonResult OdeljenjeTrajanje(int godina)
+        public JsonResult OdeljenjeTrajanje(int godina)
         {
             //Kreiranje kolekcije oznaka koje mogu ciniti odeljenja na godini koja je prosledjena kao parametar. O.O
             var kolekcijaOznaka = _context.Smerovi
@@ -114,7 +114,7 @@ namespace eDnevnikDev.Controllers
         /// <param name="oznaka"></param>
         /// <param name="status"></param>
         /// <returns></returns>
-        private JsonResult OdeljenjeSkolskaGodina(int godina, int oznaka, int status = 2)
+        public JsonResult OdeljenjeSkolskaGodina(int godina, int oznaka, int status = 2)
         {
             //Trazi odeljenje sa prosledjenom godinom oznakom i statusom u toku(Moze i hardcode).
             var pov = _context.Odeljenja.SingleOrDefault(o => o.OznakaID == oznaka && o.Razred == godina && o.StatusID == status);
@@ -140,7 +140,7 @@ namespace eDnevnikDev.Controllers
         /// <param name="oznakaOdeljenja"></param>
         /// <param name="status"></param>
         /// <returns></returns>
-        private JsonResult OdeljenjeUcenici(int razred, int oznakaOdeljenja, int status)
+        public JsonResult OdeljenjeUcenici(int razred, int oznakaOdeljenja, int status)
         {
             var datum = DateTime.Today;
             var casovi = _context.Casovi.
@@ -306,7 +306,7 @@ namespace eDnevnikDev.Controllers
         /// <param name="o"></param>
         /// <returns></returns>
 
-        private int ArhivirajOdeljenje(Odeljenje o)
+        public int ArhivirajOdeljenje(Odeljenje o)
         {
             foreach (var ucenik in o.Ucenici)
             {
@@ -418,45 +418,27 @@ namespace eDnevnikDev.Controllers
         /// </summary>
         /// <param name="odsutni">Lista sa ID-evima od odsutnih ucenika</param>
         /// <returns></returns>
-        private JsonResult UpisiOdsutne(int[] odsutni)
+        public JsonResult UpisiOdsutne(DTOCasIOdsutniUcenici casIOdsutniUcenici)
         {
+
             var datum = DateTime.Today;
-            var casId = 7;
-            var opis = "Cas 2";
-            var profesor = 1;
-            var predmet = 1;
-            var odeljenje = 4;
-            var polugodiste = 1;
-            var tromesecje = 1;
-            var redniBrojPredmete = 3;
-            var redniBrojCasa = 2;
+            var casId = casIOdsutniUcenici.CasId;
 
-            Cas cas = new Cas()
+            var cas = _context.Casovi.SingleOrDefault(x => x.CasId == casId);
+
+            if (casIOdsutniUcenici.OdsutniUcenici != null)
             {
-                CasId = casId,
-                Datum = datum,
-                Opis = opis,
-                ProfesorId = profesor,
-                PredmetId = predmet,
-                OdeljenjeId = odeljenje,
-                Polugodiste = polugodiste,
-                Tromesecje = tromesecje,
-                RedniBrojPredmeta = redniBrojPredmete,
-                RedniBrojCasa = redniBrojCasa
-            };
+                foreach (var odsutan in casIOdsutniUcenici.OdsutniUcenici)
+                {
+                    Odsustvo o = new Odsustvo();
+                    o.CasId = casId;
+                    o.UcenikId = odsutan;
 
-            _context.Casovi.Add(cas);
-            _context.SaveChanges();
-
-            foreach (var odsutan in odsutni)
-            {
-                Odsustvo o = new Odsustvo();
-                o.CasId = casId;
-                o.UcenikId = odsutan;
-
-                _context.Odsustva.Add(o);
-                _context.SaveChanges();
+                    _context.Odsustva.Add(o);
+                    _context.SaveChanges();
+                }
             }
+            
 
             return Json("", JsonRequestBehavior.AllowGet);
         }
@@ -467,7 +449,7 @@ namespace eDnevnikDev.Controllers
         /// <param name="odeljenje">odeljenje koje se dobija iz combobox-a.</param>
         /// <param name="razred">Razred koji se dobija iz combobox-a.</param>
         /// <returns></returns>
-        private JsonResult RedniBrojCasa(int odeljenje, int razred)
+        public JsonResult RedniBrojCasa(int odeljenje, int razred)
         {
             var datum = DateTime.Today;
             var izabranoOdeljenje = _context.Odeljenja.Where(x => x.OznakaID == odeljenje && x.StatusID == 3).Single(x => x.Razred == razred);
@@ -531,7 +513,7 @@ namespace eDnevnikDev.Controllers
         /// <param name="razred">razred koji se dobija iz combobox-a.</param>
         /// <param name="oznaka">oznaka kodeljenja koja se dobija iz combobox-a.</param>
         /// <returns></returns>
-        private JsonResult VratiUcenikeZaOdeljenje(int? razred, int? oznaka)
+        public JsonResult VratiUcenikeZaOdeljenje(int? razred, int? oznaka)
         {
             if (razred != null && oznaka != null)
             {

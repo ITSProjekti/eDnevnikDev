@@ -16,6 +16,11 @@
     <div class="col-md-8">
         <h4>Redni broj časa: @Model.Cas.RedniBrojCasa</h4>
     </div>
+
+    <div class="col-md-8">
+        <button type="button" id="upisiOdsutne" class="btn btn-success" onclick="UpisiOdsutne()">Upiši odsutne</button>
+    </div>
+
     <div class="col-md-8">
         @{
             switch (Model.Cas.Odeljenje.Razred)
@@ -963,16 +968,27 @@
                 var id = $(this).attr('value');
                 lista.push(id);
             });
-
+            // izmeniti imena promenljivih
+            var objekat = {
+                casId: @Model.Cas.CasId,
+                OdsutniUcenici: lista
+            }
 
             var zahtev = $.ajax({
                 type: "POST",
-                data: JSON.stringify(lista),
+                data: JSON.stringify(objekat),
                 //datatype:"text",
                 url: "/Odeljenje/UpisiOdsutne",
                 contentType: "application/json"
             }).done(function () {
-
+                swal(
+                      'Bravo',
+                      'Uspešno upisani odsutni učenici',
+                      'success'
+                    )
+                
+                $("#upisiOdsutne").prop('disabled', true);
+                
             });
         }
 

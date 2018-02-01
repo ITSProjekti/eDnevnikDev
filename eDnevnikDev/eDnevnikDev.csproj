@@ -237,6 +237,7 @@
     <Compile Include="Controllers\ProfesoriController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\UceniciController.cs" />
+    <Compile Include="DTOs\DTOCasIOdsutniUcenici.cs" />
     <Compile Include="DTOs\DTONerasporedjenUcenik.cs" />
     <Compile Include="Controllers\UpisSkolskeGodineController.cs" />
     <Compile Include="DTOs\DTOOcena.cs" />
